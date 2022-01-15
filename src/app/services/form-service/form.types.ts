@@ -6,6 +6,7 @@ export enum FieldType {
     FORMLY_GROUP = 'formly-group',
     INPUT = 'input',
     OTHER = 'other',
+    TEXTAREA = 'textarea',
 }
 
 export enum WrapperType {

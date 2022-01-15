@@ -7,6 +7,7 @@ import { Observable, Subject } from 'rxjs';
 import { OtherFieldService } from '../field-services/other/other-field.service';
 import { BaseFieldService } from '../field-services/base-field.service';
 import { InputService } from '../field-services/input/input.service';
+import { TextareaService } from '../field-services/textarea/textarea.service';
 
 @Injectable({
     providedIn: 'root',
@@ -36,6 +37,7 @@ export class FormService {
     constructor(private _formlyGroupService: FormlyGroupService,
                 private _inputService: InputService,
                 private _otherFieldService: OtherFieldService,
+                private _textareaFieldService: TextareaService,
                 private _fileService: FileService,
     ) {
         const formId: string = this._getNextFormId(this._currFormId);
@@ -189,6 +191,7 @@ export class FormService {
             case FieldType.FORMLY_GROUP: return this._formlyGroupService;
             case FieldType.INPUT: return this._inputService;
             case FieldType.OTHER: return this._otherFieldService;
+            case FieldType.TEXTAREA: return this._textareaFieldService;
             default:
 				console.warn(`Unknown formly type: '${type}', treating as 'other' type`);
 				return this._otherFieldService;
