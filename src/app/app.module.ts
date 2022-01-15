@@ -54,6 +54,9 @@ import { SidebarSectionComponent } from './components/sidebar-section/sidebar-se
         FormsModule,
         FormlyModule.forRoot({
             wrappers: [{ name: WrapperType.EDITOR, component: EditorWrapperComponent }],
+			validationMessages: [
+			  	{ name: 'required', message: 'This field is required' },
+			],
         }),
         FormlyMaterialModule,
         MatTreeModule,
