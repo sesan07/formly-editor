@@ -10,6 +10,7 @@ import { InputService } from '../field-services/input/input.service';
 import { TextareaService } from '../field-services/textarea/textarea.service';
 import { CheckboxService } from '../field-services/checkbox/checkbox.service';
 import { RadioService } from '../field-services/radio/radio.service';
+import { SelectService } from '../field-services/select/select.service';
 
 @Injectable({
     providedIn: 'root',
@@ -41,6 +42,7 @@ export class FormService {
                 private _inputService: InputService,
                 private _otherFieldService: OtherFieldService,
                 private _radioService: RadioService,
+                private _selectService: SelectService,
                 private _textareaFieldService: TextareaService,
                 private _fileService: FileService,
     ) {
@@ -197,6 +199,7 @@ export class FormService {
             case FieldType.INPUT: return this._inputService;
             case FieldType.OTHER: return this._otherFieldService;
             case FieldType.RADIO: return this._radioService;
+            case FieldType.SELECT: return this._selectService;
             case FieldType.TEXTAREA: return this._textareaFieldService;
             default:
 				console.warn(`Unknown formly type: '${type}', treating as 'other' type`);

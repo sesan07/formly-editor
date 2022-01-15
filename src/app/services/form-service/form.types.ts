@@ -8,6 +8,7 @@ export enum FieldType {
     INPUT = 'input',
     OTHER = 'other',
     RADIO = 'radio',
+    SELECT = 'select',
     TEXTAREA = 'textarea',
 }
 
