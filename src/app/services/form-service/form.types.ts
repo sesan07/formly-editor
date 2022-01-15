@@ -7,6 +7,7 @@ export enum FieldType {
     FORMLY_GROUP = 'formly-group',
     INPUT = 'input',
     OTHER = 'other',
+    RADIO = 'radio',
     TEXTAREA = 'textarea',
 }
 
