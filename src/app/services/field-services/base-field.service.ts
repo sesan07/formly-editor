@@ -58,13 +58,13 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 		];
 	}
 
-	protected _getWrapperProperties(options: WrapperType[]): IProperty[] {
+	protected _getWrapperProperties(options: WrapperType[], notRemovableOptions: WrapperType[] = []): IProperty[] {
 		const properties: IProperty[] = [
 			{
 				key: 'wrappers',
 				type: PropertyType.CHIP_LIST,
 				options: [...options],
-				notRemovableOptions: [WrapperType.EDITOR],
+				notRemovableOptions: [WrapperType.EDITOR, ...notRemovableOptions],
 			} as IChipListProperty,
 		];
 
