@@ -8,6 +8,7 @@ import { OtherFieldService } from '../field-services/other/other-field.service';
 import { BaseFieldService } from '../field-services/base-field.service';
 import { InputService } from '../field-services/input/input.service';
 import { TextareaService } from '../field-services/textarea/textarea.service';
+import { CheckboxService } from '../field-services/checkbox/checkbox.service';
 
 @Injectable({
     providedIn: 'root',
@@ -34,7 +35,8 @@ export class FormService {
     private _fieldRemoved$: Subject<IEditorFormlyField> = new Subject();
     private _fieldSelected$: Subject<IEditorFormlyField> = new Subject();
 
-    constructor(private _formlyGroupService: FormlyGroupService,
+    constructor(private _checkboxService: CheckboxService,
+				private _formlyGroupService: FormlyGroupService,
                 private _inputService: InputService,
                 private _otherFieldService: OtherFieldService,
                 private _textareaFieldService: TextareaService,
@@ -188,6 +190,7 @@ export class FormService {
 
     private _getFieldService(type: FieldType): BaseFieldService<any> {
         switch (type) {
+            case FieldType.CHECKBOX: return this._checkboxService;
             case FieldType.FORMLY_GROUP: return this._formlyGroupService;
             case FieldType.INPUT: return this._inputService;
             case FieldType.OTHER: return this._otherFieldService;
