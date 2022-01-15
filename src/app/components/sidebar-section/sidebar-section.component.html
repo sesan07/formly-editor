@@ -1,0 +1,18 @@
+<div class="sidebar-header">
+	<span class="sidebar-header-left">
+		<button [disabled]="!isCollapsible" mat-icon-button (click)="onToggleExpansionClicked()">
+			<mat-icon class="expand-icon" [class.expanded-180]="!isCollapsed" *ngIf="isCollapsible">expand_more</mat-icon>
+		</button>
+		<span>{{ sectionTitle }}</span>
+	</span>
+
+	<button *ngIf="menuPanel && !isCollapsed" mat-icon-button [matMenuTriggerFor]="menuPanel">
+		<mat-icon>more_vert</mat-icon>
+	</button>
+
+</div>
+<div #contentWrapper class="sidebar-content-wrapper">
+	<div class="sidebar-content">
+		<ng-content></ng-content>
+	</div>
+</div>

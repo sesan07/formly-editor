@@ -1,0 +1,69 @@
+<div class="tree-item-header" (mouseenter)="isPropertyHighlighted = true" (mouseleave)="isPropertyHighlighted = false">
+	<span class="tree-item-header-content-left">
+		<button mat-icon-button [ngStyle]="{'margin-right.px': treeLevelPadding}" [matMenuTriggerFor]="optionsMenu" [disabled]="!hasOptions">
+			<mat-icon>more_vert</mat-icon>
+		</button>
+		
+		<mat-menu #optionsMenu="matMenu">
+			<button *ngIf="property.canAdd" mat-menu-item (click)="onAddChild()">
+				<mat-icon>add</mat-icon>
+				<span>Add {{ property.childProperty.type }}</span>
+			</button>
+			<button *ngIf="property.isDeletable" mat-menu-item (click)="remove.emit()">
+				<mat-icon>remove</mat-icon>
+				<span>Remove</span>
+			</button>
+		</mat-menu>
+		
+		<button mat-icon-button (click)="isExpanded = !isExpanded">
+			<mat-icon class="expand-icon" [class.expanded-90]="isExpanded">chevron_right</mat-icon>
+		</button>
+		<span #key class="keyField" [ngClass]="{ 'editable': !!property.isKeyEditable }" [contentEditable]="!!property.isKeyEditable"></span>
+		<span>{{ (property?.name ? '(' + property.name + ') ' : '') + '[ ' + target.length + ' ]' }}</span>
+	</span>
+</div>
+
+
+<ng-container *ngIf="isExpanded">
+	<ng-container [ngSwitch]="property.childProperty.type">
+		<ng-container *ngSwitchCase="propertyType.BOOLEAN">
+			<app-boolean-property
+				*ngFor="let childProperty of childProperties; let i = index"
+				[treeLevel]="treeLevel + 1"
+				[property]="childProperties[i]"
+				[target]="target"
+				(remove)="onRemoveChild(i)"
+				(valueChanged)="onValueChanged()">
+			</app-boolean-property>
+		</ng-container>
+
+		<ng-container *ngSwitchCase="propertyType.OBJECT">
+			<app-object-property 
+				*ngFor="let childProperty of childProperties; let i = index"
+				[treeLevel]="treeLevel + 1"
+				[target]="target[i]"
+				[property]="propertyService.getAsObjectProperty(childProperty)"
+				(remove)="onRemoveChild(i)"
+				(valueChanged)="onValueChanged()">
+			</app-object-property>
+		</ng-container>
+		
+		<ng-container *ngSwitchCase="propertyType.NUMBER">
+			<ng-container *ngTemplateOutlet="inputProperty"></ng-container>
+		</ng-container>
+		<ng-container *ngSwitchCase="propertyType.TEXT">
+			<ng-container *ngTemplateOutlet="inputProperty"></ng-container>
+		</ng-container>
+		<ng-template #inputProperty>
+			<app-input-property
+				*ngFor="let childTarget of target; let i = index"
+				[treeLevel]="treeLevel + 1"
+				[property]="childProperties[i]"
+				[target]="target"
+				(remove)="onRemoveChild(i)"
+				(valueChanged)="onValueChanged()">
+			</app-input-property>
+		</ng-template>
+	</ng-container>
+</ng-container>
+

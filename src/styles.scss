@@ -1,0 +1,97 @@
+html, body, app-root, .mat-tab-group, .mat-tab-body-wrapper, .mat-tab-body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.tree-item {
+	display: block;
+	border-radius: 4px;
+	flex-grow: 1;
+	transition: 0.2s;
+}
+
+.tree-item.highlighted {
+	background-color: rgba(0, 0, 0, 0.05);
+}
+
+.tree-item-header {
+	display: flex;
+	column-gap: 4px;
+	align-items: flex-start;
+	padding: 4px;
+    white-space: nowrap;
+	border-radius: 4px;
+}
+
+// TODO change name?
+.tree-item-header-content-left {
+	min-height: 32px;
+	display: inline-flex;
+	align-items: center;
+    white-space: nowrap;
+}
+
+button.mat-icon-button {
+	--button-size: 28px;
+	height: var(--button-size) !important;
+	width: var(--button-size) !important;
+	line-height: var(--button-size) !important;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.keyField {
+	display: inline-block;
+	margin: 0 4px;
+	padding: 0.225em;
+	border-radius: 4px;
+}
+
+.keyField.editable {
+	outline: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.keyField.editable:hover {
+	outline: 2px solid rgba(0, 0, 0, 1);
+}
+
+.keyField.editable:focus {
+	outline: 2px solid #3f51b5;
+}
+
+.expand-icon {
+    transition: transform 0.2s;
+}
+
+.expand-icon.expanded-90 {
+    transform: rotate(90deg);
+}
+
+.expand-icon.expanded-180 {
+    transform: rotate(-180deg);
+}
+
+.mat-form-field-appearance-outline {
+	.mat-form-field-wrapper {
+		margin: 0 !important;
+		padding-bottom: 0 !important;
+	}
+	
+	.mat-form-field-infix {
+		padding: 0.5em 0 !important;
+		border-top: none;
+	}
+	
+	.mat-form-field-outline {
+		top: 0 !important;
+	}
+	
+	.mat-form-field-label-wrapper {
+		top: -1.25em;
+		padding-top: 1.25em;
+	}
+	
+	.mat-form-field-subscript-wrapper {
+		display: none;
+	}
+}

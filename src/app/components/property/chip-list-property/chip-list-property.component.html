@@ -1,0 +1,53 @@
+<div class="tree-item-header" (mouseenter)="isPropertyHighlighted = true" (mouseleave)="isPropertyHighlighted = false">
+	<span class="tree-item-header-content-left">
+		<button mat-icon-button [ngStyle]="{'margin-right.px': treeLevelPadding}" [matMenuTriggerFor]="optionsMenu" [disabled]="!hasOptions">
+			<mat-icon>more_vert</mat-icon>
+		</button>
+			
+		<mat-menu #optionsMenu="matMenu">
+			<button *ngIf="property.isDeletable" mat-menu-item color="warn" (click)="remove.emit()">
+				<mat-icon>remove</mat-icon>
+				<span>Remove</span>
+			</button>
+		</mat-menu>
+	
+		<!-- use a disabled button to provide padding for non expandable field -->
+		<button mat-icon-button [disabled]="true"></button>
+		<span #key class="keyField" [ngClass]="{ 'editable': !!property.isKeyEditable }" [contentEditable]="!!property.isKeyEditable"></span>
+		<span>:</span>
+	</span>
+	
+	
+	<div class="tree-item-header-content-right">
+		<mat-form-field class="form-field" appearance="outline">
+			<mat-chip-list #chipList>
+				<mat-chip *ngFor="let option of selectedOptions"
+						  selectable
+						  [removable]="isRemovable(option)"
+						  (removed)="onRemove(option)">
+					{{option}}
+					<mat-icon *ngIf="isRemovable(option)" matChipRemove>cancel</mat-icon>
+				</mat-chip>
+				<input #input
+					   [formControl]="formControl"
+					   [placeholder]="'start typing...'"
+					   [matAutocomplete]="autoComplete"
+					   [matChipInputFor]="chipList"
+					   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+					   (matChipInputTokenEnd)="onAdd($event)">
+			</mat-chip-list>
+			<mat-autocomplete #autoComplete="matAutocomplete" (optionSelected)="onSelected($event)">
+				<mat-option *ngFor="let option of filteredOptions | async"
+							[value]="option">
+					{{option}}
+				</mat-option>
+			</mat-autocomplete>
+		</mat-form-field>
+	</div>
+</div>
+
+
+
+<!-- <mat-form-field class="tree-item-header-content-right" appearance="outline">
+	<input matInput placeholder="Ex. Pizza" [type]="property.type" [(ngModel)]="target[property.key]" (ngModelChange)="onValueChanged()">
+</mat-form-field> -->

@@ -1,0 +1,17 @@
+<span class="header">
+    <span class="header-title">Formly Editor</span>
+    <span class="header-buttons">
+        <button mat-button (click)="onUploadForm()"><mat-icon>file_upload</mat-icon>Upload Form</button>
+        <button mat-button (click)="onDownloadForm()"><mat-icon>file_download</mat-icon>Download Form</button>
+        <mat-slide-toggle [(ngModel)]="wrapperService.isEditMode">Edit Mode</mat-slide-toggle>
+    </span>
+</span>
+<mat-tab-group>
+    <mat-tab *ngFor="let form of formService.forms; let i = index">
+        <ng-template mat-tab-label>
+            {{ form.name }}
+            <button *ngIf="i !== 0" class="close-btn" mat-icon-button (click)="formService.removeForm(i)"><mat-icon>close</mat-icon></button>
+        </ng-template>
+        <app-form [form]="form"></app-form>
+    </mat-tab>
+</mat-tab-group>

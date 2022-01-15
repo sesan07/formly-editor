@@ -1,0 +1,22 @@
+<div class="tree-item-header" (mouseenter)="isPropertyHighlighted = true" (mouseleave)="isPropertyHighlighted = false">
+	<span class="tree-item-header-content-left">
+		<button mat-icon-button [ngStyle]="{'margin-right.px': treeLevelPadding}" [matMenuTriggerFor]="optionsMenu" [disabled]="!hasOptions">
+			<mat-icon>more_vert</mat-icon>
+		</button>
+			
+		<mat-menu #optionsMenu="matMenu">
+			<button *ngIf="property.isDeletable" mat-menu-item color="warn" (click)="remove.emit()">
+				<mat-icon>remove</mat-icon>
+				<span>Remove</span>
+			</button>
+		</mat-menu>
+	
+		<!-- use a disabled button to provide padding for non expandable field -->
+		<button mat-icon-button [disabled]="true"></button>
+		<span #key class="keyField" [ngClass]="{ 'editable': !!property.isKeyEditable }" [contentEditable]="!!property.isKeyEditable"></span>
+		<span>:</span>
+	</span>
+	<mat-form-field class="tree-item-header-content-right" appearance="outline">
+		<input matInput [type]="property.type" [(ngModel)]="target[property.key]" (ngModelChange)="onValueChanged()">
+	</mat-form-field>
+</div>

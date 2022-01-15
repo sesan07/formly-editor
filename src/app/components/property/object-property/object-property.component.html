@@ -1,0 +1,104 @@
+<div class="tree-item-header" (mouseenter)="isPropertyHighlighted = true" (mouseleave)="isPropertyHighlighted = false">
+	<span class="tree-item-header-content-left">
+		<button mat-icon-button [ngStyle]="{'margin-right.px': treeLevelPadding}" [matMenuTriggerFor]="optionsMenu" [disabled]="!hasOptions">
+			<mat-icon>more_vert</mat-icon>
+		</button>
+		
+		<mat-menu #optionsMenu="matMenu">
+			<button *ngIf="property?.addOptions?.length > 0" mat-menu-item [matMenuTriggerFor]="addMenu">
+				<mat-icon>add</mat-icon>
+				<span>Add</span>
+			</button>
+			<button *ngIf="property?.isDeletable" mat-menu-item color="warn" (click)="remove.emit()">
+				<mat-icon>remove</mat-icon>
+				<span>Remove</span>
+			</button>
+		</mat-menu>
+
+		<mat-menu #addMenu="matMenu">
+			<button mat-menu-item *ngIf="property.addOptions?.includes(propertyType.ARRAY)" [matMenuTriggerFor]="addArrayMenu">
+				{{propertyType.ARRAY}}
+			</button>
+			<ng-container *ngFor="let type of propertyService.possibleArrayAddTypes">
+				<button mat-menu-item *ngIf="property.addOptions?.includes(type)" (click)="onAddChild(type)">
+					{{type}}
+				</button>
+			</ng-container>
+		</mat-menu>
+
+		<mat-menu #addArrayMenu="matMenu">
+			<button *ngFor="let type of propertyService.possibleArrayAddTypes" mat-menu-item (click)="onAddChild(propertyType.ARRAY, type)">
+				{{type}}
+			</button>
+		</mat-menu>
+
+		<button mat-icon-button (click)="isExpanded = !isExpanded">
+			<mat-icon class="expand-icon" [class.expanded-90]="isExpanded">chevron_right</mat-icon>
+		</button>
+		<span #key class="keyField" [ngClass]="{ 'editable': !!property?.isKeyEditable }" [contentEditable]="!!property?.isKeyEditable"></span>
+		<span>{{ (property?.name ? '(' + property.name + ') ' : '') + '{ ' + property.childProperties.length + ' }' }}</span>
+	</span>
+</div>
+
+<ng-container *ngIf="isExpanded">
+	<ng-container *ngFor="let child of property.childProperties; let i = index">
+		<ng-container [ngSwitch]="child.type">
+			<app-array-property 
+				*ngSwitchCase="propertyType.ARRAY"
+				[treeLevel]="treeLevel + 1"
+				[target]="target[child.key]"
+				[property]="propertyService.getAsArrayProperty(child)"
+				(keyChanged)="onKeyChanged($event, child)"
+				(remove)="onRemoveChild(i)"
+				(valueChanged)="onValueChanged()">
+			</app-array-property>
+
+			<app-boolean-property
+				*ngSwitchCase="propertyType.BOOLEAN"
+				[treeLevel]="treeLevel + 1"
+				[property]="child"
+				[target]="target"
+				(keyChanged)="onKeyChanged($event, child)"
+				(remove)="onRemoveChild(i)"
+				(valueChanged)="onValueChanged()">
+			</app-boolean-property>
+
+			<app-chip-list-property
+				*ngSwitchCase="propertyType.CHIP_LIST"
+				[treeLevel]="treeLevel + 1"
+				[property]="propertyService.getAsChiplistProperty(child)"
+				[target]="target"
+				(keyChanged)="onKeyChanged($event, child)"
+				(remove)="onRemoveChild(i)"
+				(valueChanged)="onValueChanged()">
+			</app-chip-list-property>
+
+			<app-object-property
+				*ngSwitchCase="propertyType.OBJECT"
+				[treeLevel]="treeLevel + 1"
+				[target]="target[child.key]"
+				[property]="propertyService.getAsObjectProperty(child)"
+				(keyChanged)="onKeyChanged($event, child)"
+				(remove)="onRemoveChild(i)"
+				(valueChanged)="onValueChanged()">
+			</app-object-property>
+	
+			<ng-container *ngSwitchCase="propertyType.NUMBER">
+				<ng-container *ngTemplateOutlet="inputProperty"></ng-container>
+			</ng-container>
+			<ng-container *ngSwitchCase="propertyType.TEXT">
+				<ng-container *ngTemplateOutlet="inputProperty"></ng-container>
+			</ng-container>
+			<ng-template #inputProperty>
+				<app-input-property
+					[treeLevel]="treeLevel + 1"
+					[property]="child"
+					[target]="target"
+					(keyChanged)="onKeyChanged($event, child)"
+					(remove)="onRemoveChild(i)"
+					(valueChanged)="onValueChanged()">
+				</app-input-property>
+			</ng-template>
+		</ng-container>
+	</ng-container>
+</ng-container>

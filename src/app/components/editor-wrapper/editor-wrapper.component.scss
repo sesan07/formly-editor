@@ -1,0 +1,22 @@
+.editor-wrapper {
+    display: block;
+}
+
+.editor-header {
+    display: flex;
+    align-items: center;
+}
+
+.editor-wrapper.edit-mode {
+    padding: 4px;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+.editor-wrapper.edit-mode:hover {
+    outline: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.editor-wrapper.edit-mode.active {
+    outline: 2px solid rgba(0, 0, 0, 0.2);
+}
