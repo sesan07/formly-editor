@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { IProperty } from 'src/app/components/property/property.types';
 
 export enum FieldType {
+    CHECKBOX = 'checkbox',
     FORMLY_GROUP = 'formly-group',
     INPUT = 'input',
     OTHER = 'other',
