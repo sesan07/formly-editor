@@ -9,7 +9,7 @@
 				<mat-icon>add</mat-icon>
 				<span>Add</span>
 			</button>
-			<button *ngIf="canHaveChildren" mat-menu-item [matMenuTriggerFor]="replaceMenu">
+			<button *ngIf="canHaveChildren && replaceOptions.length > 0" mat-menu-item [matMenuTriggerFor]="replaceMenu">
 				<mat-icon>sync</mat-icon>
 				<span>Replace</span>
 			</button>
