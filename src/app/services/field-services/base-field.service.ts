@@ -68,9 +68,11 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 			} as IChipListProperty,
 		];
 
+		// Add wrapper property config to `properties` if wrapper is configurable
 		options.forEach(option => {
 			switch (option) {
 				case WrapperType.EDITOR:
+				case WrapperType.FORM_FIELD:
 					break;
 				default: throw new Error(`Unkown wrapper type: '${option}'`);
 			}

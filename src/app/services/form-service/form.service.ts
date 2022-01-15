@@ -6,7 +6,7 @@ import { FormlyGroupService } from '../field-services/formly-group/formly-group.
 import { Observable, Subject } from 'rxjs';
 import { OtherFieldService } from '../field-services/other/other-field.service';
 import { BaseFieldService } from '../field-services/base-field.service';
-import { FormlyFieldConfig } from '@ngx-formly/core';
+import { InputService } from '../field-services/input/input.service';
 
 @Injectable({
     providedIn: 'root',
@@ -34,6 +34,7 @@ export class FormService {
     private _fieldSelected$: Subject<IEditorFormlyField> = new Subject();
 
     constructor(private _formlyGroupService: FormlyGroupService,
+                private _inputService: InputService,
                 private _otherFieldService: OtherFieldService,
                 private _fileService: FileService,
     ) {
@@ -186,6 +187,7 @@ export class FormService {
     private _getFieldService(type: FieldType): BaseFieldService<any> {
         switch (type) {
             case FieldType.FORMLY_GROUP: return this._formlyGroupService;
+            case FieldType.INPUT: return this._inputService;
             case FieldType.OTHER: return this._otherFieldService;
             default:
 				console.warn(`Unknown formly type: '${type}', treating as 'other' type`);
