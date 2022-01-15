@@ -4,11 +4,13 @@ import { IProperty } from 'src/app/components/property/property.types';
 
 export enum FieldType {
     FORMLY_GROUP = 'formly-group',
+    INPUT = 'input',
     OTHER = 'other',
 }
 
 export enum WrapperType {
     EDITOR = 'editor',
+    FORM_FIELD = 'form-field',
 }
 
 export interface IBaseEditorFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
