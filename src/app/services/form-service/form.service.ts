@@ -126,7 +126,7 @@ export class FormService {
         return form.fieldMap.get(fieldId);
     }
 
-    public uploadForm(): void {
+    public importForm(): void {
         this._fileService.importJSONString()
             .subscribe(json => {
                 if (json) {
@@ -135,7 +135,7 @@ export class FormService {
             });
     }
 
-    public downloadForm(index: number): void {
+    public exportForm(index: number): void {
 		const form: IForm = this.forms[index];
         const fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
         fieldsClone.forEach(field => this.cleanField(field, true, true));
