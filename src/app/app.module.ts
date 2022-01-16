@@ -31,6 +31,7 @@ import { WrapperType } from './services/form-service/form.types';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { HomeComponent } from './components/home/home.component';
 import { SidebarSectionComponent } from './components/sidebar-section/sidebar-section.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
     declarations: [
@@ -51,6 +52,7 @@ import { SidebarSectionComponent } from './components/sidebar-section/sidebar-se
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
+		HttpClientModule,
         FormsModule,
         FormlyModule.forRoot({
             wrappers: [{ name: WrapperType.EDITOR, component: EditorWrapperComponent }],
