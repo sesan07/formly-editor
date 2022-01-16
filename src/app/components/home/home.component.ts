@@ -15,12 +15,12 @@ export class HomeComponent {
     constructor(public formService: FormService, public wrapperService: EditorWrapperService) {
     }
 
-    onUploadForm(): void {
-        this.formService.uploadForm();
+    onImportForm(): void {
+        this.formService.importForm();
     }
 
-    onDownloadForm(): void {
-        this.formService.downloadForm(this.tabNav.selectedIndex);
+    onExportForm(): void {
+        this.formService.exportForm(this.tabNav.selectedIndex);
     }
 
 }
