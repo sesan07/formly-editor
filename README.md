@@ -1,3 +1,7 @@
+An Editor for ngx-formly forms
+
+Demo: https://sesan07.github.io/formly-editor/home
+
 # FormlyEditor
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.2.3.
