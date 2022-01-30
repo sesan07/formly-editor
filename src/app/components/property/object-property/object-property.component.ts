@@ -12,8 +12,6 @@ import { IObjectProperty } from './object-property.types';
 export class ObjectPropertyComponent extends BasePropertyComponent implements OnChanges {
 	@Input() property: IObjectProperty;
 
-	@Output() public valueChanged: EventEmitter<void> = new EventEmitter();
-
 	@HostBinding('class.highlighted') get propertyHighlighted() { return this.isPropertyHighlighted; }
 
 	public propertyType: typeof PropertyType = PropertyType;
@@ -57,7 +55,9 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
 				throw new Error(`Object property does not support adding ${type}`);
 		}
 
-		this._addChildProperty(childProperty);
+		this.property.childProperties.push(childProperty);
+		this.isExpanded = true;
+		this.onValueChanged();
 	}
 
 	onRemoveChild(index: number): void {
@@ -67,7 +67,7 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
 
 		delete this.target[child.key];
 		this.property.childProperties.splice(index, 1);
-		this.valueChanged.emit();
+		this.onValueChanged();
 	}
 
 	onKeyChanged(newKey: string, property: IProperty): void {
@@ -76,16 +76,6 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
 		this.target[newKey] = tempValue;
 		property.key = newKey;
 		this.onValueChanged();
-	}
-
-	onValueChanged(): void {
-		this.valueChanged.emit();
-	}
-
-	private _addChildProperty(childProperty: IProperty): void {
-		this.property.childProperties.push(childProperty);
-		this.isExpanded = true;
-		this.valueChanged.emit();
 	}
 
 	private _populateChildrenFromTarget() {

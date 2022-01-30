@@ -16,8 +16,6 @@ import { BasePropertyComponent } from '../base-property.component';
 export class ChipListPropertyComponent extends BasePropertyComponent implements OnInit {
     @Input() property: IChipListProperty;
 
-    @Output() public valueChanged: EventEmitter<void> = new EventEmitter();
-
     @ViewChild('input') inputElementRef: ElementRef<HTMLInputElement>;
 
 	@HostBinding('class.highlighted') get propertyHighlighted() { return this.isPropertyHighlighted; }
@@ -89,10 +87,6 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
         this._updateProperty();
     }
 
-	onValueChanged(): void {
-		this.valueChanged.emit();
-	}
-
     private _filter(value: string): string[] {
         const filterValue: string = value.toLowerCase();
         return this.selectableOptions.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
@@ -105,6 +99,6 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
             this.target[this.property.key] = this.selectedOptions.slice();
         }
 
-        this.valueChanged.emit();
+		this.onValueChanged();
     }
 }

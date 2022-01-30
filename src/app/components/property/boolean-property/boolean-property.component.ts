@@ -10,8 +10,6 @@ import { IBooleanProperty } from './boolean-property.types';
 export class BooleanPropertyComponent extends BasePropertyComponent {
 	@Input() property: IBooleanProperty;
 
-    @Output() public valueChanged: EventEmitter<void> = new EventEmitter();
-
 	@HostBinding('class.highlighted') get propertyHighlighted() { return this.isPropertyHighlighted; }
 
 	public isPropertyHighlighted: boolean;
@@ -20,8 +18,4 @@ export class BooleanPropertyComponent extends BasePropertyComponent {
 	};
 
 	protected propertyname = 'Boolean';
-
-	onValueChanged(): void {
-		this.valueChanged.emit();
-	}
 }
