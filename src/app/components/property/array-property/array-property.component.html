@@ -30,7 +30,7 @@
 			<app-boolean-property
 				*ngFor="let childProperty of childProperties; let i = index"
 				[treeLevel]="treeLevel + 1"
-				[property]="childProperties[i]"
+				[property]="childProperty"
 				[target]="target"
 				(remove)="onRemoveChild(i)"
 				(valueChanged)="onValueChanged()">
@@ -56,9 +56,9 @@
 		</ng-container>
 		<ng-template #inputProperty>
 			<app-input-property
-				*ngFor="let childTarget of target; let i = index"
+				*ngFor="let childProperty of childProperties; let i = index"
 				[treeLevel]="treeLevel + 1"
-				[property]="childProperties[i]"
+				[property]="childProperty"
 				[target]="target"
 				(remove)="onRemoveChild(i)"
 				(valueChanged)="onValueChanged()">

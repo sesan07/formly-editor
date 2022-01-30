@@ -61,7 +61,9 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnI
 	onRemoveChild(index: number): void {
 		this.target.splice(index, 1);
 		this.childProperties.splice(index, 1);
-		this.onValueChanged();
+
+        this._updateChildProperties();
+        this.onValueChanged();
 	}
 
 	private _updateChildProperties(): void {
