@@ -14,8 +14,6 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnI
 	@Input() property: IArrayProperty;
 	@Input() target: any[];
 
-    @Output() public valueChanged: EventEmitter<void> = new EventEmitter();
-
 	@HostBinding('class.highlighted') get propertyHighlighted() { return this.isPropertyHighlighted; }
 
 	public propertyType: typeof PropertyType = PropertyType;
@@ -57,17 +55,13 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnI
 		this._updateChildProperties();
 
 		this.isExpanded = true;
-		this.valueChanged.emit();
+		this.onValueChanged();
 	}
 
 	onRemoveChild(index: number): void {
 		this.target.splice(index, 1);
 		this.childProperties.splice(index, 1);
-		this.valueChanged.emit();
-	}
-
-	onValueChanged(): void {
-		this.valueChanged.emit();
+		this.onValueChanged();
 	}
 
 	private _updateChildProperties(): void {

@@ -18,6 +18,7 @@ export interface IBaseProperty {
 	key?: string | number;
 	isDeletable?: boolean;
 	isKeyEditable?: boolean;
+	valueChangeDebounce?: number;
 }
 
 export type IProperty = IArrayProperty | IBooleanProperty | IChipListProperty | IObjectProperty | IInputProperty;

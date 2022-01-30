@@ -22,7 +22,6 @@ export class FormViewComponent implements OnInit, OnDestroy {
     public options: FormlyFormOptions = {};
 
     private _destroy$: Subject<void> = new Subject();
-    private readonly _resetDebounceTime: number = 1000;
 
     constructor(private _formService: FormService) {
     }
@@ -30,7 +29,7 @@ export class FormViewComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this._updateForm();
         this.formChanged$
-            .pipe(debounceTime(this._resetDebounceTime), takeUntil(this._destroy$))
+            .pipe(takeUntil(this._destroy$))
             .subscribe(() => this._updateForm());
     }
 

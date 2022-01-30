@@ -12,8 +12,6 @@ export class InputPropertyComponent extends BasePropertyComponent {
 	@Input() property: IInputProperty;
 	@Input() type: PropertyType.TEXT | PropertyType.NUMBER = PropertyType.TEXT;
 
-	@Output() public valueChanged: EventEmitter<void> = new EventEmitter();
-
 	@HostBinding('class.highlighted') get propertyHighlighted() { return this.isPropertyHighlighted; }
 
 	public isPropertyHighlighted: boolean;
@@ -22,8 +20,4 @@ export class InputPropertyComponent extends BasePropertyComponent {
 	};
 
 	protected propertyname = 'Input';
-
-	onValueChanged(): void {
-		this.valueChanged.emit();
-	}
 }

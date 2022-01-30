@@ -54,6 +54,7 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 				addOptions: [PropertyType.TEXT],
 				childProperties: [],
 				populateChildrenFromTarget: true,
+				valueChangeDebounce: 1000,
 			} as IObjectProperty,
 		];
 	}

@@ -1,4 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { IBaseProperty } from './property.types';
 
 @Component({ template: '' })
@@ -9,19 +11,30 @@ export abstract class BasePropertyComponent implements OnInit, AfterViewInit {
 
     @Output() public remove: EventEmitter<void> = new EventEmitter();
     @Output() public keyChanged: EventEmitter<string> = new EventEmitter();
+	@Output() public valueChanged: EventEmitter<void> = new EventEmitter();
 
 	@ViewChild('key') keyElement: ElementRef<HTMLElement>;
 
 	public treeLevelPadding: number;
+
+	private _valueChangeSubject: Subject<void> = new Subject();
+
 	public abstract hasOptions: boolean;
 
 	protected abstract propertyname: string;
+
 
 	constructor(private _renderer: Renderer2, private _elementRef: ElementRef) {}
 
 	ngOnInit(): void {
 		this.treeLevelPadding = 24 * this.treeLevel;
 		this._renderer.addClass(this._elementRef.nativeElement, 'tree-item');
+
+		this._valueChangeSubject
+			.pipe(debounceTime(this.property.valueChangeDebounce))
+			.subscribe(() => {
+				this.valueChanged.emit();
+			});
 	}
 
 	ngAfterViewInit(): void {
@@ -29,5 +42,7 @@ export abstract class BasePropertyComponent implements OnInit, AfterViewInit {
 		this.keyElement.nativeElement.addEventListener('input', () => this.keyChanged.emit(this.keyElement.nativeElement.innerText));
 	}
 
-	abstract onValueChanged(): void;
+	onValueChanged(): void {
+		this._valueChangeSubject.next();
+	}
 }
