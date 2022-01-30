@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { EditorWrapperComponent } from './components/editor-wrapper/editor-wrapper.component';
 import { FormComponent } from './components/form/form.component';
 import { InputPropertyComponent } from './components/property/input-property/input-property.component';
@@ -27,11 +28,12 @@ import { ArrayPropertyComponent } from './components/property/array-property/arr
 import { BooleanPropertyComponent } from './components/property/boolean-property/boolean-property.component';
 import { FieldTreeItemComponent } from './components/field-tree-item/field-tree-item.component';
 import { ChipListPropertyComponent } from './components/property/chip-list-property/chip-list-property.component';
-import { WrapperType } from './services/form-service/form.types';
+import { FieldType, WrapperType } from './services/form-service/form.types';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { HomeComponent } from './components/home/home.component';
 import { SidebarSectionComponent } from './components/sidebar-section/sidebar-section.component';
 import { HttpClientModule } from '@angular/common/http';
+import { EditorFormlyGroupComponent } from './components/editor-formly-group/editor-formly-group.component';
 
 @NgModule({
     declarations: [
@@ -47,6 +49,7 @@ import { HttpClientModule } from '@angular/common/http';
         ChipListPropertyComponent,
         HomeComponent,
         SidebarSectionComponent,
+        EditorFormlyGroupComponent,
     ],
     imports: [
         BrowserModule,
@@ -55,6 +58,7 @@ import { HttpClientModule } from '@angular/common/http';
 		HttpClientModule,
         FormsModule,
         FormlyModule.forRoot({
+            types: [{ name: FieldType.FORMLY_GROUP, component: EditorFormlyGroupComponent }],
             wrappers: [{ name: WrapperType.EDITOR, component: EditorWrapperComponent }],
 			validationMessages: [
 			  	{ name: 'required', message: 'This field is required' },
@@ -74,6 +78,7 @@ import { HttpClientModule } from '@angular/common/http';
         MatAutocompleteModule,
         MatTabsModule,
         MatSlideToggleModule,
+        DragDropModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

@@ -45,13 +45,13 @@ export class FormComponent implements OnInit, OnDestroy {
 		this._updateActiveFieldProperty();
 		this._updateModelProperty();
 
-		this.formService.fieldAdded$
+		this.formService.formChanged$
 			.pipe(takeUntil(this._destroy$))
-			.subscribe(() => this._formChanged$.next());
-
-		this.formService.fieldRemoved$
-			.pipe(takeUntil(this._destroy$))
-			.subscribe(() => this._formChanged$.next());
+			.subscribe(formId => {
+                if (formId === this.form.id) {
+                    this._formChanged$.next();
+                }
+            });
 
 		this.formService.fieldSelected$
 			.pipe(takeUntil(this._destroy$))

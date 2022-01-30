@@ -1,0 +1,16 @@
+<div [id]="field.fieldId"
+    [classList]="classes"
+    [ngClass]="{ 'edit-mode': wrapperService.isEditMode }"
+    cdkDropList
+    [cdkDropListEnterPredicate]="canEnter.bind(this)"
+    [cdkDropListConnectedTo]="connectedTo"
+    [cdkDropListData]="field"
+    (cdkDropListDropped)="onDroplistDropped($event)">
+    <formly-field
+        *ngFor="let f of field.fieldGroup" 
+        [field]="f" 
+        cdkDrag
+        [cdkDragData]="f">
+        <div *cdkDragPlaceholder>Drop Here</div>
+    </formly-field>
+</div>
