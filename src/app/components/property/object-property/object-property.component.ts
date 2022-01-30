@@ -62,8 +62,6 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
 
 	onRemoveChild(index: number): void {
 		const child: IProperty = this.property.childProperties[index];
-		console.log(JSON.stringify(this.target, null, 4));
-		console.log(child.key);
 
 		delete this.target[child.key];
 		this.property.childProperties.splice(index, 1);

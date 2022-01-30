@@ -23,7 +23,6 @@ export class FileService {
         const subject: Subject<string> = new Subject();
 
         input.onchange = e => {
-			console.log(e.target);
             const file: File = (e.target as HTMLInputElement).files[0];
 
             const reader: FileReader = new FileReader();
