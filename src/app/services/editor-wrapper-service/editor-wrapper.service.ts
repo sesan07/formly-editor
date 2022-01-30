@@ -4,5 +4,5 @@ import { Injectable } from '@angular/core';
     providedIn: 'root',
 })
 export class EditorWrapperService {
-    isEditMode = false;
+    isEditMode = true;
 }

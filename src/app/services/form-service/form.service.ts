@@ -11,6 +11,7 @@ import { TextareaService } from '../field-services/textarea/textarea.service';
 import { CheckboxService } from '../field-services/checkbox/checkbox.service';
 import { RadioService } from '../field-services/radio/radio.service';
 import { SelectService } from '../field-services/select/select.service';
+import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Injectable({
     providedIn: 'root',
@@ -20,12 +21,8 @@ export class FormService {
 
     public forms: IForm[] = [];
 
-    public get fieldAdded$(): Observable<IEditorFormlyField> {
-        return this._fieldAdded$.asObservable();
-    }
-
-    public get fieldRemoved$(): Observable<IEditorFormlyField> {
-        return this._fieldRemoved$.asObservable();
+    public get formChanged$(): Observable<string> {
+        return this._formChanged$.asObservable();
     }
 
     public get fieldSelected$(): Observable<IEditorFormlyField> {
@@ -33,8 +30,7 @@ export class FormService {
     }
 
     private _currFormId = 1;
-    private _fieldAdded$: Subject<IEditorFormlyField> = new Subject();
-    private _fieldRemoved$: Subject<IEditorFormlyField> = new Subject();
+    private _formChanged$: Subject<string> = new Subject();
     private _fieldSelected$: Subject<IEditorFormlyField> = new Subject();
 
     constructor(private _checkboxService: CheckboxService,
@@ -67,7 +63,7 @@ export class FormService {
 			siblings.push(newField);
 		}
 
-		this._fieldAdded$.next(newField);
+		this._formChanged$.next(formId);
 		this.selectField(formId, newField.fieldId);
 
 		return newField;
@@ -83,7 +79,7 @@ export class FormService {
 			const childField: IEditorFormlyField = this.getField(formId, fieldId);
 
             form.fieldMap.delete(fieldId);
-			this._fieldRemoved$.next(childField);
+            this._formChanged$.next(formId);
 
 			if (parentId) {
 				this.selectField(formId, parentId);
@@ -191,6 +187,44 @@ export class FormService {
 			default: throw new Error('Field type cannot have children');
 		}
 	}
+
+    // Move field within a parent field in a form
+    public moveField(fieldId: string, formId: string, fromIndex: number, toIndex: number): void {
+        const field: IEditorFormlyField = this.getField(formId, fieldId);
+        if (!field.parentFieldId) {
+            throw new Error('Cannot move field without parent');
+        }
+
+        const parent: IEditorFormlyField = this.getField(formId, field.parentFieldId);
+        const siblings: IEditorFormlyField[] = this.getChildren(parent);
+
+        moveItemInArray(siblings, fromIndex, toIndex);
+
+        this._formChanged$.next(field.formId);
+    }
+
+    // Transfer field between parent fields in the same form
+    public transferField(
+            fieldId: string,
+            formId: string,
+            currentParentId: string,
+            targetParentId: string,
+            currentIndex: number,
+            targetIndex: number
+        ): void {
+
+        const field: IEditorFormlyField = this.getField(formId, fieldId);
+        const currentParent: IEditorFormlyField = this.getField(formId, currentParentId);
+        const targetParent: IEditorFormlyField = this.getField(formId, targetParentId);
+        const currentSiblings: IEditorFormlyField[] = this.getChildren(currentParent);
+        const targetSiblings: IEditorFormlyField[] = this.getChildren(targetParent);
+
+        transferArrayItem(currentSiblings, targetSiblings, currentIndex, targetIndex);
+
+        field.formId = targetParent.formId;
+        field.parentFieldId = targetParent.fieldId;
+        this._formChanged$.next(formId);
+    }
 
     private _getFieldService(type: FieldType): BaseFieldService<any> {
         switch (type) {

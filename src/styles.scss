@@ -1,6 +1,37 @@
 html, body, app-root, .mat-tab-group, .mat-tab-body-wrapper, .mat-tab-body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+formly-field {
+	display: block;
+}
+
+.cdk-drop-list-receiving, .cdk-drop-list-dragging {
+    background-color: #F7FFEB;
+    border: 2px solid #EBEBEB;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 8px;
+}
+
+.cdk-drop-list-dragging {
+    background-color: #BEFF5C;
+}
+
+.cdk-drag-placeholder {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    padding: 0 10px;
+    background-color: #EBEBEB;
+    border: dashed 2px #7A7A7A;
+    border-radius: 4px;
+}
+
+.cdk-drag-preview {
+    outline: dashed 2px #7A7A7A;
+    border-radius: 4px;
+}
+
 .tree-item {
 	display: block;
 	border-radius: 4px;
