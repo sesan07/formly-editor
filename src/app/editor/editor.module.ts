@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Inject, ModuleWithProviders, NgModule, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,7 +33,13 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { HomeComponent } from './components/home/home.component';
 import { SidebarSectionComponent } from './components/sidebar-section/sidebar-section.component';
 import { EditorFormlyGroupComponent } from './components/editor-formly-group/editor-formly-group.component';
+import { EditorConfig, EditorFieldCategoryConfig, EDITOR_CONFIG } from './editor.types';
+import { FormService } from './services/form-service/form.service';
 
+const defaultConfig: EditorConfig = {
+    defaultType: 'form-group',
+    fieldCategories: []
+};
 
 
 @NgModule({
@@ -83,4 +89,16 @@ import { EditorFormlyGroupComponent } from './components/editor-formly-group/edi
         HomeComponent
     ]
 })
-export class EditorModule { }
+export class EditorModule {
+
+    constructor(formService: FormService, @Optional() @Inject(EDITOR_CONFIG) config: EditorConfig = defaultConfig) {
+        formService.setup(config);
+    }
+
+    static forRoot(config: EditorConfig): ModuleWithProviders<EditorModule> {
+        return {
+            ngModule: EditorModule,
+            providers: [{ provide: EDITOR_CONFIG, useValue: config }],
+        };
+    }
+}

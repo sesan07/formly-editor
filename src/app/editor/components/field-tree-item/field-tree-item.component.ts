@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, Renderer2 } from '@angular/core';
 import { FormService } from '../../services/form-service/form.service';
-import { FieldType, IEditorFormlyField } from '../../services/form-service/form.types';
+import { FieldType, IBaseEditorFormlyField } from '../../services/form-service/form.types';
 
 @Component({
     selector: 'app-field-tree-item',
@@ -8,8 +8,8 @@ import { FieldType, IEditorFormlyField } from '../../services/form-service/form.
     styleUrls: ['./field-tree-item.component.scss'],
 })
 export class FieldTreeItemComponent implements OnInit, OnChanges {
-    @Input() public field: IEditorFormlyField;
-    @Input() public activeField: IEditorFormlyField;
+    @Input() public field: IBaseEditorFormlyField;
+    @Input() public activeField: IBaseEditorFormlyField;
     @Input() public isExpanded = false;
 	@Input() public treeLevel = 0;
 
@@ -17,10 +17,11 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
 	@HostBinding('class.highlighted') get propertyHighlighted() { return this.isPropertyHighlighted; }
 
 	public isPropertyHighlighted: boolean;
-    public childFields: IEditorFormlyField[];
+    public childFields: IBaseEditorFormlyField[];
 	public treeLevelPadding: number;
-	public parentFieldTypes: FieldType[] = this.formService.getParentFieldTypes();
-	public replaceOptions: FieldType[];
+    // TODO implement this properly
+	public parentFieldTypes: string[] = this.formService.getParentFieldTypes();
+	public replaceOptions: string[];
     public canHaveChildren: boolean;
 
     constructor(public formService: FormService, private _renderer: Renderer2, private _elementRef: ElementRef) {
@@ -40,20 +41,20 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
 		}
     }
 
-    onAddChildField(type: FieldType): void {
+    onAddChildField(type: string, customType?: string): void {
 		if (this.canHaveChildren) {
 			this.isExpanded = true;
 		}
 
-        this.formService.addField(type, this.field.formId, this.field.fieldId);
+        this.formService.addField(type, this.field.formId, customType, this.field.fieldId);
     }
 
-    onRemoveChildField(childField: IEditorFormlyField): void {
+    onRemoveChildField(childField: IBaseEditorFormlyField): void {
         this.formService.removeField(this.field.formId, childField.fieldId, this.field.fieldId);
     }
 
-	onReplaceParentField(type: FieldType): void {
-		this.formService.replaceParentField(type, this.field.formId, this.field.fieldId);
+	onReplaceParentField(type: string, customType?: string): void {
+		this.formService.replaceParentField(type, this.field.formId, this.field.fieldId, customType);
 	}
 
 	onHeaderClicked(event: MouseEvent): void {

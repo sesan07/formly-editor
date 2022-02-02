@@ -3,14 +3,14 @@ import { AfterViewInit, Component, HostListener, ViewChild } from '@angular/core
 import { FieldType } from '@ngx-formly/core';
 import { EditorWrapperService } from 'src/app/editor/services/editor-wrapper-service/editor-wrapper.service';
 import { FormService } from 'src/app/editor/services/form-service/form.service';
-import { IEditorFormlyField } from 'src/app/editor/services/form-service/form.types';
+import { IBaseEditorFormlyField } from 'src/app/editor/services/form-service/form.types';
 
 @Component({
     selector: 'app-editor-formly-group',
     templateUrl: './editor-formly-group.component.html',
     styleUrls: ['./editor-formly-group.component.scss'],
 })
-export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> implements AfterViewInit {
+export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField> implements AfterViewInit {
     @ViewChild(CdkDropList) dropList: CdkDropList;
 
     get classes() { return (this.field.fieldGroupClassName || '') + ' droplist'; }
@@ -46,16 +46,16 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
     };
 
     // TODO support dragging(copy, not move) between forms? :D
-    onDroplistDropped(dragDrop: CdkDragDrop<IEditorFormlyField>): void {
+    onDroplistDropped(dragDrop: CdkDragDrop<IBaseEditorFormlyField>): void {
         if (!dragDrop.isPointerOverContainer) {
             console.warn('Pointer is not over container. Not dropping');
             return;
         }
 
         // These are copies of the fields, only use their ids
-        const field: IEditorFormlyField = dragDrop.item.data;
-        const currentParent: IEditorFormlyField = dragDrop.previousContainer.data;
-        const targetParent: IEditorFormlyField = dragDrop.container.data;
+        const field: IBaseEditorFormlyField = dragDrop.item.data;
+        const currentParent: IBaseEditorFormlyField = dragDrop.previousContainer.data;
+        const targetParent: IBaseEditorFormlyField = dragDrop.container.data;
 
         if (currentParent.fieldId === targetParent.fieldId) {
             this._formService.moveField(field.fieldId, field.formId, dragDrop.previousIndex, dragDrop.currentIndex);
@@ -71,11 +71,11 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
         }
     }
 
-    private _addConnection(field: IEditorFormlyField, visited: Set<string>) {
+    private _addConnection(field: IBaseEditorFormlyField, visited: Set<string>) {
         visited.add(field.fieldId);
 
         if (this._formService.canHaveChildren(field)) {
-            const children: IEditorFormlyField[] = this._formService.getChildren(field);
+            const children: IBaseEditorFormlyField[] = this._formService.getChildren(field);
             children.forEach(child => {
                 if (!visited.has(child.fieldId)) {
                     this._addConnection(child, visited);
@@ -87,7 +87,7 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
         }
 
         if (field.parentFieldId && !visited.has(field.parentFieldId)) {
-            const parent: IEditorFormlyField = this._formService.getField(field.formId, field.parentFieldId);
+            const parent: IBaseEditorFormlyField = this._formService.getField(field.formId, field.parentFieldId);
             this._addConnection(parent, visited);
         }
     }

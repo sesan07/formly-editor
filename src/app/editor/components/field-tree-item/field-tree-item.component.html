@@ -20,12 +20,14 @@
 		</mat-menu>
 	
 		<mat-menu #addMenu="matMenu">
+            <!-- TODO implement properly -->
 			<button mat-menu-item *ngFor="let type of formService.fieldTypes" (click)="onAddChildField(type)">
 				{{formService.getFieldTypeName(type)}}
 			</button>
 		</mat-menu>
 		
 		<mat-menu #replaceMenu="matMenu">
+            <!-- TODO implement properly -->
 			<button mat-menu-item *ngFor="let type of replaceOptions" (click)="onReplaceParentField(type)">
 				{{formService.getFieldTypeName(type)}}
 			</button>

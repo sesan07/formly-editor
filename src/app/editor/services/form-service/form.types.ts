@@ -1,27 +1,23 @@
+import { InjectionToken } from '@angular/core';
 import { FormlyFieldConfig, FormlyTemplateOptions } from '@ngx-formly/core';
 import { Observable } from 'rxjs';
 import { IProperty } from '../../components/property/property.types';
+import { EditorFieldConfig } from '../../editor.types';
 
 export enum FieldType {
-    CHECKBOX = 'checkbox',
     FORMLY_GROUP = 'formly-group',
-    INPUT = 'input',
-    OTHER = 'other',
-    RADIO = 'radio',
-    SELECT = 'select',
-    TEXTAREA = 'textarea',
 }
 
 export enum WrapperType {
     EDITOR = 'editor',
-    FORM_FIELD = 'form-field',
 }
 
 export interface IBaseEditorFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
     name: string;
-	type: FieldType;
+    type: string;
+    customType?: string;
 	templateOptions?: T;
-    fieldGroup?: IEditorFormlyField[];
+    fieldGroup?: IBaseEditorFormlyField[];
     expressionProperties: {
         [property: string]: string | ((model: any, formState: any, field?: FormlyFieldConfig) => any) | Observable<any>;
     };
@@ -34,11 +30,19 @@ export interface IBaseEditorFormlyField<T = FormlyTemplateOptions> extends Forml
 export interface IForm {
     id: string;
     name: string;
-	activeField: IEditorFormlyField;
-    fields: IEditorFormlyField[];
-    fieldMap: Map<string, IEditorFormlyField>;
+	activeField: IBaseEditorFormlyField;
+    fields: IBaseEditorFormlyField[];
+    fieldMap: Map<string, IBaseEditorFormlyField>;
     model: Record<string, unknown>;
 }
 
+export interface IFieldService {
+    // getNextKey(): string;
+    getNextFieldId(type: string, customType?: string): string;
+    getDefaultConfig(type: string, formId: string, customType?: string, parentFieldId?: string): IBaseEditorFormlyField;
+    getProperties(type: string, customType?: string): IProperty[];
+}
 
-export type IEditorFormlyField = IBaseEditorFormlyField;
+export const EDITOR_FIELD_SERVICE = new InjectionToken<IFieldService>('EDITOR_FIELD_SERVICE');
+
+// export type IEditorFormlyField = IBaseEditorFormlyField;

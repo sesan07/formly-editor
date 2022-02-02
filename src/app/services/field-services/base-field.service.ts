@@ -1,13 +1,15 @@
-import { StyleService } from '../style-service/style.service';
-import { FieldType, IBaseEditorFormlyField, WrapperType } from '../form-service/form.types';
-import { IProperty, PropertyType } from '../../components/property/property.types';
-import { IChipListProperty } from '../../components/property/chip-list-property/chip-list-property.types';
-import { IObjectProperty } from '../../components/property/object-property/object-property.types';
+
 import { FormlyTemplateOptions } from '@ngx-formly/core';
 import { Injectable } from '@angular/core';
+import { IBaseEditorFormlyField, IFieldService } from 'src/app/editor/services/form-service/form.types';
+import { FieldType, WrapperType } from './field.types';
+import { IChipListProperty } from 'src/app/editor/components/property/chip-list-property/chip-list-property.types';
+import { IObjectProperty } from 'src/app/editor/components/property/object-property/object-property.types';
+import { IProperty, PropertyType } from 'src/app/editor/components/property/property.types';
+import { StyleService } from 'src/app/editor/services/style-service/style.service';
 
 @Injectable()
-export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
+export abstract class BaseFieldService<T extends FormlyTemplateOptions> implements IFieldService {
 	private _currKey = 0;
 	private _currId = 0;
 

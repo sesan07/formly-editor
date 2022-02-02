@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { IArrayProperty } from 'src/app/editor/components/property/array-property/array-property.types';
+import { IObjectProperty } from 'src/app/editor/components/property/object-property/object-property.types';
+import { IProperty, PropertyType } from 'src/app/editor/components/property/property.types';
 import { BaseFieldService } from '../base-field.service';
-import { FieldType, IBaseEditorFormlyField, WrapperType } from '../../form-service/form.types';
-import { IProperty, PropertyType } from '../../../components/property/property.types';
+import { FieldType, IEditorFormlyField, WrapperType } from '../field.types';
 import { IRadioTemplateOptions } from './radio.types';
-import { IObjectProperty } from '../../../components/property/object-property/object-property.types';
-import { IArrayProperty } from '../../../components/property/array-property/array-property.types';
 
 @Injectable({
 	providedIn: 'root',
@@ -14,7 +14,7 @@ export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
 	public name = 'Radio';
 	public type: FieldType = FieldType.RADIO;
 
-	public getDefaultConfig(formId: string, parentFieldId?: string): IBaseEditorFormlyField<IRadioTemplateOptions> {
+	public getDefaultConfig(formId: string, parentFieldId?: string): IEditorFormlyField<IRadioTemplateOptions> {
 		return {
 			formId,
 			parentFieldId,

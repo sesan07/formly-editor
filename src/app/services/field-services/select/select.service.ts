@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { IArrayProperty } from 'src/app/editor/components/property/array-property/array-property.types';
+import { IObjectProperty } from 'src/app/editor/components/property/object-property/object-property.types';
+import { IProperty, PropertyType } from 'src/app/editor/components/property/property.types';
 import { BaseFieldService } from '../base-field.service';
-import { FieldType, IBaseEditorFormlyField, WrapperType } from '../../form-service/form.types';
-import { IProperty, PropertyType } from '../../../components/property/property.types';
+import { FieldType, IEditorFormlyField, WrapperType } from '../field.types';
 import { ISelectTemplateOptions } from './select.types';
-import { IObjectProperty } from '../../../components/property/object-property/object-property.types';
-import { IArrayProperty } from '../../../components/property/array-property/array-property.types';
 
 @Injectable({
 	providedIn: 'root',
@@ -14,7 +14,7 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
 	public name = 'Select';
 	public type: FieldType = FieldType.SELECT;
 
-	public getDefaultConfig(formId: string, parentFieldId?: string): IBaseEditorFormlyField<ISelectTemplateOptions> {
+	public getDefaultConfig(formId: string, parentFieldId?: string): IEditorFormlyField<ISelectTemplateOptions> {
 		return {
 			formId,
 			parentFieldId,

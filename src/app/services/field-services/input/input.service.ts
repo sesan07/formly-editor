@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService } from '../base-field.service';
-import { FieldType, IBaseEditorFormlyField, WrapperType } from '../../form-service/form.types';
-import { IProperty, PropertyType } from '../../../components/property/property.types';
 import { IInputTemplateOptions } from './input.types';
-import { IObjectProperty } from '../../../components/property/object-property/object-property.types';
+import { FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { IProperty, PropertyType } from 'src/app/editor/components/property/property.types';
+import { IObjectProperty } from 'src/app/editor/components/property/object-property/object-property.types';
 
 @Injectable({
 	providedIn: 'root',
@@ -13,7 +13,7 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
 	public name = 'Input';
 	public type: FieldType = FieldType.INPUT;
 
-	public getDefaultConfig(formId: string, parentFieldId?: string): IBaseEditorFormlyField<IInputTemplateOptions> {
+	public getDefaultConfig(formId: string, parentFieldId?: string): IEditorFormlyField<IInputTemplateOptions> {
 		return {
 			formId,
 			parentFieldId,

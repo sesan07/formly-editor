@@ -1,27 +1,26 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService } from '../base-field.service';
-import { FieldType, IBaseEditorFormlyField, WrapperType } from '../../form-service/form.types';
-import { IProperty } from '../../../components/property/property.types';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
+import { FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { IProperty } from 'src/app/editor/components/property/property.types';
 
 @Injectable({
     providedIn: 'root',
 })
-export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> {
+export class OtherFieldService extends BaseFieldService<FormlyTemplateOptions> {
 
-    public name = 'Formly Group';
-    public type: FieldType = FieldType.FORMLY_GROUP;
+    public name = 'Other';
+    public type: FieldType = FieldType.OTHER;
 
-    public getDefaultConfig(formId: string, parentFieldId?: string): IBaseEditorFormlyField {
+    public getDefaultConfig(formId: string, parentFieldId?: string): IEditorFormlyField {
         return {
             formId,
             parentFieldId,
             name: this.name,
-			type: this.type,
+			type: undefined,
             fieldId: this.getNextFieldId(),
             wrappers: [WrapperType.EDITOR],
             templateOptions: {},
-            fieldGroup: [],
             expressionProperties: {},
             fieldProperties: this.getProperties(),
         };

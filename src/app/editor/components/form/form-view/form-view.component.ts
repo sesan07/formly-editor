@@ -5,7 +5,7 @@ import { Observable, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { cloneDeep } from 'lodash-es';
 import { FormService } from '../../../services/form-service/form.service';
-import { IEditorFormlyField, IForm } from '../../../services/form-service/form.types';
+import { IBaseEditorFormlyField, IForm } from '../../../services/form-service/form.types';
 
 @Component({
     selector: 'app-form-view',
@@ -16,7 +16,7 @@ export class FormViewComponent implements OnInit, OnDestroy {
     @Input() form: IForm;
     @Input() formChanged$: Observable<void>;
 
-    public fields: IEditorFormlyField[];
+    public fields: IBaseEditorFormlyField[];
     public formGroup: FormGroup = new FormGroup({});
     public model: any = {};
     public options: FormlyFormOptions = {};
@@ -44,7 +44,7 @@ export class FormViewComponent implements OnInit, OnDestroy {
 		this.options = {};
 		this.model = cloneDeep(this.form.model);
 
-		const logClone: IEditorFormlyField[] = cloneDeep(this.form.fields);
+		const logClone: IBaseEditorFormlyField[] = cloneDeep(this.form.fields);
 		logClone.forEach(field => this._formService.cleanField(field, true, true));
 		console.log('FIELDS', JSON.stringify(logClone, null, 4));
     }
