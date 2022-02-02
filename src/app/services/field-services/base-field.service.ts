@@ -2,7 +2,7 @@
 import { FormlyTemplateOptions } from '@ngx-formly/core';
 import { Injectable } from '@angular/core';
 import { IBaseEditorFormlyField, IFieldService } from 'src/app/editor/services/form-service/form.types';
-import { FieldType, WrapperType } from './field.types';
+import { FieldType, CustomFieldType, WrapperType } from './field.types';
 import { IChipListProperty } from 'src/app/editor/components/property/chip-list-property/chip-list-property.types';
 import { IObjectProperty } from 'src/app/editor/components/property/object-property/object-property.types';
 import { IProperty, PropertyType } from 'src/app/editor/components/property/property.types';
@@ -10,12 +10,10 @@ import { StyleService } from 'src/app/services/style-service/style.service';
 
 @Injectable()
 export abstract class BaseFieldService<T extends FormlyTemplateOptions> implements IFieldService {
-	customType?: FieldType;
 
 	private _currKey = 0;
 	private _currId = 0;
 
-	abstract name: string;
 	abstract type: FieldType;
 
 	public constructor(private _styleService: StyleService) { }
@@ -25,7 +23,6 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> implemen
 	}
 
 	public getNextFieldId(): string {
-        return `${this.type}${this.customType ? '__' + this.customType : ''}__${this._currId++}`;
 		return this.type + '__' + this._currId++;
 	}
 
@@ -87,6 +84,6 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> implemen
 		return properties;
 	}
 
-	public abstract getDefaultConfig(formId: string, parentFieldId?: string): IBaseEditorFormlyField<T>;
+	public abstract getDefaultConfig(formId: string, customType?: CustomFieldType, parentFieldId?: string): IBaseEditorFormlyField<T>;
 	public abstract getProperties(): IProperty[];
 }

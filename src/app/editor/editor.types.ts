@@ -5,6 +5,7 @@ export interface EditorFieldConfig {
     type: string;
     customType?: string;
     canHaveChildren?: boolean;
+    childrenPath?: string; // Lodash path
 }
 
 export interface EditorFieldCategoryConfig {

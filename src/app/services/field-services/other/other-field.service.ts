@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService } from '../base-field.service';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
-import { FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
 import { IProperty } from 'src/app/editor/components/property/property.types';
 
 @Injectable({
@@ -9,14 +9,17 @@ import { IProperty } from 'src/app/editor/components/property/property.types';
 })
 export class OtherFieldService extends BaseFieldService<FormlyTemplateOptions> {
 
-    public name = 'Other';
     public type: FieldType = FieldType.OTHER;
 
-    public getDefaultConfig(formId: string, parentFieldId?: string): IEditorFormlyField {
+	public getDefaultConfig(
+        formId: string,
+        customType?: CustomFieldType,
+        parentFieldId?: string
+    ): IEditorFormlyField {
         return {
             formId,
             parentFieldId,
-            name: this.name,
+            name: 'Other',
 			type: undefined,
             fieldId: this.getNextFieldId(),
             wrappers: [WrapperType.EDITOR],

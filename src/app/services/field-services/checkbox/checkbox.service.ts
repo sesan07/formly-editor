@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IObjectProperty } from 'src/app/editor/components/property/object-property/object-property.types';
 import { IProperty, PropertyType } from 'src/app/editor/components/property/property.types';
 import { BaseFieldService } from '../base-field.service';
-import { FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
 import { ICheckboxTemplateOptions } from './checkbox.types';
 
 @Injectable({
@@ -10,14 +10,17 @@ import { ICheckboxTemplateOptions } from './checkbox.types';
 })
 export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> {
 
-	public name = 'Checkbox';
 	public type: FieldType = FieldType.CHECKBOX;
 
-	public getDefaultConfig(formId: string, parentFieldId?: string): IEditorFormlyField<ICheckboxTemplateOptions> {
+	public getDefaultConfig(
+        formId: string,
+        customType?: CustomFieldType,
+        parentFieldId?: string
+    ): IEditorFormlyField<ICheckboxTemplateOptions> {
 		return {
 			formId,
 			parentFieldId,
-			name: this.name,
+			name: 'Checkbox',
 			type: this.type,
 			fieldId: this.getNextFieldId(),
 			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],

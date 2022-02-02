@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService } from '../base-field.service';
 import { IInputTemplateOptions } from './input.types';
-import { FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
 import { IProperty, PropertyType } from 'src/app/editor/components/property/property.types';
 import { IObjectProperty } from 'src/app/editor/components/property/object-property/object-property.types';
 
@@ -10,14 +10,18 @@ import { IObjectProperty } from 'src/app/editor/components/property/object-prope
 })
 export class InputService extends BaseFieldService<IInputTemplateOptions> {
 
-	public name = 'Input';
 	public type: FieldType = FieldType.INPUT;
 
-	public getDefaultConfig(formId: string, parentFieldId?: string): IEditorFormlyField<IInputTemplateOptions> {
-		return {
+	public getDefaultConfig(
+            formId: string,
+            customType?: CustomFieldType,
+            parentFieldId?: string
+        ): IEditorFormlyField<IInputTemplateOptions> {
+
+        const config: IEditorFormlyField<IInputTemplateOptions> = {
 			formId,
 			parentFieldId,
-			name: this.name,
+			name: 'Input',
 			type: this.type,
 			fieldId: this.getNextFieldId(),
 			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],
@@ -30,6 +34,15 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
 			expressionProperties: {},
 			fieldProperties: this.getProperties(),
 		};
+
+        switch (customType) {
+            case CustomFieldType.NUMBER:
+                config.name = 'Number';
+                config.customType = customType;
+                config.templateOptions.type = 'number';
+        }
+
+        return config;
 	}
 
 	getProperties(): IProperty[] {
@@ -41,6 +54,10 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
 				childProperties: [
 					{
 						key: 'label',
+						type: PropertyType.TEXT,
+					},
+					{
+						key: 'type',
 						type: PropertyType.TEXT,
 					},
 					{

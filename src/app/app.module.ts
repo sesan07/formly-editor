@@ -6,7 +6,7 @@ import { EditorModule } from './editor/editor.module';
 import { AppRoutingModule } from './app-routing.module';
 import { EDITOR_FIELD_SERVICE } from './editor/services/form-service/form.types';
 import { FieldService } from './services/field-services/field-service';
-import { FieldType } from './services/field-services/field.types';
+import { CustomFieldType, FieldType } from './services/field-services/field.types';
 
 @NgModule({
     declarations: [
@@ -48,6 +48,16 @@ import { FieldType } from './services/field-services/field.types';
                         {
                             name: 'Textarea',
                             type: FieldType.TEXTAREA,
+                        },
+                    ]
+                },
+                {
+                    name: 'Custom',
+                    fields: [
+                        {
+                            name: 'Number',
+                            type: FieldType.INPUT,
+                            customType: CustomFieldType.NUMBER
                         },
                     ]
                 }

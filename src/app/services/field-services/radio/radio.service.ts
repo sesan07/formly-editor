@@ -3,7 +3,7 @@ import { IArrayProperty } from 'src/app/editor/components/property/array-propert
 import { IObjectProperty } from 'src/app/editor/components/property/object-property/object-property.types';
 import { IProperty, PropertyType } from 'src/app/editor/components/property/property.types';
 import { BaseFieldService } from '../base-field.service';
-import { FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
 import { IRadioTemplateOptions } from './radio.types';
 
 @Injectable({
@@ -11,14 +11,17 @@ import { IRadioTemplateOptions } from './radio.types';
 })
 export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
 
-	public name = 'Radio';
 	public type: FieldType = FieldType.RADIO;
 
-	public getDefaultConfig(formId: string, parentFieldId?: string): IEditorFormlyField<IRadioTemplateOptions> {
+	public getDefaultConfig(
+        formId: string,
+        customType?: CustomFieldType,
+        parentFieldId?: string
+    ): IEditorFormlyField<IRadioTemplateOptions> {
 		return {
 			formId,
 			parentFieldId,
-			name: this.name,
+			name: 'Radio',
 			type: this.type,
 			fieldId: this.getNextFieldId(),
 			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],

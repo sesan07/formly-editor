@@ -38,11 +38,7 @@ export class FormService {
 
     public addField(type: string, formId: string, customType?: string, parentId?: string, index?: number): IBaseEditorFormlyField {
         const form: IForm = this.forms.find(f => f.id === formId);
-		// const fieldService: BaseFieldService<any> = this._getFieldService(type);
-
         const newField: IBaseEditorFormlyField = this._fieldService.getDefaultConfig(type, formId, customType, parentId);
-
-		// const newField: IBaseEditorFormlyField = fieldService.getDefaultConfig(formId, parentId);
 		form.fieldMap.set(newField.fieldId, newField);
 
 		const siblings: IBaseEditorFormlyField[] = this._getSiblings(formId, parentId);
@@ -142,6 +138,7 @@ export class FormService {
 		delete field.fieldProperties;
 		this._removeEmptyProperties(field);
 
+        // TODO clean children using provided service if field.canHaveChildren
 		// Children
 		if (!cleanChildren) {
 			return;
@@ -172,17 +169,11 @@ export class FormService {
 	}
 
 	public getChildren(field: IBaseEditorFormlyField): IBaseEditorFormlyField[] {
-        // TOD implement properly
-        if (field.canHaveChildren) {
-            if (!field.childrenPath) {
-                throw new Error(`childrenPath is not configured for ${field.type}`);
-            }
-
-            return get(field, field.childrenPath);
-
-        } else {
-            throw new Error(`Attempting to get children for field '${field.type}', but it's not configured to have children`);
+        if (!field.childrenPath) {
+            throw new Error(`childrenPath is not configured for ${field.type}`);
         }
+
+        return get(field, field.childrenPath);
 	}
 
     // Move field within a parent field in a form
@@ -284,12 +275,6 @@ export class FormService {
             field.type = FieldType.FORMLY_GROUP;
         }
 
-        // const fieldService: BaseFieldService<any> = this._getFieldService(field.type);
-
-        // const supportedFieldType: FieldType = Object.values(FieldType).includes(field.type)
-        //     ? field.type
-        //     : FieldType.OTHER;
-
         // TOD implement properly
         field.name = this.fieldCategories[0].fields.find(f => f.type === field.type).name;
 
@@ -297,11 +282,6 @@ export class FormService {
         field.parentFieldId = parentId;
         field.fieldId = this._fieldService.getNextFieldId(field.type);
         fieldMap.set(field.fieldId, field);
-
-		// TODO verify if keys are always requierd when not formly-group
-        // if (!field.key && supportedFieldType !== FieldType.FORMLY_GROUP) {
-        //     field.key = fieldService.getNextKey();
-        // }
 
         if (field.wrappers) {
             field.wrappers.unshift(WrapperType.EDITOR);
@@ -346,6 +326,7 @@ export class FormService {
         delete field.fieldProperties;
         delete field.canHaveChildren;
         delete field.childrenPath;
+        delete field.customType;
 
         const editorIndex: number = field.wrappers.indexOf(WrapperType.EDITOR);
         if (editorIndex !== -1) {

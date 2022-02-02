@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { IProperty } from 'src/app/editor/components/property/property.types';
-import { EditorFieldConfig } from 'src/app/editor/editor.types';
 import { IBaseEditorFormlyField, IFieldService } from 'src/app/editor/services/form-service/form.types';
 import { BaseFieldService } from './base-field.service';
 import { CheckboxService } from './checkbox/checkbox.service';
-import { FieldType } from './field.types';
+import { CustomFieldType, FieldType } from './field.types';
 import { FormlyGroupService } from './formly-group/formly-group.service';
 import { InputService } from './input/input.service';
 import { OtherFieldService } from './other/other-field.service';
@@ -26,23 +25,22 @@ export class FieldService implements IFieldService {
         private _textareaFieldService: TextareaService,
     ) { }
 
-    getDefaultConfig(type: string, formId: string, customType?: string, parentFieldId?: string): IBaseEditorFormlyField {
-        const fieldService: BaseFieldService<any> = this._getFieldService(type, customType);
-        return fieldService.getDefaultConfig(formId, parentFieldId);
+    getDefaultConfig(type: FieldType, formId: string, customType?: CustomFieldType, parentFieldId?: string): IBaseEditorFormlyField {
+        const fieldService: BaseFieldService<any> = this._getFieldService(type);
+        return fieldService.getDefaultConfig(formId, customType, parentFieldId);
     }
 
-    getProperties(type: string, customType?: string): IProperty[] {
-        const fieldService: BaseFieldService<any> = this._getFieldService(type, customType);
+    getProperties(type: FieldType, customType?: CustomFieldType): IProperty[] {
+        const fieldService: BaseFieldService<any> = this._getFieldService(type);
         return fieldService.getProperties();
     }
 
-    getNextFieldId(type: string, customType?: string): string {
-        const fieldService: BaseFieldService<any> = this._getFieldService(type, customType);
+    getNextFieldId(type: FieldType): string {
+        const fieldService: BaseFieldService<any> = this._getFieldService(type);
         return fieldService.getNextFieldId();
     }
 
-    private _getFieldService(type: string, customType?: string): BaseFieldService<any> {
-        // TODO check for customType to get correct service
+    private _getFieldService(type: FieldType): BaseFieldService<any> {
         switch (type) {
             case FieldType.CHECKBOX: return this._checkboxService;
             case FieldType.FORMLY_GROUP: return this._formlyGroupService;
@@ -52,8 +50,8 @@ export class FieldService implements IFieldService {
             case FieldType.SELECT: return this._selectService;
             case FieldType.TEXTAREA: return this._textareaFieldService;
             default:
-				console.warn(`Unknown formly type: '${type}', treating as 'other' type`);
-				return this._otherFieldService;
+                console.warn(`Unknown formly type: '${type}', treating as 'other' type`);
+                return this._otherFieldService;
         }
     }
 }

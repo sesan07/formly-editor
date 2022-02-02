@@ -39,10 +39,9 @@ export interface IForm {
 }
 
 export interface IFieldService {
-    // getNextKey(): string;
-    getNextFieldId(type: string, customType?: string): string;
+    getNextFieldId(type: string): string;
     getDefaultConfig(type: string, formId: string, customType?: string, parentFieldId?: string): IBaseEditorFormlyField;
-    getProperties(type: string, customType?: string): IProperty[];
+    getProperties(type: string): IProperty[];
 }
 
 export const EDITOR_FIELD_SERVICE = new InjectionToken<IFieldService>('EDITOR_FIELD_SERVICE');
