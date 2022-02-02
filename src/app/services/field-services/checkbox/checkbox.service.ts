@@ -44,28 +44,27 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
 	getProperties(): IProperty[] {
 		return [
 			...this._getSharedProperties(),
-			{
-				key: 'templateOptions',
-				type: PropertyType.OBJECT,
-				childProperties: [
-					{
-						key: 'label',
-						type: PropertyType.TEXT,
-					},
-					{
-						key: 'description',
-						type: PropertyType.TEXT,
-					},
-					{
-						key: 'pattern',
-						type: PropertyType.TEXT,
-					},
-					{
-						key: 'required',
-						type: PropertyType.BOOLEAN,
-					},
-				]
-			} as IObjectProperty,
+            this._getTemplateOptionsProperty(
+                [
+                    {
+                        key: 'label',
+                        type: PropertyType.TEXT,
+                    },
+                    {
+                        key: 'description',
+                        type: PropertyType.TEXT,
+                    },
+                    {
+                        key: 'pattern',
+                        type: PropertyType.TEXT,
+                    },
+                    {
+                        key: 'required',
+                        type: PropertyType.BOOLEAN,
+                    },
+                ],
+                [WrapperType.FORM_FIELD]
+            ),
 			{
 				key: 'validation',
 				type: PropertyType.OBJECT,
@@ -73,7 +72,7 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
 				childProperties: [],
 				populateChildrenFromTarget: true,
 			} as IObjectProperty,
-			...this._getWrapperProperties([WrapperType.FORM_FIELD]),
+			this._getWrapperProperty([WrapperType.FORM_FIELD])
 		];
 	}
 }

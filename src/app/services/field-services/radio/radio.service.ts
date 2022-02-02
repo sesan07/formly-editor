@@ -46,10 +46,8 @@ export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
 	getProperties(): IProperty[] {
 		return [
 			...this._getSharedProperties(),
-			{
-				key: 'templateOptions',
-				type: PropertyType.OBJECT,
-				childProperties: [
+            this._getTemplateOptionsProperty(
+                [
 					{
 						key: 'label',
 						type: PropertyType.TEXT,
@@ -89,9 +87,10 @@ export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
 							],
 						} as IObjectProperty
 					} as IArrayProperty,
-				]
-			} as IObjectProperty,
-			...this._getWrapperProperties([WrapperType.FORM_FIELD]),
+                ],
+                [WrapperType.FORM_FIELD]
+            ),
+			this._getWrapperProperty([WrapperType.FORM_FIELD])
 		];
 	}
 }

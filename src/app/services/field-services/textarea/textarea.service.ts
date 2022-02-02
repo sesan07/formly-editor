@@ -39,10 +39,8 @@ export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> 
 	getProperties(): IProperty[] {
 		return [
 			...this._getSharedProperties(),
-			{
-				key: 'templateOptions',
-				type: PropertyType.OBJECT,
-				childProperties: [
+            this._getTemplateOptionsProperty(
+                [
 					{
 						key: 'label',
 						type: PropertyType.TEXT,
@@ -59,9 +57,10 @@ export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> 
 						key: 'required',
 						type: PropertyType.BOOLEAN,
 					},
-				]
-			} as IObjectProperty,
-			...this._getWrapperProperties([WrapperType.FORM_FIELD]),
+                ],
+                [WrapperType.FORM_FIELD]
+            ),
+			this._getWrapperProperty([WrapperType.FORM_FIELD])
 		];
 	}
 }

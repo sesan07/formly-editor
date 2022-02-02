@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService } from '../base-field.service';
-import { IProperty } from 'src/app/editor/components/property/property.types';
+import { IProperty, PropertyType } from 'src/app/editor/components/property/property.types';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
 import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { IChipListProperty } from 'src/app/editor/components/property/chip-list-property/chip-list-property.types';
+import { IObjectProperty } from 'src/app/editor/components/property/object-property/object-property.types';
 
 @Injectable({
     providedIn: 'root',
@@ -46,7 +48,8 @@ export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> 
     getProperties(): IProperty[] {
         return [
             ...this._getSharedProperties(),
-            ...this._getWrapperProperties([]),
+            this._getTemplateOptionsProperty([], [WrapperType.CARD]),
+			this._getWrapperProperty([WrapperType.CARD])
         ];
     }
 }

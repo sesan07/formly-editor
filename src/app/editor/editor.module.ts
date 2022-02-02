@@ -116,7 +116,6 @@ export class EditorModule {
             typeCategories: config.typeCategories,
          };
 
-        console.log(types);
         return {
             ngModule: EditorModule,
             providers: [

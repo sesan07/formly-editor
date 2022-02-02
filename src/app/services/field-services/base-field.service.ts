@@ -66,27 +66,44 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> implemen
 		];
 	}
 
-	protected _getWrapperProperties(options: WrapperType[], notRemovableOptions: WrapperType[] = []): IProperty[] {
-		const properties: IProperty[] = [
-			{
-				key: 'wrappers',
-				type: PropertyType.CHIP_LIST,
-				options: [...options],
-				notRemovableOptions: [WrapperType.EDITOR, ...notRemovableOptions],
-			} as IChipListProperty,
-		];
+    protected _getTemplateOptionsProperty(childProperties: IProperty[], wrappers: WrapperType[]): IObjectProperty {
+        wrappers.forEach(wrapper => childProperties.push(...this._getWrapperTOProperties(wrapper)));
 
-		// Add wrapper property config to `properties` if wrapper is configurable
-		options.forEach(option => {
-			switch (option) {
-				case WrapperType.EDITOR:
-				case WrapperType.FORM_FIELD:
-					break;
-				default: throw new Error(`Unkown wrapper type: '${option}'`);
-			}
-		});
+        // Remove duplicates with same key
+        const propertyMap: Map<string, IProperty> = new Map();
+        childProperties.forEach(property => propertyMap.set(property.key + '', property));
 
-		return properties;
+        return {
+            key: 'templateOptions',
+            type: PropertyType.OBJECT,
+            childProperties: Array.from(propertyMap.values())
+        };
+    }
+
+	protected _getWrapperProperty(wrappers: WrapperType[]): IChipListProperty {
+        return {
+            key: 'wrappers',
+            type: PropertyType.CHIP_LIST,
+            options: [WrapperType.EDITOR, ...wrappers],
+            notRemovableOptions: [WrapperType.EDITOR],
+        };
+	}
+
+    // Wrapper template option properties
+	private _getWrapperTOProperties(wrapper: WrapperType): IProperty[] {
+        switch (wrapper) {
+            case WrapperType.CARD:
+                return [
+					{
+						key: 'cardTitle',
+						type: PropertyType.TEXT,
+					},
+                ];
+            case WrapperType.EDITOR:
+            case WrapperType.FORM_FIELD:
+                return [];
+            default: throw new Error(`Unkown wrapper type: '${wrapper}'`);
+        }
 	}
 
 	public abstract getDefaultConfig(formId: string, customType?: CustomFieldType, parentFieldId?: string): IBaseEditorFormlyField<T>;

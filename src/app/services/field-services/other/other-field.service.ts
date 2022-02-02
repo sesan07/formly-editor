@@ -33,7 +33,8 @@ export class OtherFieldService extends BaseFieldService<FormlyTemplateOptions> {
     getProperties(): IProperty[] {
         return [
             ...this._getSharedProperties(),
-            ...this._getWrapperProperties([]),
+            this._getTemplateOptionsProperty([], []),
+			this._getWrapperProperty([])
         ];
     }
 }

@@ -49,10 +49,8 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
 	getProperties(): IProperty[] {
 		return [
 			...this._getSharedProperties(),
-			{
-				key: 'templateOptions',
-				type: PropertyType.OBJECT,
-				childProperties: [
+            this._getTemplateOptionsProperty(
+                [
 					{
 						key: 'label',
 						type: PropertyType.TEXT,
@@ -73,9 +71,25 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
 						key: 'required',
 						type: PropertyType.BOOLEAN,
 					},
-				]
-			} as IObjectProperty,
-			...this._getWrapperProperties([WrapperType.FORM_FIELD]),
+                ],
+                [WrapperType.FORM_FIELD]
+            ),
+			this._getWrapperProperty([WrapperType.FORM_FIELD])
 		];
 	}
+
+    // protected _getTemplateOptionsProperty(wrappers: WrapperType[]): IObjectProperty {
+    //     const childProperties: IProperty[] = [];
+    //     wrappers.forEach(wrapper => childProperties.push(...this._getWrapperProperties(wrapper)));
+
+    //     // Remove duplicates
+    //     const propertyMap: Map<string, IProperty> = new Map();
+    //     childProperties.forEach(property => propertyMap.set(property.key + '', property));
+
+    //     return {
+    //         key: 'templateOptions',
+    //         type: PropertyType.OBJECT,
+    //         childProperties: Array.from(propertyMap.values())
+    //     };
+    // }
 }
