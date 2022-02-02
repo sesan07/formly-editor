@@ -9,7 +9,7 @@
 				<mat-icon>add</mat-icon>
 				<span>Add</span>
 			</button>
-			<button *ngIf="field.canHaveChildren && replaceOptions.length > 0" mat-menu-item [matMenuTriggerFor]="replaceMenu">
+			<button *ngIf="field.canHaveChildren && replaceCategories.length > 0" mat-menu-item [matMenuTriggerFor]="replaceCategoryMenu">
 				<mat-icon>sync</mat-icon>
 				<span>Replace</span>
 			</button>
@@ -26,18 +26,25 @@
                 </button>
 
                 <mat-menu #addFieldMenu="matMenu">
-                    <button mat-menu-item  *ngFor="let field of category.fields" (click)="onAddChildField(field.type, field.customType)">
-                        {{ field.name }}
+                    <button mat-menu-item  *ngFor="let option of category.typeOptions" (click)="onAddChildField(option.name, option.customName)">
+                        {{ option.displayName }}
                     </button>
                 </mat-menu>
             </ng-container>
 		</mat-menu>
 		
-		<mat-menu #replaceMenu="matMenu">
-            <!-- TODO implement properly -->
-			<button mat-menu-item *ngFor="let type of replaceOptions" (click)="onReplaceParentField(type)">
-				{{formService.getFieldTypeName(type)}}
-			</button>
+		<mat-menu #replaceCategoryMenu="matMenu">
+            <ng-container *ngFor="let category of replaceCategories">
+                <button mat-menu-item [matMenuTriggerFor]="replaceFieldMenu">
+                    {{ category.name }}
+                </button>
+
+                <mat-menu #replaceFieldMenu="matMenu">
+                    <button mat-menu-item  *ngFor="let option of category.typeOptions" (click)="onReplaceParentField(option.name, option.customName)">
+                        {{ option.displayName }}
+                    </button>
+                </mat-menu>
+            </ng-container>
 		</mat-menu>
 	
 		<!-- use a disabled button to provide padding for non expandable fields -->

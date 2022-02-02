@@ -13,11 +13,13 @@ export enum FieldType {
 
 export enum CustomFieldType {
     NUMBER = 'number',
+    CARD = 'card',
 }
 
 export enum WrapperType {
     EDITOR = 'editor',
     FORM_FIELD = 'form-field',
+    CARD = 'card',
 }
 
 export interface IEditorFormlyField<T = FormlyTemplateOptions> extends IBaseEditorFormlyField {

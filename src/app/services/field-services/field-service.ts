@@ -30,7 +30,7 @@ export class FieldService implements IFieldService {
         return fieldService.getDefaultConfig(formId, customType, parentFieldId);
     }
 
-    getProperties(type: FieldType, customType?: CustomFieldType): IProperty[] {
+    getProperties(type: FieldType): IProperty[] {
         const fieldService: BaseFieldService<any> = this._getFieldService(type);
         return fieldService.getProperties();
     }
@@ -38,6 +38,11 @@ export class FieldService implements IFieldService {
     getNextFieldId(type: FieldType): string {
         const fieldService: BaseFieldService<any> = this._getFieldService(type);
         return fieldService.getNextFieldId();
+    }
+
+    getName(type: FieldType): string {
+        const fieldService: BaseFieldService<any> = this._getFieldService(type);
+        return fieldService.getName();
     }
 
     private _getFieldService(type: FieldType): BaseFieldService<any> {

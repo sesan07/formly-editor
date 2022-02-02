@@ -1,68 +1,90 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+
+import {MatCardModule} from '@angular/material/card';
 
 import { AppComponent } from './app.component';
 import { EditorModule } from './editor/editor.module';
 import { AppRoutingModule } from './app-routing.module';
 import { EDITOR_FIELD_SERVICE } from './editor/services/form-service/form.types';
 import { FieldService } from './services/field-services/field-service';
-import { CustomFieldType, FieldType } from './services/field-services/field.types';
+import { CustomFieldType, FieldType, WrapperType } from './services/field-services/field.types';
+import { CardWrapperComponent } from './components/card-wrapper/card-wrapper.component';
+import { FormlyMaterialModule } from '@ngx-formly/material';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
     declarations: [
         AppComponent,
+        CardWrapperComponent,
     ],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
         AppRoutingModule,
+        MatCardModule,
+        FormlyMaterialModule,
         EditorModule.forRoot({
-            defaultType: FieldType.FORMLY_GROUP,
-            fieldCategories: [
+            defaultName: FieldType.FORMLY_GROUP,
+            typeCategories: [
                 {
                     name: 'Basic',
-                    fields: [
+                    typeOptions: [
                         {
-                            name: 'Checkbox',
-                            type: FieldType.CHECKBOX,
+                            name: FieldType.CHECKBOX,
+                            displayName: 'Checkbox',
                         },
                         {
-                            name: 'Formly Group',
-                            type: FieldType.FORMLY_GROUP,
+                            name: FieldType.FORMLY_GROUP,
+                            displayName: 'Formly Group',
+                            canHaveChildren: true,
                         },
                         {
-                            name: 'Input',
-                            type: FieldType.INPUT,
+                            name: FieldType.INPUT,
+                            displayName: 'Input',
                         },
                         {
-                            name: 'Other',
-                            type: FieldType.OTHER,
+                            name: FieldType.OTHER,
+                            displayName: 'Other',
                         },
                         {
-                            name: 'Radio',
-                            type: FieldType.RADIO,
+                            name: FieldType.RADIO,
+                            displayName: 'Radio',
                         },
                         {
-                            name: 'Select',
-                            type: FieldType.SELECT,
+                            name: FieldType.SELECT,
+                            displayName: 'Select',
                         },
                         {
-                            name: 'Textarea',
-                            type: FieldType.TEXTAREA,
+                            name: FieldType.TEXTAREA,
+                            displayName: 'Textarea',
                         },
                     ]
                 },
                 {
                     name: 'Custom',
-                    fields: [
+                    typeOptions: [
                         {
-                            name: 'Number',
-                            type: FieldType.INPUT,
-                            customType: CustomFieldType.NUMBER
+                            name: FieldType.INPUT,
+                            displayName: 'Number',
+                            customName: CustomFieldType.NUMBER
+                        },
+                        {
+                            name: FieldType.FORMLY_GROUP,
+                            displayName: 'Card',
+                            customName: CustomFieldType.CARD,
+                            canHaveChildren: true,
                         },
                     ]
                 }
-            ]
-        })
+            ],
+            wrappers: [{ name: WrapperType.CARD, component: CardWrapperComponent }],
+            validationMessages: [
+                { name: 'required', message: 'This field is required' },
+            ],
+        }),
     ],
     providers: [{ provide: EDITOR_FIELD_SERVICE, useClass: FieldService }],
     bootstrap: [AppComponent],

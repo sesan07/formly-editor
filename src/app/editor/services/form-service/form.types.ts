@@ -2,7 +2,7 @@ import { InjectionToken } from '@angular/core';
 import { FormlyFieldConfig, FormlyTemplateOptions } from '@ngx-formly/core';
 import { Observable } from 'rxjs';
 import { IProperty } from '../../components/property/property.types';
-import { EditorFieldConfig } from '../../editor.types';
+import { EditorTypeOption } from '../../editor.types';
 
 export enum FieldType {
     FORMLY_GROUP = 'formly-group',
@@ -39,6 +39,7 @@ export interface IForm {
 }
 
 export interface IFieldService {
+    getName(type: string, customType?: string): string;
     getNextFieldId(type: string): string;
     getDefaultConfig(type: string, formId: string, customType?: string, parentFieldId?: string): IBaseEditorFormlyField;
     getProperties(type: string): IProperty[];

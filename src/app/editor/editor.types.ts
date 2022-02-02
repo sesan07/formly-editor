@@ -1,22 +1,22 @@
 import { InjectionToken } from '@angular/core';
+import { ConfigOption, TypeOption } from '@ngx-formly/core/lib/services/formly.config';
 
-export interface EditorFieldConfig {
+export interface EditorTypeOption extends TypeOption {
+    displayName: string;
     name: string;
-    type: string;
-    customType?: string;
+    customName?: string;
     canHaveChildren?: boolean;
-    childrenPath?: string; // Lodash path
 }
 
-export interface EditorFieldCategoryConfig {
+export interface EditorTypeCategoryOption {
     name: string;
-    fields: EditorFieldConfig[];
+    typeOptions: EditorTypeOption[];
 }
 
-export interface EditorConfig {
-    defaultType: string;
-    defaultCustomType?: string;
-    fieldCategories: EditorFieldCategoryConfig[];
+export interface EditorConfigOption extends ConfigOption {
+    defaultName: string;
+    defaultCustomName?: string;
+    typeCategories: EditorTypeCategoryOption[];
 }
 
-export const EDITOR_CONFIG = new InjectionToken<EditorConfig[]>('EDITOR_CONFIG');
+export const EDITOR_CONFIG = new InjectionToken<EditorConfigOption[]>('EDITOR_CONFIG');

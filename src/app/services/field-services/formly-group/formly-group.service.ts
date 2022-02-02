@@ -10,16 +10,18 @@ import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../
 export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> {
 
     public type: FieldType = FieldType.FORMLY_GROUP;
+	protected defaultName = 'Formly Group';
 
 	public getDefaultConfig(
         formId: string,
         customType?: CustomFieldType,
         parentFieldId?: string
     ): IEditorFormlyField {
-        return {
+
+        const config: IEditorFormlyField = {
             formId,
             parentFieldId,
-            name: 'Formly Group',
+			name: this.defaultName,
 			type: this.type,
             fieldId: this.getNextFieldId(),
             wrappers: [WrapperType.EDITOR],
@@ -29,7 +31,16 @@ export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> 
             fieldProperties: this.getProperties(),
             canHaveChildren: true,
             childrenPath: 'fieldGroup'
-        };
+		};
+
+        switch (customType) {
+            case CustomFieldType.CARD:
+                config.name = 'Card';
+                config.customType = customType;
+                config.wrappers.push(WrapperType.CARD);
+        }
+
+        return config;
     }
 
     getProperties(): IProperty[] {

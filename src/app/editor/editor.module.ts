@@ -1,9 +1,7 @@
 import { Inject, ModuleWithProviders, NgModule, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormlyModule } from '@ngx-formly/core';
-import { FormlyMaterialModule } from '@ngx-formly/material';
+import { FormlyModule, FORMLY_CONFIG } from '@ngx-formly/core';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,7 +15,6 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { HttpClientModule } from '@angular/common/http';
 
 import { EditorWrapperComponent } from './components/editor-wrapper/editor-wrapper.component';
 import { FormComponent } from './components/form/form.component';
@@ -33,12 +30,14 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { HomeComponent } from './components/home/home.component';
 import { SidebarSectionComponent } from './components/sidebar-section/sidebar-section.component';
 import { EditorFormlyGroupComponent } from './components/editor-formly-group/editor-formly-group.component';
-import { EditorConfig, EditorFieldCategoryConfig, EDITOR_CONFIG } from './editor.types';
+import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG } from './editor.types';
 import { FormService } from './services/form-service/form.service';
+import { cloneDeep } from 'lodash-es';
+import { TypeOption } from '@ngx-formly/core/lib/services/formly.config';
 
-const defaultConfig: EditorConfig = {
-    defaultType: 'form-group',
-    fieldCategories: []
+const defaultConfig: EditorConfigOption = {
+    defaultName: 'formly-group',
+    typeCategories: []
 };
 
 
@@ -59,17 +58,11 @@ const defaultConfig: EditorConfig = {
     ],
     imports: [
         CommonModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
         FormsModule,
-        FormlyModule.forRoot({
+        FormlyModule.forChild({
             types: [{ name: FieldType.FORMLY_GROUP, component: EditorFormlyGroupComponent }],
             wrappers: [{ name: WrapperType.EDITOR, component: EditorWrapperComponent }],
-            validationMessages: [
-                { name: 'required', message: 'This field is required' },
-            ],
         }),
-        FormlyMaterialModule,
         MatTreeModule,
         MatButtonModule,
         MatIconModule,
@@ -91,14 +84,45 @@ const defaultConfig: EditorConfig = {
 })
 export class EditorModule {
 
-    constructor(formService: FormService, @Optional() @Inject(EDITOR_CONFIG) config: EditorConfig = defaultConfig) {
-        formService.setup(config);
+    constructor(formService: FormService, @Optional() @Inject(EDITOR_CONFIG) config: EditorConfigOption) {
+        formService.setup(config ?? defaultConfig);
     }
 
-    static forRoot(config: EditorConfig): ModuleWithProviders<EditorModule> {
+    static forRoot(config: EditorConfigOption): ModuleWithProviders<EditorModule> {
+        const typeOptionMap: Map<string, EditorTypeOption> = new Map();
+        config.typeCategories.forEach(category => {
+            category.typeOptions.forEach(typeOption => {
+                if (!typeOptionMap.has(typeOption.name) && !typeOption.customName) {
+                    const copy: EditorTypeOption = cloneDeep(typeOption);
+                    delete copy.displayName;
+                    delete copy.customName;
+                    delete copy.canHaveChildren;
+
+                    typeOptionMap.set(copy.name, copy);
+                }
+            });
+        });
+        const types: TypeOption[] = Array.from(typeOptionMap.values());
+
+        const formlyConfig: EditorConfigOption = cloneDeep(config);
+        formlyConfig.types = types;
+        delete formlyConfig.defaultName;
+        delete formlyConfig.defaultCustomName;
+        delete formlyConfig.typeCategories;
+
+        const editorConfig: EditorConfigOption = {
+            defaultName: config.defaultName,
+            defaultCustomName: config.defaultCustomName,
+            typeCategories: config.typeCategories,
+         };
+
+        console.log(types);
         return {
             ngModule: EditorModule,
-            providers: [{ provide: EDITOR_CONFIG, useValue: config }],
+            providers: [
+                { provide: EDITOR_CONFIG, useValue: editorConfig, deps: [FormService] },
+                { provide: FORMLY_CONFIG, useValue: formlyConfig, multi: true },
+            ],
         };
     }
 }

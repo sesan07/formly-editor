@@ -12,6 +12,7 @@ import { IRadioTemplateOptions } from './radio.types';
 export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
 
 	public type: FieldType = FieldType.RADIO;
+	protected defaultName = 'Radio';
 
 	public getDefaultConfig(
         formId: string,
@@ -21,7 +22,7 @@ export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
 		return {
 			formId,
 			parentFieldId,
-			name: 'Radio',
+			name: this.defaultName,
 			type: this.type,
 			fieldId: this.getNextFieldId(),
 			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],

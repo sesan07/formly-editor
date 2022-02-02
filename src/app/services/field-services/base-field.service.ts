@@ -15,6 +15,7 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> implemen
 	private _currId = 0;
 
 	abstract type: FieldType;
+	protected abstract defaultName: string;
 
 	public constructor(private _styleService: StyleService) { }
 
@@ -24,6 +25,10 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> implemen
 
 	public getNextFieldId(): string {
 		return this.type + '__' + this._currId++;
+	}
+
+	public getName(): string {
+		return this.defaultName;
 	}
 
 	protected _getSharedProperties(): IProperty[] {

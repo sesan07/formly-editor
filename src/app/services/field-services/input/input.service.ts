@@ -11,6 +11,7 @@ import { IObjectProperty } from 'src/app/editor/components/property/object-prope
 export class InputService extends BaseFieldService<IInputTemplateOptions> {
 
 	public type: FieldType = FieldType.INPUT;
+	protected defaultName = 'Input';
 
 	public getDefaultConfig(
             formId: string,
@@ -21,7 +22,7 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
         const config: IEditorFormlyField<IInputTemplateOptions> = {
 			formId,
 			parentFieldId,
-			name: 'Input',
+			name: this.defaultName,
 			type: this.type,
 			fieldId: this.getNextFieldId(),
 			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],

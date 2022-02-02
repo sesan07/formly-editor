@@ -10,6 +10,7 @@ import { IProperty } from 'src/app/editor/components/property/property.types';
 export class OtherFieldService extends BaseFieldService<FormlyTemplateOptions> {
 
     public type: FieldType = FieldType.OTHER;
+	protected defaultName = 'Other';
 
 	public getDefaultConfig(
         formId: string,
@@ -19,7 +20,7 @@ export class OtherFieldService extends BaseFieldService<FormlyTemplateOptions> {
         return {
             formId,
             parentFieldId,
-            name: 'Other',
+			name: this.defaultName,
 			type: undefined,
             fieldId: this.getNextFieldId(),
             wrappers: [WrapperType.EDITOR],

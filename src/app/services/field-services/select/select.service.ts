@@ -12,6 +12,7 @@ import { ISelectTemplateOptions } from './select.types';
 export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
 
 	public type: FieldType = FieldType.SELECT;
+	protected defaultName = 'Select';
 
 	public getDefaultConfig(
         formId: string,
@@ -21,7 +22,7 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
 		return {
 			formId,
 			parentFieldId,
-			name: 'Select',
+			name: this.defaultName,
 			type: this.type,
 			fieldId: this.getNextFieldId(),
 			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],

@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, Renderer2 } from '@angular/core';
+import { EditorTypeCategoryOption, EditorTypeOption } from '../../editor.types';
 import { FormService } from '../../services/form-service/form.service';
 import { FieldType, IBaseEditorFormlyField } from '../../services/form-service/form.types';
 
@@ -19,10 +20,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
 	public isPropertyHighlighted: boolean;
     public childFields: IBaseEditorFormlyField[];
 	public treeLevelPadding: number;
-    // TODO implement this properly
-	public parentFieldTypes: string[] = this.formService.getParentFieldTypes();
-	public replaceOptions: string[];
-    // public canHaveChildren: boolean;
+	public replaceCategories: EditorTypeCategoryOption[];
 
     constructor(public formService: FormService, private _renderer: Renderer2, private _elementRef: ElementRef) {
     }
@@ -34,7 +32,23 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
 	}
 
     ngOnChanges(): void {
-		this.replaceOptions = this.parentFieldTypes.filter(type => type !== this.field.type);
+        this.replaceCategories = this.formService.fieldCategories.map(category => {
+            // Filter fields that can have children and aren't this field
+            const options: EditorTypeOption[] = category.typeOptions.filter(option => {
+                if (!option.canHaveChildren) {
+                    return false;
+                }
+
+                // If they're the same type, return based on customType
+                if (option.name === this.field.type) {
+                    return option.customName !== this.field.customType;
+                }
+                return true;
+            });
+
+            return { ...category, typeOptions: options };
+        }).filter(category => category.typeOptions.length > 0); // Remove categories with empty fields
+
 		if (this.field.canHaveChildren) {
 			this.childFields = this.formService.getChildren(this.field);
 		}

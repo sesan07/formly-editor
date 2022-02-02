@@ -5,7 +5,7 @@ import { cloneDeep, get, isEmpty } from 'lodash-es';
 import { FileService } from '../file-service/file.service';
 import { Observable, Subject } from 'rxjs';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { EditorConfig, EditorFieldCategoryConfig, EditorFieldConfig } from '../../editor.types';
+import { EditorConfigOption, EditorTypeCategoryOption } from '../../editor.types';
 import { EDITOR_FIELD_SERVICE, FieldType, IBaseEditorFormlyField, IFieldService, IForm, WrapperType } from './form.types';
 
 @Injectable({
@@ -14,7 +14,7 @@ import { EDITOR_FIELD_SERVICE, FieldType, IBaseEditorFormlyField, IFieldService,
 export class FormService {
 
     public forms: IForm[] = [];
-    public fieldCategories: EditorFieldCategoryConfig[] = [];
+    public fieldCategories: EditorTypeCategoryOption[] = [];
 
     public get formChanged$(): Observable<string> { return this._formChanged$.asObservable(); }
     public get fieldSelected$(): Observable<IBaseEditorFormlyField> { return this._fieldSelected$.asObservable(); }
@@ -25,15 +25,15 @@ export class FormService {
 
     constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService, private _fileService: FileService) {}
 
-    setup(editorConfig: EditorConfig) {
-        this.fieldCategories = editorConfig.fieldCategories;
+    setup(editorConfig: EditorConfigOption) {
+        this.fieldCategories = editorConfig.typeCategories;
 
         const formId: string = this._getNextFormId(this._currFormId);
         const formName: string = this._getNextFormName(this._currFormId);
         this._currFormId++;
 
 		this._addForm(formId, formName, [], new Map());
-		this.addField(editorConfig.defaultType, formId, editorConfig.defaultCustomType);
+		this.addField(editorConfig.defaultName, formId, editorConfig.defaultCustomName);
     }
 
     public addField(type: string, formId: string, customType?: string, parentId?: string, index?: number): IBaseEditorFormlyField {
@@ -95,6 +95,12 @@ export class FormService {
 		children.forEach(child => child.parentFieldId = newField.fieldId);
 		const newChildren: IBaseEditorFormlyField[] = this.getChildren(newField);
 		newChildren.push(...children);
+
+        // Copy classes
+        newField.className = field.className;
+        newField.fieldGroupClassName = field.fieldGroupClassName;
+
+        this._formChanged$.next(formId);
 	}
 
 	public isActiveField(formId: string, fieldId: string): boolean {
@@ -129,48 +135,28 @@ export class FormService {
     }
 
 	public cleanField(field: IBaseEditorFormlyField, cleanChildren: boolean = true, removeEditorProperties?: boolean): void {
-		// Editor properties
+		delete field.fieldProperties;
+
+		if (cleanChildren && field.canHaveChildren) {
+            this.getChildren(field).forEach(child => {
+                this.cleanField(child, cleanChildren, removeEditorProperties);
+            });
+		}
+
 		if (removeEditorProperties) {
 			this._removeEditorProperties(field);
 		}
 
-        // General properties
-		delete field.fieldProperties;
 		this._removeEmptyProperties(field);
-
-        // TODO clean children using provided service if field.canHaveChildren
-		// Children
-		if (!cleanChildren) {
-			return;
-		}
-        if (field.fieldGroup) {
-            field.fieldGroup.forEach(fieldGroupChild => {
-                this.cleanField(fieldGroupChild, cleanChildren, removeEditorProperties);
-            });
-        }
 	}
-
-    public getFieldTypeName(type: string, customType?: string): string {
-        // TODO implement this properly
-        return this.fieldCategories[0].fields.find(field => field.type === type).name;
-
-        // const fieldService: BaseFieldService<any> = this._getFieldService(type);
-        // return fieldService.name;
-    }
 
     public getFormattedFieldName(name: string, key?: string | number | string[]): string {
 		return `${name}${key ? ' (' + key + ')' : ''}`;
     }
 
-	public getParentFieldTypes(): string[] {
-        // TODO implement this properly
-        return this.fieldCategories[0]?.fields?.filter(field => field.canHaveChildren)?.map(f => f.type) ?? [];
-		// return [FieldType.FORMLY_GROUP];
-	}
-
 	public getChildren(field: IBaseEditorFormlyField): IBaseEditorFormlyField[] {
         if (!field.childrenPath) {
-            throw new Error(`childrenPath is not configured for ${field.type}`);
+            throw new Error(`'childrenPath' is not configured for ${field.type}`);
         }
 
         return get(field, field.childrenPath);
@@ -275,12 +261,10 @@ export class FormService {
             field.type = FieldType.FORMLY_GROUP;
         }
 
-        // TOD implement properly
-        field.name = this.fieldCategories[0].fields.find(f => f.type === field.type).name;
-
         field.formId = formId;
         field.parentFieldId = parentId;
         field.fieldId = this._fieldService.getNextFieldId(field.type);
+        field.name = this._fieldService.getName(field.type, field.customType);
         fieldMap.set(field.fieldId, field);
 
         if (field.wrappers) {

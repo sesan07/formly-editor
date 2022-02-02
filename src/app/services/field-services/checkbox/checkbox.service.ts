@@ -11,6 +11,7 @@ import { ICheckboxTemplateOptions } from './checkbox.types';
 export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> {
 
 	public type: FieldType = FieldType.CHECKBOX;
+	protected defaultName = 'Checkbox';
 
 	public getDefaultConfig(
         formId: string,
@@ -20,7 +21,7 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
 		return {
 			formId,
 			parentFieldId,
-			name: 'Checkbox',
+			name: this.defaultName,
 			type: this.type,
 			fieldId: this.getNextFieldId(),
 			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],

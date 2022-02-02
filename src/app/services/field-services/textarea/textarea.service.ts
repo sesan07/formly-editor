@@ -11,6 +11,7 @@ import { ITextareaTemplateOptions } from './textarea.types';
 export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> {
 
 	public type: FieldType = FieldType.TEXTAREA;
+	protected defaultName = 'Textarea';
 
 	public getDefaultConfig(
         formId: string,
@@ -20,7 +21,7 @@ export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> 
 		return {
 			formId,
 			parentFieldId,
-			name: 'Textarea',
+			name: this.defaultName,
 			type: this.type,
 			fieldId: this.getNextFieldId(),
 			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],
