@@ -1,18 +1,18 @@
-import { StyleService } from '../style-service/style.service';
-import { FieldType, IBaseEditorFormlyField, WrapperType } from '../form-service/form.types';
-import { IProperty, PropertyType } from 'src/app/components/property/property.types';
-import { IChipListProperty } from 'src/app/components/property/chip-list-property/chip-list-property.types';
-import { IObjectProperty } from 'src/app/components/property/object-property/object-property.types';
+
 import { FormlyTemplateOptions } from '@ngx-formly/core';
 import { Injectable } from '@angular/core';
+import { FieldType, CustomFieldType, WrapperType } from './field.types';
+import { StyleService } from 'src/app/services/style-service/style.service';
+import { IBaseEditorFormlyField, IChipListProperty, IFieldService, IObjectProperty, IProperty, PropertyType } from 'editor';
 
 @Injectable()
-export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
+export abstract class BaseFieldService<T extends FormlyTemplateOptions> implements IFieldService {
+
 	private _currKey = 0;
 	private _currId = 0;
 
-	abstract name: string;
 	abstract type: FieldType;
+	protected abstract defaultName: string;
 
 	public constructor(private _styleService: StyleService) { }
 
@@ -22,6 +22,10 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 
 	public getNextFieldId(): string {
 		return this.type + '__' + this._currId++;
+	}
+
+	public getName(): string {
+		return this.defaultName;
 	}
 
 	protected _getSharedProperties(): IProperty[] {
@@ -59,29 +63,46 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 		];
 	}
 
-	protected _getWrapperProperties(options: WrapperType[], notRemovableOptions: WrapperType[] = []): IProperty[] {
-		const properties: IProperty[] = [
-			{
-				key: 'wrappers',
-				type: PropertyType.CHIP_LIST,
-				options: [...options],
-				notRemovableOptions: [WrapperType.EDITOR, ...notRemovableOptions],
-			} as IChipListProperty,
-		];
+    protected _getTemplateOptionsProperty(childProperties: IProperty[], wrappers: WrapperType[]): IObjectProperty {
+        wrappers.forEach(wrapper => childProperties.push(...this._getWrapperTOProperties(wrapper)));
 
-		// Add wrapper property config to `properties` if wrapper is configurable
-		options.forEach(option => {
-			switch (option) {
-				case WrapperType.EDITOR:
-				case WrapperType.FORM_FIELD:
-					break;
-				default: throw new Error(`Unkown wrapper type: '${option}'`);
-			}
-		});
+        // Remove duplicates with same key
+        const propertyMap: Map<string, IProperty> = new Map();
+        childProperties.forEach(property => propertyMap.set(property.key + '', property));
 
-		return properties;
+        return {
+            key: 'templateOptions',
+            type: PropertyType.OBJECT,
+            childProperties: Array.from(propertyMap.values())
+        };
+    }
+
+	protected _getWrapperProperty(wrappers: WrapperType[]): IChipListProperty {
+        return {
+            key: 'wrappers',
+            type: PropertyType.CHIP_LIST,
+            options: [WrapperType.EDITOR, ...wrappers],
+            notRemovableOptions: [WrapperType.EDITOR],
+        };
 	}
 
-	public abstract getDefaultConfig(formId: string, parentFieldId?: string): IBaseEditorFormlyField<T>;
+    // Wrapper template option properties
+	private _getWrapperTOProperties(wrapper: WrapperType): IProperty[] {
+        switch (wrapper) {
+            case WrapperType.CARD:
+                return [
+					{
+						key: 'cardTitle',
+						type: PropertyType.TEXT,
+					},
+                ];
+            case WrapperType.EDITOR:
+            case WrapperType.FORM_FIELD:
+                return [];
+            default: throw new Error(`Unkown wrapper type: '${wrapper}'`);
+        }
+	}
+
+	public abstract getDefaultConfig(formId: string, customType?: CustomFieldType, parentFieldId?: string): IBaseEditorFormlyField<T>;
 	public abstract getProperties(): IProperty[];
 }

@@ -1,23 +1,27 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService } from '../base-field.service';
-import { FieldType, IBaseEditorFormlyField, WrapperType } from '../../form-service/form.types';
-import { IProperty, PropertyType } from 'src/app/components/property/property.types';
 import { IInputTemplateOptions } from './input.types';
-import { IObjectProperty } from 'src/app/components/property/object-property/object-property.types';
+import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { IProperty, PropertyType } from 'editor';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class InputService extends BaseFieldService<IInputTemplateOptions> {
 
-	public name = 'Input';
 	public type: FieldType = FieldType.INPUT;
+	protected defaultName = 'Input';
 
-	public getDefaultConfig(formId: string, parentFieldId?: string): IBaseEditorFormlyField<IInputTemplateOptions> {
-		return {
+	public getDefaultConfig(
+            formId: string,
+            customType?: CustomFieldType,
+            parentFieldId?: string
+        ): IEditorFormlyField<IInputTemplateOptions> {
+
+        const config: IEditorFormlyField<IInputTemplateOptions> = {
 			formId,
 			parentFieldId,
-			name: this.name,
+			name: this.defaultName,
 			type: this.type,
 			fieldId: this.getNextFieldId(),
 			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],
@@ -30,17 +34,28 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
 			expressionProperties: {},
 			fieldProperties: this.getProperties(),
 		};
+
+        switch (customType) {
+            case CustomFieldType.NUMBER:
+                config.name = 'Number';
+                config.customType = customType;
+                config.templateOptions.type = 'number';
+        }
+
+        return config;
 	}
 
 	getProperties(): IProperty[] {
 		return [
 			...this._getSharedProperties(),
-			{
-				key: 'templateOptions',
-				type: PropertyType.OBJECT,
-				childProperties: [
+            this._getTemplateOptionsProperty(
+                [
 					{
 						key: 'label',
+						type: PropertyType.TEXT,
+					},
+					{
+						key: 'type',
 						type: PropertyType.TEXT,
 					},
 					{
@@ -55,9 +70,25 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
 						key: 'required',
 						type: PropertyType.BOOLEAN,
 					},
-				]
-			} as IObjectProperty,
-			...this._getWrapperProperties([WrapperType.FORM_FIELD]),
+                ],
+                [WrapperType.FORM_FIELD]
+            ),
+			this._getWrapperProperty([WrapperType.FORM_FIELD])
 		];
 	}
+
+    // protected _getTemplateOptionsProperty(wrappers: WrapperType[]): IObjectProperty {
+    //     const childProperties: IProperty[] = [];
+    //     wrappers.forEach(wrapper => childProperties.push(...this._getWrapperProperties(wrapper)));
+
+    //     // Remove duplicates
+    //     const propertyMap: Map<string, IProperty> = new Map();
+    //     childProperties.forEach(property => propertyMap.set(property.key + '', property));
+
+    //     return {
+    //         key: 'templateOptions',
+    //         type: PropertyType.OBJECT,
+    //         childProperties: Array.from(propertyMap.values())
+    //     };
+    // }
 }

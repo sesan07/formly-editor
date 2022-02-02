@@ -1,23 +1,26 @@
 import { Injectable } from '@angular/core';
+import { IProperty, PropertyType } from 'editor';
 import { BaseFieldService } from '../base-field.service';
-import { FieldType, IBaseEditorFormlyField, WrapperType } from '../../form-service/form.types';
-import { IProperty, PropertyType } from 'src/app/components/property/property.types';
+import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
 import { ITextareaTemplateOptions } from './textarea.types';
-import { IObjectProperty } from 'src/app/components/property/object-property/object-property.types';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> {
 
-	public name = 'Textarea';
 	public type: FieldType = FieldType.TEXTAREA;
+	protected defaultName = 'Textarea';
 
-	public getDefaultConfig(formId: string, parentFieldId?: string): IBaseEditorFormlyField<ITextareaTemplateOptions> {
+	public getDefaultConfig(
+        formId: string,
+        customType?: CustomFieldType,
+        parentFieldId?: string
+    ): IEditorFormlyField<ITextareaTemplateOptions> {
 		return {
 			formId,
 			parentFieldId,
-			name: this.name,
+			name: this.defaultName,
 			type: this.type,
 			fieldId: this.getNextFieldId(),
 			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],
@@ -35,10 +38,8 @@ export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> 
 	getProperties(): IProperty[] {
 		return [
 			...this._getSharedProperties(),
-			{
-				key: 'templateOptions',
-				type: PropertyType.OBJECT,
-				childProperties: [
+            this._getTemplateOptionsProperty(
+                [
 					{
 						key: 'label',
 						type: PropertyType.TEXT,
@@ -55,9 +56,10 @@ export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> 
 						key: 'required',
 						type: PropertyType.BOOLEAN,
 					},
-				]
-			} as IObjectProperty,
-			...this._getWrapperProperties([WrapperType.FORM_FIELD]),
+                ],
+                [WrapperType.FORM_FIELD]
+            ),
+			this._getWrapperProperty([WrapperType.FORM_FIELD])
 		];
 	}
 }

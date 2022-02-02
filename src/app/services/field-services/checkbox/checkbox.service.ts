@@ -1,23 +1,26 @@
 import { Injectable } from '@angular/core';
+import { IProperty, PropertyType, IObjectProperty } from 'editor';
 import { BaseFieldService } from '../base-field.service';
-import { FieldType, IBaseEditorFormlyField, WrapperType } from '../../form-service/form.types';
-import { IProperty, PropertyType } from 'src/app/components/property/property.types';
+import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
 import { ICheckboxTemplateOptions } from './checkbox.types';
-import { IObjectProperty } from 'src/app/components/property/object-property/object-property.types';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> {
 
-	public name = 'Checkbox';
 	public type: FieldType = FieldType.CHECKBOX;
+	protected defaultName = 'Checkbox';
 
-	public getDefaultConfig(formId: string, parentFieldId?: string): IBaseEditorFormlyField<ICheckboxTemplateOptions> {
+	public getDefaultConfig(
+        formId: string,
+        customType?: CustomFieldType,
+        parentFieldId?: string
+    ): IEditorFormlyField<ICheckboxTemplateOptions> {
 		return {
 			formId,
 			parentFieldId,
-			name: this.name,
+			name: this.defaultName,
 			type: this.type,
 			fieldId: this.getNextFieldId(),
 			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],
@@ -40,28 +43,27 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
 	getProperties(): IProperty[] {
 		return [
 			...this._getSharedProperties(),
-			{
-				key: 'templateOptions',
-				type: PropertyType.OBJECT,
-				childProperties: [
-					{
-						key: 'label',
-						type: PropertyType.TEXT,
-					},
-					{
-						key: 'description',
-						type: PropertyType.TEXT,
-					},
-					{
-						key: 'pattern',
-						type: PropertyType.TEXT,
-					},
-					{
-						key: 'required',
-						type: PropertyType.BOOLEAN,
-					},
-				]
-			} as IObjectProperty,
+            this._getTemplateOptionsProperty(
+                [
+                    {
+                        key: 'label',
+                        type: PropertyType.TEXT,
+                    },
+                    {
+                        key: 'description',
+                        type: PropertyType.TEXT,
+                    },
+                    {
+                        key: 'pattern',
+                        type: PropertyType.TEXT,
+                    },
+                    {
+                        key: 'required',
+                        type: PropertyType.BOOLEAN,
+                    },
+                ],
+                [WrapperType.FORM_FIELD]
+            ),
 			{
 				key: 'validation',
 				type: PropertyType.OBJECT,
@@ -69,7 +71,7 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
 				childProperties: [],
 				populateChildrenFromTarget: true,
 			} as IObjectProperty,
-			...this._getWrapperProperties([WrapperType.FORM_FIELD]),
+			this._getWrapperProperty([WrapperType.FORM_FIELD])
 		];
 	}
 }

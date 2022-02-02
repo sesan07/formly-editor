@@ -1,23 +1,27 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService } from '../base-field.service';
-import { FieldType, IBaseEditorFormlyField, WrapperType } from '../../form-service/form.types';
-import { StyleService } from '../../style-service/style.service';
-import { IProperty } from 'src/app/components/property/property.types';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
+import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { IProperty } from 'editor';
 
 @Injectable({
     providedIn: 'root',
 })
 export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> {
 
-    public name = 'Formly Group';
     public type: FieldType = FieldType.FORMLY_GROUP;
+	protected defaultName = 'Formly Group';
 
-    public getDefaultConfig(formId: string, parentFieldId?: string): IBaseEditorFormlyField {
-        return {
+	public getDefaultConfig(
+        formId: string,
+        customType?: CustomFieldType,
+        parentFieldId?: string
+    ): IEditorFormlyField {
+
+        const config: IEditorFormlyField = {
             formId,
             parentFieldId,
-            name: this.name,
+			name: this.defaultName,
 			type: this.type,
             fieldId: this.getNextFieldId(),
             wrappers: [WrapperType.EDITOR],
@@ -25,13 +29,25 @@ export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> 
             fieldGroup: [],
             expressionProperties: {},
             fieldProperties: this.getProperties(),
-        };
+            canHaveChildren: true,
+            childrenPath: 'fieldGroup'
+		};
+
+        switch (customType) {
+            case CustomFieldType.CARD:
+                config.name = 'Card';
+                config.customType = customType;
+                config.wrappers.push(WrapperType.CARD);
+        }
+
+        return config;
     }
 
     getProperties(): IProperty[] {
         return [
             ...this._getSharedProperties(),
-            ...this._getWrapperProperties([]),
+            this._getTemplateOptionsProperty([], [WrapperType.CARD]),
+			this._getWrapperProperty([WrapperType.CARD])
         ];
     }
 }

@@ -1,0 +1,44 @@
+:host {
+    --header-height: 48px;
+    display: flex;
+    height: 100%;
+}
+
+.form-view {
+    flex-grow: 1;
+    padding: 32px;
+    overflow: auto;
+}
+
+.sidebar {
+    flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+    height: 100%;
+    width: 25%;
+	min-width: 200px;
+	max-width: 40%;
+}
+
+.sidebar-divider {
+	position: relative;
+    height: 100%;
+    width: 4px;
+    flex-shrink: 0;
+    background-color: rgba(0,0,0,0.12);
+	cursor: ew-resize;
+}
+
+.sidebar-divider::after {
+	position: absolute;
+	content: '';
+	height: 100%;
+	width: 4px;
+	left: 0;
+}
+
+.sidebar-divider:hover::after {
+	width: 16px;
+	left: -6px;
+    background-color: rgba(0,0,0,0.2);
+}

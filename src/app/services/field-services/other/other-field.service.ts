@@ -1,23 +1,26 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService } from '../base-field.service';
-import { FieldType, IBaseEditorFormlyField, WrapperType } from '../../form-service/form.types';
-import { StyleService } from '../../style-service/style.service';
-import { IProperty } from '../../../components/property/property.types';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
+import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { IProperty } from 'editor';
 
 @Injectable({
     providedIn: 'root',
 })
 export class OtherFieldService extends BaseFieldService<FormlyTemplateOptions> {
 
-    public name = 'Other';
     public type: FieldType = FieldType.OTHER;
+	protected defaultName = 'Other';
 
-    public getDefaultConfig(formId: string, parentFieldId?: string): IBaseEditorFormlyField {
+	public getDefaultConfig(
+        formId: string,
+        customType?: CustomFieldType,
+        parentFieldId?: string
+    ): IEditorFormlyField {
         return {
             formId,
             parentFieldId,
-            name: this.name,
+			name: this.defaultName,
 			type: undefined,
             fieldId: this.getNextFieldId(),
             wrappers: [WrapperType.EDITOR],
@@ -30,7 +33,8 @@ export class OtherFieldService extends BaseFieldService<FormlyTemplateOptions> {
     getProperties(): IProperty[] {
         return [
             ...this._getSharedProperties(),
-            ...this._getWrapperProperties([]),
+            this._getTemplateOptionsProperty([], []),
+			this._getWrapperProperty([])
         ];
     }
 }

@@ -1,86 +1,91 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
+import {MatCardModule} from '@angular/material/card';
+
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormlyModule } from '@ngx-formly/core';
+import { AppRoutingModule } from './app-routing.module';
+import { FieldService } from './services/field-services/field-service';
+import { CustomFieldType, FieldType, WrapperType } from './services/field-services/field.types';
+import { CardWrapperComponent } from './components/card-wrapper/card-wrapper.component';
 import { FormlyMaterialModule } from '@ngx-formly/material';
-import { MatTreeModule } from '@angular/material/tree';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatInputModule } from '@angular/material/input';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatSelectModule } from '@angular/material/select';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatTabsModule } from '@angular/material/tabs';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { EditorWrapperComponent } from './components/editor-wrapper/editor-wrapper.component';
-import { FormComponent } from './components/form/form.component';
-import { InputPropertyComponent } from './components/property/input-property/input-property.component';
-import { ObjectPropertyComponent } from './components/property/object-property/object-property.component';
-import { FormViewComponent } from './components/form/form-view/form-view.component';
-import { ArrayPropertyComponent } from './components/property/array-property/array-property.component';
-import { BooleanPropertyComponent } from './components/property/boolean-property/boolean-property.component';
-import { FieldTreeItemComponent } from './components/field-tree-item/field-tree-item.component';
-import { ChipListPropertyComponent } from './components/property/chip-list-property/chip-list-property.component';
-import { FieldType, WrapperType } from './services/form-service/form.types';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { HomeComponent } from './components/home/home.component';
-import { SidebarSectionComponent } from './components/sidebar-section/sidebar-section.component';
 import { HttpClientModule } from '@angular/common/http';
-import { EditorFormlyGroupComponent } from './components/editor-formly-group/editor-formly-group.component';
+import { EditorModule, EDITOR_FIELD_SERVICE } from 'editor';
 
 @NgModule({
     declarations: [
         AppComponent,
-        EditorWrapperComponent,
-        FormComponent,
-        InputPropertyComponent,
-        ObjectPropertyComponent,
-        FormViewComponent,
-        ArrayPropertyComponent,
-        BooleanPropertyComponent,
-        FieldTreeItemComponent,
-        ChipListPropertyComponent,
-        HomeComponent,
-        SidebarSectionComponent,
-        EditorFormlyGroupComponent,
+        CardWrapperComponent,
     ],
     imports: [
         BrowserModule,
-        AppRoutingModule,
         BrowserAnimationsModule,
-		HttpClientModule,
-        FormsModule,
-        FormlyModule.forRoot({
-            types: [{ name: FieldType.FORMLY_GROUP, component: EditorFormlyGroupComponent }],
-            wrappers: [{ name: WrapperType.EDITOR, component: EditorWrapperComponent }],
-			validationMessages: [
-			  	{ name: 'required', message: 'This field is required' },
-			],
-        }),
+        HttpClientModule,
+        AppRoutingModule,
+        MatCardModule,
         FormlyMaterialModule,
-        MatTreeModule,
-        MatButtonModule,
-        MatIconModule,
-        MatMenuModule,
-        MatInputModule,
-        MatExpansionModule,
-        MatCheckboxModule,
-        MatSelectModule,
-        MatChipsModule,
-        ReactiveFormsModule,
-        MatAutocompleteModule,
-        MatTabsModule,
-        MatSlideToggleModule,
-        DragDropModule,
+        EditorModule.forRoot({
+            defaultName: FieldType.FORMLY_GROUP,
+            typeCategories: [
+                {
+                    name: 'Basic',
+                    typeOptions: [
+                        {
+                            name: FieldType.CHECKBOX,
+                            displayName: 'Checkbox',
+                        },
+                        {
+                            name: FieldType.FORMLY_GROUP,
+                            displayName: 'Formly Group',
+                            canHaveChildren: true,
+                        },
+                        {
+                            name: FieldType.INPUT,
+                            displayName: 'Input',
+                        },
+                        {
+                            name: FieldType.OTHER,
+                            displayName: 'Other',
+                        },
+                        {
+                            name: FieldType.RADIO,
+                            displayName: 'Radio',
+                        },
+                        {
+                            name: FieldType.SELECT,
+                            displayName: 'Select',
+                        },
+                        {
+                            name: FieldType.TEXTAREA,
+                            displayName: 'Textarea',
+                        },
+                    ]
+                },
+                {
+                    name: 'Custom',
+                    typeOptions: [
+                        {
+                            name: FieldType.INPUT,
+                            displayName: 'Number',
+                            customName: CustomFieldType.NUMBER
+                        },
+                        {
+                            name: FieldType.FORMLY_GROUP,
+                            displayName: 'Card',
+                            customName: CustomFieldType.CARD,
+                            canHaveChildren: true,
+                        },
+                    ]
+                }
+            ],
+            wrappers: [{ name: WrapperType.CARD, component: CardWrapperComponent }],
+            validationMessages: [
+                { name: 'required', message: 'This field is required' },
+            ],
+        }),
     ],
-    providers: [],
+    providers: [{ provide: EDITOR_FIELD_SERVICE, useClass: FieldService }],
     bootstrap: [AppComponent],
 })
 export class AppModule {
