@@ -25,6 +25,8 @@ export interface IBaseEditorFormlyField<T = FormlyTemplateOptions> extends Forml
     formId: string;
     fieldId: string;
     parentFieldId?: string;
+    canHaveChildren?: boolean;
+    childrenPath?: string; // Lodash path
 }
 
 export interface IForm {

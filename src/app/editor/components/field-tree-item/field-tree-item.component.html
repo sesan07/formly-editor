@@ -5,11 +5,11 @@
 		</button>
 		
 		<mat-menu #optionsMenu="matMenu">
-			<button *ngIf="canHaveChildren" mat-menu-item [matMenuTriggerFor]="addMenu">
+			<button *ngIf="field.canHaveChildren" mat-menu-item [matMenuTriggerFor]="addCategoryMenu">
 				<mat-icon>add</mat-icon>
 				<span>Add</span>
 			</button>
-			<button *ngIf="canHaveChildren && replaceOptions.length > 0" mat-menu-item [matMenuTriggerFor]="replaceMenu">
+			<button *ngIf="field.canHaveChildren && replaceOptions.length > 0" mat-menu-item [matMenuTriggerFor]="replaceMenu">
 				<mat-icon>sync</mat-icon>
 				<span>Replace</span>
 			</button>
@@ -19,11 +19,18 @@
 			</button>
 		</mat-menu>
 	
-		<mat-menu #addMenu="matMenu">
-            <!-- TODO implement properly -->
-			<button mat-menu-item *ngFor="let type of formService.fieldTypes" (click)="onAddChildField(type)">
-				{{formService.getFieldTypeName(type)}}
-			</button>
+		<mat-menu #addCategoryMenu="matMenu">
+            <ng-container *ngFor="let category of formService.fieldCategories">
+                <button mat-menu-item [matMenuTriggerFor]="addFieldMenu">
+                    {{ category.name }}
+                </button>
+
+                <mat-menu #addFieldMenu="matMenu">
+                    <button mat-menu-item  *ngFor="let field of category.fields" (click)="onAddChildField(field.type, field.customType)">
+                        {{ field.name }}
+                    </button>
+                </mat-menu>
+            </ng-container>
 		</mat-menu>
 		
 		<mat-menu #replaceMenu="matMenu">
@@ -34,8 +41,8 @@
 		</mat-menu>
 	
 		<!-- use a disabled button to provide padding for non expandable fields -->
-		<button mat-icon-button [disabled]="!canHaveChildren" (click)="onToggle($event)">
-			<mat-icon class="expand-icon" [class.expanded-90]="isExpanded" *ngIf="canHaveChildren">chevron_right</mat-icon>
+		<button mat-icon-button [disabled]="!field.canHaveChildren" (click)="onToggle($event)">
+			<mat-icon class="expand-icon" [class.expanded-90]="isExpanded" *ngIf="field.canHaveChildren">chevron_right</mat-icon>
 		</button>
 		<span>{{ formService.getFormattedFieldName(field.name, field.key) }}</span>
 	</span>

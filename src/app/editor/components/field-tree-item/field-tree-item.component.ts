@@ -22,7 +22,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
     // TODO implement this properly
 	public parentFieldTypes: string[] = this.formService.getParentFieldTypes();
 	public replaceOptions: string[];
-    public canHaveChildren: boolean;
+    // public canHaveChildren: boolean;
 
     constructor(public formService: FormService, private _renderer: Renderer2, private _elementRef: ElementRef) {
     }
@@ -35,14 +35,13 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
 
     ngOnChanges(): void {
 		this.replaceOptions = this.parentFieldTypes.filter(type => type !== this.field.type);
-        this.canHaveChildren = this.parentFieldTypes.includes(this.field.type);
-		if (this.canHaveChildren) {
+		if (this.field.canHaveChildren) {
 			this.childFields = this.formService.getChildren(this.field);
 		}
     }
 
     onAddChildField(type: string, customType?: string): void {
-		if (this.canHaveChildren) {
+		if (this.field.canHaveChildren) {
 			this.isExpanded = true;
 		}
 
@@ -58,7 +57,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
 	}
 
 	onHeaderClicked(event: MouseEvent): void {
-		if (this.canHaveChildren) {
+		if (this.field.canHaveChildren) {
 			this.isExpanded = true;
 		}
 

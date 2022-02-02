@@ -74,7 +74,7 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
     private _addConnection(field: IBaseEditorFormlyField, visited: Set<string>) {
         visited.add(field.fieldId);
 
-        if (this._formService.canHaveChildren(field)) {
+        if (field.canHaveChildren) {
             const children: IBaseEditorFormlyField[] = this._formService.getChildren(field);
             children.forEach(child => {
                 if (!visited.has(child.fieldId)) {

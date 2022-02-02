@@ -24,6 +24,8 @@ export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> 
             fieldGroup: [],
             expressionProperties: {},
             fieldProperties: this.getProperties(),
+            canHaveChildren: true,
+            childrenPath: 'fieldGroup'
         };
     }
 

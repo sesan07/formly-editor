@@ -15,7 +15,7 @@ export class EditorWrapperComponent extends FieldWrapper<IBaseEditorFormlyField>
     @ViewChild('fieldComponent', {read: ViewContainerRef, static: true})
     fieldComponent: ViewContainerRef;
 
-    public canHaveChildren: boolean;
+    // public canHaveChildren: boolean;
 	public isActiveField: boolean;
 
     private _destroy$: Subject<void> = new Subject();
@@ -27,7 +27,7 @@ export class EditorWrapperComponent extends FieldWrapper<IBaseEditorFormlyField>
     }
 
     ngOnInit(): void {
-        this.canHaveChildren = this.formService.canHaveChildren(this.field);
+        // this.canHaveChildren = this.formService.canHaveChildren(this.field);
 		this._checkActiveField();
 
         this.formService.fieldSelected$
