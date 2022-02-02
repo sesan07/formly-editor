@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IObjectProperty } from 'src/app/editor/components/property/object-property/object-property.types';
-import { IProperty, PropertyType } from 'src/app/editor/components/property/property.types';
+import { IProperty, PropertyType } from 'editor';
 import { BaseFieldService } from '../base-field.service';
 import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
 import { ITextareaTemplateOptions } from './textarea.types';

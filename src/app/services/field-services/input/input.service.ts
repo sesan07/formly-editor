@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseFieldService } from '../base-field.service';
 import { IInputTemplateOptions } from './input.types';
 import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
-import { IProperty, PropertyType } from 'src/app/editor/components/property/property.types';
-import { IObjectProperty } from 'src/app/editor/components/property/object-property/object-property.types';
+import { IProperty, PropertyType } from 'editor';
 
 @Injectable({
 	providedIn: 'root',

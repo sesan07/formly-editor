@@ -1,5 +1,5 @@
 import { FormlyTemplateOptions } from '@ngx-formly/core';
-import { IBaseEditorFormlyField } from 'src/app/editor/services/form-service/form.types';
+import { IBaseEditorFormlyField } from 'editor';
 
 export enum FieldType {
     CHECKBOX = 'checkbox',

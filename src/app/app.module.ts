@@ -5,14 +5,13 @@ import { NgModule } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 
 import { AppComponent } from './app.component';
-import { EditorModule } from './editor/editor.module';
 import { AppRoutingModule } from './app-routing.module';
-import { EDITOR_FIELD_SERVICE } from './editor/services/form-service/form.types';
 import { FieldService } from './services/field-services/field-service';
 import { CustomFieldType, FieldType, WrapperType } from './services/field-services/field.types';
 import { CardWrapperComponent } from './components/card-wrapper/card-wrapper.component';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { HttpClientModule } from '@angular/common/http';
+import { EditorModule, EDITOR_FIELD_SERVICE } from 'editor';
 
 @NgModule({
     declarations: [

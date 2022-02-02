@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseFieldService } from '../base-field.service';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
 import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
-import { IProperty } from 'src/app/editor/components/property/property.types';
+import { IProperty } from 'editor';
 
 @Injectable({
     providedIn: 'root',

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
-import { EditorWrapperService } from 'src/app/editor/services/editor-wrapper-service/editor-wrapper.service';
+import { EditorWrapperService } from '../../services/editor-wrapper-service/editor-wrapper.service';
 import { FormService } from '../../services/form-service/form.service';
 
 @Component({

@@ -1,9 +1,9 @@
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { AfterViewInit, Component, HostListener, ViewChild } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
-import { EditorWrapperService } from 'src/app/editor/services/editor-wrapper-service/editor-wrapper.service';
-import { FormService } from 'src/app/editor/services/form-service/form.service';
-import { IBaseEditorFormlyField } from 'src/app/editor/services/form-service/form.types';
+import { EditorWrapperService } from '../../services/editor-wrapper-service/editor-wrapper.service';
+import { FormService } from '../../services/form-service/form.service';
+import { IBaseEditorFormlyField } from '../../services/form-service/form.types';
 
 @Component({
     selector: 'app-editor-formly-group',
