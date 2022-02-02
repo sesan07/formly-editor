@@ -12,38 +12,18 @@ import { EDITOR_FIELD_SERVICE, FieldType, IBaseEditorFormlyField, IFieldService,
     providedIn: 'root',
 })
 export class FormService {
-    // public fieldTypes: FieldType[] = Object.values(FieldType);
-    public get fieldTypes(): string[] {
-        return this.fieldCategories[0]?.fields?.map(f => f.type) ?? [];
-    }
-
-    public fieldCategories: EditorFieldCategoryConfig[] = [];
 
     public forms: IForm[] = [];
+    public fieldCategories: EditorFieldCategoryConfig[] = [];
 
-    public get formChanged$(): Observable<string> {
-        return this._formChanged$.asObservable();
-    }
-
-    public get fieldSelected$(): Observable<IBaseEditorFormlyField> {
-        return this._fieldSelected$.asObservable();
-    }
+    public get formChanged$(): Observable<string> { return this._formChanged$.asObservable(); }
+    public get fieldSelected$(): Observable<IBaseEditorFormlyField> { return this._fieldSelected$.asObservable(); }
 
     private _currFormId = 1;
     private _formChanged$: Subject<string> = new Subject();
     private _fieldSelected$: Subject<IBaseEditorFormlyField> = new Subject();
 
-
-    constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService,
-                private _fileService: FileService,
-    ) {
-        // const formId: string = this._getNextFormId(this._currFormId);
-        // const formName: string = this._getNextFormName(this._currFormId);
-        // this._currFormId++;
-
-		// this._addForm(formId, formName, [], new Map());
-		// this.addField(FieldType.FORMLY_GROUP, formId);
-    }
+    constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService, private _fileService: FileService) {}
 
     setup(editorConfig: EditorConfig) {
         this.fieldCategories = editorConfig.fieldCategories;
@@ -54,14 +34,11 @@ export class FormService {
 
 		this._addForm(formId, formName, [], new Map());
 		this.addField(editorConfig.defaultType, formId, editorConfig.defaultCustomType);
-
-        console.log('SET UP', editorConfig);
     }
 
     public addField(type: string, formId: string, customType?: string, parentId?: string, index?: number): IBaseEditorFormlyField {
         const form: IForm = this.forms.find(f => f.id === formId);
 		// const fieldService: BaseFieldService<any> = this._getFieldService(type);
-        console.log(parentId)
 
         const newField: IBaseEditorFormlyField = this._fieldService.getDefaultConfig(type, formId, customType, parentId);
 
@@ -77,8 +54,6 @@ export class FormService {
 
 		this._formChanged$.next(formId);
 		this.selectField(formId, newField.fieldId);
-
-        console.log('new field', newField)
 
 		return newField;
     }

@@ -23,8 +23,32 @@ import { FieldType } from './services/field-services/field.types';
                     fields: [
                         {
                             name: 'Checkbox',
-                            type: 'checkbox',
-                        }
+                            type: FieldType.CHECKBOX,
+                        },
+                        {
+                            name: 'Formly Group',
+                            type: FieldType.FORMLY_GROUP,
+                        },
+                        {
+                            name: 'Input',
+                            type: FieldType.INPUT,
+                        },
+                        {
+                            name: 'Other',
+                            type: FieldType.OTHER,
+                        },
+                        {
+                            name: 'Radio',
+                            type: FieldType.RADIO,
+                        },
+                        {
+                            name: 'Select',
+                            type: FieldType.SELECT,
+                        },
+                        {
+                            name: 'Textarea',
+                            type: FieldType.TEXTAREA,
+                        },
                     ]
                 }
             ]
