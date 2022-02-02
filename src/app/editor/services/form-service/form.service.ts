@@ -248,21 +248,6 @@ export class FormService {
         this._formChanged$.next(formId);
     }
 
-    // private _getFieldService(type: FieldType): BaseFieldService<any> {
-    //     switch (type) {
-    //         case FieldType.CHECKBOX: return this._checkboxService;
-    //         case FieldType.FORMLY_GROUP: return this._formlyGroupService;
-    //         case FieldType.INPUT: return this._inputService;
-    //         case FieldType.OTHER: return this._otherFieldService;
-    //         case FieldType.RADIO: return this._radioService;
-    //         case FieldType.SELECT: return this._selectService;
-    //         case FieldType.TEXTAREA: return this._textareaFieldService;
-    //         default:
-	// 			console.warn(`Unknown formly type: '${type}', treating as 'other' type`);
-	// 			return this._otherFieldService;
-    //     }
-    // }
-
     private _getNextFormName(index: number): string {
         return 'Form ' + index;
     }
@@ -384,6 +369,8 @@ export class FormService {
         delete field.fieldId;
         delete field.parentFieldId;
         delete field.fieldProperties;
+        delete field.canHaveChildren;
+        delete field.childrenPath;
 
         const editorIndex: number = field.wrappers.indexOf(WrapperType.EDITOR);
         if (editorIndex !== -1) {

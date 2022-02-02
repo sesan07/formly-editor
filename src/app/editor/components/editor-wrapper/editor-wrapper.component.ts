@@ -41,8 +41,7 @@ export class EditorWrapperComponent extends FieldWrapper<IBaseEditorFormlyField>
     }
 
     onAddChildField(type: string, customType?: string): void {
-        // TODO implement this properly
-        this.formService.addField(type, this.field.formId, this.field.fieldId);
+        this.formService.addField(type, this.field.formId, customType, this.field.fieldId);
     }
 
     onRemove(): void {
