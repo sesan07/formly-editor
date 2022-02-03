@@ -276,37 +276,29 @@ export class FormService {
         field: IBaseEditorFormlyField,
         fieldMap: Map<string, IBaseEditorFormlyField>,
         formId: string,
-        parentId?: string,
+        parentFieldId?: string,
     ): void {
         if (!field.type && field.fieldGroup) {
             field.type = FieldType.FORMLY_GROUP;
         }
 
-        field.formId = formId;
-        field.parentFieldId = parentId;
-        field.fieldId = this._fieldService.getNextFieldId(field.type);
-        field.name = this._fieldService.getName(field.type, field.customType);
+        const mergedField = Object.assign(this._fieldService.getDefaultConfig(field.type, formId, undefined, parentFieldId), field)
+        Object.assign(field, mergedField)
+
         fieldMap.set(field.fieldId, field);
 
         if (field.wrappers) {
-            field.wrappers.unshift(WrapperType.EDITOR);
+            const index = field.wrappers.indexOf(WrapperType.EDITOR)
+            if (index < 0) {
+                field.wrappers.unshift(WrapperType.EDITOR);
+            }
         } else {
             field.wrappers = [WrapperType.EDITOR];
         }
 
-        if (!field.templateOptions) {
-            field.templateOptions = {};
-        }
-
-        if (!field.expressionProperties) {
-            field.expressionProperties = {};
-        }
-
-        field.fieldProperties = this._fieldService.getProperties(field.type);
-
-        if (field.fieldGroup) {
-            field.fieldGroup.forEach(fieldGroupChild => {
-                this._addEditorProperties(fieldGroupChild, fieldMap, formId, field.fieldId);
+        if (field.canHaveChildren) {
+            this.getChildren(field).forEach(child => {
+                this._addEditorProperties(child, fieldMap, formId, field.fieldId);
             });
         }
     }
