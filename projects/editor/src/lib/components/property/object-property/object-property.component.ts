@@ -12,11 +12,11 @@ import { IObjectProperty } from './object-property.types';
 export class ObjectPropertyComponent extends BasePropertyComponent implements OnChanges {
 	@Input() property: IObjectProperty;
 
-	@HostBinding('class.highlighted') get propertyHighlighted() { return this.isPropertyHighlighted; }
+	
 
 	public propertyType: typeof PropertyType = PropertyType;
 	public isExpanded: boolean;
-	public isPropertyHighlighted: boolean;
+	
 	public propertyTypes: PropertyType[] = Object.values(PropertyType);
 	public get hasOptions(): boolean {
 		return this.property?.isDeletable || this.property?.addOptions?.length > 0;

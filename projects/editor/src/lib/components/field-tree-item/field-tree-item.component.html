@@ -1,4 +1,4 @@
-<div class="tree-item-header" [class.active]="field === activeField" (click)="onHeaderClicked($event)" (mouseenter)="isPropertyHighlighted = true" (mouseleave)="isPropertyHighlighted = false">
+<div class="tree-item-header" [class.active]="field === activeField" (click)="onHeaderClicked($event)">
 	<span class="tree-item-header-content-left">
 		<button mat-icon-button [ngStyle]="{'margin-right.px': treeLevelPadding}" [matMenuTriggerFor]="optionsMenu" (click)="$event.stopPropagation()">
 			<mat-icon>more_vert</mat-icon>

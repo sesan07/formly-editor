@@ -28,7 +28,7 @@ formly-field {
     user-select: none;
 }
 
-.tree-item.highlighted {
+.tree-item:hover {
 	background-color: rgba(0, 0, 0, 0.05);
 }
 
