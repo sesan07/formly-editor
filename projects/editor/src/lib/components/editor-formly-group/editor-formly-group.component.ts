@@ -5,6 +5,7 @@ import { EditorWrapperService } from '../../services/editor-wrapper-service/edit
 import { DragAction, IItemDragData } from '../../services/field-droplist-service/field-droplist.types';
 import { FormService } from '../../services/form-service/form.service';
 import { IBaseEditorFormlyField } from '../../services/form-service/form.types';
+import { MouseService } from '../../services/mouse-service/mouse.service';
 
 @Component({
     selector: 'app-editor-formly-group',
@@ -22,15 +23,8 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
     }
 
     connectedTo: string[] = [];
-    mousePosition: {x: number; y: number} = {x:0, y:0};
 
-    constructor(private _formService: FormService, public wrapperService: EditorWrapperService) { super(); }
-
-    @HostListener('mousemove', ['$event'])
-    onMouseMove(event: MouseEvent): void {
-        this.mousePosition.x = event.clientX;
-        this.mousePosition.y = event.clientY;
-    }
+    constructor(private _formService: FormService, public wrapperService: EditorWrapperService, private _mouseService: MouseService) { super(); }
 
     ngAfterViewInit(): void {
         this._addConnection(this.field, new Set());
@@ -111,8 +105,8 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
     private _isMouseInElement(droplistElement: HTMLElement): boolean {
         const rect: DOMRect = droplistElement.getBoundingClientRect();
 
-        const isInWidth: boolean = this.mousePosition.x >= rect.left && this.mousePosition.x <= rect.right;
-        const isInHeight: boolean = this.mousePosition.y >= rect.top && this.mousePosition.y <= rect.bottom;
+        const isInWidth: boolean = this._mouseService.position.x >= rect.left && this._mouseService.position.x <= rect.right;
+        const isInHeight: boolean = this._mouseService.position.y >= rect.top && this._mouseService.position.y <= rect.bottom;
 
         return isInWidth && isInHeight;
     }

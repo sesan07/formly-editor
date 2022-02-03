@@ -61,7 +61,7 @@ const defaultConfig: EditorConfigOption = {
     imports: [
         CommonModule,
         FormsModule,
-        FormlyModule.forChild({
+        FormlyModule.forRoot({
             types: [{ name: FieldType.FORMLY_GROUP, component: EditorFormlyGroupComponent }],
             wrappers: [{ name: WrapperType.EDITOR, component: EditorWrapperComponent }],
         }),
