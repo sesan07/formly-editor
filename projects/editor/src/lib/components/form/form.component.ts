@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { FormService } from '../../services/form-service/form.service';
 import { IForm } from '../../services/form-service/form.types';
@@ -8,6 +8,7 @@ import { IObjectProperty } from '../property/object-property/object-property.typ
 import { PropertyType } from '../property/property.types';
 import { PropertyService } from '../property/property.service';
 import { IArrayProperty } from '../property/array-property/array-property.types';
+import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
 
 @Component({
 	selector: 'app-form',
@@ -36,7 +37,8 @@ export class FormComponent implements OnInit, OnDestroy {
 	constructor(
 		public propertyService: PropertyService,
 		public formService: FormService,
-		private _renderer: Renderer2) {
+		private _renderer: Renderer2,
+        private _fieldDropListService: FieldDroplistService) {
 	}
 
 	public ngOnInit(): void {
@@ -44,12 +46,14 @@ export class FormComponent implements OnInit, OnDestroy {
 
 		this._updateActiveFieldProperty();
 		this._updateModelProperty();
+        this._fieldDropListService.resetDropListIds(this.form.id);
 
 		this.formService.formChanged$
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(formId => {
                 if (formId === this.form.id) {
                     this._formChanged$.next();
+                    this._fieldDropListService.resetDropListIds(formId);
                 }
             });
 

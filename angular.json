@@ -125,6 +125,11 @@
     },
     "editor": {
       "projectType": "library",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "projects/editor",
       "sourceRoot": "projects/editor/src",
       "prefix": "lib",

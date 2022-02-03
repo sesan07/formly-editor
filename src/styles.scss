@@ -5,18 +5,6 @@ formly-field {
 	display: block;
 }
 
-.cdk-drop-list-receiving, .cdk-drop-list-dragging {
-    background-color: #F7FFEB;
-    border: 2px solid #EBEBEB;
-    border-radius: 4px;
-    box-sizing: border-box;
-    padding: 8px;
-}
-
-.cdk-drop-list-dragging {
-    background-color: #BEFF5C;
-}
-
 .cdk-drag-placeholder {
     height: 40px;
     line-height: 40px;
@@ -37,6 +25,7 @@ formly-field {
 	border-radius: 4px;
 	flex-grow: 1;
 	transition: 0.2s;
+    user-select: none;
 }
 
 .tree-item.highlighted {
