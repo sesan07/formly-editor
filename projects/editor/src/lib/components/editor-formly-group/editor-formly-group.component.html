@@ -1,7 +1,8 @@
 <div [id]="field.fieldId"
-    [classList]="classes"
+    [classList]="dropListClasses"
     [ngClass]="{ 'edit-mode': wrapperService.isEditMode }"
     cdkDropList
+    [cdkDropListOrientation]="dropListOrientation"
     [cdkDropListEnterPredicate]="canEnter.bind(this)"
     [cdkDropListConnectedTo]="connectedTo"
     [cdkDropListData]="field"
@@ -10,7 +11,7 @@
         *ngFor="let f of field.fieldGroup" 
         [field]="f" 
         cdkDrag
-        [cdkDragData]="f">
+        [cdkDragData]="getItemDragData(f)">
         <div *cdkDragPlaceholder>Drop Here</div>
     </formly-field>
 </div>

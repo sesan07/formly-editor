@@ -13,6 +13,7 @@ import { EDITOR_FIELD_SERVICE, FieldType, IBaseEditorFormlyField, IFieldService,
 })
 export class FormService {
 
+    // TODO make this private
     public forms: IForm[] = [];
     public fieldCategories: EditorTypeCategoryOption[] = [];
 
@@ -36,12 +37,13 @@ export class FormService {
 		this.addField(editorConfig.defaultName, formId, editorConfig.defaultCustomName);
     }
 
-    public addField(type: string, formId: string, customType?: string, parentId?: string, index?: number): IBaseEditorFormlyField {
-        const form: IForm = this.forms.find(f => f.id === formId);
-        const newField: IBaseEditorFormlyField = this._fieldService.getDefaultConfig(type, formId, customType, parentId);
+    public addField(type: string, formId: string, customType?: string, parentFieldId?: string, index?: number): IBaseEditorFormlyField {
+        // TODO remove responsibility of setting formId from fieldService?
+        const form: IForm = this.getForm(formId);
+        const newField: IBaseEditorFormlyField = this._fieldService.getDefaultConfig(type, formId, customType, parentFieldId);
 		form.fieldMap.set(newField.fieldId, newField);
 
-		const siblings: IBaseEditorFormlyField[] = this._getSiblings(formId, parentId);
+		const siblings: IBaseEditorFormlyField[] = this._getSiblings(formId, parentFieldId);
 		if (typeof index === 'number') {
 			siblings.splice(index, 0, newField);
 		} else {
@@ -55,7 +57,7 @@ export class FormService {
     }
 
     public removeField(formId: string, fieldId: string, parentId?: string): void {
-        const form: IForm = this.forms.find(f => f.id === formId);
+        const form: IForm = this.getForm(formId);
 		const siblings: IBaseEditorFormlyField[] = this._getSiblings(formId, parentId);
 
         const index: number = siblings.findIndex(field => field.fieldId === fieldId);
@@ -75,7 +77,7 @@ export class FormService {
     }
 
 	public selectField(formId: string, fieldId: string): void {
-        const form: IForm = this.forms.find(f => f.id === formId);
+        const form: IForm = this.getForm(formId);
 		const field = form.fieldMap.get(fieldId);
 		form.activeField = form.fieldMap.get(fieldId);
 
@@ -104,13 +106,17 @@ export class FormService {
 	}
 
 	public isActiveField(formId: string, fieldId: string): boolean {
-        const form: IForm = this.forms.find(f => f.id === formId);
-		return form.activeField.fieldId === fieldId;
+        const form: IForm = this.getForm(formId);
+		return form ? form.activeField.fieldId === fieldId : false;
 	}
 
     public getField(formId: string, fieldId: string): IBaseEditorFormlyField {
-        const form: IForm = this.forms.find(f => f.id === formId);
+        const form: IForm = this.getForm(formId);
         return form.fieldMap.get(fieldId);
+    }
+
+    public getForm(formId: string): IForm {
+        return this.forms.find(f => f.id === formId);
     }
 
     public importForm(): void {
@@ -200,6 +206,21 @@ export class FormService {
         this._formChanged$.next(formId);
     }
 
+    private _addField(field: IBaseEditorFormlyField, formId: string, parentFieldId?: string, index?: number): void {
+        const form: IForm = this.getForm(formId);
+		form.fieldMap.set(field.fieldId, field);
+
+		const siblings: IBaseEditorFormlyField[] = this._getSiblings(formId, parentFieldId);
+		if (typeof index === 'number') {
+			siblings.splice(index, 0, field);
+		} else {
+			siblings.push(field);
+		}
+
+		this._formChanged$.next(formId);
+		this.selectField(formId, field.fieldId);
+    }
+
     private _getNextFormName(index: number): string {
         return 'Form ' + index;
     }
@@ -213,7 +234,7 @@ export class FormService {
 			const parentField: IBaseEditorFormlyField = this.getField(formId, parentFieldId);
 			return this.getChildren(parentField);
 		} else {
-        	const form: IForm = this.forms.find(f => f.id === formId);
+        	const form: IForm = this.getForm(formId);
 			return form.fields;
 		}
 	}

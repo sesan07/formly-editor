@@ -1,4 +1,16 @@
-.droplist.edit-mode {
+.cdk-drop-list.edit-mode {
     min-height: 60px;
     min-width: 60px;
+}
+
+.cdk-drop-list-receiving, .cdk-drop-list-dragging {
+    background-color: #F7FFEB;
+    border: 2px solid #EBEBEB;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 8px;
+}
+
+.cdk-drop-list-dragging {
+    background-color: #BEFF5C;
 }

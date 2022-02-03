@@ -1,4 +1,12 @@
 <div id="leftSidebar" class="sidebar">
+	<app-sidebar-section
+		[sectionTitle]="'Add Field'">
+        <lib-field-category-list
+            *ngFor="let category of formService.fieldCategories"
+            [category]="category"
+            [formId]="form.id">
+        </lib-field-category-list>
+	</app-sidebar-section>
 	<app-sidebar-section [sectionTitle]="'Fields'">
 		<app-field-tree-item 
 			*ngFor="let field of form.fields"

@@ -1,7 +1,8 @@
-import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDropList, DropListOrientation } from '@angular/cdk/drag-drop';
 import { AfterViewInit, Component, HostListener, ViewChild } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
 import { EditorWrapperService } from '../../services/editor-wrapper-service/editor-wrapper.service';
+import { DragAction, IItemDragData } from '../../services/field-droplist-service/field-droplist.types';
 import { FormService } from '../../services/form-service/form.service';
 import { IBaseEditorFormlyField } from '../../services/form-service/form.types';
 
@@ -13,7 +14,12 @@ import { IBaseEditorFormlyField } from '../../services/form-service/form.types';
 export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField> implements AfterViewInit {
     @ViewChild(CdkDropList) dropList: CdkDropList;
 
-    get classes() { return (this.field.fieldGroupClassName || '') + ' droplist'; }
+    get dropListClasses(): string { return (this.field.fieldGroupClassName || '') + ' cdk-drop-list'; }
+    get dropListOrientation(): DropListOrientation {
+        return this.dropListClasses.includes('flex') && !this.dropListClasses.includes('flex-column')
+            ? 'horizontal' as DropListOrientation
+            : 'vertial'  as DropListOrientation;
+    }
 
     connectedTo: string[] = [];
     mousePosition: {x: number; y: number} = {x:0, y:0};
@@ -27,10 +33,6 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
     }
 
     ngAfterViewInit(): void {
-        if (this.classes.includes('flex') && !this.classes.includes('flex-column')) {
-            this.dropList.orientation = 'horizontal';
-        }
-
         this._addConnection(this.field, new Set());
     }
 
@@ -52,23 +54,37 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
             return;
         }
 
-        // These are copies of the fields, only use their ids
-        const field: IBaseEditorFormlyField = dragDrop.item.data;
+        const itemData: IItemDragData = dragDrop.item.data;
+        const field: IBaseEditorFormlyField = itemData.field;
         const currentParent: IBaseEditorFormlyField = dragDrop.previousContainer.data;
         const targetParent: IBaseEditorFormlyField = dragDrop.container.data;
 
-        if (currentParent.fieldId === targetParent.fieldId) {
-            this._formService.moveField(field.fieldId, field.formId, dragDrop.previousIndex, dragDrop.currentIndex);
-        } else {
-            this._formService.transferField(
-                field.fieldId,
-                field.formId,
-                currentParent.fieldId,
-                targetParent.fieldId,
-                dragDrop.previousIndex,
-                dragDrop.currentIndex
-            );
+        switch(itemData.action) {
+            case DragAction.COPY:
+                this._formService.addField(field.type, targetParent.formId, field.customType, targetParent.fieldId, dragDrop.currentIndex);
+                break;
+            case DragAction.MOVE:
+                if (currentParent.fieldId === targetParent.fieldId) {
+                    this._formService.moveField(field.fieldId, field.formId, dragDrop.previousIndex, dragDrop.currentIndex);
+                } else {
+                    this._formService.transferField(
+                        field.fieldId,
+                        field.formId,
+                        currentParent.fieldId,
+                        targetParent.fieldId,
+                        dragDrop.previousIndex,
+                        dragDrop.currentIndex
+                    );
+                }
+                break;
         }
+    }
+
+    getItemDragData(field: IBaseEditorFormlyField): IItemDragData {
+        return {
+            action: DragAction.MOVE,
+            field
+        };
     }
 
     private _addConnection(field: IBaseEditorFormlyField, visited: Set<string>) {

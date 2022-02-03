@@ -34,6 +34,7 @@ import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG } from './editor.ty
 import { FormService } from './services/form-service/form.service';
 import { cloneDeep } from 'lodash-es';
 import { TypeOption } from '@ngx-formly/core/lib/services/formly.config';
+import { FieldCategoryListComponent } from './components/field-category-list/field-category-list.component';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -55,6 +56,7 @@ const defaultConfig: EditorConfigOption = {
         HomeComponent,
         SidebarSectionComponent,
         EditorFormlyGroupComponent,
+        FieldCategoryListComponent,
     ],
     imports: [
         CommonModule,
