@@ -39,7 +39,7 @@ formly-field {
 	transition: 0.2s;
 }
 
-.tree-item.highlighted {
+.tree-item:hover {
 	background-color: rgba(0, 0, 0, 0.05);
 }
 

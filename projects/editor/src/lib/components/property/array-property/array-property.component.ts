@@ -14,11 +14,11 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnI
 	@Input() property: IArrayProperty;
 	@Input() target: any[];
 
-	@HostBinding('class.highlighted') get propertyHighlighted() { return this.isPropertyHighlighted; }
+	
 
 	public propertyType: typeof PropertyType = PropertyType;
 	public isExpanded: boolean;
-	public isPropertyHighlighted: boolean;
+	
 	public get hasOptions(): boolean {
 		return this.property.isDeletable || this.property.canAdd;
 	};

@@ -12,9 +12,9 @@ export class InputPropertyComponent extends BasePropertyComponent {
 	@Input() property: IInputProperty;
 	@Input() type: PropertyType.TEXT | PropertyType.NUMBER = PropertyType.TEXT;
 
-	@HostBinding('class.highlighted') get propertyHighlighted() { return this.isPropertyHighlighted; }
+	
 
-	public isPropertyHighlighted: boolean;
+	
 	public get hasOptions(): boolean {
 		return this.property.isDeletable;
 	};

@@ -10,9 +10,9 @@ import { IBooleanProperty } from './boolean-property.types';
 export class BooleanPropertyComponent extends BasePropertyComponent {
 	@Input() property: IBooleanProperty;
 
-	@HostBinding('class.highlighted') get propertyHighlighted() { return this.isPropertyHighlighted; }
+	
 
-	public isPropertyHighlighted: boolean;
+	
 	public get hasOptions(): boolean {
 		return this.property.isDeletable;
 	};

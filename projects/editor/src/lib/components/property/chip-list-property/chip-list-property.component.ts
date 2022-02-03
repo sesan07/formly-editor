@@ -18,9 +18,9 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
 
     @ViewChild('input') inputElementRef: ElementRef<HTMLInputElement>;
 
-	@HostBinding('class.highlighted') get propertyHighlighted() { return this.isPropertyHighlighted; }
+	
 
-	public isPropertyHighlighted: boolean;
+	
     public formControl: FormControl = new FormControl();
     public separatorKeysCodes: number[] = [ENTER, COMMA];
     public selectedOptions: string[] = [];

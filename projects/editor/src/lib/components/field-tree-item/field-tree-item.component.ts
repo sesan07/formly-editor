@@ -15,9 +15,9 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
 	@Input() public treeLevel = 0;
 
     @Output() public remove: EventEmitter<void> = new EventEmitter();
-	@HostBinding('class.highlighted') get propertyHighlighted() { return this.isPropertyHighlighted; }
+	
 
-	public isPropertyHighlighted: boolean;
+	
     public childFields: IBaseEditorFormlyField[];
 	public treeLevelPadding: number;
 	public replaceCategories: EditorTypeCategoryOption[];
