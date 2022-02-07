@@ -1,7 +1,6 @@
 import { CdkDrag, CdkDragDrop, CdkDropList, DropListOrientation } from '@angular/cdk/drag-drop';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
-import { EditorWrapperService } from '../../services/editor-wrapper-service/editor-wrapper.service';
 import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
 import { DragAction, IItemDragData } from '../../services/field-droplist-service/field-droplist.types';
 import { FormService } from '../../services/form-service/form.service';
@@ -26,8 +25,7 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
     connectedTo: string[] = [];
 
     constructor(
-        private _formService: FormService,
-        public wrapperService: EditorWrapperService,
+        public formService: FormService,
         private _mouseService: MouseService,
         private _dropListService: FieldDroplistService) { super(); }
 
@@ -64,13 +62,13 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
 
         switch(itemData.action) {
             case DragAction.COPY:
-                this._formService.addField(field.type, targetParent.formId, field.customType, targetParent.fieldId, dragDrop.currentIndex);
+                this.formService.addField(field.type, targetParent.formId, field.customType, targetParent.fieldId, dragDrop.currentIndex);
                 break;
             case DragAction.MOVE:
                 if (currentParent.fieldId === targetParent.fieldId) {
-                    this._formService.moveField(field.fieldId, field.formId, dragDrop.previousIndex, dragDrop.currentIndex);
+                    this.formService.moveField(field.fieldId, field.formId, dragDrop.previousIndex, dragDrop.currentIndex);
                 } else {
-                    this._formService.transferField(
+                    this.formService.transferField(
                         field.fieldId,
                         field.formId,
                         currentParent.fieldId,

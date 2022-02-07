@@ -19,6 +19,7 @@ export class FormService {
 
     public get formChanged$(): Observable<string> { return this._formChanged$.asObservable(); }
     public get fieldSelected$(): Observable<IBaseEditorFormlyField> { return this._fieldSelected$.asObservable(); }
+    public isEditMode: boolean = true;
 
     private _currFormId = 1;
     private _formChanged$: Subject<string> = new Subject();
