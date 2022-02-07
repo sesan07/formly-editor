@@ -2,7 +2,6 @@ import { InjectionToken } from '@angular/core';
 import { FormlyFieldConfig, FormlyTemplateOptions } from '@ngx-formly/core';
 import { Observable } from 'rxjs';
 import { IProperty } from '../../components/property/property.types';
-import { EditorTypeOption } from '../../editor.types';
 
 export enum FieldType {
     FORMLY_GROUP = 'formly-group',
@@ -46,5 +45,3 @@ export interface IFieldService {
 }
 
 export const EDITOR_FIELD_SERVICE = new InjectionToken<IFieldService>('EDITOR_FIELD_SERVICE');
-
-// export type IEditorFormlyField = IBaseEditorFormlyField;

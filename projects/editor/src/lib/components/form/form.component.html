@@ -2,7 +2,7 @@
 	<app-sidebar-section
 		[sectionTitle]="'Add Field'">
         <lib-field-category-list
-            *ngFor="let category of formService.fieldCategories"
+            *ngFor="let category of editorService.fieldCategories"
             [category]="category"
             [formId]="form.id">
         </lib-field-category-list>
@@ -29,7 +29,7 @@
 
 <div id="rightSidebar" class="sidebar" *ngIf="form.activeField">
 	<app-sidebar-section
-		[sectionTitle]="'Properties - ' + formService.getFormattedFieldName(form.activeField.name, form.activeField.key)">
+		[sectionTitle]="'Properties - ' + editorService.getFormattedFieldName(form.activeField.name, form.activeField.key)">
 		<app-object-property
 			[target]="form.activeField"
 			[property]="activeFieldProperty"

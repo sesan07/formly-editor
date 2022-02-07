@@ -1,6 +1,6 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
-import { FormService } from '../../services/form-service/form.service';
+import { EditorService } from '../../services/editor-service/editor.service';
 import { MouseService } from '../../services/mouse-service/mouse.service';
 
 @Component({
@@ -10,10 +10,9 @@ import { MouseService } from '../../services/mouse-service/mouse.service';
 })
 export class HomeComponent {
 
-	@ViewChild(MatTabGroup) tabNav: MatTabGroup;
+	@ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
-    constructor(public formService: FormService, private _mouseService: MouseService) {
-    }
+    constructor(public editorService: EditorService, private _mouseService: MouseService) {}
 
     @HostListener('mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
@@ -22,11 +21,11 @@ export class HomeComponent {
     }
 
     onImportForm(): void {
-        this.formService.importForm();
+        this.editorService.importForm();
     }
 
     onExportForm(): void {
-        this.formService.exportForm(this.tabNav.selectedIndex);
+        this.editorService.exportForm(this.tabGroup.selectedIndex);
     }
 
 }

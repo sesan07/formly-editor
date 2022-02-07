@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { FieldWrapper } from '@ngx-formly/core';
-import { IBaseEditorFormlyField } from '../../services/form-service/form.types';
-import { FormService } from '../../services/form-service/form.service';
+import { IBaseEditorFormlyField } from '../../services/editor-service/editor.types';
+import { EditorService } from '../../services/editor-service/editor.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -14,18 +14,16 @@ export class EditorWrapperComponent extends FieldWrapper<IBaseEditorFormlyField>
     @ViewChild('fieldComponent', {read: ViewContainerRef, static: true})
     fieldComponent: ViewContainerRef;
 
-    // public canHaveChildren: boolean;
 	public isActiveField: boolean;
 
     private _destroy$: Subject<void> = new Subject();
 
-    constructor(public formService: FormService) { super(); }
+    constructor(public editorService: EditorService) { super(); }
 
     ngOnInit(): void {
-        // this.canHaveChildren = this.formService.canHaveChildren(this.field);
 		this._checkActiveField();
 
-        this.formService.fieldSelected$
+        this.editorService.fieldSelected$
             .pipe(takeUntil(this._destroy$))
             .subscribe(() => this._checkActiveField());
     }
@@ -36,19 +34,19 @@ export class EditorWrapperComponent extends FieldWrapper<IBaseEditorFormlyField>
     }
 
     onAddChildField(type: string, customType?: string): void {
-        this.formService.addField(type, this.field.formId, customType, this.field.fieldId);
+        this.editorService.addField(type, this.field.formId, customType, this.field.fieldId);
     }
 
     onRemove(): void {
-        this.formService.removeField(this.field.formId, this.field.fieldId, this.field.parentFieldId);
+        this.editorService.removeField(this.field.formId, this.field.fieldId, this.field.parentFieldId);
     }
 
     onClick(event: MouseEvent): void {
-        this.formService.selectField(this.field.formId, this.field.fieldId);
+        this.editorService.selectField(this.field.formId, this.field.fieldId);
         event.stopPropagation();
     }
 
 	private _checkActiveField(): void {
-		this.isActiveField =  this.formService.isActiveField(this.field.formId, this.field.fieldId);
+		this.isActiveField =  this.editorService.isActiveField(this.field.formId, this.field.fieldId);
 	}
 }

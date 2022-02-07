@@ -25,13 +25,13 @@ import { ArrayPropertyComponent } from './components/property/array-property/arr
 import { BooleanPropertyComponent } from './components/property/boolean-property/boolean-property.component';
 import { FieldTreeItemComponent } from './components/field-tree-item/field-tree-item.component';
 import { ChipListPropertyComponent } from './components/property/chip-list-property/chip-list-property.component';
-import { FieldType, WrapperType } from './services/form-service/form.types';
+import { FieldType, WrapperType } from './services/editor-service/editor.types';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { HomeComponent } from './components/home/home.component';
 import { SidebarSectionComponent } from './components/sidebar-section/sidebar-section.component';
 import { EditorFormlyGroupComponent } from './components/editor-formly-group/editor-formly-group.component';
 import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG } from './editor.types';
-import { FormService } from './services/form-service/form.service';
+import { EditorService } from './services/editor-service/editor.service';
 import { cloneDeep } from 'lodash-es';
 import { TypeOption } from '@ngx-formly/core/lib/services/formly.config';
 import { FieldCategoryListComponent } from './components/field-category-list/field-category-list.component';
@@ -86,8 +86,8 @@ const defaultConfig: EditorConfigOption = {
 })
 export class EditorModule {
 
-    constructor(formService: FormService, @Optional() @Inject(EDITOR_CONFIG) config: EditorConfigOption) {
-        formService.setup(config ?? defaultConfig);
+    constructor(editorService: EditorService, @Optional() @Inject(EDITOR_CONFIG) config: EditorConfigOption) {
+        editorService.setup(config ?? defaultConfig);
     }
 
     static forRoot(config: EditorConfigOption): ModuleWithProviders<EditorModule> {
@@ -121,7 +121,7 @@ export class EditorModule {
         return {
             ngModule: EditorModule,
             providers: [
-                { provide: EDITOR_CONFIG, useValue: editorConfig, deps: [FormService] },
+                { provide: EDITOR_CONFIG, useValue: editorConfig, deps: [EditorService] },
                 { provide: FORMLY_CONFIG, useValue: formlyConfig, multi: true },
             ],
         };

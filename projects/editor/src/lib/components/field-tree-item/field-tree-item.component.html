@@ -20,7 +20,7 @@
 		</mat-menu>
 	
 		<mat-menu #addCategoryMenu="matMenu">
-            <ng-container *ngFor="let category of formService.fieldCategories">
+            <ng-container *ngFor="let category of editorService.fieldCategories">
                 <button mat-menu-item [matMenuTriggerFor]="addFieldMenu">
                     {{ category.name }}
                 </button>
@@ -51,7 +51,7 @@
 		<button mat-icon-button [disabled]="!field.canHaveChildren" (click)="onToggle($event)">
 			<mat-icon class="expand-icon" [class.expanded-90]="isExpanded" *ngIf="field.canHaveChildren">chevron_right</mat-icon>
 		</button>
-		<span>{{ formService.getFormattedFieldName(field.name, field.key) }}</span>
+		<span>{{ editorService.getFormattedFieldName(field.name, field.key) }}</span>
 	</span>
 </div>
 
