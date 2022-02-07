@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, Renderer2 } from '@angular/core';
 import { EditorTypeCategoryOption, EditorTypeOption } from '../../editor.types';
-import { FormService } from '../../services/form-service/form.service';
-import { FieldType, IBaseEditorFormlyField } from '../../services/form-service/form.types';
+import { EditorService } from '../../services/editor-service/editor.service';
+import { FieldType, IBaseEditorFormlyField } from '../../services/editor-service/editor.types';
 
 @Component({
     selector: 'app-field-tree-item',
@@ -22,7 +22,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
 	public treeLevelPadding: number;
 	public replaceCategories: EditorTypeCategoryOption[];
 
-    constructor(public formService: FormService, private _renderer: Renderer2, private _elementRef: ElementRef) {
+    constructor(public editorService: EditorService, private _renderer: Renderer2, private _elementRef: ElementRef) {
     }
 
 	ngOnInit(): void {
@@ -32,7 +32,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
 	}
 
     ngOnChanges(): void {
-        this.replaceCategories = this.formService.fieldCategories.map(category => {
+        this.replaceCategories = this.editorService.fieldCategories.map(category => {
             // Filter fields that can have children and aren't this field
             const options: EditorTypeOption[] = category.typeOptions.filter(option => {
                 if (!option.canHaveChildren) {
@@ -50,7 +50,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
         }).filter(category => category.typeOptions.length > 0); // Remove categories with empty fields
 
 		if (this.field.canHaveChildren) {
-			this.childFields = this.formService.getChildren(this.field);
+			this.childFields = this.editorService.getChildren(this.field);
 		}
     }
 
@@ -59,15 +59,15 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
 			this.isExpanded = true;
 		}
 
-        this.formService.addField(type, this.field.formId, customType, this.field.fieldId);
+        this.editorService.addField(type, this.field.formId, customType, this.field.fieldId);
     }
 
     onRemoveChildField(childField: IBaseEditorFormlyField): void {
-        this.formService.removeField(this.field.formId, childField.fieldId, this.field.fieldId);
+        this.editorService.removeField(this.field.formId, childField.fieldId, this.field.fieldId);
     }
 
 	onReplaceParentField(type: string, customType?: string): void {
-		this.formService.replaceParentField(type, this.field.formId, this.field.fieldId, customType);
+		this.editorService.replaceParentField(type, this.field.formId, this.field.fieldId, customType);
 	}
 
 	onHeaderClicked(event: MouseEvent): void {
@@ -75,7 +75,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
 			this.isExpanded = true;
 		}
 
-        this.formService.selectField(this.field.formId, this.field.fieldId);
+        this.editorService.selectField(this.field.formId, this.field.fieldId);
 		event.stopPropagation();
 	}
 
@@ -83,7 +83,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
 		this.isExpanded = !this.isExpanded;
 
 		if (!this.isExpanded) {
-			this.formService.selectField(this.field.formId, this.field.fieldId);
+			this.editorService.selectField(this.field.formId, this.field.fieldId);
 		}
 
 		event.stopPropagation();

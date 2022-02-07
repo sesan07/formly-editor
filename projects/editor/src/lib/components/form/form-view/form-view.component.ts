@@ -4,8 +4,8 @@ import { FormGroup } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { cloneDeep } from 'lodash-es';
-import { FormService } from '../../../services/form-service/form.service';
-import { IBaseEditorFormlyField, IForm } from '../../../services/form-service/form.types';
+import { EditorService } from '../../../services/editor-service/editor.service';
+import { IBaseEditorFormlyField, IForm } from '../../../services/editor-service/editor.types';
 
 @Component({
     selector: 'app-form-view',
@@ -23,7 +23,7 @@ export class FormViewComponent implements OnInit, OnDestroy {
 
     private _destroy$: Subject<void> = new Subject();
 
-    constructor(private _formService: FormService) {
+    constructor(private _editorService: EditorService) {
     }
 
     public ngOnInit(): void {
@@ -45,7 +45,7 @@ export class FormViewComponent implements OnInit, OnDestroy {
 		this.model = cloneDeep(this.form.model);
 
 		const logClone: IBaseEditorFormlyField[] = cloneDeep(this.form.fields);
-		logClone.forEach(field => this._formService.cleanField(field, true, true));
+		logClone.forEach(field => this._editorService.cleanField(field, true, true));
 		console.log('FIELDS', JSON.stringify(logClone, null, 4));
     }
 }

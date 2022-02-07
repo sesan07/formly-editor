@@ -1,4 +1,4 @@
-import { IBaseEditorFormlyField } from "./../form-service/form.types";
+import { IBaseEditorFormlyField } from "../editor-service/editor.types";
 
 export enum DragAction {
     COPY,

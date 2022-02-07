@@ -10,6 +10,6 @@ export * from './lib/components/property/input-property/input-property.types'
 export * from './lib/components/property/object-property/object-property.types'
 
 export * from './lib/components/home/home.component';
-export * from './lib/services/form-service/form.types';
+export * from './lib/services/editor-service/editor.types';
 export * from './lib/editor.types';
 export * from './lib/editor.module';

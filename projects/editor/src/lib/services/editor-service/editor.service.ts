@@ -1,17 +1,15 @@
 import { Inject, Injectable } from '@angular/core';
-// import { IBaseEditorFormlyField, IForm } from './form.types';
-// import { FieldType, IBaseEditorFormlyField, IForm, WrapperType } from './form.types';
 import { cloneDeep, get, isEmpty } from 'lodash-es';
 import { FileService } from '../file-service/file.service';
 import { Observable, Subject } from 'rxjs';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { EditorConfigOption, EditorTypeCategoryOption } from '../../editor.types';
-import { EDITOR_FIELD_SERVICE, FieldType, IBaseEditorFormlyField, IFieldService, IForm, WrapperType } from './form.types';
+import { EDITOR_FIELD_SERVICE, FieldType, IBaseEditorFormlyField, IFieldService, IForm, WrapperType } from './editor.types';
 
 @Injectable({
     providedIn: 'root',
 })
-export class FormService {
+export class EditorService {
 
     // TODO make this private
     public forms: IForm[] = [];

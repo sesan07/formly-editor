@@ -3,8 +3,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
 import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
 import { DragAction, IItemDragData } from '../../services/field-droplist-service/field-droplist.types';
-import { FormService } from '../../services/form-service/form.service';
-import { IBaseEditorFormlyField } from '../../services/form-service/form.types';
+import { EditorService } from '../../services/editor-service/editor.service';
+import { IBaseEditorFormlyField } from '../../services/editor-service/editor.types';
 import { MouseService } from '../../services/mouse-service/mouse.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
     connectedTo: string[] = [];
 
     constructor(
-        public formService: FormService,
+        public editorService: EditorService,
         private _mouseService: MouseService,
         private _dropListService: FieldDroplistService) { super(); }
 
@@ -62,13 +62,13 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
 
         switch(itemData.action) {
             case DragAction.COPY:
-                this.formService.addField(field.type, targetParent.formId, field.customType, targetParent.fieldId, dragDrop.currentIndex);
+                this.editorService.addField(field.type, targetParent.formId, field.customType, targetParent.fieldId, dragDrop.currentIndex);
                 break;
             case DragAction.MOVE:
                 if (currentParent.fieldId === targetParent.fieldId) {
-                    this.formService.moveField(field.fieldId, field.formId, dragDrop.previousIndex, dragDrop.currentIndex);
+                    this.editorService.moveField(field.fieldId, field.formId, dragDrop.previousIndex, dragDrop.currentIndex);
                 } else {
-                    this.formService.transferField(
+                    this.editorService.transferField(
                         field.fieldId,
                         field.formId,
                         currentParent.fieldId,

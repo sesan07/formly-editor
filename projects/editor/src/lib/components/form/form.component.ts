@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { FormService } from '../../services/form-service/form.service';
-import { IForm } from '../../services/form-service/form.types';
+import { EditorService } from '../../services/editor-service/editor.service';
+import { IForm } from '../../services/editor-service/editor.types';
 import { cloneDeep } from 'lodash-es';
 import { takeUntil } from 'rxjs/operators';
 import { IObjectProperty } from '../property/object-property/object-property.types';
@@ -36,7 +36,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
 	constructor(
 		public propertyService: PropertyService,
-		public formService: FormService,
+		public editorService: EditorService,
 		private _renderer: Renderer2,
         private _fieldDropListService: FieldDroplistService) {
 	}
@@ -48,7 +48,7 @@ export class FormComponent implements OnInit, OnDestroy {
 		this._updateModelProperty();
         this._fieldDropListService.resetDropListIds(this.form.id);
 
-		this.formService.formChanged$
+		this.editorService.formChanged$
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(formId => {
                 if (formId === this.form.id) {
@@ -57,7 +57,7 @@ export class FormComponent implements OnInit, OnDestroy {
                 }
             });
 
-		this.formService.fieldSelected$
+		this.editorService.fieldSelected$
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(() => this._updateActiveFieldProperty());
 	}
