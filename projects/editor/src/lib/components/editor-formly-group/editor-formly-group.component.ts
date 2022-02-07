@@ -1,7 +1,8 @@
 import { CdkDrag, CdkDragDrop, CdkDropList, DropListOrientation } from '@angular/cdk/drag-drop';
-import { AfterViewInit, Component, HostListener, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
 import { EditorWrapperService } from '../../services/editor-wrapper-service/editor-wrapper.service';
+import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
 import { DragAction, IItemDragData } from '../../services/field-droplist-service/field-droplist.types';
 import { FormService } from '../../services/form-service/form.service';
 import { IBaseEditorFormlyField } from '../../services/form-service/form.types';
@@ -12,7 +13,7 @@ import { MouseService } from '../../services/mouse-service/mouse.service';
     templateUrl: './editor-formly-group.component.html',
     styleUrls: ['./editor-formly-group.component.scss'],
 })
-export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField> implements AfterViewInit {
+export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField> implements OnInit {
     @ViewChild(CdkDropList) dropList: CdkDropList;
 
     get dropListClasses(): string { return (this.field.fieldGroupClassName || '') + ' cdk-drop-list'; }
@@ -24,14 +25,22 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
 
     connectedTo: string[] = [];
 
-    constructor(private _formService: FormService, public wrapperService: EditorWrapperService, private _mouseService: MouseService) { super(); }
+    constructor(
+        private _formService: FormService,
+        public wrapperService: EditorWrapperService,
+        private _mouseService: MouseService,
+        private _dropListService: FieldDroplistService) { super(); }
 
-    ngAfterViewInit(): void {
-        this._addConnection(this.field, new Set());
+    ngOnInit(): void {
+        if (this.field.fieldId !== 'preview') {
+            this.connectedTo = this._dropListService.getDropListIds(this.field.formId);
+        }
     }
 
     canEnter = (drag: CdkDrag) => {
-        // The drag-drop module doesn't seem to allow dragging back into the source container
+        // The drag-drop module doesn't call canEnter for the soure droplist, it's not designed for nested droplists.
+        // If you try to drag out of a nested source you won't be able to drop back in the source.
+        // This is because canEnter() is only called for other drop lists, so it would call canEnter() for parent, which would be true.
         // To get around that, we prevent entry into other containers if the mouse is inside the source container
         // We also use the order of the connectedTo list to check if the target container is stacked above.
         const isInDropContainer: boolean = this._isMouseInElement(drag.dropContainer.element.nativeElement);
@@ -79,27 +88,6 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
             action: DragAction.MOVE,
             field
         };
-    }
-
-    private _addConnection(field: IBaseEditorFormlyField, visited: Set<string>) {
-        visited.add(field.fieldId);
-
-        if (field.canHaveChildren) {
-            const children: IBaseEditorFormlyField[] = this._formService.getChildren(field);
-            children.forEach(child => {
-                if (!visited.has(child.fieldId)) {
-                    this._addConnection(child, visited);
-                }
-            });
-
-            // Only connect to fields with children
-            this.connectedTo.push(field.fieldId);
-        }
-
-        if (field.parentFieldId && !visited.has(field.parentFieldId)) {
-            const parent: IBaseEditorFormlyField = this._formService.getField(field.formId, field.parentFieldId);
-            this._addConnection(parent, visited);
-        }
     }
 
     private _isMouseInElement(droplistElement: HTMLElement): boolean {

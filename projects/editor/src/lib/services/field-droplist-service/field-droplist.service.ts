@@ -16,32 +16,33 @@ export class FieldDroplistService {
     }
 
     resetDropListIds(formId: string): void {
-        const formDropListIds = [];
-        this._formDropListIdMap.set(formId, formDropListIds);
+        const levelList: IBaseEditorFormlyField[][] = [];
+        const dropListIds: string[] = [];
 
         const form = this._formService.getForm(formId);
-        const visitedSet: Set<string> = new Set();
-        form.fields.forEach(field => this._addConnection(field, formDropListIds, visitedSet));
+        form.fields.forEach(field => {
+            this._addField(field, levelList, 0)
+        })
+
+        levelList.forEach(level => {
+            level.forEach(field => dropListIds.push(field.fieldId))
+        })
+        
+        this._formDropListIdMap.set(formId, dropListIds.reverse());
     }
 
-    private _addConnection(field: IBaseEditorFormlyField, connections: string[], visited: Set<string>) {
-        visited.add(field.fieldId);
-
+    private _addField(field: IBaseEditorFormlyField, levelList: IBaseEditorFormlyField[][], level: number): void {
         if (field.canHaveChildren) {
             const children: IBaseEditorFormlyField[] = this._formService.getChildren(field);
             children.forEach(child => {
-                if (!visited.has(child.fieldId)) {
-                    this._addConnection(child, connections, visited);
-                }
+                this._addField(child, levelList, level + 1)
             });
 
-            // Only connect to fields with children
-            connections.push(field.fieldId);
-        }
-
-        if (field.parentFieldId && !visited.has(field.parentFieldId)) {
-            const parent: IBaseEditorFormlyField = this._formService.getField(field.formId, field.parentFieldId);
-            this._addConnection(parent, connections, visited);
+            if (!levelList[level]) {
+                levelList[level] = [field];
+            } else {
+                levelList[level].push(field)
+            }
         }
     }
 }

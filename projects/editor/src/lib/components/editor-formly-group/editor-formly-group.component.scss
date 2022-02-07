@@ -1,16 +1,17 @@
 .cdk-drop-list.edit-mode {
-    min-height: 60px;
-    min-width: 60px;
+    min-height: 48px;
+    min-width: 48px;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 2px solid transparent;
 }
 
-.cdk-drop-list-receiving, .cdk-drop-list-dragging {
+.cdk-drop-list-receiving.edit-mode, .cdk-drop-list-dragging.edit-mode {
     background-color: #F7FFEB;
     border: 2px solid #EBEBEB;
     border-radius: 4px;
-    box-sizing: border-box;
-    padding: 8px;
 }
 
-.cdk-drop-list-dragging {
+.cdk-drop-list-dragging.edit-mode {
     background-color: #BEFF5C;
 }
