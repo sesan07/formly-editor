@@ -52,8 +52,8 @@ export class FormComponent implements OnInit, OnDestroy {
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(formId => {
                 if (formId === this.form.id) {
-                    this._formChanged$.next();
                     this._fieldDropListService.resetDropListIds(formId);
+                    this._formChanged$.next();
                 }
             });
 

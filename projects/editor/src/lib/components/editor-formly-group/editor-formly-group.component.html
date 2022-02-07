@@ -3,7 +3,7 @@
     [ngClass]="{ 'edit-mode': wrapperService.isEditMode }"
     cdkDropList
     [cdkDropListOrientation]="dropListOrientation"
-    [cdkDropListEnterPredicate]="canEnter.bind(this)"
+    [cdkDropListEnterPredicate]="canEnter"
     [cdkDropListConnectedTo]="connectedTo"
     [cdkDropListData]="field"
     (cdkDropListDropped)="onDroplistDropped($event)">
