@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { FieldWrapper } from '@ngx-formly/core';
-import { FieldType, IBaseEditorFormlyField } from '../../services/form-service/form.types';
+import { IBaseEditorFormlyField } from '../../services/form-service/form.types';
 import { FormService } from '../../services/form-service/form.service';
-import { EditorWrapperService } from '../../services/editor-wrapper-service/editor-wrapper.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -20,11 +19,7 @@ export class EditorWrapperComponent extends FieldWrapper<IBaseEditorFormlyField>
 
     private _destroy$: Subject<void> = new Subject();
 
-    constructor(public formService: FormService,
-                public wrapperService: EditorWrapperService
-    ) {
-        super();
-    }
+    constructor(public formService: FormService) { super(); }
 
     ngOnInit(): void {
         // this.canHaveChildren = this.formService.canHaveChildren(this.field);

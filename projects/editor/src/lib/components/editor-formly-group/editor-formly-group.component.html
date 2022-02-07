@@ -1,6 +1,6 @@
 <div [id]="field.fieldId"
     [classList]="dropListClasses"
-    [ngClass]="{ 'edit-mode': wrapperService.isEditMode }"
+    [ngClass]="{ 'edit-mode': formService.isEditMode }"
     cdkDropList
     [cdkDropListOrientation]="dropListOrientation"
     [cdkDropListEnterPredicate]="canEnter"

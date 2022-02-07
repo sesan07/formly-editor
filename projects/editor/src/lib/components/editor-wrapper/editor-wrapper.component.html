@@ -1,5 +1,5 @@
-<div class="editor-wrapper" [ngClass]="{'edit-mode': wrapperService.isEditMode, 'active': isActiveField}" (click)="onClick($event)">
-    <div class="editor-header" *ngIf="wrapperService.isEditMode">
+<div class="editor-wrapper" [ngClass]="{'edit-mode': formService.isEditMode, 'active': isActiveField}" (click)="onClick($event)">
+    <div class="editor-header" *ngIf="formService.isEditMode">
         <span class="editor-title">{{ formService.getFormattedFieldName(field.name, field.key) }}</span>
         <button *ngIf="field.canHaveChildren" mat-icon-button [matMenuTriggerFor]="addCategoryMenu" (click)="$event.stopPropagation()">
             <mat-icon>add</mat-icon>
