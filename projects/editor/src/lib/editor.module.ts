@@ -27,7 +27,7 @@ import { FieldTreeItemComponent } from './components/field-tree-item/field-tree-
 import { ChipListPropertyComponent } from './components/property/chip-list-property/chip-list-property.component';
 import { FieldType, WrapperType } from './services/editor-service/editor.types';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { HomeComponent } from './components/home/home.component';
+import { EditorComponent } from './components/editor/editor.component';
 import { SidebarSectionComponent } from './components/sidebar-section/sidebar-section.component';
 import { EditorFormlyGroupComponent } from './components/editor-formly-group/editor-formly-group.component';
 import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG } from './editor.types';
@@ -53,7 +53,7 @@ const defaultConfig: EditorConfigOption = {
         BooleanPropertyComponent,
         FieldTreeItemComponent,
         ChipListPropertyComponent,
-        HomeComponent,
+        EditorComponent,
         SidebarSectionComponent,
         EditorFormlyGroupComponent,
         FieldCategoryListComponent,
@@ -81,7 +81,7 @@ const defaultConfig: EditorConfigOption = {
         DragDropModule,
     ],
     exports: [
-        HomeComponent
+        EditorComponent
     ]
 })
 export class EditorModule {
