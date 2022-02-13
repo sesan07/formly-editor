@@ -39,6 +39,7 @@ import { TypeOption } from '@ngx-formly/core/lib/services/formly.config';
 import { FieldCategoryListComponent } from './components/field-category-list/field-category-list.component';
 import { ImportFormDialogComponent } from './components/import-form-dialog/import-form-dialog.component';
 import { JsonValidatorDirective } from './components/import-form-dialog/json-validator/json-validator.directive';
+import { ExportFormDialogComponent } from './components/export-form-dialog/export-form-dialog.component';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -62,6 +63,7 @@ const defaultConfig: EditorConfigOption = {
         EditorFormlyGroupComponent,
         FieldCategoryListComponent,
         ImportFormDialogComponent,
+        ExportFormDialogComponent,
         JsonValidatorDirective,
     ],
     imports: [

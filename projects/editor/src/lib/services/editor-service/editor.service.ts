@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { cloneDeep, get, isEmpty } from 'lodash-es';
-import { FileService } from '../file-service/file.service';
+import { get, isEmpty } from 'lodash-es';
 import { Observable, Subject } from 'rxjs';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { EditorConfigOption, EditorTypeCategoryOption } from '../../editor.types';
@@ -23,7 +22,7 @@ export class EditorService {
     private _formChanged$: Subject<string> = new Subject();
     private _fieldSelected$: Subject<IBaseEditorFormlyField> = new Subject();
 
-    constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService, private _fileService: FileService) {}
+    constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService) {}
 
     setup(editorConfig: EditorConfigOption) {
         this.fieldCategories = editorConfig.typeCategories;
@@ -118,16 +117,31 @@ export class EditorService {
         return this.forms.find(f => f.id === formId);
     }
 
-    public importForm(name: string, json): void {
-        this._loadJSONForm(name, json);
-    }
+    public importForm(name: string, json: string): void {
+        let loadedForm: IBaseEditorFormlyField | IBaseEditorFormlyField[];
+        try {
+            loadedForm = JSON.parse(json);
+        } catch(e) {
+            console.error('Unable to parse form');
+            return;
+        }
 
-    public exportForm(index: number): void {
-		const form: IForm = this.forms[index];
-        const fieldsClone: IBaseEditorFormlyField[] = cloneDeep(form.fields);
-        fieldsClone.forEach(field => this.cleanField(field, true, true));
-        // TODO add ability to export single line instead of 4-space formatted JSON, see if it still works... it should...
-        this._fileService.exportJSONString(JSON.stringify(fieldsClone, null, 4), 'form.json');
+        const id: string = this._getNextFormId(this._currFormId);
+        this._currFormId++;
+
+        const fields: IBaseEditorFormlyField[] = [];
+        const fieldMap: Map<string, IBaseEditorFormlyField> = new Map();
+        if (Array.isArray(loadedForm)) {
+            loadedForm.forEach(field => {
+                this._addEditorProperties(field, fieldMap, id);
+                fields.push(field);
+            });
+        } else {
+            this._addEditorProperties(loadedForm, fieldMap, id);
+            fields.push(loadedForm);
+        }
+
+		this._addForm(id, name, fields, fieldMap);
     }
 
     public removeForm(index: number): void {
@@ -232,33 +246,6 @@ export class EditorService {
 			return form.fields;
 		}
 	}
-
-    private _loadJSONForm(name: string, json: string): void {
-        let loadedForm: IBaseEditorFormlyField | IBaseEditorFormlyField[];
-        try {
-            loadedForm = JSON.parse(json);
-        } catch(e) {
-            console.error('Unable to parse form');
-            return;
-        }
-
-        const id: string = this._getNextFormId(this._currFormId);
-        this._currFormId++;
-
-        const fields: IBaseEditorFormlyField[] = [];
-        const fieldMap: Map<string, IBaseEditorFormlyField> = new Map();
-        if (Array.isArray(loadedForm)) {
-            loadedForm.forEach(field => {
-                this._addEditorProperties(field, fieldMap, id);
-                fields.push(field);
-            });
-        } else {
-            this._addEditorProperties(loadedForm, fieldMap, id);
-            fields.push(loadedForm);
-        }
-
-		this._addForm(id, name, fields, fieldMap);
-    }
 
 	private _addForm(id: string, name: string, fields: IBaseEditorFormlyField[], fieldMap: Map<string, IBaseEditorFormlyField>) {
         this.forms.push({
