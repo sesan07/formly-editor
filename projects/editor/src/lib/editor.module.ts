@@ -40,6 +40,7 @@ import { FieldCategoryListComponent } from './components/field-category-list/fie
 import { ImportFormDialogComponent } from './components/import-form-dialog/import-form-dialog.component';
 import { JsonValidatorDirective } from './components/import-form-dialog/json-validator/json-validator.directive';
 import { ExportFormDialogComponent } from './components/export-form-dialog/export-form-dialog.component';
+import { AddFormDialogComponent } from './components/add-form-dialog/add-form-dialog.component';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -65,6 +66,7 @@ const defaultConfig: EditorConfigOption = {
         ImportFormDialogComponent,
         ExportFormDialogComponent,
         JsonValidatorDirective,
+        AddFormDialogComponent,
     ],
     imports: [
         CommonModule,
@@ -100,7 +102,9 @@ const defaultConfig: EditorConfigOption = {
                 height: '80%',
                 width: '80%',
                 maxHeight: '675px',
-                maxWidth: '1200px'
+                maxWidth: '1200px',
+                hasBackdrop: true,
+                backdropClass: 'dialogBackdrop'
             }
         }
     ]

@@ -12,27 +12,22 @@ export class EditorService {
 
     // TODO make this private
     public forms: IForm[] = [];
-    public fieldCategories: EditorTypeCategoryOption[] = [];
+    public get fieldCategories(): EditorTypeCategoryOption[] { return this._editorConfig.typeCategories; };
 
     public get formChanged$(): Observable<string> { return this._formChanged$.asObservable(); }
     public get fieldSelected$(): Observable<IBaseEditorFormlyField> { return this._fieldSelected$.asObservable(); }
     public isEditMode = true;
 
     private _currFormId = 1;
+    private _editorConfig: EditorConfigOption;
     private _formChanged$: Subject<string> = new Subject();
     private _fieldSelected$: Subject<IBaseEditorFormlyField> = new Subject();
 
     constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService) {}
 
     setup(editorConfig: EditorConfigOption) {
-        this.fieldCategories = editorConfig.typeCategories;
-
-        const formId: string = this._getNextFormId(this._currFormId);
-        const formName: string = this._getNextFormName(this._currFormId);
-        this._currFormId++;
-
-		this._addForm(formId, formName, [], new Map());
-		this.addField(editorConfig.defaultName, formId, editorConfig.defaultCustomName);
+        this._editorConfig = editorConfig;
+        this.addNewForm('Form Zero');
     }
 
     public addField(type: string, formId: string, customType?: string, parentFieldId?: string, index?: number): IBaseEditorFormlyField {
@@ -115,6 +110,13 @@ export class EditorService {
 
     public getForm(formId: string): IForm {
         return this.forms.find(f => f.id === formId);
+    }
+
+    public addNewForm(name: string): void {
+        const formId: string = this._getNextFormId(this._currFormId++);
+
+		this._addForm(formId, name, [], new Map());
+		this.addField(this._editorConfig.defaultName, formId, this._editorConfig.defaultCustomName);
     }
 
     public importForm(name: string, json: string): void {
