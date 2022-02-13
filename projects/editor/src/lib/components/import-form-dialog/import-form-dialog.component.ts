@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
@@ -9,7 +9,7 @@ import { ImportJSONRequest, ImportJSONResponse } from './import-json-dialog.type
     templateUrl: './import-form-dialog.component.html',
     styleUrls: ['./import-form-dialog.component.scss']
 })
-export class ImportFormDialogComponent implements OnInit {
+export class ImportFormDialogComponent {
 
     @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
@@ -24,16 +24,6 @@ export class ImportFormDialogComponent implements OnInit {
     jsonValue: string;
 
     currTabIndex = 0;
-
-    private _selectedFile: File;
-
-    constructor(
-        @Inject(MAT_DIALOG_DATA) public data: ImportJSONRequest,
-        private _dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse>
-    ) { }
-
-    ngOnInit(): void {
-    }
 
     get isFormValid(): boolean {
         if (!this.fileNameModel || !this.jsonModel) {
@@ -54,6 +44,13 @@ export class ImportFormDialogComponent implements OnInit {
                 ? this.jsonModel.valid
                 : true;
     }
+
+    private _selectedFile: File;
+
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public data: ImportJSONRequest,
+        private _dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse>
+    ) { }
 
     onFileChanged(): void {
         const file: File = this.fileSelectElement?.nativeElement.files.item(0);

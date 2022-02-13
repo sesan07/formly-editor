@@ -1,11 +1,14 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { MatTabGroup } from '@angular/material/tabs';
+import { cloneDeep } from 'lodash-es';
 import { of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { EditorService } from '../../services/editor-service/editor.service';
+import { IBaseEditorFormlyField, IForm } from '../../services/editor-service/editor.types';
 import { FileService } from '../../services/file-service/file.service';
 import { MouseService } from '../../services/mouse-service/mouse.service';
+import { ExportFormDialogComponent } from '../export-form-dialog/export-form-dialog.component';
+import { ExportJSONRequest, ExportJSONResponse } from '../export-form-dialog/export-json-dialog.types';
 import { ImportFormDialogComponent } from '../import-form-dialog/import-form-dialog.component';
 import { ImportJSONRequest, ImportJSONResponse } from '../import-form-dialog/import-json-dialog.types';
 
@@ -16,7 +19,7 @@ import { ImportJSONRequest, ImportJSONResponse } from '../import-form-dialog/imp
 })
 export class EditorComponent {
 
-    @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+    tabIndex = 0;
 
     constructor(
         public editorService: EditorService,
@@ -56,12 +59,34 @@ export class EditorComponent {
             .subscribe(res => {
                 if (res) {
                     this.editorService.importForm(res.name, res.json);
+                    // Navigate to new form. Allow some time for tab to load.
+                    setTimeout(() => {
+                        this.tabIndex = this.editorService.forms.length - 1;
+                    }, 1000);
                 }
             });
     }
 
     onExportForm(): void {
-        this.editorService.exportForm(this.tabGroup.selectedIndex);
-    }
+        const form: IForm = this.editorService.forms[this.tabIndex];
+        const fieldsClone: IBaseEditorFormlyField[] = cloneDeep(form.fields);
+        fieldsClone.forEach(field => this.editorService.cleanField(field, true, true));
 
+        const config: MatDialogConfig<ExportJSONRequest> = {
+            data: {
+                type: 'Form',
+                name: form.name + '.json',
+                json: JSON.stringify(fieldsClone, null, 2)
+            }
+        };
+
+        const dialogRef: MatDialogRef<ExportFormDialogComponent, ExportJSONResponse> = this._dialog.open(ExportFormDialogComponent, config);
+
+        dialogRef.afterClosed()
+            .subscribe(res => {
+                if (res) {
+                    this._fileService.saveFile(res.name, res.json);
+                }
+            });
+    }
 }

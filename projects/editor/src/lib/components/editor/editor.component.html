@@ -6,7 +6,7 @@
         <mat-slide-toggle [(ngModel)]="editorService.isEditMode">Edit Mode</mat-slide-toggle>
     </span>
 </span>
-<mat-tab-group>
+<mat-tab-group [(selectedIndex)]="tabIndex">
     <mat-tab *ngFor="let form of editorService.forms; let i = index">
         <ng-template mat-tab-label>
             {{ form.name }}

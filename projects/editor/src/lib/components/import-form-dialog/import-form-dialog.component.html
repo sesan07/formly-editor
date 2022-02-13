@@ -12,15 +12,14 @@
                     </mat-form-field>
                     
                     <div class="file-select">
-                        <mat-form-field class="file-select-field">
+                        <mat-form-field class="file-select-field" (click)="fileSelect.click()">
                             <mat-label>File</mat-label>
                             <input 
                                 #fileNameModel="ngModel" 
                                 [(ngModel)]="fileNameValue" 
                                 matInput
                                 required 
-                                readonly
-                                (click)="fileSelect.click()">
+                                readonly>
                             <mat-error *ngIf="fileNameModel.errors?.required">Please select a file</mat-error>
                         </mat-form-field>
                         <button mat-button type="button" (click)="fileSelect.click()">
@@ -53,7 +52,7 @@
         <span>Cancel</span>
     </button>
     <button mat-button [disabled]="!isFormValid" (click)="onImport()">
-        <mat-icon>file_upload</mat-icon>
+        <mat-icon>file_download</mat-icon>
         <span>Import</span>
     </button>
 </mat-dialog-actions>
