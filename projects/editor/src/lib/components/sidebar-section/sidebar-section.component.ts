@@ -2,14 +2,14 @@ import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@ang
 import { MatMenuPanel } from '@angular/material/menu';
 
 @Component({
-	selector: 'app-sidebar-section',
+	selector: 'lib-sidebar-section',
 	templateUrl: './sidebar-section.component.html',
 	styleUrls: ['./sidebar-section.component.scss']
 })
 export class SidebarSectionComponent implements OnInit {
 	@Input() sectionTitle: string;
 	@Input() menuPanel: MatMenuPanel;
-	@Input() isCollapsible: boolean = true;
+	@Input() isCollapsible = true;
 	@Input() isCollapsed: boolean;
 
 	@ViewChild('contentWrapper', { read: ElementRef }) contentWrapper: ElementRef<HTMLElement>;

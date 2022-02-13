@@ -11,7 +11,7 @@ export class FileService {
     }
 
     public exportJSONString(content: string, fileName: string): void {
-        const blob: Blob = new Blob([content], {type: 'application/json'});
+        const blob: Blob = new Blob([content], { type: 'application/json' });
         saveAs(blob, fileName);
     }
 
@@ -37,5 +37,18 @@ export class FileService {
 
         setTimeout(() => input.click());
         return subject.asObservable();
+    }
+
+    public readFile(file: File): Observable<string> {
+        return new Observable(sub => {
+            const reader: FileReader = new FileReader();
+            reader.onload = readerEvent => {
+                const content: string = readerEvent.target.result as string;
+                sub.next(content);
+                sub.complete();
+            };
+
+            reader.readAsText(file);
+        });
     }
 }

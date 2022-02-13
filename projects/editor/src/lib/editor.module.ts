@@ -15,6 +15,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 import { EditorWrapperComponent } from './components/editor-wrapper/editor-wrapper.component';
 import { FormComponent } from './components/form/form.component';
@@ -35,6 +37,8 @@ import { EditorService } from './services/editor-service/editor.service';
 import { cloneDeep } from 'lodash-es';
 import { TypeOption } from '@ngx-formly/core/lib/services/formly.config';
 import { FieldCategoryListComponent } from './components/field-category-list/field-category-list.component';
+import { ImportFormDialogComponent } from './components/import-form-dialog/import-form-dialog.component';
+import { JsonValidatorDirective } from './components/import-form-dialog/json-validator/json-validator.directive';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -57,6 +61,8 @@ const defaultConfig: EditorConfigOption = {
         SidebarSectionComponent,
         EditorFormlyGroupComponent,
         FieldCategoryListComponent,
+        ImportFormDialogComponent,
+        JsonValidatorDirective,
     ],
     imports: [
         CommonModule,
@@ -79,9 +85,22 @@ const defaultConfig: EditorConfigOption = {
         MatTabsModule,
         MatSlideToggleModule,
         DragDropModule,
+        MatDialogModule,
+        MatButtonToggleModule,
     ],
     exports: [
         EditorComponent
+    ],
+    providers: [
+        {
+            provide: MAT_DIALOG_DEFAULT_OPTIONS,
+            useValue: {
+                height: '80%',
+                width: '80%',
+                maxHeight: '675px',
+                maxWidth: '1200px'
+            }
+        }
     ]
 })
 export class EditorModule {

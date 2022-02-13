@@ -6,7 +6,7 @@ import { IProperty, PropertyType } from '../property.types';
 import { IArrayProperty } from './array-property.types';
 
 @Component({
-    selector: 'app-array-property',
+    selector: 'lib-array-property',
     templateUrl: './array-property.component.html',
     styleUrls: ['./array-property.component.scss'],
 })
@@ -14,11 +14,11 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnI
 	@Input() property: IArrayProperty;
 	@Input() target: any[];
 
-	
+
 
 	public propertyType: typeof PropertyType = PropertyType;
 	public isExpanded: boolean;
-	
+
 	public get hasOptions(): boolean {
 		return this.property.isDeletable || this.property.canAdd;
 	};

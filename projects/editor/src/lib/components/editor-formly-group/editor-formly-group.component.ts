@@ -8,7 +8,7 @@ import { IBaseEditorFormlyField } from '../../services/editor-service/editor.typ
 import { MouseService } from '../../services/mouse-service/mouse.service';
 
 @Component({
-    selector: 'app-editor-formly-group',
+    selector: 'lib-editor-formly-group',
     templateUrl: './editor-formly-group.component.html',
     styleUrls: ['./editor-formly-group.component.scss'],
 })

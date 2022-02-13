@@ -12,6 +12,6 @@
             {{ form.name }}
             <button *ngIf="i !== 0" class="close-btn" mat-icon-button (click)="editorService.removeForm(i)"><mat-icon>close</mat-icon></button>
         </ng-template>
-        <app-form [form]="form"></app-form>
+        <lib-form [form]="form"></lib-form>
     </mat-tab>
 </mat-tab-group>

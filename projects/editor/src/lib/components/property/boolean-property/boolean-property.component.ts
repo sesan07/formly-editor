@@ -3,16 +3,16 @@ import { BasePropertyComponent } from '../base-property.component';
 import { IBooleanProperty } from './boolean-property.types';
 
 @Component({
-    selector: 'app-boolean-property',
+    selector: 'lib-boolean-property',
     templateUrl: './boolean-property.component.html',
     styleUrls: ['./boolean-property.component.scss'],
 })
 export class BooleanPropertyComponent extends BasePropertyComponent {
 	@Input() property: IBooleanProperty;
 
-	
 
-	
+
+
 	public get hasOptions(): boolean {
 		return this.property.isDeletable;
 	};

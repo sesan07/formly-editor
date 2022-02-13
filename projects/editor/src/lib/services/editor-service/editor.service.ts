@@ -17,7 +17,7 @@ export class EditorService {
 
     public get formChanged$(): Observable<string> { return this._formChanged$.asObservable(); }
     public get fieldSelected$(): Observable<IBaseEditorFormlyField> { return this._fieldSelected$.asObservable(); }
-    public isEditMode: boolean = true;
+    public isEditMode = true;
 
     private _currFormId = 1;
     private _formChanged$: Subject<string> = new Subject();
@@ -118,13 +118,8 @@ export class EditorService {
         return this.forms.find(f => f.id === formId);
     }
 
-    public importForm(): void {
-        this._fileService.importJSONString()
-            .subscribe(json => {
-                if (json) {
-                    this._loadJSONForm(json);
-                }
-            });
+    public importForm(name: string, json): void {
+        this._loadJSONForm(name, json);
     }
 
     public exportForm(index: number): void {
@@ -238,11 +233,16 @@ export class EditorService {
 		}
 	}
 
-    private _loadJSONForm(json: string): void {
-        const loadedForm: IBaseEditorFormlyField | IBaseEditorFormlyField[] = JSON.parse(json);
+    private _loadJSONForm(name: string, json: string): void {
+        let loadedForm: IBaseEditorFormlyField | IBaseEditorFormlyField[];
+        try {
+            loadedForm = JSON.parse(json);
+        } catch(e) {
+            console.error('Unable to parse form');
+            return;
+        }
 
         const id: string = this._getNextFormId(this._currFormId);
-        const name: string = this._getNextFormName(this._currFormId);
         this._currFormId++;
 
         const fields: IBaseEditorFormlyField[] = [];
@@ -281,13 +281,13 @@ export class EditorService {
             field.type = FieldType.FORMLY_GROUP;
         }
 
-        const mergedField = Object.assign(this._fieldService.getDefaultConfig(field.type, formId, undefined, parentFieldId), field)
-        Object.assign(field, mergedField)
+        const mergedField = Object.assign(this._fieldService.getDefaultConfig(field.type, formId, undefined, parentFieldId), field);
+        Object.assign(field, mergedField);
 
         fieldMap.set(field.fieldId, field);
 
         if (field.wrappers) {
-            const index = field.wrappers.indexOf(WrapperType.EDITOR)
+            const index = field.wrappers.indexOf(WrapperType.EDITOR);
             if (index < 0) {
                 field.wrappers.unshift(WrapperType.EDITOR);
             }

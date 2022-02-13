@@ -1,50 +1,50 @@
 <div id="leftSidebar" class="sidebar">
-	<app-sidebar-section
+	<lib-sidebar-section
 		[sectionTitle]="'Add Field'">
         <lib-field-category-list
             *ngFor="let category of editorService.fieldCategories"
             [category]="category"
             [formId]="form.id">
         </lib-field-category-list>
-	</app-sidebar-section>
-	<app-sidebar-section [sectionTitle]="'Fields'">
-		<app-field-tree-item 
+	</lib-sidebar-section>
+	<lib-sidebar-section [sectionTitle]="'Fields'">
+		<lib-field-tree-item 
 			*ngFor="let field of form.fields"
 			[field]="field"
 			[activeField]="form.activeField"
 			[isExpanded]="true">
-		</app-field-tree-item>
-	</app-sidebar-section>
+		</lib-field-tree-item>
+	</lib-sidebar-section>
 </div>
 
 
 <div class="sidebar-divider" (mousedown)="onSidebarMouseDown($event, 'leftSidebar', true)"></div>
 
-<app-form-view class="form-view"
+<lib-form-view class="form-view"
 					[form]="form"
 					[formChanged$]="formChanged$">
-</app-form-view>
+</lib-form-view>
 
 <div class="sidebar-divider" (mousedown)="onSidebarMouseDown($event, 'rightSidebar', false)"></div>
 
 <div id="rightSidebar" class="sidebar" *ngIf="form.activeField">
-	<app-sidebar-section
+	<lib-sidebar-section
 		[sectionTitle]="'Properties - ' + editorService.getFormattedFieldName(form.activeField.name, form.activeField.key)">
-		<app-object-property
+		<lib-object-property
 			[target]="form.activeField"
 			[property]="activeFieldProperty"
 			(valueChanged)="onFieldPropertyChanged()">
-		</app-object-property>
-	</app-sidebar-section>
+		</lib-object-property>
+	</lib-sidebar-section>
 
-	<app-sidebar-section
+	<lib-sidebar-section
 		[sectionTitle]="'Model'"
 		[menuPanel]="modelOptionsMenu">
-		<app-object-property
+		<lib-object-property
 			[target]="modelClone"
 			[property]="propertyService.getAsObjectProperty(modelProperty)">
-		</app-object-property>
-	</app-sidebar-section>
+		</lib-object-property>
+	</lib-sidebar-section>
 </div>
 
 <mat-menu #modelOptionsMenu="matMenu">

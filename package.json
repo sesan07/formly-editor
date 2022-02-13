@@ -11,8 +11,8 @@
     "build:editor": "ng build editor --watch",
     "test": "ng test",
     "e2e": "ng e2e",
-    "lint": "ng lint",
-    "lint:fix": "ng lint --fix"
+    "lint": "ng lint --fix",
+    "lint:editor": "ng lint editor --fix"
   },
   "private": true,
   "dependencies": {

@@ -5,18 +5,18 @@ import { IProperty, PropertyType } from '../property.types';
 import { IObjectProperty } from './object-property.types';
 
 @Component({
-	selector: 'app-object-property',
+	selector: 'lib-object-property',
 	templateUrl: './object-property.component.html',
 	styleUrls: ['./object-property.component.scss'],
 })
 export class ObjectPropertyComponent extends BasePropertyComponent implements OnChanges {
 	@Input() property: IObjectProperty;
 
-	
+
 
 	public propertyType: typeof PropertyType = PropertyType;
 	public isExpanded: boolean;
-	
+
 	public propertyTypes: PropertyType[] = Object.values(PropertyType);
 	public get hasOptions(): boolean {
 		return this.property?.isDeletable || this.property?.addOptions?.length > 0;

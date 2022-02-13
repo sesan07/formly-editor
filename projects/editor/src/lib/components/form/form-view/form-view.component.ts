@@ -8,7 +8,7 @@ import { EditorService } from '../../../services/editor-service/editor.service';
 import { IBaseEditorFormlyField, IForm } from '../../../services/editor-service/editor.types';
 
 @Component({
-    selector: 'app-form-view',
+    selector: 'lib-form-view',
     templateUrl: './form-view.component.html',
     styleUrls: ['./form-view.component.scss'],
 })
