@@ -7,6 +7,8 @@ import { EditorService } from '../../services/editor-service/editor.service';
 import { IBaseEditorFormlyField, IForm } from '../../services/editor-service/editor.types';
 import { FileService } from '../../services/file-service/file.service';
 import { MouseService } from '../../services/mouse-service/mouse.service';
+import { AddFormDialogComponent } from '../add-form-dialog/add-form-dialog.component';
+import { AddFormResponse } from '../add-form-dialog/add-form-dialog.types';
 import { ExportFormDialogComponent } from '../export-form-dialog/export-form-dialog.component';
 import { ExportJSONRequest, ExportJSONResponse } from '../export-form-dialog/export-json-dialog.types';
 import { ImportFormDialogComponent } from '../import-form-dialog/import-form-dialog.component';
@@ -32,6 +34,26 @@ export class EditorComponent {
     onMouseMove(event: MouseEvent): void {
         this._mouseService.position.x = event.clientX;
         this._mouseService.position.y = event.clientY;
+    }
+
+    onAddForm(): void {
+        const config: MatDialogConfig = {
+            height: 'auto',
+            maxWidth: '600px'
+        };
+
+        const dialogRef: MatDialogRef<AddFormDialogComponent, AddFormResponse> = this._dialog.open(AddFormDialogComponent, config);
+
+        dialogRef.afterClosed()
+            .subscribe(res => {
+                if (res) {
+                    this.editorService.addNewForm(res.name);
+                    // Navigate to new form. Allow some time for tab to load.
+                    setTimeout(() => {
+                        this.tabIndex = this.editorService.forms.length - 1;
+                    }, 1000);
+                }
+            });
     }
 
     onImportForm(): void {
