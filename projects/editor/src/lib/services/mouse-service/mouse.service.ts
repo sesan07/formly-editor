@@ -4,5 +4,5 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class MouseService {
-    position: { x: number, y: number } = { x: 0, y: 0 };
+    position: { x: number; y: number } = { x: 0, y: 0 };
 }

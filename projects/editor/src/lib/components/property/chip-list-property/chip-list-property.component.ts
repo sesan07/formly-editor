@@ -9,7 +9,7 @@ import { IChipListProperty } from './chip-list-property.types';
 import { BasePropertyComponent } from '../base-property.component';
 
 @Component({
-    selector: 'app-chip-list-property',
+    selector: 'lib-chip-list-property',
     templateUrl: './chip-list-property.component.html',
     styleUrls: ['./chip-list-property.component.scss'],
 })
@@ -18,9 +18,9 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
 
     @ViewChild('input') inputElementRef: ElementRef<HTMLInputElement>;
 
-	
 
-	
+
+
     public formControl: FormControl = new FormControl();
     public separatorKeysCodes: number[] = [ENTER, COMMA];
     public selectedOptions: string[] = [];

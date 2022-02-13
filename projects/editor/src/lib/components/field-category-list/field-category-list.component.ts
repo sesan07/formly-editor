@@ -17,7 +17,7 @@ export class FieldCategoryListComponent implements OnInit {
 
     public fields: IBaseEditorFormlyField[];
     public previewFields: IBaseEditorFormlyField[];
-    public isExpanded: boolean = true;
+    public isExpanded = true;
 
     public get dropListIds(): string[] {
         return this._dropListService.getDropListIds(this.formId);
@@ -26,7 +26,8 @@ export class FieldCategoryListComponent implements OnInit {
     constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService, private _dropListService: FieldDroplistService) { }
 
     ngOnInit(): void {
-        this.fields = this.category.typeOptions.map(option => this._fieldService.getDefaultConfig(option.name, this.formId, option.customName));
+        this.fields = this.category.typeOptions.map(option =>
+            this._fieldService.getDefaultConfig(option.name, this.formId, option.customName));
         this.previewFields = cloneDeep(this.fields);
         this.previewFields.forEach(field => field.fieldId = 'preview');
     }

@@ -43,7 +43,7 @@
 <ng-container *ngIf="isExpanded">
 	<ng-container *ngFor="let child of property.childProperties; let i = index">
 		<ng-container [ngSwitch]="child.type">
-			<app-array-property 
+			<lib-array-property 
 				*ngSwitchCase="propertyType.ARRAY"
 				[treeLevel]="treeLevel + 1"
 				[target]="target[child.key]"
@@ -51,9 +51,9 @@
 				(keyChanged)="onKeyChanged($event, child)"
 				(remove)="onRemoveChild(i)"
 				(valueChanged)="onValueChanged()">
-			</app-array-property>
+			</lib-array-property>
 
-			<app-boolean-property
+			<lib-boolean-property
 				*ngSwitchCase="propertyType.BOOLEAN"
 				[treeLevel]="treeLevel + 1"
 				[property]="child"
@@ -61,9 +61,9 @@
 				(keyChanged)="onKeyChanged($event, child)"
 				(remove)="onRemoveChild(i)"
 				(valueChanged)="onValueChanged()">
-			</app-boolean-property>
+			</lib-boolean-property>
 
-			<app-chip-list-property
+			<lib-chip-list-property
 				*ngSwitchCase="propertyType.CHIP_LIST"
 				[treeLevel]="treeLevel + 1"
 				[property]="propertyService.getAsChiplistProperty(child)"
@@ -71,9 +71,9 @@
 				(keyChanged)="onKeyChanged($event, child)"
 				(remove)="onRemoveChild(i)"
 				(valueChanged)="onValueChanged()">
-			</app-chip-list-property>
+			</lib-chip-list-property>
 
-			<app-object-property
+			<lib-object-property
 				*ngSwitchCase="propertyType.OBJECT"
 				[treeLevel]="treeLevel + 1"
 				[target]="target[child.key]"
@@ -81,7 +81,7 @@
 				(keyChanged)="onKeyChanged($event, child)"
 				(remove)="onRemoveChild(i)"
 				(valueChanged)="onValueChanged()">
-			</app-object-property>
+			</lib-object-property>
 	
 			<ng-container *ngSwitchCase="propertyType.NUMBER">
 				<ng-container *ngTemplateOutlet="inputProperty"></ng-container>
@@ -90,14 +90,14 @@
 				<ng-container *ngTemplateOutlet="inputProperty"></ng-container>
 			</ng-container>
 			<ng-template #inputProperty>
-				<app-input-property
+				<lib-input-property
 					[treeLevel]="treeLevel + 1"
 					[property]="child"
 					[target]="target"
 					(keyChanged)="onKeyChanged($event, child)"
 					(remove)="onRemoveChild(i)"
 					(valueChanged)="onValueChanged()">
-				</app-input-property>
+				</lib-input-property>
 			</ng-template>
 		</ng-container>
 	</ng-container>

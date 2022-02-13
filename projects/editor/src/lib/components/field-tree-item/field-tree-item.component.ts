@@ -4,7 +4,7 @@ import { EditorService } from '../../services/editor-service/editor.service';
 import { FieldType, IBaseEditorFormlyField } from '../../services/editor-service/editor.types';
 
 @Component({
-    selector: 'app-field-tree-item',
+    selector: 'lib-field-tree-item',
     templateUrl: './field-tree-item.component.html',
     styleUrls: ['./field-tree-item.component.scss'],
 })
@@ -15,9 +15,9 @@ export class FieldTreeItemComponent implements OnInit, OnChanges {
 	@Input() public treeLevel = 0;
 
     @Output() public remove: EventEmitter<void> = new EventEmitter();
-	
 
-	
+
+
     public childFields: IBaseEditorFormlyField[];
 	public treeLevelPadding: number;
 	public replaceCategories: EditorTypeCategoryOption[];

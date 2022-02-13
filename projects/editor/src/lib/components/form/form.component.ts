@@ -11,7 +11,7 @@ import { IArrayProperty } from '../property/array-property/array-property.types'
 import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
 
 @Component({
-	selector: 'app-form',
+	selector: 'lib-form',
 	templateUrl: './form.component.html',
 	styleUrls: ['./form.component.scss'],
 })

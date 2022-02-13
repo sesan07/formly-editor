@@ -21,13 +21,13 @@ export class FieldDroplistService {
 
         const form = this._editorService.getForm(formId);
         form.fields.forEach(field => {
-            this._addField(field, levelList, 0)
-        })
+            this._addField(field, levelList, 0);
+        });
 
         levelList.forEach(level => {
-            level.forEach(field => dropListIds.push(field.fieldId))
-        })
-        
+            level.forEach(field => dropListIds.push(field.fieldId));
+        });
+
         this._formDropListIdMap.set(formId, dropListIds.reverse());
     }
 
@@ -35,13 +35,13 @@ export class FieldDroplistService {
         if (field.canHaveChildren) {
             const children: IBaseEditorFormlyField[] = this._editorService.getChildren(field);
             children.forEach(child => {
-                this._addField(child, levelList, level + 1)
+                this._addField(child, levelList, level + 1);
             });
 
             if (!levelList[level]) {
                 levelList[level] = [field];
             } else {
-                levelList[level].push(field)
+                levelList[level].push(field);
             }
         }
     }

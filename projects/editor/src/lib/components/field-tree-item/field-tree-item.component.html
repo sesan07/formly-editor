@@ -56,9 +56,9 @@
 </div>
 
 <ng-container *ngIf="childFields && isExpanded">
-    <app-field-tree-item *ngFor="let child of childFields" [field]="child"
+    <lib-field-tree-item *ngFor="let child of childFields" [field]="child"
 							[treeLevel]="treeLevel + 1"
                             [activeField]="activeField"
                             (remove)="onRemoveChildField(child)">
-    </app-field-tree-item>
+    </lib-field-tree-item>
 </ng-container>

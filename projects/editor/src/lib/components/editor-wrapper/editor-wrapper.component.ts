@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'app-editor-wrapper',
+    selector: 'lib-editor-wrapper',
     templateUrl: './editor-wrapper.component.html',
     styleUrls: ['./editor-wrapper.component.scss'],
 })
