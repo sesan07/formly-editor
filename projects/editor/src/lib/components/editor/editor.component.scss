@@ -24,3 +24,12 @@
 mat-tab-group {
 	flex-grow: 1;
 }
+
+.empty-view {
+	flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 16px;
+}
