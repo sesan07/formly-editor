@@ -7,12 +7,19 @@
         <mat-slide-toggle [(ngModel)]="editorService.isEditMode">Edit Mode</mat-slide-toggle>
     </span>
 </span>
-<mat-tab-group [(selectedIndex)]="tabIndex">
+<mat-tab-group *ngIf="editorService.forms.length > 0; else emptyView" [(selectedIndex)]="tabIndex">
     <mat-tab *ngFor="let form of editorService.forms; let i = index">
         <ng-template mat-tab-label>
             {{ form.name }}
-            <button *ngIf="i !== 0" class="close-btn" mat-icon-button (click)="editorService.removeForm(i)"><mat-icon>close</mat-icon></button>
+            <button class="close-btn" mat-icon-button (click)="editorService.removeForm(i)"><mat-icon>close</mat-icon></button>
         </ng-template>
         <lib-form [form]="form"></lib-form>
     </mat-tab>
 </mat-tab-group>
+
+<ng-template #emptyView>
+    <div class="empty-view">
+        <div>[Cool Logo Here]</div>
+        <button mat-button color="primary" (click)="onAddForm()"><mat-icon>add</mat-icon>New Form</button>
+    </div>
+</ng-template>
