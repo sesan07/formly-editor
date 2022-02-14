@@ -1,4 +1,4 @@
-html, body, app-root, .mat-tab-group, .mat-tab-body-wrapper, .mat-tab-body { height: 100%; }
+html, body, app-root { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 formly-field {
@@ -115,6 +115,10 @@ button.mat-icon-button {
 	.mat-form-field-subscript-wrapper {
 		display: none;
 	}
+}
+
+.mat-tab-body-wrapper {
+    flex-grow: 1;
 }
 
 .dialogBackdrop {
