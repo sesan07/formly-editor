@@ -1,4 +1,4 @@
-<div class="tree-item-header" [class.active]="field === activeField" (click)="onHeaderClicked($event)">
+<div class="tree-item-header" [class.active]="isActiveField" (click)="onHeaderClicked($event)">
 	<span class="tree-item-header-content-left">
 		<button mat-icon-button [ngStyle]="{'margin-right.px': treeLevelPadding}" [matMenuTriggerFor]="optionsMenu" (click)="$event.stopPropagation()">
 			<mat-icon>more_vert</mat-icon>
@@ -55,10 +55,10 @@
 	</span>
 </div>
 
-<ng-container *ngIf="childFields && isExpanded">
+<div [ngStyle]="{ display: (childFields && isExpanded) ? 'block' : 'none' }">
     <lib-field-tree-item *ngFor="let child of childFields" [field]="child"
-							[treeLevel]="treeLevel + 1"
-                            [activeField]="activeField"
-                            (remove)="onRemoveChildField(child)">
+                            [treeLevel]="treeLevel + 1"
+                            (remove)="onRemoveChildField(child)"
+                            (expandParent)="onExpandParent()">
     </lib-field-tree-item>
-</ng-container>
+</div>

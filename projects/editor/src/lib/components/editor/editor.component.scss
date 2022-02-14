@@ -22,7 +22,7 @@
 }
 
 mat-tab-group {
-	flex-grow: 1;
+    height: calc(100% - 48px);
 }
 
 .empty-view {
