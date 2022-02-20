@@ -1,10 +1,8 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { cloneDeep } from 'lodash-es';
-import { EditorTypeCategoryOption } from '../../editor.types';
 import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
 import { DragAction, IItemDragData } from '../../services/field-droplist-service/field-droplist.types';
-import { EDITOR_FIELD_SERVICE,
-     IEditorFormlyField, IFieldService, IBaseFormlyField } from '../../services/editor-service/editor.types';
+import { IEditorFormlyField, EditorTypeCategoryOption } from '../../services/editor-service/editor.types';
 import { EditorService } from '../../services/editor-service/editor.service';
 import { CdkDragExit } from '@angular/cdk/drag-drop';
 

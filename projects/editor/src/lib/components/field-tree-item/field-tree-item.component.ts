@@ -1,9 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { EditorTypeCategoryOption, EditorTypeOption } from '../../editor.types';
 import { EditorService } from '../../services/editor-service/editor.service';
-import { IEditorFormlyField } from '../../services/editor-service/editor.types';
+import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField } from '../../services/editor-service/editor.types';
 
 @Component({
     selector: 'lib-field-tree-item',

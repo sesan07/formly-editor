@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@angular/core';
 import { get, isEmpty, set } from 'lodash-es';
 import { Observable, Subject } from 'rxjs';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { EditorConfigOption, EditorTypeCategoryOption, EditorTypeOption } from '../../editor.types';
 import {
     EDITOR_FIELD_SERVICE,
     FieldType,
@@ -11,6 +10,9 @@ import {
     IForm,
     WrapperType,
     IBaseFormlyField,
+    EditorConfigOption,
+    EditorTypeCategoryOption,
+    EditorTypeOption,
 } from './editor.types';
 import { IProperty, PropertyType } from '../../components/property/property.types';
 import { IChipListProperty } from '../../components/property/chip-list-property/chip-list-property.types';

@@ -1,5 +1,6 @@
 import { InjectionToken } from '@angular/core';
-import { FormlyFieldConfig, FormlyTemplateOptions } from '@ngx-formly/core';
+import { ConfigOption, FormlyFieldConfig, FormlyTemplateOptions } from '@ngx-formly/core';
+import { TypeOption } from '@ngx-formly/core/lib/services/formly.config';
 import { Observable } from 'rxjs';
 import { IProperty } from '../../components/property/property.types';
 
@@ -47,4 +48,25 @@ export interface IFieldService {
     getProperties(type: string): IProperty[];
 }
 
+export interface EditorTypeOption extends TypeOption {
+    displayName: string;
+    name: string;
+    customName?: string;
+    canHaveChildren?: boolean;
+    childrenPath?: string;
+}
+
+export interface EditorTypeCategoryOption {
+    name: string;
+    typeOptions: EditorTypeOption[];
+}
+
+export interface EditorConfigOption extends ConfigOption {
+    defaultName: string;
+    defaultCustomName?: string;
+    unknownTypeName?: string;
+    typeCategories: EditorTypeCategoryOption[];
+}
+
 export const EDITOR_FIELD_SERVICE = new InjectionToken<IFieldService>('EDITOR_FIELD_SERVICE');
+export const EDITOR_CONFIG = new InjectionToken<EditorConfigOption[]>('EDITOR_CONFIG');
