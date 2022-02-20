@@ -4,15 +4,14 @@ import { FieldType } from '@ngx-formly/core';
 import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
 import { DragAction, IItemDragData } from '../../services/field-droplist-service/field-droplist.types';
 import { EditorService } from '../../services/editor-service/editor.service';
-import { IBaseEditorFormlyField } from '../../services/editor-service/editor.types';
-import { MouseService } from '../../services/mouse-service/mouse.service';
+import { IEditorFormlyField } from '../../services/editor-service/editor.types';
 
 @Component({
     selector: 'lib-editor-formly-group',
     templateUrl: './editor-formly-group.component.html',
     styleUrls: ['./editor-formly-group.component.scss'],
 })
-export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField> implements OnInit {
+export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> implements OnInit {
     @ViewChild(CdkDropList) dropList: CdkDropList;
 
     get dropListClasses(): string { return (this.field.fieldGroupClassName || '') + ' cdk-drop-list'; }
@@ -26,7 +25,6 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
 
     constructor(
         public editorService: EditorService,
-        private _mouseService: MouseService,
         private _dropListService: FieldDroplistService) { super(); }
 
     ngOnInit(): void {
@@ -49,16 +47,16 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
     };
 
     // TODO support dragging(copy, not move) between forms? :D
-    onDroplistDropped(dragDrop: CdkDragDrop<IBaseEditorFormlyField>): void {
+    onDroplistDropped(dragDrop: CdkDragDrop<IEditorFormlyField>): void {
         if (!dragDrop.isPointerOverContainer) {
             console.warn('Pointer is not over container. Not dropping');
             return;
         }
 
         const itemData: IItemDragData = dragDrop.item.data;
-        const field: IBaseEditorFormlyField = itemData.field;
-        const currentParent: IBaseEditorFormlyField = dragDrop.previousContainer.data;
-        const targetParent: IBaseEditorFormlyField = dragDrop.container.data;
+        const field: IEditorFormlyField = itemData.field;
+        const currentParent: IEditorFormlyField = dragDrop.previousContainer.data;
+        const targetParent: IEditorFormlyField = dragDrop.container.data;
 
         switch(itemData.action) {
             case DragAction.COPY:
@@ -81,7 +79,7 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
         }
     }
 
-    getItemDragData(field: IBaseEditorFormlyField): IItemDragData {
+    getItemDragData(field: IEditorFormlyField): IItemDragData {
         return {
             action: DragAction.MOVE,
             field
@@ -91,8 +89,8 @@ export class EditorFormlyGroupComponent extends FieldType<IBaseEditorFormlyField
     private _isMouseInElement(droplistElement: HTMLElement): boolean {
         const rect: DOMRect = droplistElement.getBoundingClientRect();
 
-        const isInWidth: boolean = this._mouseService.position.x >= rect.left && this._mouseService.position.x <= rect.right;
-        const isInHeight: boolean = this._mouseService.position.y >= rect.top && this._mouseService.position.y <= rect.bottom;
+        const isInWidth: boolean = this.editorService.mousePosition.x >= rect.left && this.editorService.mousePosition.x <= rect.right;
+        const isInHeight: boolean = this.editorService.mousePosition.y >= rect.top && this.editorService.mousePosition.y <= rect.bottom;
 
         return isInWidth && isInHeight;
     }

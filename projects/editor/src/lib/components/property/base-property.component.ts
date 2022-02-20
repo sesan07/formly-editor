@@ -4,7 +4,7 @@ import { debounceTime } from 'rxjs/operators';
 import { IBaseProperty } from './property.types';
 
 @Component({ template: '' })
-export abstract class BasePropertyComponent implements OnInit, AfterViewInit {
+export class BasePropertyComponent implements OnInit, AfterViewInit {
 	@Input() treeLevel = 0;
 	@Input() target: Record<string, any> | any[];
 	@Input() property: IBaseProperty;
@@ -18,10 +18,6 @@ export abstract class BasePropertyComponent implements OnInit, AfterViewInit {
 	public treeLevelPadding: number;
 
 	private _valueChangeSubject: Subject<void> = new Subject();
-
-	public abstract hasOptions: boolean;
-
-	protected abstract propertyname: string;
 
 
 	constructor(private _renderer: Renderer2, private _elementRef: ElementRef) {}

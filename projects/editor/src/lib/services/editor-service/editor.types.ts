@@ -1,5 +1,6 @@
 import { InjectionToken } from '@angular/core';
-import { FormlyFieldConfig, FormlyTemplateOptions } from '@ngx-formly/core';
+import { ConfigOption, FormlyFieldConfig, FormlyTemplateOptions } from '@ngx-formly/core';
+import { TypeOption } from '@ngx-formly/core/lib/services/formly.config';
 import { Observable } from 'rxjs';
 import { IProperty } from '../../components/property/property.types';
 
@@ -11,15 +12,20 @@ export enum WrapperType {
     EDITOR = 'editor',
 }
 
-export interface IBaseEditorFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
-    name: string;
+export interface IBaseFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
     type: string;
     customType?: string;
-	templateOptions?: T;
-    fieldGroup?: IBaseEditorFormlyField[];
-    expressionProperties: {
+	templateOptions: T; // TODO make optional. property should initialize key in target of empty
+    wrappers: string[]; // TODO remove this. property should initialize key in target of empty
+    fieldGroup?: IBaseFormlyField[];
+    expressionProperties: { // TODO remove this. property should initialize key in target of empty
         [property: string]: string | ((model: any, formState: any, field?: FormlyFieldConfig) => any) | Observable<any>;
     };
+}
+
+export interface IEditorFormlyField extends IBaseFormlyField {
+    name: string;
+    fieldGroup?: IEditorFormlyField[];
     fieldProperties: IProperty[];
     formId: string;
     fieldId: string;
@@ -31,17 +37,36 @@ export interface IBaseEditorFormlyField<T = FormlyTemplateOptions> extends Forml
 export interface IForm {
     id: string;
     name: string;
-	activeField: IBaseEditorFormlyField;
-    fields: IBaseEditorFormlyField[];
-    fieldMap: Map<string, IBaseEditorFormlyField>;
+	activeField: IEditorFormlyField;
+    fields: IEditorFormlyField[];
+    fieldMap: Map<string, IEditorFormlyField>;
     model: Record<string, unknown>;
 }
 
 export interface IFieldService {
-    getName(type: string, customType?: string): string;
-    getNextFieldId(type: string): string;
-    getDefaultConfig(type: string, formId: string, customType?: string, parentFieldId?: string): IBaseEditorFormlyField;
+    getDefaultConfig(type: string, customType?: string): IBaseFormlyField;
     getProperties(type: string): IProperty[];
 }
 
+export interface EditorTypeOption extends TypeOption {
+    displayName: string;
+    name: string;
+    customName?: string;
+    canHaveChildren?: boolean;
+    childrenPath?: string;
+}
+
+export interface EditorTypeCategoryOption {
+    name: string;
+    typeOptions: EditorTypeOption[];
+}
+
+export interface EditorConfigOption extends ConfigOption {
+    defaultName: string;
+    defaultCustomName?: string;
+    unknownTypeName?: string;
+    typeCategories: EditorTypeCategoryOption[];
+}
+
 export const EDITOR_FIELD_SERVICE = new InjectionToken<IFieldService>('EDITOR_FIELD_SERVICE');
+export const EDITOR_CONFIG = new InjectionToken<EditorConfigOption[]>('EDITOR_CONFIG');

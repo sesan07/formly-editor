@@ -1,5 +1,5 @@
 import { FormlyTemplateOptions } from '@ngx-formly/core';
-import { IBaseEditorFormlyField } from 'editor';
+import { IBaseFormlyField } from 'editor';
 
 export enum FieldType {
     CHECKBOX = 'checkbox',
@@ -17,21 +17,20 @@ export enum CustomFieldType {
 }
 
 export enum WrapperType {
-    EDITOR = 'editor',
     FORM_FIELD = 'form-field',
     CARD = 'card',
 }
 
-export interface IEditorFormlyField<T = FormlyTemplateOptions> extends IBaseEditorFormlyField {
-	templateOptions?: T;
-    fieldGroup?: IEditorFormlyField[];
+export interface IFormlyField<T = FormlyTemplateOptions> extends IBaseFormlyField {
+	templateOptions: T;
+    fieldGroup?: IFormlyField[];
 }
 
 export interface IForm {
     id: string;
     name: string;
-	activeField: IEditorFormlyField;
-    fields: IEditorFormlyField[];
-    fieldMap: Map<string, IEditorFormlyField>;
+	activeField: IFormlyField;
+    fields: IFormlyField[];
+    fieldMap: Map<string, IFormlyField>;
     model: Record<string, unknown>;
 }

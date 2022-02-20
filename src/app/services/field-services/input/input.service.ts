@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService } from '../base-field.service';
 import { IInputTemplateOptions } from './input.types';
-import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 import { IProperty, PropertyType } from 'editor';
 
 @Injectable({
@@ -9,22 +9,10 @@ import { IProperty, PropertyType } from 'editor';
 })
 export class InputService extends BaseFieldService<IInputTemplateOptions> {
 
-	public type: FieldType = FieldType.INPUT;
-	protected defaultName = 'Input';
-
-	public getDefaultConfig(
-            formId: string,
-            customType?: CustomFieldType,
-            parentFieldId?: string
-        ): IEditorFormlyField<IInputTemplateOptions> {
-
-        const config: IEditorFormlyField<IInputTemplateOptions> = {
-			formId,
-			parentFieldId,
-			name: this.defaultName,
-			type: this.type,
-			fieldId: this.getNextFieldId(),
-			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],
+	public getDefaultConfig(customType?: CustomFieldType): IFormlyField<IInputTemplateOptions> {
+        const config: IFormlyField<IInputTemplateOptions> = {
+			type: FieldType.INPUT,
+			wrappers: [WrapperType.FORM_FIELD],
 			templateOptions: {
 				label: 'Label',
 				placeholder: 'Placeholder',
@@ -32,7 +20,6 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
 				required: true
 			},
 			expressionProperties: {},
-			fieldProperties: this.getProperties(),
 		};
 
         switch (customType) {
@@ -76,19 +63,4 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
 			this._getWrapperProperty([WrapperType.FORM_FIELD])
 		];
 	}
-
-    // protected _getTemplateOptionsProperty(wrappers: WrapperType[]): IObjectProperty {
-    //     const childProperties: IProperty[] = [];
-    //     wrappers.forEach(wrapper => childProperties.push(...this._getWrapperProperties(wrapper)));
-
-    //     // Remove duplicates
-    //     const propertyMap: Map<string, IProperty> = new Map();
-    //     childProperties.forEach(property => propertyMap.set(property.key + '', property));
-
-    //     return {
-    //         key: 'templateOptions',
-    //         type: PropertyType.OBJECT,
-    //         childProperties: Array.from(propertyMap.values())
-    //     };
-    // }
 }

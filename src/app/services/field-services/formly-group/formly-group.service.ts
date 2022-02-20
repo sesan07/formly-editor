@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService } from '../base-field.service';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
-import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 import { IProperty } from 'editor';
 
 @Injectable({
@@ -9,28 +9,13 @@ import { IProperty } from 'editor';
 })
 export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> {
 
-    public type: FieldType = FieldType.FORMLY_GROUP;
-	protected defaultName = 'Formly Group';
-
-	public getDefaultConfig(
-        formId: string,
-        customType?: CustomFieldType,
-        parentFieldId?: string
-    ): IEditorFormlyField {
-
-        const config: IEditorFormlyField = {
-            formId,
-            parentFieldId,
-			name: this.defaultName,
-			type: this.type,
-            fieldId: this.getNextFieldId(),
-            wrappers: [WrapperType.EDITOR],
+	public getDefaultConfig(customType?: CustomFieldType): IFormlyField {
+        const config: IFormlyField = {
+			type: FieldType.FORMLY_GROUP,
+            wrappers: [],
             templateOptions: {},
             fieldGroup: [],
             expressionProperties: {},
-            fieldProperties: this.getProperties(),
-            canHaveChildren: true,
-            childrenPath: 'fieldGroup'
 		};
 
         switch (customType) {

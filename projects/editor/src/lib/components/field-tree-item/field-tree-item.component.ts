@@ -1,17 +1,16 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { EditorTypeCategoryOption, EditorTypeOption } from '../../editor.types';
 import { EditorService } from '../../services/editor-service/editor.service';
-import { IBaseEditorFormlyField } from '../../services/editor-service/editor.types';
+import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField } from '../../services/editor-service/editor.types';
 
 @Component({
     selector: 'lib-field-tree-item',
     templateUrl: './field-tree-item.component.html',
     styleUrls: ['./field-tree-item.component.scss'],
 })
-export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
-    @Input() public field: IBaseEditorFormlyField;
+export class FieldTreeItemComponent implements OnInit, OnDestroy {
+    @Input() public field: IEditorFormlyField;
     @Input() public isExpanded = false;
 	@Input() public treeLevel = 0;
 
@@ -19,7 +18,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public expandParent: EventEmitter<void> = new EventEmitter();
 
 	public isActiveField: boolean;
-    public childFields: IBaseEditorFormlyField[];
+    public childFields: IEditorFormlyField[];
 	public treeLevelPadding: number;
 	public replaceCategories: EditorTypeCategoryOption[];
 
@@ -33,22 +32,6 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
 		this._renderer.addClass(this._elementRef.nativeElement, 'tree-item');
 		this._renderer.addClass(this._elementRef.nativeElement, 'cursor-pointer');
 
-        this._checkActiveField();
-        if (this.isActiveField) {
-            setTimeout(() => this.expandParent.emit());
-        }
-
-        this.editorService.fieldSelected$
-            .pipe(takeUntil(this._destroy$))
-            .subscribe((f: IBaseEditorFormlyField) => {
-                this._checkActiveField();
-                if (this.isActiveField) {
-                    this.expandParent.emit();
-                }
-            });
-	}
-
-    ngOnChanges(): void {
         this.replaceCategories = this.editorService.fieldCategories.map(category => {
             // Filter fields that can have children and aren't this field
             const options: EditorTypeOption[] = category.typeOptions.filter(option => {
@@ -69,7 +52,21 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
 		if (this.field.canHaveChildren) {
 			this.childFields = this.editorService.getChildren(this.field);
 		}
-    }
+
+        this._checkActiveField();
+        if (this.isActiveField) {
+            setTimeout(() => this.expandParent.emit());
+        }
+
+        this.editorService.fieldSelected$
+            .pipe(takeUntil(this._destroy$))
+            .subscribe((f: IEditorFormlyField) => {
+                this._checkActiveField();
+                if (this.isActiveField) {
+                    this.expandParent.emit();
+                }
+            });
+	}
 
     ngOnDestroy(): void {
         this._destroy$.next();
@@ -84,7 +81,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
         this.editorService.addField(type, this.field.formId, customType, this.field.fieldId);
     }
 
-    onRemoveChildField(childField: IBaseEditorFormlyField): void {
+    onRemoveChildField(childField: IEditorFormlyField): void {
         this.editorService.removeField(this.field.formId, childField.fieldId, this.field.fieldId);
     }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IBaseEditorFormlyField } from '../editor-service/editor.types';
+import { IEditorFormlyField } from '../editor-service/editor.types';
 import { EditorService } from '../editor-service/editor.service';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class FieldDroplistService {
     }
 
     resetDropListIds(formId: string): void {
-        const levelList: IBaseEditorFormlyField[][] = [];
+        const levelList: IEditorFormlyField[][] = [];
         const dropListIds: string[] = [];
 
         const form = this._editorService.getForm(formId);
@@ -31,9 +31,9 @@ export class FieldDroplistService {
         this._formDropListIdMap.set(formId, dropListIds.reverse());
     }
 
-    private _addField(field: IBaseEditorFormlyField, levelList: IBaseEditorFormlyField[][], level: number): void {
+    private _addField(field: IEditorFormlyField, levelList: IEditorFormlyField[][], level: number): void {
         if (field.canHaveChildren) {
-            const children: IBaseEditorFormlyField[] = this._editorService.getChildren(field);
+            const children: IEditorFormlyField[] = this._editorService.getChildren(field);
             children.forEach(child => {
                 this._addField(child, levelList, level + 1);
             });
