@@ -1,9 +1,19 @@
 import { Inject, Injectable } from '@angular/core';
-import { get, isEmpty } from 'lodash-es';
+import { get, isEmpty, set } from 'lodash-es';
 import { Observable, Subject } from 'rxjs';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { EditorConfigOption, EditorTypeCategoryOption } from '../../editor.types';
-import { EDITOR_FIELD_SERVICE, FieldType, IBaseEditorFormlyField, IFieldService, IForm, WrapperType } from './editor.types';
+import { EditorConfigOption, EditorTypeCategoryOption, EditorTypeOption } from '../../editor.types';
+import {
+    EDITOR_FIELD_SERVICE,
+    FieldType,
+    IEditorFormlyField,
+    IFieldService,
+    IForm,
+    WrapperType,
+    IBaseFormlyField,
+} from './editor.types';
+import { IProperty, PropertyType } from '../../components/property/property.types';
+import { IChipListProperty } from '../../components/property/chip-list-property/chip-list-property.types';
 
 @Injectable({
     providedIn: 'root',
@@ -15,28 +25,28 @@ export class EditorService {
     public get fieldCategories(): EditorTypeCategoryOption[] { return this._editorConfig.typeCategories; };
 
     public get formChanged$(): Observable<string> { return this._formChanged$.asObservable(); }
-    public get fieldSelected$(): Observable<IBaseEditorFormlyField> { return this._fieldSelected$.asObservable(); }
+    public get fieldSelected$(): Observable<IEditorFormlyField> { return this._fieldSelected$.asObservable(); }
     public isEditMode = true;
 
-    private _currFormId = 1;
+    private _currFormId = 0;
     private _editorConfig: EditorConfigOption;
     private _formChanged$: Subject<string> = new Subject();
-    private _fieldSelected$: Subject<IBaseEditorFormlyField> = new Subject();
+    private _fieldSelected$: Subject<IEditorFormlyField> = new Subject();
+
+    private _fieldIdCounterMap: Map<string, number> = new Map(); // Map<fieldType, count>
+    private _fieldtypeOptions: EditorTypeOption[] = [];
 
     constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService) {}
 
     setup(editorConfig: EditorConfigOption) {
         this._editorConfig = editorConfig;
+        this._editorConfig.typeCategories.forEach(category => this._fieldtypeOptions.push(...category.typeOptions));
         this.addNewForm('Form Zero');
     }
 
-    public addField(type: string, formId: string, customType?: string, parentFieldId?: string, index?: number): IBaseEditorFormlyField {
-        // TODO remove responsibility of setting formId from fieldService?
-        const form: IForm = this.getForm(formId);
-        const newField: IBaseEditorFormlyField = this._fieldService.getDefaultConfig(type, formId, customType, parentFieldId);
-		form.fieldMap.set(newField.fieldId, newField);
-
-		const siblings: IBaseEditorFormlyField[] = this._getSiblings(formId, parentFieldId);
+    public addField(type: string, formId: string, customType?: string, parentFieldId?: string, index?: number): IEditorFormlyField {
+        const newField: IEditorFormlyField = this.getDefaultConfig(formId, type, customType, parentFieldId);
+		const siblings: IEditorFormlyField[] = this._getSiblings(formId, parentFieldId);
 		if (typeof index === 'number') {
 			siblings.splice(index, 0, newField);
 		} else {
@@ -51,12 +61,11 @@ export class EditorService {
 
     public removeField(formId: string, fieldId: string, parentId?: string): void {
         const form: IForm = this.getForm(formId);
-		const siblings: IBaseEditorFormlyField[] = this._getSiblings(formId, parentId);
+		const siblings: IEditorFormlyField[] = this._getSiblings(formId, parentId);
 
         const index: number = siblings.findIndex(field => field.fieldId === fieldId);
         if (index !== -1) {
             siblings.splice(index, 1);
-			const childField: IBaseEditorFormlyField = this.getField(formId, fieldId);
 
             form.fieldMap.delete(fieldId);
             this._formChanged$.next(formId);
@@ -78,17 +87,17 @@ export class EditorService {
 	}
 
 	public replaceParentField(replaceType: string, formId: string, fieldId: string, replaceCustomType?: string): void {
-		const field: IBaseEditorFormlyField = this.getField(formId, fieldId);
-		const siblings: IBaseEditorFormlyField[] = this._getSiblings(formId, field.parentFieldId);
+		const field: IEditorFormlyField = this.getField(formId, fieldId);
+		const siblings: IEditorFormlyField[] = this._getSiblings(formId, field.parentFieldId);
 		const index: number = siblings.findIndex(f => f.fieldId === fieldId);
 		const children = this.getChildren(field);
 
 		this.removeField(formId, fieldId, field.parentFieldId);
-		const newField: IBaseEditorFormlyField = this.addField(replaceType, formId, replaceCustomType, field.parentFieldId, index);
+		const newField: IEditorFormlyField = this.addField(replaceType, formId, replaceCustomType, field.parentFieldId, index);
 
 		// Copy children to new field's children
 		children.forEach(child => child.parentFieldId = newField.fieldId);
-		const newChildren: IBaseEditorFormlyField[] = this.getChildren(newField);
+		const newChildren: IEditorFormlyField[] = this.getChildren(newField);
 		newChildren.push(...children);
 
         // Copy classes
@@ -103,7 +112,13 @@ export class EditorService {
 		return form ? form.activeField.fieldId === fieldId : false;
 	}
 
-    public getField(formId: string, fieldId: string): IBaseEditorFormlyField {
+    public getDefaultConfig(formId: string, type: string, customType?: string, parentFieldId?: string): IEditorFormlyField {
+        const form: IForm = this.getForm(formId);
+        const defaultField: IBaseFormlyField = this._fieldService.getDefaultConfig(type, customType);
+        return this._convertToEditorField(defaultField, formId, form.fieldMap, parentFieldId);
+    }
+
+    public getField(formId: string, fieldId: string): IEditorFormlyField {
         const form: IForm = this.getForm(formId);
         return form.fieldMap.get(fieldId);
     }
@@ -120,7 +135,7 @@ export class EditorService {
     }
 
     public importForm(name: string, json: string): void {
-        let loadedForm: IBaseEditorFormlyField | IBaseEditorFormlyField[];
+        let loadedForm: IBaseFormlyField | IBaseFormlyField[];
         try {
             loadedForm = JSON.parse(json);
         } catch(e) {
@@ -128,29 +143,27 @@ export class EditorService {
             return;
         }
 
-        const id: string = this._getNextFormId(this._currFormId);
+        const formId: string = this._getNextFormId(this._currFormId);
         this._currFormId++;
 
-        const fields: IBaseEditorFormlyField[] = [];
-        const fieldMap: Map<string, IBaseEditorFormlyField> = new Map();
+        const fields: IEditorFormlyField[] = [];
+        const fieldMap: Map<string, IEditorFormlyField> = new Map();
         if (Array.isArray(loadedForm)) {
             loadedForm.forEach(field => {
-                this._addEditorProperties(field, fieldMap, id);
-                fields.push(field);
+                fields.push(this._convertToEditorField(field, formId, fieldMap));
             });
         } else {
-            this._addEditorProperties(loadedForm, fieldMap, id);
-            fields.push(loadedForm);
+            fields.push(this._convertToEditorField(loadedForm, formId, fieldMap));
         }
 
-		this._addForm(id, name, fields, fieldMap);
+		this._addForm(formId, name, fields, fieldMap);
     }
 
     public removeForm(index: number): void {
         this.forms.splice(index, 1);
     }
 
-	public cleanField(field: IBaseEditorFormlyField, cleanChildren: boolean = true, removeEditorProperties?: boolean): void {
+	public cleanField(field: IEditorFormlyField, cleanChildren: boolean = true, removeEditorProperties?: boolean): void {
 		delete field.fieldProperties;
 
 		if (cleanChildren && field.canHaveChildren) {
@@ -170,23 +183,19 @@ export class EditorService {
 		return `${name}${key ? ' (' + key + ')' : ''}`;
     }
 
-	public getChildren(field: IBaseEditorFormlyField): IBaseEditorFormlyField[] {
-        if (!field.childrenPath) {
-            throw new Error(`'childrenPath' is not configured for ${field.type}`);
-        }
-
+	public getChildren(field: IEditorFormlyField): IEditorFormlyField[] | undefined {
         return get(field, field.childrenPath);
 	}
 
     // Move field within a parent field in a form
     public moveField(fieldId: string, formId: string, fromIndex: number, toIndex: number): void {
-        const field: IBaseEditorFormlyField = this.getField(formId, fieldId);
+        const field: IEditorFormlyField = this.getField(formId, fieldId);
         if (!field.parentFieldId) {
             throw new Error('Cannot move field without parent');
         }
 
-        const parent: IBaseEditorFormlyField = this.getField(formId, field.parentFieldId);
-        const siblings: IBaseEditorFormlyField[] = this.getChildren(parent);
+        const parent: IEditorFormlyField = this.getField(formId, field.parentFieldId);
+        const siblings: IEditorFormlyField[] = this.getChildren(parent);
 
         moveItemInArray(siblings, fromIndex, toIndex);
 
@@ -203,11 +212,11 @@ export class EditorService {
             targetIndex: number
         ): void {
 
-        const field: IBaseEditorFormlyField = this.getField(formId, fieldId);
-        const currentParent: IBaseEditorFormlyField = this.getField(formId, currentParentId);
-        const targetParent: IBaseEditorFormlyField = this.getField(formId, targetParentId);
-        const currentSiblings: IBaseEditorFormlyField[] = this.getChildren(currentParent);
-        const targetSiblings: IBaseEditorFormlyField[] = this.getChildren(targetParent);
+        const field: IEditorFormlyField = this.getField(formId, fieldId);
+        const currentParent: IEditorFormlyField = this.getField(formId, currentParentId);
+        const targetParent: IEditorFormlyField = this.getField(formId, targetParentId);
+        const currentSiblings: IEditorFormlyField[] = this.getChildren(currentParent);
+        const targetSiblings: IEditorFormlyField[] = this.getChildren(targetParent);
 
         transferArrayItem(currentSiblings, targetSiblings, currentIndex, targetIndex);
 
@@ -216,32 +225,96 @@ export class EditorService {
         this._formChanged$.next(formId);
     }
 
-    private _addField(field: IBaseEditorFormlyField, formId: string, parentFieldId?: string, index?: number): void {
-        const form: IForm = this.getForm(formId);
-		form.fieldMap.set(field.fieldId, field);
+    private _convertToEditorField(
+        sourceField: IBaseFormlyField,
+        formId: string,
+        fieldMap?: Map<string, IEditorFormlyField>,
+        parentFieldId?: string
+    ): IEditorFormlyField {
+        const typeOption: EditorTypeOption = this._getTypeOption(sourceField.type, sourceField.customType);
 
-		const siblings: IBaseEditorFormlyField[] = this._getSiblings(formId, parentFieldId);
-		if (typeof index === 'number') {
-			siblings.splice(index, 0, field);
-		} else {
-			siblings.push(field);
-		}
+        // Special case to specify 'formly-group' type
+        if (!sourceField.type && sourceField.fieldGroup) {
+            sourceField.type = FieldType.FORMLY_GROUP;
+        }
 
-		this._formChanged$.next(formId);
-		this.selectField(formId, field.fieldId);
-    }
+        // Assign default properties if missing
+        const defaultField: IBaseFormlyField = this._fieldService.getDefaultConfig(sourceField.type, sourceField.customType);
+        const mergedField: IBaseFormlyField = Object.assign(defaultField, sourceField);
+        Object.assign(sourceField, mergedField);
 
-    private _getNextFormName(index: number): string {
-        return 'Form ' + index;
+        // Add editor wrapper
+        if (sourceField.wrappers) {
+            const index = sourceField.wrappers.indexOf(WrapperType.EDITOR);
+            if (index < 0) {
+                sourceField.wrappers.unshift(WrapperType.EDITOR);
+            }
+        } else {
+            sourceField.wrappers = [WrapperType.EDITOR];
+        }
+
+        // Field properties
+        const fieldProperties: IProperty[] = this._fieldService.getProperties(sourceField.type);
+        // Check for 'wrappers' chip list property, make 'editor' unremovable
+        const wrappersProperty: IChipListProperty = fieldProperties.find(property => property.key === 'wrappers') as IChipListProperty;
+        if (wrappersProperty && wrappersProperty.type === PropertyType.CHIP_LIST) {
+            if (!wrappersProperty.notRemovableOptions) {
+                wrappersProperty.notRemovableOptions = [WrapperType.EDITOR];
+            } else {
+                wrappersProperty.notRemovableOptions.unshift(WrapperType.EDITOR);
+            }
+        }
+
+        // Create editor field
+        const field: IEditorFormlyField = {
+            ...sourceField,
+            name: typeOption.displayName,
+            fieldGroup: undefined,
+            formId,
+            fieldId: this._getNextFieldId(sourceField.type),
+            parentFieldId,
+            canHaveChildren: typeOption.canHaveChildren,
+            childrenPath: typeOption.childrenPath,
+            fieldProperties,
+        };
+
+        // Update fieldMap with field if provided
+        if (fieldMap) {
+            fieldMap.set(field.fieldId, field);
+        }
+
+        // Process children (e.g. 'fieldGroup')
+        if (typeOption.canHaveChildren) {
+            const sourceChildren: IBaseFormlyField[] = get(sourceField, typeOption.childrenPath);
+            const children: IEditorFormlyField[] = sourceChildren?.map(child =>
+                this._convertToEditorField(child, formId, fieldMap, field.fieldId)
+            );
+            set(field, typeOption.childrenPath, children);
+        }
+
+
+        return field;
     }
 
     private _getNextFormId(index: number): string {
         return 'form__' + index;
     }
 
-	private _getSiblings(formId: string, parentFieldId?: string): IBaseEditorFormlyField[] {
+    private _getNextFieldId(type: string): string {
+        type = type ?? this._editorConfig.unknownTypeName ?? 'unknown';
+        let id: number;
+        if (this._fieldIdCounterMap.has(type)) {
+            id = this._fieldIdCounterMap.get(type) + 1;
+        } else {
+            id = 0;
+        }
+        this._fieldIdCounterMap.set(type, id);
+        return type + '__' + id;
+    }
+
+	private _getSiblings(formId: string, parentFieldId?: string): IEditorFormlyField[] {
 		if (parentFieldId) {
-			const parentField: IBaseEditorFormlyField = this.getField(formId, parentFieldId);
+			const parentField: IEditorFormlyField = this.getField(formId, parentFieldId);
 			return this.getChildren(parentField);
 		} else {
         	const form: IForm = this.getForm(formId);
@@ -249,7 +322,7 @@ export class EditorService {
 		}
 	}
 
-	private _addForm(id: string, name: string, fields: IBaseEditorFormlyField[], fieldMap: Map<string, IBaseEditorFormlyField>) {
+	private _addForm(id: string, name: string, fields: IEditorFormlyField[], fieldMap: Map<string, IEditorFormlyField>) {
         this.forms.push({
 			id,
 			name,
@@ -260,38 +333,7 @@ export class EditorService {
 		});
 	}
 
-    private _addEditorProperties(
-        field: IBaseEditorFormlyField,
-        fieldMap: Map<string, IBaseEditorFormlyField>,
-        formId: string,
-        parentFieldId?: string,
-    ): void {
-        if (!field.type && field.fieldGroup) {
-            field.type = FieldType.FORMLY_GROUP;
-        }
-
-        const mergedField = Object.assign(this._fieldService.getDefaultConfig(field.type, formId, undefined, parentFieldId), field);
-        Object.assign(field, mergedField);
-
-        fieldMap.set(field.fieldId, field);
-
-        if (field.wrappers) {
-            const index = field.wrappers.indexOf(WrapperType.EDITOR);
-            if (index < 0) {
-                field.wrappers.unshift(WrapperType.EDITOR);
-            }
-        } else {
-            field.wrappers = [WrapperType.EDITOR];
-        }
-
-        if (field.canHaveChildren) {
-            this.getChildren(field).forEach(child => {
-                this._addEditorProperties(child, fieldMap, formId, field.fieldId);
-            });
-        }
-    }
-
-	private _removeEmptyProperties(field: IBaseEditorFormlyField): void {
+	private _removeEmptyProperties(field: IEditorFormlyField): void {
 		if (isEmpty(field.wrappers)) {
 			delete field.wrappers;
 		}
@@ -303,7 +345,26 @@ export class EditorService {
 		}
 	}
 
-    private _removeEditorProperties(field: IBaseEditorFormlyField): void {
+    private _getTypeOption(type: string, customType?: string): EditorTypeOption {
+        let typeOption: EditorTypeOption = this._fieldtypeOptions.find(
+            option => option.name === type && option.customName === customType
+        );
+
+        if (!typeOption && this._editorConfig.unknownTypeName) {
+            typeOption = this._fieldtypeOptions.find(
+                option => option.name === this._editorConfig.unknownTypeName
+            );
+        }
+
+        if(!typeOption) {
+            console.warn('EditorTypeOption not configured for type: ' + type);
+            typeOption = { name: undefined, displayName: 'Unknown Type' };
+        }
+
+        return typeOption;
+    }
+
+    private _removeEditorProperties(field: IEditorFormlyField): void {
         delete field.name;
         delete field.formId;
         delete field.fieldId;

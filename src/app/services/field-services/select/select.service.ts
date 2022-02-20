@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IProperty, PropertyType, IObjectProperty, IArrayProperty } from 'editor';
 import { BaseFieldService } from '../base-field.service';
-import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 import { ISelectTemplateOptions } from './select.types';
 
 @Injectable({
@@ -9,21 +9,10 @@ import { ISelectTemplateOptions } from './select.types';
 })
 export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
 
-	public type: FieldType = FieldType.SELECT;
-	protected defaultName = 'Select';
-
-	public getDefaultConfig(
-        formId: string,
-        customType?: CustomFieldType,
-        parentFieldId?: string
-    ): IEditorFormlyField<ISelectTemplateOptions> {
+	public getDefaultConfig(customType?: CustomFieldType): IFormlyField<ISelectTemplateOptions> {
 		return {
-			formId,
-			parentFieldId,
-			name: this.defaultName,
-			type: this.type,
-			fieldId: this.getNextFieldId(),
-			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],
+			type: FieldType.SELECT,
+			wrappers: [WrapperType.FORM_FIELD],
 			templateOptions: {
 				label: 'Label',
 				placeholder: 'Placeholder',
@@ -39,7 +28,6 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
 				],
 			},
 			expressionProperties: {},
-			fieldProperties: this.getProperties(),
 		};
 	}
 

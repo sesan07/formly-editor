@@ -6,6 +6,7 @@ export interface EditorTypeOption extends TypeOption {
     name: string;
     customName?: string;
     canHaveChildren?: boolean;
+    childrenPath?: string;
 }
 
 export interface EditorTypeCategoryOption {
@@ -16,6 +17,7 @@ export interface EditorTypeCategoryOption {
 export interface EditorConfigOption extends ConfigOption {
     defaultName: string;
     defaultCustomName?: string;
+    unknownTypeName?: string;
     typeCategories: EditorTypeCategoryOption[];
 }
 

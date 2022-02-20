@@ -27,6 +27,7 @@ import { EditorModule, EDITOR_FIELD_SERVICE } from 'editor';
         FormlyMaterialModule,
         EditorModule.forRoot({
             defaultName: FieldType.FORMLY_GROUP,
+            unknownTypeName: FieldType.OTHER,
             typeCategories: [
                 {
                     name: 'Basic',
@@ -39,6 +40,7 @@ import { EditorModule, EDITOR_FIELD_SERVICE } from 'editor';
                             name: FieldType.FORMLY_GROUP,
                             displayName: 'Formly Group',
                             canHaveChildren: true,
+                            childrenPath: 'fieldGroup'
                         },
                         {
                             name: FieldType.INPUT,
@@ -75,6 +77,7 @@ import { EditorModule, EDITOR_FIELD_SERVICE } from 'editor';
                             displayName: 'Card',
                             customName: CustomFieldType.CARD,
                             canHaveChildren: true,
+                            childrenPath: 'fieldGroup'
                         },
                     ]
                 }

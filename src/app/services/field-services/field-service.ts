@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IBaseEditorFormlyField, IFieldService, IProperty } from 'editor';
+import { IBaseFormlyField, IFieldService, IProperty } from 'editor';
 import { BaseFieldService } from './base-field.service';
 import { CheckboxService } from './checkbox/checkbox.service';
 import { CustomFieldType, FieldType } from './field.types';
@@ -24,24 +24,14 @@ export class FieldService implements IFieldService {
         private _textareaFieldService: TextareaService,
     ) { }
 
-    getDefaultConfig(type: FieldType, formId: string, customType?: CustomFieldType, parentFieldId?: string): IBaseEditorFormlyField {
+    getDefaultConfig(type: FieldType, customType?: CustomFieldType): IBaseFormlyField {
         const fieldService: BaseFieldService<any> = this._getFieldService(type);
-        return fieldService.getDefaultConfig(formId, customType, parentFieldId);
+        return fieldService.getDefaultConfig(customType);
     }
 
     getProperties(type: FieldType): IProperty[] {
         const fieldService: BaseFieldService<any> = this._getFieldService(type);
         return fieldService.getProperties();
-    }
-
-    getNextFieldId(type: FieldType): string {
-        const fieldService: BaseFieldService<any> = this._getFieldService(type);
-        return fieldService.getNextFieldId();
-    }
-
-    getName(type: FieldType): string {
-        const fieldService: BaseFieldService<any> = this._getFieldService(type);
-        return fieldService.getName();
     }
 
     private _getFieldService(type: FieldType): BaseFieldService<any> {

@@ -124,6 +124,7 @@ export class EditorModule {
                     delete copy.displayName;
                     delete copy.customName;
                     delete copy.canHaveChildren;
+                    delete copy.childrenPath;
 
                     typeOptionMap.set(copy.name, copy);
                 }
@@ -135,11 +136,13 @@ export class EditorModule {
         formlyConfig.types = types;
         delete formlyConfig.defaultName;
         delete formlyConfig.defaultCustomName;
+        delete formlyConfig.unknownTypeName;
         delete formlyConfig.typeCategories;
 
         const editorConfig: EditorConfigOption = {
             defaultName: config.defaultName,
             defaultCustomName: config.defaultCustomName,
+            unknownTypeName: config.unknownTypeName,
             typeCategories: config.typeCategories,
          };
 

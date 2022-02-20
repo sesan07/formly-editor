@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { FieldWrapper } from '@ngx-formly/core';
-import { IBaseEditorFormlyField } from '../../services/editor-service/editor.types';
+import { IEditorFormlyField } from '../../services/editor-service/editor.types';
 import { EditorService } from '../../services/editor-service/editor.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { takeUntil } from 'rxjs/operators';
     templateUrl: './editor-wrapper.component.html',
     styleUrls: ['./editor-wrapper.component.scss'],
 })
-export class EditorWrapperComponent extends FieldWrapper<IBaseEditorFormlyField> implements OnInit, OnDestroy {
+export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> implements OnInit, OnDestroy {
     @ViewChild('fieldComponent', {read: ViewContainerRef, static: true})
     fieldComponent: ViewContainerRef;
 

@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash-es';
 import { of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { EditorService } from '../../services/editor-service/editor.service';
-import { IBaseEditorFormlyField, IForm } from '../../services/editor-service/editor.types';
+import { IEditorFormlyField, IForm } from '../../services/editor-service/editor.types';
 import { FileService } from '../../services/file-service/file.service';
 import { MouseService } from '../../services/mouse-service/mouse.service';
 import { AddFormDialogComponent } from '../add-form-dialog/add-form-dialog.component';
@@ -91,7 +91,7 @@ export class EditorComponent {
 
     onExportForm(): void {
         const form: IForm = this.editorService.forms[this.tabIndex];
-        const fieldsClone: IBaseEditorFormlyField[] = cloneDeep(form.fields);
+        const fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
         fieldsClone.forEach(field => this.editorService.cleanField(field, true, true));
 
         const config: MatDialogConfig<ExportJSONRequest> = {

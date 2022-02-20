@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IArrayProperty, IObjectProperty, IProperty, PropertyType } from 'editor';
 import { BaseFieldService } from '../base-field.service';
-import { CustomFieldType, FieldType, IEditorFormlyField, WrapperType } from '../field.types';
+import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 import { IRadioTemplateOptions } from './radio.types';
 
 @Injectable({
@@ -9,21 +9,10 @@ import { IRadioTemplateOptions } from './radio.types';
 })
 export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
 
-	public type: FieldType = FieldType.RADIO;
-	protected defaultName = 'Radio';
-
-	public getDefaultConfig(
-        formId: string,
-        customType?: CustomFieldType,
-        parentFieldId?: string
-    ): IEditorFormlyField<IRadioTemplateOptions> {
+	public getDefaultConfig(customType?: CustomFieldType): IFormlyField<IRadioTemplateOptions> {
 		return {
-			formId,
-			parentFieldId,
-			name: this.defaultName,
-			type: this.type,
-			fieldId: this.getNextFieldId(),
-			wrappers: [WrapperType.EDITOR, WrapperType.FORM_FIELD],
+			type: FieldType.RADIO,
+			wrappers: [WrapperType.FORM_FIELD],
 			templateOptions: {
 				label: 'Label',
 				placeholder: 'Placeholder',
@@ -37,7 +26,6 @@ export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
 				],
 			},
 			expressionProperties: {},
-			fieldProperties: this.getProperties(),
 		};
 	}
 
