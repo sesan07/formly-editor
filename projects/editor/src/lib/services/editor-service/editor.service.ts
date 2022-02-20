@@ -26,7 +26,9 @@ export class EditorService {
 
     public get formChanged$(): Observable<string> { return this._formChanged$.asObservable(); }
     public get fieldSelected$(): Observable<IEditorFormlyField> { return this._fieldSelected$.asObservable(); }
+
     public isEditMode = true;
+    public mousePosition: { x: number; y: number } = { x: 0, y: 0 };
 
     private _currFormId = 0;
     private _editorConfig: EditorConfigOption;

@@ -5,7 +5,6 @@ import { FieldDroplistService } from '../../services/field-droplist-service/fiel
 import { DragAction, IItemDragData } from '../../services/field-droplist-service/field-droplist.types';
 import { EditorService } from '../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../services/editor-service/editor.types';
-import { MouseService } from '../../services/mouse-service/mouse.service';
 
 @Component({
     selector: 'lib-editor-formly-group',
@@ -26,7 +25,6 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
 
     constructor(
         public editorService: EditorService,
-        private _mouseService: MouseService,
         private _dropListService: FieldDroplistService) { super(); }
 
     ngOnInit(): void {
@@ -91,8 +89,8 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
     private _isMouseInElement(droplistElement: HTMLElement): boolean {
         const rect: DOMRect = droplistElement.getBoundingClientRect();
 
-        const isInWidth: boolean = this._mouseService.position.x >= rect.left && this._mouseService.position.x <= rect.right;
-        const isInHeight: boolean = this._mouseService.position.y >= rect.top && this._mouseService.position.y <= rect.bottom;
+        const isInWidth: boolean = this.editorService.mousePosition.x >= rect.left && this.editorService.mousePosition.x <= rect.right;
+        const isInHeight: boolean = this.editorService.mousePosition.y >= rect.top && this.editorService.mousePosition.y <= rect.bottom;
 
         return isInWidth && isInHeight;
     }

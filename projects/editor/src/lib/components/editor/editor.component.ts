@@ -1,4 +1,4 @@
-import { Component, HostListener, ViewChild } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash-es';
 import { of } from 'rxjs';
@@ -6,7 +6,6 @@ import { map, mergeMap } from 'rxjs/operators';
 import { EditorService } from '../../services/editor-service/editor.service';
 import { IEditorFormlyField, IForm } from '../../services/editor-service/editor.types';
 import { FileService } from '../../services/file-service/file.service';
-import { MouseService } from '../../services/mouse-service/mouse.service';
 import { AddFormDialogComponent } from '../add-form-dialog/add-form-dialog.component';
 import { AddFormResponse } from '../add-form-dialog/add-form-dialog.types';
 import { ExportFormDialogComponent } from '../export-form-dialog/export-form-dialog.component';
@@ -25,15 +24,14 @@ export class EditorComponent {
 
     constructor(
         public editorService: EditorService,
-        private _mouseService: MouseService,
         private _dialog: MatDialog,
         private _fileService: FileService
     ) { }
 
     @HostListener('mousemove', ['$event'])
     onMouseMove(event: MouseEvent): void {
-        this._mouseService.position.x = event.clientX;
-        this._mouseService.position.y = event.clientY;
+        this.editorService.mousePosition.x = event.clientX;
+        this.editorService.mousePosition.y = event.clientY;
     }
 
     onAddForm(): void {
