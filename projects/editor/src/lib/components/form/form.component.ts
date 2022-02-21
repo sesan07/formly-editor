@@ -26,7 +26,6 @@ export class FormComponent implements OnInit, OnDestroy {
 
 	public activeFieldProperty: IObjectProperty;
 	public modelProperty: IObjectProperty;
-	public modelClone: { [k: string]: unknown };
 	public get formChanged$(): Observable<void> {
 		return this._formChanged$.asObservable();
 	}
@@ -50,8 +49,6 @@ export class FormComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit(): void {
-		this.modelClone = cloneDeep(this.form.model);
-
 		this._updateActiveFieldProperty();
 		this._updateModelProperty();
         this._fieldDropListService.resetDropListIds(this.form.id);
@@ -79,15 +76,13 @@ export class FormComponent implements OnInit, OnDestroy {
 		this._formChanged$.next();
 	}
 
-	onPushModel(): void {
-		this.form.model = cloneDeep(this.modelClone);
-		this._formChanged$.next();
-	}
-
-	onPullModel(): void {
-		this.modelClone = cloneDeep(this.form.model);
+    onModelChanged(): void {
 		this._updateModelProperty();
-	}
+    }
+
+    onModelPropertyChanged(): void {
+        this._formChanged$.next();
+    }
 
     onImportModel(): void {
         const config: MatDialogConfig<ImportJSONRequest> = {
@@ -101,7 +96,6 @@ export class FormComponent implements OnInit, OnDestroy {
                 if (res) {
                     this.form.model = JSON.parse(res.json);
                     this._formChanged$.next();
-                    this.onPullModel();
                 }
             });
     }
@@ -111,7 +105,7 @@ export class FormComponent implements OnInit, OnDestroy {
             data: {
                 type: 'Model',
                 name: this.form.name + '.model.json',
-                json: JSON.stringify(this.modelClone, null, 2)
+                json: JSON.stringify(this.form.model, null, 2)
             }
         };
 

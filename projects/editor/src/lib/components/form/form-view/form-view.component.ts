@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormlyFormOptions } from '@ngx-formly/core';
 import { FormGroup } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
@@ -15,6 +15,8 @@ import { IEditorFormlyField, IForm } from '../../../services/editor-service/edit
 export class FormViewComponent implements OnInit, OnDestroy {
     @Input() form: IForm;
     @Input() formChanged$: Observable<void>;
+
+	@Output() modelChanged: EventEmitter<void> = new EventEmitter();
 
     public fields: IEditorFormlyField[];
     public formGroup: FormGroup = new FormGroup({});
