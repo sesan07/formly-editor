@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatTabGroup } from '@angular/material/tabs';
+import { FileService } from '../../services/file-service/file.service';
 import { ImportJSONRequest, ImportJSONResponse } from './import-json-dialog.types';
 
 @Component({
@@ -10,8 +10,6 @@ import { ImportJSONRequest, ImportJSONResponse } from './import-json-dialog.type
     styleUrls: ['./import-form-dialog.component.scss']
 })
 export class ImportFormDialogComponent {
-
-    @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
     @ViewChild('nameModel') nameModel: NgModel;
     @ViewChild('fileNameModel') fileNameModel: NgModel;
@@ -49,7 +47,8 @@ export class ImportFormDialogComponent {
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: ImportJSONRequest,
-        private _dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse>
+        private _dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse>,
+        private _fileService: FileService,
     ) { }
 
     onFileChanged(): void {
@@ -57,14 +56,17 @@ export class ImportFormDialogComponent {
         if (file) {
             this._selectedFile = file;
             this.fileNameValue = file.name.split('/').shift();
+            this.fileNameModel.control.markAsTouched();
         }
     }
 
     onImport(): void {
         if (this.currTabIndex === 0) {
-            this._dialogRef.close({
-                name: this.nameValue,
-                file: this._selectedFile
+            this._fileService.readFile(this._selectedFile).subscribe(text => {
+                this._dialogRef.close({
+                    name: this.nameValue,
+                    json: text
+                });
             });
         } else if (this.currTabIndex === 1) {
             this._dialogRef.close({

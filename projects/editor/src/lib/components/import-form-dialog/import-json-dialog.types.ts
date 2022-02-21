@@ -5,6 +5,5 @@ export interface ImportJSONRequest {
 
 export interface ImportJSONResponse {
     name?: string;
-    file?: File;
-    json?: string;
+    json: string;
 }
