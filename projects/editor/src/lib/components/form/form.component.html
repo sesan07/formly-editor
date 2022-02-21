@@ -32,7 +32,8 @@
 		<lib-object-property
 			[target]="form.activeField"
 			[property]="activeFieldProperty"
-			(valueChanged)="onFieldPropertyChanged()">
+			(valueChanged)="onFieldPropertyChanged()"
+            [isExpanded]="true">
 		</lib-object-property>
 	</lib-sidebar-section>
 
@@ -41,18 +42,27 @@
 		[menuPanel]="modelOptionsMenu">
 		<lib-object-property
 			[target]="modelClone"
-			[property]="propertyService.getAsObjectProperty(modelProperty)">
+			[property]="propertyService.getAsObjectProperty(modelProperty)"
+            [isExpanded]="true">
 		</lib-object-property>
 	</lib-sidebar-section>
 </div>
 
 <mat-menu #modelOptionsMenu="matMenu">
-	<button mat-menu-item (click)="onPushModelClicked()">
+	<button mat-menu-item (click)="onPushModel()">
 		<mat-icon>arrow_upward</mat-icon>
 		<span>Push</span>
 	</button>
-	<button mat-menu-item (click)="onPullModelClicked()">
+	<button mat-menu-item (click)="onPullModel()">
 		<mat-icon>arrow_downward</mat-icon>
 		<span>Pull</span>
+	</button>
+	<button mat-menu-item (click)="onImportModel()">
+		<mat-icon>file_download</mat-icon>
+		<span>Import</span>
+	</button>
+	<button mat-menu-item (click)="onExportModel()">
+		<mat-icon>file_upload</mat-icon>
+		<span>Export</span>
 	</button>
 </mat-menu>
