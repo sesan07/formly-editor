@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Observable, Subject } from 'rxjs';
 import { EditorService } from '../../services/editor-service/editor.service';
 import { IForm } from '../../services/editor-service/editor.types';
@@ -9,6 +10,11 @@ import { PropertyType } from '../property/property.types';
 import { PropertyService } from '../property/property.service';
 import { IArrayProperty } from '../property/array-property/array-property.types';
 import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
+import { ImportFormDialogComponent } from '../import-form-dialog/import-form-dialog.component';
+import { ImportJSONRequest, ImportJSONResponse } from '../import-form-dialog/import-json-dialog.types';
+import { ExportFormDialogComponent } from '../export-form-dialog/export-form-dialog.component';
+import { ExportJSONRequest, ExportJSONResponse } from '../export-form-dialog/export-json-dialog.types';
+import { FileService } from '../../services/file-service/file.service';
 
 @Component({
 	selector: 'lib-form',
@@ -20,7 +26,6 @@ export class FormComponent implements OnInit, OnDestroy {
 
 	public activeFieldProperty: IObjectProperty;
 	public modelProperty: IObjectProperty;
-	public modelClone: { [k: string]: unknown };
 	public get formChanged$(): Observable<void> {
 		return this._formChanged$.asObservable();
 	}
@@ -37,13 +42,13 @@ export class FormComponent implements OnInit, OnDestroy {
 	constructor(
 		public propertyService: PropertyService,
 		public editorService: EditorService,
+        private _dialog: MatDialog,
 		private _renderer: Renderer2,
+        private _fileService: FileService,
         private _fieldDropListService: FieldDroplistService) {
 	}
 
 	public ngOnInit(): void {
-		this.modelClone = cloneDeep(this.form.model);
-
 		this._updateActiveFieldProperty();
 		this._updateModelProperty();
         this._fieldDropListService.resetDropListIds(this.form.id);
@@ -71,15 +76,48 @@ export class FormComponent implements OnInit, OnDestroy {
 		this._formChanged$.next();
 	}
 
-	onPushModelClicked(): void {
-		this.form.model = cloneDeep(this.modelClone);
-		this._formChanged$.next();
-	}
-
-	onPullModelClicked(): void {
-		this.modelClone = cloneDeep(this.form.model);
+    onModelChanged(): void {
 		this._updateModelProperty();
-	}
+    }
+
+    onModelPropertyChanged(): void {
+        this._formChanged$.next();
+    }
+
+    onImportModel(): void {
+        const config: MatDialogConfig<ImportJSONRequest> = {
+            data: { type: 'Model' }
+        };
+
+        const dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse> = this._dialog.open(ImportFormDialogComponent, config);
+
+        dialogRef.afterClosed()
+            .subscribe(res => {
+                if (res) {
+                    this.form.model = JSON.parse(res.json);
+                    this._formChanged$.next();
+                }
+            });
+    }
+
+    onExportModel(): void {
+        const config: MatDialogConfig<ExportJSONRequest> = {
+            data: {
+                type: 'Model',
+                name: this.form.name + '.model.json',
+                json: JSON.stringify(this.form.model, null, 2)
+            }
+        };
+
+        const dialogRef: MatDialogRef<ExportFormDialogComponent, ExportJSONResponse> = this._dialog.open(ExportFormDialogComponent, config);
+
+        dialogRef.afterClosed()
+            .subscribe(res => {
+                if (res) {
+                    this._fileService.saveFile(res.name, res.json);
+                }
+            });
+    }
 
 	onSidebarMouseDown(event: MouseEvent, sidebarId: string, isReverse: boolean): void {
 		this._prevResizeX = event.clientX;

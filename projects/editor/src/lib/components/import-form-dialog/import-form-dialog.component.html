@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Import {{ data.type }} JSON</h2>
 <mat-dialog-content>
-        <mat-tab-group #tabGroup (selectedIndexChange)="currTabIndex = $event">
+        <mat-tab-group (selectedIndexChange)="currTabIndex = $event">
             <mat-tab label="File">
                     <mat-form-field *ngIf="data.showName">
                         <mat-label>{{ data.type }} name</mat-label>
@@ -19,8 +19,10 @@
                                 [(ngModel)]="fileNameValue" 
                                 matInput
                                 required 
-                                readonly>
+                                readonly
+                                [libJsonFileValidator]="fileSelect">
                             <mat-error *ngIf="fileNameModel.errors?.required">Please select a file</mat-error>
+                            <mat-error *ngIf="fileNameModel.errors?.jsonFormat">Invalid JSON</mat-error>
                         </mat-form-field>
                         <button mat-button type="button" (click)="fileSelect.click()">
                             <mat-icon>upload_file</mat-icon>

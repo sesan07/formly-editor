@@ -65,17 +65,6 @@ export class EditorComponent {
         const dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse> = this._dialog.open(ImportFormDialogComponent, config);
 
         dialogRef.afterClosed()
-            .pipe(mergeMap(res => {
-                // If user selected a file, read file content and set the json property
-                if (res.file) {
-                    return this._fileService.readFile(res.file)
-                        .pipe(map(text => ({
-                            name: res.name,
-                            json: text
-                        })));
-                }
-                return of(res);
-            }))
             .subscribe(res => {
                 if (res) {
                     this.editorService.importForm(res.name, res.json);

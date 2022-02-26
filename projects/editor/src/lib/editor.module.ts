@@ -41,6 +41,7 @@ import { JsonValidatorDirective } from './components/import-form-dialog/json-val
 import { ExportFormDialogComponent } from './components/export-form-dialog/export-form-dialog.component';
 import { AddFormDialogComponent } from './components/add-form-dialog/add-form-dialog.component';
 import { BasePropertyComponent } from './components/property/base-property.component';
+import { JsonFileValidatorDirective } from './components/import-form-dialog/json-file-validator/json-file-validator.directive';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -68,6 +69,7 @@ const defaultConfig: EditorConfigOption = {
         ExportFormDialogComponent,
         JsonValidatorDirective,
         AddFormDialogComponent,
+        JsonFileValidatorDirective,
     ],
     imports: [
         CommonModule,

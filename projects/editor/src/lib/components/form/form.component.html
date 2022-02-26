@@ -21,7 +21,8 @@
 
 <lib-form-view class="form-view"
 					[form]="form"
-					[formChanged$]="formChanged$">
+					[formChanged$]="formChanged$"
+                    (modelChanged)="onModelChanged()">
 </lib-form-view>
 
 <div class="sidebar-divider" (mousedown)="onSidebarMouseDown($event, 'rightSidebar', false)"></div>
@@ -32,6 +33,7 @@
 		<lib-object-property
 			[target]="form.activeField"
 			[property]="activeFieldProperty"
+            [isExpanded]="true"
 			(valueChanged)="onFieldPropertyChanged()">
 		</lib-object-property>
 	</lib-sidebar-section>
@@ -40,19 +42,21 @@
 		[sectionTitle]="'Model'"
 		[menuPanel]="modelOptionsMenu">
 		<lib-object-property
-			[target]="modelClone"
-			[property]="propertyService.getAsObjectProperty(modelProperty)">
+			[target]="form.model"
+			[property]="propertyService.getAsObjectProperty(modelProperty)"
+            [isExpanded]="true"
+			(valueChanged)="onModelPropertyChanged()">
 		</lib-object-property>
 	</lib-sidebar-section>
 </div>
 
 <mat-menu #modelOptionsMenu="matMenu">
-	<button mat-menu-item (click)="onPushModelClicked()">
-		<mat-icon>arrow_upward</mat-icon>
-		<span>Push</span>
+	<button mat-menu-item (click)="onImportModel()">
+		<mat-icon>file_download</mat-icon>
+		<span>Import</span>
 	</button>
-	<button mat-menu-item (click)="onPullModelClicked()">
-		<mat-icon>arrow_downward</mat-icon>
-		<span>Pull</span>
+	<button mat-menu-item (click)="onExportModel()">
+		<mat-icon>file_upload</mat-icon>
+		<span>Export</span>
 	</button>
 </mat-menu>

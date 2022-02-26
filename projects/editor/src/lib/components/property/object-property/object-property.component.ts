@@ -11,11 +11,9 @@ import { IObjectProperty } from './object-property.types';
 })
 export class ObjectPropertyComponent extends BasePropertyComponent implements OnChanges {
 	@Input() property: IObjectProperty;
-
-
+	@Input() isExpanded: boolean;
 
 	public propertyType: typeof PropertyType = PropertyType;
-	public isExpanded: boolean;
 
 	public propertyTypes: PropertyType[] = Object.values(PropertyType);
 	public get hasOptions(): boolean {
