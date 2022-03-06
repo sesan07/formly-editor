@@ -1,0 +1,123 @@
+[
+  {
+    "type": "formly-group",
+    "fieldGroup": [
+      {
+        "type": "formly-group",
+        "wrappers": [
+          "card"
+        ],
+        "fieldGroup": [
+          {
+            "type": "input",
+            "wrappers": [
+              "form-field"
+            ],
+            "templateOptions": {
+              "label": "Label",
+              "placeholder": "Placeholder",
+              "description": "Description",
+              "required": true
+            },
+            "key": "input"
+          }
+        ],
+        "key": "card"
+      },
+      {
+        "type": "input",
+        "wrappers": [
+          "form-field"
+        ],
+        "templateOptions": {
+          "label": "Label",
+          "placeholder": "Placeholder",
+          "description": "Description",
+          "required": true,
+          "type": "number"
+        },
+        "key": "number"
+      },
+      {
+        "type": "radio",
+        "wrappers": [
+          "form-field"
+        ],
+        "templateOptions": {
+          "label": "Label",
+          "placeholder": "Placeholder",
+          "description": "Description",
+          "required": true,
+          "options": [
+            {
+              "value": 1,
+              "label": "Option 1"
+            },
+            {
+              "value": 2,
+              "label": "Option 2"
+            },
+            {
+              "value": 3,
+              "label": "Option 3"
+            },
+            {
+              "value": 4,
+              "label": "Option 4",
+              "disabled": true
+            }
+          ]
+        },
+        "key": "radio"
+      },
+      {
+        "type": "select",
+        "wrappers": [
+          "form-field"
+        ],
+        "templateOptions": {
+          "label": "Label",
+          "placeholder": "Placeholder",
+          "description": "Description",
+          "required": true,
+          "multiple": true,
+          "selectAllOption": "Select All",
+          "options": [
+            {
+              "value": 1,
+              "label": "Option 1"
+            },
+            {
+              "value": 2,
+              "label": "Option 2"
+            },
+            {
+              "value": 3,
+              "label": "Option 3"
+            },
+            {
+              "value": 4,
+              "label": "Option 4",
+              "disabled": true
+            }
+          ]
+        },
+        "key": "select"
+      },
+      {
+        "type": "textarea",
+        "wrappers": [
+          "form-field"
+        ],
+        "templateOptions": {
+          "label": "Label",
+          "placeholder": "Placeholder",
+          "description": "Description",
+          "required": true
+        },
+        "key": "textarea"
+      }
+    ],
+    "key": "group"
+  }
+]

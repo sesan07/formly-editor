@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { get, isEmpty, merge, set } from 'lodash-es';
-import { Observable, Subject } from 'rxjs';
+import { forkJoin, Observable, of, Subject } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import {
     EDITOR_FIELD_SERVICE,
@@ -40,12 +42,12 @@ export class EditorService {
     private _fieldIdCounterMap: Map<string, number> = new Map(); // Map<fieldType, count>
     private _fieldtypeOptions: EditorTypeOption[] = [];
 
-    constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService) {}
+    constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService, private _http: HttpClient) {}
 
     setup(editorConfig: EditorConfigOption) {
         this._editorConfig = editorConfig;
         this._editorConfig.typeCategories.forEach(category => this._fieldtypeOptions.push(...category.typeOptions));
-        this.addNewForm('Form Zero');
+        this._loadDefaultForm();
     }
 
     public addField(type: string, formId: string, customType?: string, parentFieldId?: string, index?: number): IEditorFormlyField {
@@ -138,13 +140,17 @@ export class EditorService {
 		this.addField(this._editorConfig.defaultName, formId, this._editorConfig.defaultCustomName);
     }
 
-    public importForm(name: string, json: string): void {
+    public importForm(name: string, source: string | IBaseFormlyField | IBaseFormlyField[], model?: Record<string, unknown>): void {
         let loadedForm: IBaseFormlyField | IBaseFormlyField[];
-        try {
-            loadedForm = JSON.parse(json);
-        } catch(e) {
-            console.error('Unable to parse form');
-            return;
+        if (typeof source === 'string') {
+            try {
+                loadedForm = JSON.parse(source);
+            } catch(e) {
+                console.error('Unable to parse form');
+                return;
+            }
+        } else {
+            loadedForm = source;
         }
 
         const formId: string = this._getNextFormId(this._currFormId);
@@ -160,7 +166,7 @@ export class EditorService {
             fields.push(this._convertToEditorField(loadedForm, formId, fieldMap));
         }
 
-		this._addForm(formId, name, fields, fieldMap);
+		this._addForm(formId, name, fields, fieldMap, model);
     }
 
     public removeForm(index: number): void {
@@ -300,8 +306,31 @@ export class EditorService {
             set(field, typeOption.childrenPath, children);
         }
 
-
         return field;
+    }
+
+    private _loadDefaultForm(): void {
+        forkJoin([
+            this._http.get<IBaseFormlyField>('assets/default.form.json').pipe(
+                catchError(() => {
+                    console.warn('Unable to load default form, using default field');
+                    const defaultField: IBaseFormlyField = this._fieldService.getDefaultConfig(
+                        this._editorConfig.defaultName,
+                        this._editorConfig.defaultCustomName
+                    );
+                    return of(defaultField);
+                })
+            ),
+            this._http.get<Record<string, unknown>>('assets/default.model.json').pipe(
+                catchError(() => {
+                    console.warn('Unable to load default model, using {}');
+                    return of({});
+                })
+            )
+        ])
+        .subscribe(([form, model]) => {
+            this.importForm('Form Zero', form, model);
+        });
     }
 
     private _getNextFormId(index: number): string {
@@ -330,14 +359,20 @@ export class EditorService {
 		}
 	}
 
-	private _addForm(id: string, name: string, fields: IEditorFormlyField[], fieldMap: Map<string, IEditorFormlyField>) {
+	private _addForm(
+        id: string,
+        name: string,
+        fields: IEditorFormlyField[],
+        fieldMap: Map<string, IEditorFormlyField>,
+        model?: Record<string, unknown>
+    ) {
         this.forms.push({
 			id,
 			name,
 			fields,
 			fieldMap,
 			activeField: fields[0],
-			model: {}
+			model: model ?? {}
 		});
 	}
 
