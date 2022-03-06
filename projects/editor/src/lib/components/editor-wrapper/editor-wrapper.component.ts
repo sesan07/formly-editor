@@ -4,6 +4,9 @@ import { IEditorFormlyField } from '../../services/editor-service/editor.types';
 import { EditorService } from '../../services/editor-service/editor.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { EditFieldDialogComponent } from '../edit-field-dialog/edit-field-dialog.component';
+import { EditFieldRequest } from '../edit-field-dialog/edit-field-dialog.types';
 
 @Component({
     selector: 'lib-editor-wrapper',
@@ -18,7 +21,7 @@ export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> imp
 
     private _destroy$: Subject<void> = new Subject();
 
-    constructor(public editorService: EditorService) { super(); }
+    constructor(public editorService: EditorService, private _dialog: MatDialog) { super(); }
 
     ngOnInit(): void {
 		this._checkActiveField();
@@ -44,6 +47,25 @@ export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> imp
     onClick(event: MouseEvent): void {
         this.editorService.selectField(this.field.formId, this.field.fieldId);
         event.stopPropagation();
+    }
+
+    onEditField(): void {
+        const config: MatDialogConfig<EditFieldRequest> = {
+            data: {
+                formId: this.field.formId,
+                fieldId: this.field.fieldId
+            }
+        };
+
+        const dialogRef: MatDialogRef<EditFieldDialogComponent, IEditorFormlyField> =
+            this._dialog.open(EditFieldDialogComponent, config);
+
+        dialogRef.afterClosed()
+            .subscribe(field => {
+                if (field) {
+                    this.editorService.updateField(field);
+                }
+            });
     }
 
 	private _checkActiveField(): void {

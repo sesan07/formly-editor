@@ -6,6 +6,11 @@
 
 .editor-header {
     display: flex;
+    justify-content: space-between;
+}
+
+.editor-header-right {
+    display: flex;
     align-items: center;
 }
 

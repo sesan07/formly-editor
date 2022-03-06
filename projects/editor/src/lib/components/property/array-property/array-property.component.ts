@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, Renderer2, SimpleChanges, TrackByFunction } from '@angular/core';
 import { cloneDeep } from 'lodash-es';
 import { BasePropertyComponent } from '../base-property.component';
 import { PropertyService } from '../property.service';
@@ -10,7 +10,7 @@ import { IArrayProperty } from './array-property.types';
     templateUrl: './array-property.component.html',
     styleUrls: ['./array-property.component.scss'],
 })
-export class ArrayPropertyComponent extends BasePropertyComponent implements OnInit {
+export class ArrayPropertyComponent extends BasePropertyComponent implements OnChanges {
 	@Input() property: IArrayProperty;
 	@Input() target: any[];
 
@@ -27,9 +27,11 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnI
 
 	constructor(public propertyService: PropertyService, renderer: Renderer2, elementRef: ElementRef) { super(renderer, elementRef); }
 
-    ngOnInit(): void {
-		super.ngOnInit();
-		this._updateChildProperties();
+    ngOnChanges(changes: SimpleChanges): void {
+        super.ngOnChanges(changes);
+        if (changes.property) {
+            this._updateChildProperties();
+        }
     }
 
 	onAddChild(): void {

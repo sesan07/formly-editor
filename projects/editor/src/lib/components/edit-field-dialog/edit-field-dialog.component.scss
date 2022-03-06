@@ -1,0 +1,54 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.mat-dialog-content {
+    display: flex;
+    column-gap: 48px;
+    flex-grow: 1;
+}
+
+.mat-dialog-title { margin: 0; }
+
+.properties-section {
+    flex-grow: 1;
+    padding: 8px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.properties-content {
+    flex-grow: 1;
+    overflow: auto;
+}
+
+.preview {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    border-radius: 4px;
+}
+
+.preview-section {
+    flex-basis: 40%;
+    flex-shrink: 1;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.divider {
+    height: 100%;
+    border-left: 2px solid #A3A3A3;
+}
+
+formly-form {
+    width: 100%;
+}

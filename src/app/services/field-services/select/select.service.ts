@@ -37,48 +37,68 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
             this._getTemplateOptionsProperty(
                 [
 					{
+                        name: 'Label',
 						key: 'label',
 						type: PropertyType.TEXT,
+                        isSimple: true,
 					},
 					{
+						name: 'Placeholder',
 						key: 'placeholder',
 						type: PropertyType.TEXT,
+                        isSimple: true,
 					},
 					{
+						name: 'Description',
 						key: 'description',
 						type: PropertyType.TEXT,
+                        isSimple: true,
 					},
 					{
-						key: 'required',
-						type: PropertyType.BOOLEAN,
-					},
-					{
-						key: 'multiple',
-						type: PropertyType.BOOLEAN,
-					},
-					{
+						name: 'Select all options label',
 						key: 'selectAllOption',
 						type: PropertyType.TEXT,
+                        isSimple: true,
 					},
 					{
+						name: 'Multiple selections',
+						key: 'multiple',
+						type: PropertyType.BOOLEAN,
+                        isSimple: true,
+					},
+					{
+						name: 'Required',
+						key: 'required',
+						type: PropertyType.BOOLEAN,
+                        isSimple: true,
+					},
+					{
+                        name: 'Options',
 						key: 'options',
 						type: PropertyType.ARRAY,
+                        isSimple: true,
 						canAdd: true,
 						childProperty: {
 							type: PropertyType.OBJECT,
 							isDeletable: true,
 							childProperties: [
 								{
+                                    name: 'Label',
 									key: 'label',
 									type: PropertyType.TEXT,
+                                    isSimple: true,
 								},
 								{
+                                    name: 'Value',
 									key: 'value',
 									type: PropertyType.TEXT,
+                                    isSimple: true,
 								},
 								{
+                                    name: 'Disabled',
 									key: 'disabled',
 									type: PropertyType.BOOLEAN,
+                                    isSimple: true,
 								},
 							],
 						} as IObjectProperty

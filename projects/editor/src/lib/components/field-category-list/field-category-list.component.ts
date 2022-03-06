@@ -15,10 +15,10 @@ export class FieldCategoryListComponent implements OnInit {
 
     @Input() category: EditorTypeCategoryOption;
     @Input() formId: string;
+    @Input() isExpanded: boolean;
 
     public fields: IEditorFormlyField[];
     public previewFields: IEditorFormlyField[];
-    public isExpanded = true;
 
     public get dropListIds(): string[] {
         return this._dropListService.getDropListIds(this.formId);

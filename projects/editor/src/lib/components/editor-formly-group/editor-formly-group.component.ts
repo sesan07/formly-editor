@@ -28,9 +28,11 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
         private _dropListService: FieldDroplistService) { super(); }
 
     ngOnInit(): void {
-        if (this.field.fieldId !== 'preview') {
-            this.connectedTo = this._dropListService.getDropListIds(this.field.formId);
+        if (!this.field.formId || this.field.fieldId === 'preview') {
+            return;
         }
+
+        this.connectedTo = this._dropListService.getDropListIds(this.field.formId);
     }
 
     canEnter = (drag: CdkDrag) => {

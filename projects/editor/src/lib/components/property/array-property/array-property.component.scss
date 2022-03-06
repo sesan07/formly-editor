@@ -1,0 +1,25 @@
+.simplified-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    cursor: pointer;
+}
+
+.simplified-header-left {
+    display: inline-flex;
+    align-items: center;
+    column-gap: 8px;
+}
+
+.simplified-properties {
+    flex-grow: 1;
+    padding: 16px 32px;
+    box-sizing: border-box;
+}
+
+.divider {
+    width: 25%;
+    opacity: 0.5;
+    margin: 16px auto;
+}

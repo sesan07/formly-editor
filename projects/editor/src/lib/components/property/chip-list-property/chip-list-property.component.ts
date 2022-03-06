@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
@@ -13,13 +13,10 @@ import { BasePropertyComponent } from '../base-property.component';
     templateUrl: './chip-list-property.component.html',
     styleUrls: ['./chip-list-property.component.scss'],
 })
-export class ChipListPropertyComponent extends BasePropertyComponent implements OnInit {
+export class ChipListPropertyComponent extends BasePropertyComponent implements OnInit, OnChanges {
     @Input() property: IChipListProperty;
 
     @ViewChild('input') inputElementRef: ElementRef<HTMLInputElement>;
-
-
-
 
     public formControl: FormControl = new FormControl();
     public separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -32,21 +29,26 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
 
 	protected propertyname = 'Chiplist';
 
-    ngOnInit(): void {
-		super.ngOnInit();
+    ngOnChanges(changes: SimpleChanges): void {
+        super.ngOnChanges(changes);
+
+        if (!changes.property) {
+            return;
+        }
 
         if (this.target[this.property.key]) { // If the target already has some selection
             const existingOptions: string[] = this.property.outputString
                 ? (this.target[this.property.key] as string).split(' ')
                 : this.target[this.property.key] as string[];
 
-            this.selectedOptions.push(...existingOptions);
+            this.selectedOptions = [...existingOptions];
         }
 
-        this.selectableOptions.push(...this.property.options);
+        this.selectableOptions = [...this.property.options];
         this.filteredOptions = this.formControl.valueChanges.pipe(
             startWith(''),
-            map((option: string) => option ? this._filter(option) : this.selectableOptions.slice()));
+            map((option: string) => option ? this._filter(option) : this.selectableOptions.slice())
+        );
     }
 
     isRemovable(option: string): boolean {
@@ -54,7 +56,6 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
             ? (this.property.notRemovableOptions as string[]).indexOf(option) === -1
             : true;
     }
-
 
     onAdd(event: MatChipInputEvent): void {
         const input: HTMLInputElement = event.input;

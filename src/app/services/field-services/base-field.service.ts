@@ -16,11 +16,13 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 				name: 'Key',
 				key: 'key',
 				type: PropertyType.TEXT,
+                isSimple: true,
 			},
 			{
 				name: 'Default Value',
 				key: 'defaultValue',
 				type: PropertyType.TEXT,
+                isSimple: true,
 			},
 			{
 				key: 'className',
@@ -55,7 +57,8 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
         return {
             key: 'templateOptions',
             type: PropertyType.OBJECT,
-            childProperties: Array.from(propertyMap.values())
+            childProperties: Array.from(propertyMap.values()),
+            isSimple: true,
         };
     }
 
@@ -73,8 +76,10 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
             case WrapperType.CARD:
                 return [
 					{
+                        name: 'Card Title',
 						key: 'cardTitle',
 						type: PropertyType.TEXT,
+                        isSimple: true,
 					},
                 ];
             case WrapperType.FORM_FIELD:

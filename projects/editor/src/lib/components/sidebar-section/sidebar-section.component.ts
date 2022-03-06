@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatMenuPanel } from '@angular/material/menu';
 
 @Component({
@@ -6,7 +6,7 @@ import { MatMenuPanel } from '@angular/material/menu';
 	templateUrl: './sidebar-section.component.html',
 	styleUrls: ['./sidebar-section.component.scss']
 })
-export class SidebarSectionComponent implements OnInit {
+export class SidebarSectionComponent implements AfterViewInit {
 	@Input() sectionTitle: string;
 	@Input() menuPanel: MatMenuPanel;
 	@Input() isCollapsible = true;
@@ -16,11 +16,16 @@ export class SidebarSectionComponent implements OnInit {
 
 	constructor(private _renderer: Renderer2, private _elementRef: ElementRef<HTMLElement>) { }
 
-	ngOnInit(): void {
+	ngAfterViewInit(): void {
+        this._updateClasses();
 	}
 
 	onToggleExpansionClicked(): void {
 		this.isCollapsed = !this.isCollapsed;
+        this._updateClasses();
+	}
+
+    private _updateClasses(): void {
 		if (this.isCollapsed) {
 			this._renderer.addClass(this._elementRef.nativeElement, 'collapsed');
 			this._renderer.addClass(this.contentWrapper.nativeElement, 'collapsed');
@@ -28,5 +33,5 @@ export class SidebarSectionComponent implements OnInit {
 			this._renderer.removeClass(this._elementRef.nativeElement, 'collapsed');
 			this._renderer.removeClass(this.contentWrapper.nativeElement, 'collapsed');
 		}
-	}
+    }
 }

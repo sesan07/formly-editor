@@ -1,4 +1,4 @@
-<div class="tree-item-header">
+<div class="tree-item-header" *ngIf="!isSimplified">
 	<span class="tree-item-header-content-left">
 		<button mat-icon-button [ngStyle]="{'margin-right.px': treeLevelPadding}" [matMenuTriggerFor]="optionsMenu" [disabled]="!hasOptions">
 			<mat-icon>more_vert</mat-icon>
@@ -40,14 +40,29 @@
 	</span>
 </div>
 
-<ng-container *ngIf="isExpanded">
+<ng-container *ngIf="!isSimplified && isExpanded">
+    <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
+</ng-container>
+
+<div class="simplified-container" *ngIf="isSimplified">
+    <div class="simplified-properties">
+        <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
+    </div>
+    <button *ngIf="property?.isDeletable" mat-icon-button color="warn" (click)="remove.emit()">
+        <mat-icon>remove</mat-icon>
+    </button>
+</div>
+
+<ng-template #childPropertiesView>
 	<ng-container *ngFor="let child of property.childProperties; let i = index; trackBy: trackPropertyByKey">
         <lib-property
+            *ngIf="isSimplified ? child.isSimple : true"
             [treeLevel]="treeLevel + 1"
             [target]="target"
             [property]="child"
+            [isSimplified]="isSimplified"
             (remove)="onRemoveChild(i)"
             (valueChanged)="onValueChanged()">
         </lib-property>
 	</ng-container>
-</ng-container>
+</ng-template>

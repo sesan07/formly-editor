@@ -47,7 +47,7 @@ export class FormViewComponent implements OnInit, OnDestroy {
 		this.model = cloneDeep(this.form.model);
 
 		const logClone: IEditorFormlyField[] = cloneDeep(this.form.fields);
-		logClone.forEach(field => this._editorService.cleanField(field, true, false));
-		console.log('FIELDS', JSON.stringify(logClone, null, 4));
+		logClone.forEach(field => this._editorService.cleanField(field, true, true));
+		console.log('FIELDS', JSON.stringify(logClone, null, 2));
     }
 }
