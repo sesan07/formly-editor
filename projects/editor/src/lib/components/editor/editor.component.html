@@ -8,7 +8,7 @@
     </span>
 </span>
 <mat-tab-group *ngIf="editorService.forms.length > 0; else emptyView" [(selectedIndex)]="tabIndex">
-    <mat-tab *ngFor="let form of editorService.forms; let i = index">
+    <mat-tab *ngFor="let form of editorService.forms; let i = index; trackBy: trackFormById">
         <ng-template mat-tab-label>
             {{ form.name }}
             <button class="close-btn" mat-icon-button (click)="editorService.removeForm(i)"><mat-icon>close</mat-icon></button>

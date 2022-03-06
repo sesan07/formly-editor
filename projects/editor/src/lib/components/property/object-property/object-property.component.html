@@ -41,7 +41,7 @@
 </div>
 
 <ng-container *ngIf="isExpanded">
-	<ng-container *ngFor="let child of property.childProperties; let i = index">
+	<ng-container *ngFor="let child of property.childProperties; let i = index; trackBy: trackPropertyByKey">
         <lib-property
             [treeLevel]="treeLevel + 1"
             [target]="target"

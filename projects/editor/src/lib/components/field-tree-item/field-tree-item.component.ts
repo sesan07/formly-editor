@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, TrackByFunction } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EditorService } from '../../services/editor-service/editor.service';
@@ -112,6 +112,8 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
         this.isExpanded = true;
         this.expandParent.emit();
     }
+
+    trackFieldById: TrackByFunction<IEditorFormlyField> = (_, field: IEditorFormlyField) => field.fieldId;
 
 	private _checkActiveField(): void {
 		this.isActiveField =  this.editorService.isActiveField(this.field.formId, this.field.fieldId);

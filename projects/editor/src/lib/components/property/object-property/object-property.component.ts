@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, Renderer2, SimpleChanges, TrackByFunction } from '@angular/core';
 import { BasePropertyComponent } from '../base-property.component';
 import { PropertyService } from '../property.service';
 import { IProperty, PropertyType } from '../property.types';
@@ -65,6 +65,8 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
 		this.property.childProperties.splice(index, 1);
 		this.onValueChanged();
 	}
+
+    trackPropertyByKey: TrackByFunction<IProperty> = (_, property: IProperty) => property.key;
 
 	private _populateChildrenFromTarget() {
 		Object.entries(this.target).forEach(([key, value]) => {

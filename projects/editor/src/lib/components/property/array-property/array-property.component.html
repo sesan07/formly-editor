@@ -25,7 +25,7 @@
 
 <ng-container *ngIf="isExpanded">
     <lib-property
-        *ngFor="let childProperty of childProperties; let i = index"
+        *ngFor="let childProperty of childProperties; let i = index; trackBy: trackPropertyByKey"
         [treeLevel]="treeLevel + 1"
         [target]="target"
         [property]="childProperty"
