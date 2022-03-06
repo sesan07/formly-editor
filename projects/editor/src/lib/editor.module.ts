@@ -44,6 +44,7 @@ import { BasePropertyComponent } from './components/property/base-property.compo
 import { PropertyComponent } from './components/property/property.component';
 import { JsonFileValidatorDirective } from './components/import-form-dialog/json-file-validator/json-file-validator.directive';
 import { EditFieldDialogComponent } from './components/edit-field-dialog/edit-field-dialog.component';
+import { HttpClientModule } from '@angular/common/http';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -77,6 +78,7 @@ const defaultConfig: EditorConfigOption = {
     ],
     imports: [
         CommonModule,
+        HttpClientModule,
         FormsModule,
         FormlyModule.forRoot({
             types: [{ name: FieldType.FORMLY_GROUP, component: EditorFormlyGroupComponent }],

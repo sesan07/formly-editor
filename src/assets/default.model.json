@@ -1,0 +1,14 @@
+{
+  "group": {
+    "card": {
+      "input": "Hello!"
+    },
+    "number": 69,
+    "radio": 1,
+    "select": [
+      1,
+      3
+    ],
+    "textarea": "Bye!"
+  }
+}
