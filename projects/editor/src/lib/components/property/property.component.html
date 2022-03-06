@@ -1,0 +1,59 @@
+<ng-container [ngSwitch]="property.type">
+    <lib-array-property 
+        *ngSwitchCase="propertyType.ARRAY"
+        [treeLevel]="treeLevel"
+        [target]="isRoot ? target : target[property.key]"
+        [property]="propertyService.getAsArrayProperty(property)"
+        (keyChanged)="onKeyChanged($event, property)"
+        (remove)="remove.emit()"
+        (valueChanged)="valueChanged.emit()">
+    </lib-array-property>
+
+    <lib-object-property
+        *ngSwitchCase="propertyType.OBJECT"
+        [treeLevel]="treeLevel"
+        [target]="isRoot ? target : target[property.key]"
+        [property]="propertyService.getAsObjectProperty(property)"
+        [isExpanded]="isRoot"
+        (keyChanged)="onKeyChanged($event, property)"
+        (remove)="remove.emit()"
+        (valueChanged)="valueChanged.emit()">
+    </lib-object-property>
+
+    <lib-boolean-property
+        *ngSwitchCase="propertyType.BOOLEAN"
+        [treeLevel]="treeLevel"
+        [property]="property"
+        [target]="target"
+        (keyChanged)="onKeyChanged($event, property)"
+        (remove)="remove.emit()"
+        (valueChanged)="valueChanged.emit()">
+    </lib-boolean-property>
+
+    <lib-chip-list-property
+        *ngSwitchCase="propertyType.CHIP_LIST"
+        [treeLevel]="treeLevel"
+        [property]="propertyService.getAsChiplistProperty(property)"
+        [target]="target"
+        (keyChanged)="onKeyChanged($event, property)"
+        (remove)="remove.emit()"
+        (valueChanged)="valueChanged.emit()">
+    </lib-chip-list-property>
+
+    <ng-container *ngSwitchCase="propertyType.NUMBER">
+        <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="propertyType.TEXT">
+        <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
+    </ng-container>
+    <ng-template #inputProperty>
+        <lib-input-property
+            [treeLevel]="treeLevel"
+            [property]="property"
+            [target]="target"
+            (keyChanged)="onKeyChanged($event, property)"
+            (remove)="remove.emit()"
+            (valueChanged)="valueChanged.emit()">
+        </lib-input-property>
+    </ng-template>
+</ng-container>

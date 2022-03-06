@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostBinding, Input, OnChanges, Output, Renderer2, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
 import { BasePropertyComponent } from '../base-property.component';
 import { PropertyService } from '../property.service';
 import { IProperty, PropertyType } from '../property.types';
@@ -63,14 +63,6 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
 
 		delete this.target[child.key];
 		this.property.childProperties.splice(index, 1);
-		this.onValueChanged();
-	}
-
-	onKeyChanged(newKey: string, property: IProperty): void {
-		const tempValue: any = this.target[property.key];
-		delete this.target[property.key];
-		this.target[newKey] = tempValue;
-		property.key = newKey;
 		this.onValueChanged();
 	}
 

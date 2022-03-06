@@ -42,63 +42,12 @@
 
 <ng-container *ngIf="isExpanded">
 	<ng-container *ngFor="let child of property.childProperties; let i = index">
-		<ng-container [ngSwitch]="child.type">
-			<lib-array-property 
-				*ngSwitchCase="propertyType.ARRAY"
-				[treeLevel]="treeLevel + 1"
-				[target]="target[child.key]"
-				[property]="propertyService.getAsArrayProperty(child)"
-				(keyChanged)="onKeyChanged($event, child)"
-				(remove)="onRemoveChild(i)"
-				(valueChanged)="onValueChanged()">
-			</lib-array-property>
-
-			<lib-boolean-property
-				*ngSwitchCase="propertyType.BOOLEAN"
-				[treeLevel]="treeLevel + 1"
-				[property]="child"
-				[target]="target"
-				(keyChanged)="onKeyChanged($event, child)"
-				(remove)="onRemoveChild(i)"
-				(valueChanged)="onValueChanged()">
-			</lib-boolean-property>
-
-			<lib-chip-list-property
-				*ngSwitchCase="propertyType.CHIP_LIST"
-				[treeLevel]="treeLevel + 1"
-				[property]="propertyService.getAsChiplistProperty(child)"
-				[target]="target"
-				(keyChanged)="onKeyChanged($event, child)"
-				(remove)="onRemoveChild(i)"
-				(valueChanged)="onValueChanged()">
-			</lib-chip-list-property>
-
-			<lib-object-property
-				*ngSwitchCase="propertyType.OBJECT"
-				[treeLevel]="treeLevel + 1"
-				[target]="target[child.key]"
-				[property]="propertyService.getAsObjectProperty(child)"
-				(keyChanged)="onKeyChanged($event, child)"
-				(remove)="onRemoveChild(i)"
-				(valueChanged)="onValueChanged()">
-			</lib-object-property>
-	
-			<ng-container *ngSwitchCase="propertyType.NUMBER">
-				<ng-container *ngTemplateOutlet="inputProperty"></ng-container>
-			</ng-container>
-			<ng-container *ngSwitchCase="propertyType.TEXT">
-				<ng-container *ngTemplateOutlet="inputProperty"></ng-container>
-			</ng-container>
-			<ng-template #inputProperty>
-				<lib-input-property
-					[treeLevel]="treeLevel + 1"
-					[property]="child"
-					[target]="target"
-					(keyChanged)="onKeyChanged($event, child)"
-					(remove)="onRemoveChild(i)"
-					(valueChanged)="onValueChanged()">
-				</lib-input-property>
-			</ng-template>
-		</ng-container>
+        <lib-property
+            [treeLevel]="treeLevel + 1"
+            [target]="target"
+            [property]="child"
+            (remove)="onRemoveChild(i)"
+            (valueChanged)="onValueChanged()">
+        </lib-property>
 	</ng-container>
 </ng-container>

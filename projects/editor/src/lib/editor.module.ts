@@ -41,6 +41,7 @@ import { JsonValidatorDirective } from './components/import-form-dialog/json-val
 import { ExportFormDialogComponent } from './components/export-form-dialog/export-form-dialog.component';
 import { AddFormDialogComponent } from './components/add-form-dialog/add-form-dialog.component';
 import { BasePropertyComponent } from './components/property/base-property.component';
+import { PropertyComponent } from './components/property/property.component';
 import { JsonFileValidatorDirective } from './components/import-form-dialog/json-file-validator/json-file-validator.directive';
 
 const defaultConfig: EditorConfigOption = {
@@ -54,6 +55,7 @@ const defaultConfig: EditorConfigOption = {
         EditorWrapperComponent,
         FormComponent,
         BasePropertyComponent,
+        PropertyComponent,
         InputPropertyComponent,
         ObjectPropertyComponent,
         FormViewComponent,
