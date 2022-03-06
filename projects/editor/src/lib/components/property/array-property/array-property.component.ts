@@ -14,8 +14,6 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnI
 	@Input() property: IArrayProperty;
 	@Input() target: any[];
 
-
-
 	public propertyType: typeof PropertyType = PropertyType;
 	public isExpanded: boolean;
 
@@ -65,6 +63,8 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnI
         this._updateChildProperties();
         this.onValueChanged();
 	}
+
+    trackPropertyByKey: TrackByFunction<IProperty> = (_, property: IProperty) => property.key;
 
 	private _updateChildProperties(): void {
 		this.childProperties = [];

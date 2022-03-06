@@ -56,7 +56,7 @@
 </div>
 
 <div [ngStyle]="{ display: (childFields && isExpanded) ? 'block' : 'none' }">
-    <lib-field-tree-item *ngFor="let child of childFields" [field]="child"
+    <lib-field-tree-item *ngFor="let child of childFields; trackBy: trackFieldById" [field]="child"
                             [treeLevel]="treeLevel + 1"
                             (remove)="onRemoveChildField(child)"
                             (expandParent)="onExpandParent()">

@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, TrackByFunction } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash-es';
 import { of } from 'rxjs';
@@ -98,4 +98,6 @@ export class EditorComponent {
                 }
             });
     }
+
+    trackFormById: TrackByFunction<IForm> = (_, form: IForm) => form.id;
 }
