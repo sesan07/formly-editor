@@ -4,14 +4,20 @@
     background-color: white;
 }
 
-.editor-header {
+header {
     display: flex;
     justify-content: space-between;
 }
 
-.editor-header-right {
+.options {
     display: flex;
     align-items: center;
+    opacity: 0;
+    transition: 0.2s;
+}
+
+.options.visible {
+    opacity: 1;
 }
 
 .editor-wrapper.edit-mode {
