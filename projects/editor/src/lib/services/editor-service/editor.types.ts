@@ -26,7 +26,7 @@ export interface IBaseFormlyField<T = FormlyTemplateOptions> extends FormlyField
 export interface IEditorFormlyField extends IBaseFormlyField {
     name: string;
     fieldGroup?: IEditorFormlyField[];
-    fieldProperties: IProperty[];
+    properties: IProperty[];
     formId: string;
     fieldId: string;
     parentFieldId?: string;

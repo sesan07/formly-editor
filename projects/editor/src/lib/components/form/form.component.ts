@@ -139,7 +139,7 @@ export class FormComponent implements OnInit, OnDestroy {
 	private _updateActiveFieldProperty(): void {
 		this.activeFieldProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
 		this._initRootProperty(this.activeFieldProperty);
-		this.activeFieldProperty.childProperties = this.form.activeField.fieldProperties;
+		this.activeFieldProperty.childProperties = this.form.activeField.properties;
 		this.activeFieldProperty.populateChildrenFromTarget = false;
 		this.activeFieldProperty.addOptions = [];
 	}
