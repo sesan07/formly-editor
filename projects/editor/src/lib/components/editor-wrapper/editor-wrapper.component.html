@@ -1,7 +1,13 @@
-<div class="editor-wrapper" [ngClass]="{'edit-mode': editorService.isEditMode, 'active': isActiveField}" (click)="onClick($event)">
-    <div class="editor-header" *ngIf="editorService.isEditMode">
-        <span class="editor-title">{{ editorService.getFormattedFieldName(field.name, field.key) }}</span>
-        <div class="editor-header-right">
+<div 
+    class="editor-wrapper"
+    [ngClass]="{'edit-mode': editorService.isEditMode, 'active': isActiveField}"
+    (click)="onClick($event)"
+    (mouseover)="isMouseInside = true; $event.stopPropagation()"
+    (mouseout)="isMouseInside = false"
+    >
+    <header *ngIf="editorService.isEditMode">
+        <span>{{ editorService.getFormattedFieldName(field.name, field.key) }}</span>
+        <div class="options" [class.visible]="isMouseInside">
             <button mat-icon-button (click)="onEditField()">
                 <mat-icon>edit</mat-icon>
             </button>
@@ -14,7 +20,7 @@
                 <mat-icon>remove</mat-icon>
             </button>
         </div>
-    </div>
+    </header>
     <ng-container #fieldComponent></ng-container>
 </div>
             

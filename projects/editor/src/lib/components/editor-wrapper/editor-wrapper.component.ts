@@ -18,6 +18,7 @@ export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> imp
     fieldComponent: ViewContainerRef;
 
 	public isActiveField: boolean;
+	public isMouseInside: boolean;
 
     private _destroy$: Subject<void> = new Subject();
 
