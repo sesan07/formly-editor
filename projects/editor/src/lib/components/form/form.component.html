@@ -30,23 +30,23 @@
 <div id="rightSidebar" class="sidebar" *ngIf="form.activeField">
 	<lib-sidebar-section
 		[sectionTitle]="'Properties - ' + editorService.getFormattedFieldName(form.activeField.name, form.activeField.key)">
-		<lib-object-property
-			[target]="form.activeField"
-			[property]="activeFieldProperty"
-            [isExpanded]="true"
-			(valueChanged)="onFieldPropertyChanged()">
-		</lib-object-property>
+        <lib-property
+            [target]="form.activeField"
+            [property]="activeFieldProperty"
+            [isRoot]="true"
+            (valueChanged)="onFieldPropertyChanged()">
+        </lib-property>
 	</lib-sidebar-section>
 
 	<lib-sidebar-section
 		[sectionTitle]="'Model'"
 		[menuPanel]="modelOptionsMenu">
-		<lib-object-property
-			[target]="form.model"
-			[property]="propertyService.getAsObjectProperty(modelProperty)"
-            [isExpanded]="true"
-			(valueChanged)="onModelPropertyChanged()">
-		</lib-object-property>
+        <lib-property
+            [target]="form.model"
+            [property]="modelProperty"
+            [isRoot]="true"
+            (valueChanged)="onModelPropertyChanged()">
+        </lib-property>
 	</lib-sidebar-section>
 </div>
 

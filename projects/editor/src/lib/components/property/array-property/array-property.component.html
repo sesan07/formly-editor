@@ -23,47 +23,13 @@
 	</span>
 </div>
 
-
 <ng-container *ngIf="isExpanded">
-	<ng-container [ngSwitch]="property.childProperty.type">
-		<ng-container *ngSwitchCase="propertyType.BOOLEAN">
-			<lib-boolean-property
-				*ngFor="let childProperty of childProperties; let i = index"
-				[treeLevel]="treeLevel + 1"
-				[property]="childProperty"
-				[target]="target"
-				(remove)="onRemoveChild(i)"
-				(valueChanged)="onValueChanged()">
-			</lib-boolean-property>
-		</ng-container>
-
-		<ng-container *ngSwitchCase="propertyType.OBJECT">
-			<lib-object-property 
-				*ngFor="let childProperty of childProperties; let i = index"
-				[treeLevel]="treeLevel + 1"
-				[target]="target[i]"
-				[property]="propertyService.getAsObjectProperty(childProperty)"
-				(remove)="onRemoveChild(i)"
-				(valueChanged)="onValueChanged()">
-			</lib-object-property>
-		</ng-container>
-		
-		<ng-container *ngSwitchCase="propertyType.NUMBER">
-			<ng-container *ngTemplateOutlet="inputProperty"></ng-container>
-		</ng-container>
-		<ng-container *ngSwitchCase="propertyType.TEXT">
-			<ng-container *ngTemplateOutlet="inputProperty"></ng-container>
-		</ng-container>
-		<ng-template #inputProperty>
-			<lib-input-property
-				*ngFor="let childProperty of childProperties; let i = index"
-				[treeLevel]="treeLevel + 1"
-				[property]="childProperty"
-				[target]="target"
-				(remove)="onRemoveChild(i)"
-				(valueChanged)="onValueChanged()">
-			</lib-input-property>
-		</ng-template>
-	</ng-container>
+    <lib-property
+        *ngFor="let childProperty of childProperties; let i = index"
+        [treeLevel]="treeLevel + 1"
+        [target]="target"
+        [property]="childProperty"
+        (remove)="onRemoveChild(i)"
+        (valueChanged)="onValueChanged()">
+    </lib-property>
 </ng-container>
-
