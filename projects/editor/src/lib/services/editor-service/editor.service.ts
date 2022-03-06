@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { get, isEmpty, set } from 'lodash-es';
+import { get, isEmpty, merge, set } from 'lodash-es';
 import { Observable, Subject } from 'rxjs';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import {
@@ -168,7 +168,7 @@ export class EditorService {
     }
 
 	public cleanField(field: IEditorFormlyField, cleanChildren: boolean = true, removeEditorProperties?: boolean): void {
-		delete field.fieldProperties;
+		delete field.properties;
 
 		if (cleanChildren && field.canHaveChildren) {
             this.getChildren(field).forEach(child => {
@@ -235,32 +235,29 @@ export class EditorService {
         fieldMap?: Map<string, IEditorFormlyField>,
         parentFieldId?: string
     ): IEditorFormlyField {
-        const typeOption: EditorTypeOption = this._getTypeOption(sourceField.type, sourceField.customType);
-
         // Special case to specify 'formly-group' type
         if (!sourceField.type && sourceField.fieldGroup) {
             sourceField.type = FieldType.FORMLY_GROUP;
         }
 
-        // Assign default properties if missing
-        const defaultField: IBaseFormlyField = this._fieldService.getDefaultConfig(sourceField.type, sourceField.customType);
-        const mergedField: IBaseFormlyField = Object.assign(defaultField, sourceField);
-        Object.assign(sourceField, mergedField);
+        // Merge with default properties
+        const baseField: IBaseFormlyField = this._fieldService.getDefaultConfig(sourceField.type, sourceField.customType);
+        merge(baseField, sourceField);
 
         // Add editor wrapper
-        if (sourceField.wrappers) {
-            const index = sourceField.wrappers.indexOf(WrapperType.EDITOR);
+        if (baseField.wrappers) {
+            const index = baseField.wrappers.indexOf(WrapperType.EDITOR);
             if (index < 0) {
-                sourceField.wrappers.unshift(WrapperType.EDITOR);
+                baseField.wrappers.unshift(WrapperType.EDITOR);
             }
         } else {
-            sourceField.wrappers = [WrapperType.EDITOR];
+            baseField.wrappers = [WrapperType.EDITOR];
         }
 
-        // Field properties
-        const fieldProperties: IProperty[] = this._fieldService.getProperties(sourceField.type);
+        // Properties
+        const properties: IProperty[] = this._fieldService.getProperties(baseField.type);
         // Check for 'wrappers' chip list property, make 'editor' unremovable
-        const wrappersProperty: IChipListProperty = fieldProperties.find(property => property.key === 'wrappers') as IChipListProperty;
+        const wrappersProperty: IChipListProperty = properties.find(property => property.key === 'wrappers') as IChipListProperty;
         if (wrappersProperty && wrappersProperty.type === PropertyType.CHIP_LIST) {
             if (!wrappersProperty.notRemovableOptions) {
                 wrappersProperty.notRemovableOptions = [WrapperType.EDITOR];
@@ -270,16 +267,17 @@ export class EditorService {
         }
 
         // Create editor field
+        const typeOption: EditorTypeOption = this._getTypeOption(baseField.type, baseField.customType);
         const field: IEditorFormlyField = {
-            ...sourceField,
+            ...baseField,
             name: typeOption.displayName,
             fieldGroup: undefined,
             formId,
-            fieldId: this._getNextFieldId(sourceField.type),
+            fieldId: this._getNextFieldId(baseField.type),
             parentFieldId,
             canHaveChildren: typeOption.canHaveChildren,
             childrenPath: typeOption.childrenPath,
-            fieldProperties,
+            properties,
         };
 
         // Update fieldMap with field if provided
@@ -289,8 +287,8 @@ export class EditorService {
 
         // Process children (e.g. 'fieldGroup')
         if (typeOption.canHaveChildren) {
-            const sourceChildren: IBaseFormlyField[] = get(sourceField, typeOption.childrenPath);
-            const children: IEditorFormlyField[] = sourceChildren?.map(child =>
+            const baseChildren: IBaseFormlyField[] = get(baseField, typeOption.childrenPath);
+            const children: IEditorFormlyField[] = baseChildren?.map(child =>
                 this._convertToEditorField(child, formId, fieldMap, field.fieldId)
             );
             set(field, typeOption.childrenPath, children);
@@ -373,7 +371,7 @@ export class EditorService {
         delete field.formId;
         delete field.fieldId;
         delete field.parentFieldId;
-        delete field.fieldProperties;
+        delete field.properties;
         delete field.canHaveChildren;
         delete field.childrenPath;
         delete field.customType;
