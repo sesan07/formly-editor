@@ -4,6 +4,7 @@
         [treeLevel]="treeLevel"
         [target]="isRoot ? target : target[property.key]"
         [property]="propertyService.getAsArrayProperty(property)"
+        [isSimplified]="isSimplified"
         (keyChanged)="onKeyChanged($event, property)"
         (remove)="remove.emit()"
         (valueChanged)="valueChanged.emit()">
@@ -14,6 +15,7 @@
         [treeLevel]="treeLevel"
         [target]="isRoot ? target : target[property.key]"
         [property]="propertyService.getAsObjectProperty(property)"
+        [isSimplified]="isSimplified"
         [isExpanded]="isRoot"
         (keyChanged)="onKeyChanged($event, property)"
         (remove)="remove.emit()"
@@ -25,6 +27,7 @@
         [treeLevel]="treeLevel"
         [property]="property"
         [target]="target"
+        [isSimplified]="isSimplified"
         (keyChanged)="onKeyChanged($event, property)"
         (remove)="remove.emit()"
         (valueChanged)="valueChanged.emit()">
@@ -35,6 +38,7 @@
         [treeLevel]="treeLevel"
         [property]="propertyService.getAsChiplistProperty(property)"
         [target]="target"
+        [isSimplified]="isSimplified"
         (keyChanged)="onKeyChanged($event, property)"
         (remove)="remove.emit()"
         (valueChanged)="valueChanged.emit()">
@@ -51,6 +55,7 @@
             [treeLevel]="treeLevel"
             [property]="property"
             [target]="target"
+            [isSimplified]="isSimplified"
             (keyChanged)="onKeyChanged($event, property)"
             (remove)="remove.emit()"
             (valueChanged)="valueChanged.emit()">

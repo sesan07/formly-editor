@@ -11,6 +11,7 @@ export class PropertyComponent {
 	@Input() treeLevel = 0;
 	@Input() target: Record<string, any> | any[];
 	@Input() property: IProperty;
+	@Input() isSimplified: boolean;
 	@Input() isRoot: boolean;
 
     @Output() public remove: EventEmitter<void> = new EventEmitter();

@@ -1,27 +1,33 @@
 <div class="editor-wrapper" [ngClass]="{'edit-mode': editorService.isEditMode, 'active': isActiveField}" (click)="onClick($event)">
     <div class="editor-header" *ngIf="editorService.isEditMode">
         <span class="editor-title">{{ editorService.getFormattedFieldName(field.name, field.key) }}</span>
-        <button *ngIf="field.canHaveChildren" mat-icon-button [matMenuTriggerFor]="addCategoryMenu" (click)="$event.stopPropagation()">
-            <mat-icon>add</mat-icon>
-        </button>
-        
-		<mat-menu #addCategoryMenu="matMenu">
-            <ng-container *ngFor="let category of editorService.fieldCategories">
-                <button mat-menu-item [matMenuTriggerFor]="addFieldMenu">
-                    {{ category.name }}
-                </button>
+        <div class="editor-header-right">
+            <button mat-icon-button (click)="onEditField()">
+                <mat-icon>edit</mat-icon>
+            </button>
 
-                <mat-menu #addFieldMenu="matMenu">
-                    <button mat-menu-item  *ngFor="let option of category.typeOptions" (click)="onAddChildField(option.name, option.customName)">
-                        {{ option.displayName }}
-                    </button>
-                </mat-menu>
-            </ng-container>
-		</mat-menu>
-        
-        <button *ngIf="!!field.parentFieldId" mat-icon-button (click)="onRemove(); $event.stopPropagation()">
-            <mat-icon>remove</mat-icon>
-        </button>
+            <button *ngIf="field.canHaveChildren" mat-icon-button [matMenuTriggerFor]="addCategoryMenu" (click)="$event.stopPropagation()">
+                <mat-icon>add</mat-icon>
+            </button>
+            
+            <button *ngIf="!!field.parentFieldId" mat-icon-button (click)="onRemove(); $event.stopPropagation()">
+                <mat-icon>remove</mat-icon>
+            </button>
+        </div>
     </div>
     <ng-container #fieldComponent></ng-container>
 </div>
+            
+<mat-menu #addCategoryMenu="matMenu">
+    <ng-container *ngFor="let category of editorService.fieldCategories">
+        <button mat-menu-item [matMenuTriggerFor]="addFieldMenu">
+            {{ category.name }}
+        </button>
+
+        <mat-menu #addFieldMenu="matMenu">
+            <button mat-menu-item  *ngFor="let option of category.typeOptions" (click)="onAddChildField(option.name, option.customName)">
+                {{ option.displayName }}
+            </button>
+        </mat-menu>
+    </ng-container>
+</mat-menu>

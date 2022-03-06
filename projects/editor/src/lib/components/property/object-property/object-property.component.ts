@@ -25,6 +25,7 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
 	constructor(public propertyService: PropertyService, renderer: Renderer2, elementRef: ElementRef) { super(renderer, elementRef); }
 
 	ngOnChanges(changes: SimpleChanges): void {
+        super.ngOnChanges(changes);
 		if (changes.property?.currentValue?.populateChildrenFromTarget) {
 			this._populateChildrenFromTarget();
 		}

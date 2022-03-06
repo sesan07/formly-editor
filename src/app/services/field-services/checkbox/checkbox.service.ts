@@ -34,20 +34,26 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
             this._getTemplateOptionsProperty(
                 [
                     {
+                        name: 'Label',
                         key: 'label',
                         type: PropertyType.TEXT,
+                        isSimple: true,
                     },
                     {
+                        name: 'Description',
                         key: 'description',
                         type: PropertyType.TEXT,
+                        isSimple: true,
                     },
                     {
                         key: 'pattern',
                         type: PropertyType.TEXT,
                     },
                     {
+                        name: 'Required',
                         key: 'required',
                         type: PropertyType.BOOLEAN,
+                        isSimple: true,
                     },
                 ],
                 [WrapperType.FORM_FIELD]
@@ -55,7 +61,7 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
 			{
 				key: 'validation',
 				type: PropertyType.OBJECT,
-				addOptions: [PropertyType.OBJECT],
+				addOptions: [PropertyType.OBJECT, PropertyType.BOOLEAN],
 				childProperties: [],
 				populateChildrenFromTarget: true,
 			} as IObjectProperty,

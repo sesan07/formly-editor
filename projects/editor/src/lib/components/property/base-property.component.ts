@@ -1,13 +1,26 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    Renderer2,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { IBaseProperty } from './property.types';
 
 @Component({ template: '' })
-export class BasePropertyComponent implements OnInit, AfterViewInit {
+export class BasePropertyComponent implements OnChanges, OnInit, AfterViewInit {
 	@Input() treeLevel = 0;
 	@Input() target: Record<string, any> | any[];
 	@Input() property: IBaseProperty;
+	@Input() isSimplified: boolean;
 
     @Output() public remove: EventEmitter<void> = new EventEmitter();
     @Output() public keyChanged: EventEmitter<string> = new EventEmitter();
@@ -22,9 +35,13 @@ export class BasePropertyComponent implements OnInit, AfterViewInit {
 
 	constructor(private _renderer: Renderer2, private _elementRef: ElementRef) {}
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.treeLevel) {
+            this.treeLevelPadding = 24 * this.treeLevel;
+        }
+    }
+
 	ngOnInit(): void {
-		this.treeLevelPadding = 24 * this.treeLevel;
-		this._renderer.addClass(this._elementRef.nativeElement, 'tree-item');
 
 		this._valueChangeSubject
 			.pipe(debounceTime(this.property.valueChangeDebounce))
@@ -34,8 +51,10 @@ export class BasePropertyComponent implements OnInit, AfterViewInit {
 	}
 
 	ngAfterViewInit(): void {
-		this.keyElement.nativeElement.innerText = (!!this.property.key || this.property.key === 0) ? this.property.key as string : '';
-		this.keyElement.nativeElement.addEventListener('input', () => this.keyChanged.emit(this.keyElement.nativeElement.innerText));
+        if (this.keyElement) {
+            this.keyElement.nativeElement.innerText = (!!this.property.key || this.property.key === 0) ? this.property.key as string : '';
+            this.keyElement.nativeElement.addEventListener('blur', () => this.keyChanged.emit(this.keyElement.nativeElement.innerText));
+        }
 	}
 
 	onValueChanged(): void {

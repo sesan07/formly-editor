@@ -29,20 +29,28 @@ export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> 
             this._getTemplateOptionsProperty(
                 [
 					{
+                        name: 'Label',
 						key: 'label',
 						type: PropertyType.TEXT,
+                        isSimple: true,
 					},
 					{
+                        name: 'Placeholder',
 						key: 'placeholder',
 						type: PropertyType.TEXT,
+                        isSimple: true,
 					},
 					{
+                        name: 'Description',
 						key: 'description',
 						type: PropertyType.TEXT,
+                        isSimple: true,
 					},
 					{
+                        name: 'Required',
 						key: 'required',
 						type: PropertyType.BOOLEAN,
+                        isSimple: true,
 					},
                 ],
                 [WrapperType.FORM_FIELD]

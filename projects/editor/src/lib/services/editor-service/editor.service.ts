@@ -191,6 +191,12 @@ export class EditorService {
         return get(field, field.childrenPath);
 	}
 
+    public updateField(modifiedField: IEditorFormlyField) {
+        const field: IEditorFormlyField = this.getField(modifiedField.formId, modifiedField.fieldId);
+        merge(field, modifiedField);
+        this._formChanged$.next(field.formId);
+    }
+
     // Move field within a parent field in a form
     public moveField(fieldId: string, formId: string, fromIndex: number, toIndex: number): void {
         const field: IEditorFormlyField = this.getField(formId, fieldId);

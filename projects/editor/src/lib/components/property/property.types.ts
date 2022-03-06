@@ -15,9 +15,11 @@ export enum PropertyType {
 
 export interface IBaseProperty {
 	type: PropertyType;
+    name?: string;
 	key?: string | number;
 	isDeletable?: boolean;
 	isKeyEditable?: boolean;
+    isSimple?: boolean;
 	valueChangeDebounce?: number;
 }
 

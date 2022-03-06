@@ -38,24 +38,32 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
             this._getTemplateOptionsProperty(
                 [
 					{
-						key: 'label',
-						type: PropertyType.TEXT,
-					},
-					{
 						key: 'type',
 						type: PropertyType.TEXT,
 					},
 					{
+                        name: 'Label',
+						key: 'label',
+						type: PropertyType.TEXT,
+                        isSimple: true,
+					},
+					{
+                        name: 'Placeholder',
 						key: 'placeholder',
 						type: PropertyType.TEXT,
+                        isSimple: true,
 					},
 					{
+                        name: 'Description',
 						key: 'description',
 						type: PropertyType.TEXT,
+                        isSimple: true,
 					},
 					{
+                        name: 'Required',
 						key: 'required',
 						type: PropertyType.BOOLEAN,
+                        isSimple: true,
 					},
                 ],
                 [WrapperType.FORM_FIELD]

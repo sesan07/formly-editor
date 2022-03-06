@@ -1,4 +1,4 @@
-<div class="tree-item-header">
+<div class="tree-item-header" *ngIf="!isSimplified else simplifiedView">
 	<span class="tree-item-header-content-left">
 		<button mat-icon-button [ngStyle]="{'margin-right.px': treeLevelPadding}" [matMenuTriggerFor]="optionsMenu" [disabled]="!hasOptions">
 			<mat-icon>more_vert</mat-icon>
@@ -18,3 +18,9 @@
 	</span>
 	<mat-checkbox class="tree-item-header-content-right" [(ngModel)]="target[property.key]" (ngModelChange)="onValueChanged()"></mat-checkbox>
 </div>
+
+<ng-template #simplifiedView>
+	<mat-checkbox [(ngModel)]="target[property.key]" (ngModelChange)="onValueChanged()">
+        {{ property.name ? property.name : property.key }}
+    </mat-checkbox>
+</ng-template>

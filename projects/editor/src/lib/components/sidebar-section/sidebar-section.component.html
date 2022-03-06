@@ -12,7 +12,7 @@
 
 </div>
 <div #contentWrapper class="sidebar-content-wrapper">
-	<div class="sidebar-content">
+	<div class="sidebar-content" *ngIf="!isCollapsed">
 		<ng-content></ng-content>
 	</div>
 </div>

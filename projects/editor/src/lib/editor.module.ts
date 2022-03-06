@@ -43,6 +43,7 @@ import { AddFormDialogComponent } from './components/add-form-dialog/add-form-di
 import { BasePropertyComponent } from './components/property/base-property.component';
 import { PropertyComponent } from './components/property/property.component';
 import { JsonFileValidatorDirective } from './components/import-form-dialog/json-file-validator/json-file-validator.directive';
+import { EditFieldDialogComponent } from './components/edit-field-dialog/edit-field-dialog.component';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -72,6 +73,7 @@ const defaultConfig: EditorConfigOption = {
         JsonValidatorDirective,
         AddFormDialogComponent,
         JsonFileValidatorDirective,
+        EditFieldDialogComponent,
     ],
     imports: [
         CommonModule,
@@ -108,8 +110,7 @@ const defaultConfig: EditorConfigOption = {
                 width: '80%',
                 maxHeight: '675px',
                 maxWidth: '1200px',
-                hasBackdrop: true,
-                backdropClass: 'dialogBackdrop'
+                hasBackdrop: true
             }
         }
     ]

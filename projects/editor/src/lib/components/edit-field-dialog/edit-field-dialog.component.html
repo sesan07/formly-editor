@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>Edit {{ editField.name }}</h2>
+<mat-dialog-content>
+    <section class="properties-section">
+        <header class="section-header">
+            <h3>Properties</h3>
+        </header>
+        <div class="properties-content">
+            <lib-property
+                [target]="editField"
+                [property]="property"
+                [isSimplified]="true"
+                [isRoot]="true"
+                (valueChanged)="onFieldPropertyChanged()">
+            </lib-property>
+        </div>
+    </section>
+
+    <section class="preview-section">
+        <header class="section-header">
+            <h3>Preview</h3>
+            <mat-checkbox *ngIf="editField.canHaveChildren" [(ngModel)]="showChildren" (ngModelChange)="onShowChildrenChanged()">
+                Show children
+            </mat-checkbox>
+        </header>
+        <formly-form [fields]="[previewField]"></formly-form>
+    </section>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+        <span>Cancel</span>
+    </button>
+    <button mat-flat-button color="primary" (click)="onSave()">
+        <mat-icon>save</mat-icon>
+        <span>Save</span>
+    </button>
+</mat-dialog-actions>

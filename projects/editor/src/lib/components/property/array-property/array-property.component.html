@@ -1,4 +1,4 @@
-<div class="tree-item-header">
+<div class="tree-item-header" *ngIf="!isSimplified else simplifiedView">
 	<span class="tree-item-header-content-left">
 		<button mat-icon-button [ngStyle]="{'margin-right.px': treeLevelPadding}" [matMenuTriggerFor]="optionsMenu" [disabled]="!hasOptions">
 			<mat-icon>more_vert</mat-icon>
@@ -23,13 +23,40 @@
 	</span>
 </div>
 
-<ng-container *ngIf="isExpanded">
-    <lib-property
-        *ngFor="let childProperty of childProperties; let i = index; trackBy: trackPropertyByKey"
-        [treeLevel]="treeLevel + 1"
-        [target]="target"
-        [property]="childProperty"
-        (remove)="onRemoveChild(i)"
-        (valueChanged)="onValueChanged()">
-    </lib-property>
+<ng-container *ngIf="!isSimplified">
+    <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
 </ng-container>
+
+<ng-template #simplifiedView>
+    <div class="simplified-header" (click)="isExpanded = !isExpanded">
+            <span class="simplified-header-left">
+                <button mat-icon-button (click)="isExpanded = !isExpanded; $event.stopPropagation()">
+                    <mat-icon class="expand-icon" [class.expanded-90]="isExpanded">chevron_right</mat-icon>
+                </button>
+                <span>{{ property.name ? property.name : property.key + ' [ ' + target.length + ' ]' }}</span>
+            </span>
+            
+            <button *ngIf="property.canAdd" mat-icon-button (click)="onAddChild(); $event.stopPropagation()">
+                <mat-icon>add</mat-icon>
+            </button>
+    </div>
+    <div class="simplified-properties">
+        <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
+    </div>
+</ng-template>
+
+<ng-template #childPropertiesView>
+    <ng-container *ngIf="isExpanded">
+        <ng-container *ngFor="let childProperty of childProperties; let i = index; let last = last; trackBy: trackPropertyByKey">
+            <lib-property
+                [treeLevel]="treeLevel + 1"
+                [target]="target"
+                [property]="childProperty"
+                [isSimplified]="isSimplified"
+                (remove)="onRemoveChild(i)"
+                (valueChanged)="onValueChanged()">
+            </lib-property>
+            <hr class="divider" *ngIf="isSimplified && !last">
+        </ng-container>
+    </ng-container>
+</ng-template>

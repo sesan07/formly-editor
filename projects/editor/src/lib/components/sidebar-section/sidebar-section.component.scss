@@ -1,6 +1,6 @@
 :host {
 	flex-grow: 1;
-	height: 0; // Ensures all sidebars are equal height regardless of content
+	height: 0; // Ensures all sidebar sections are equal height regardless of content
 	display: flex;
 	flex-direction: column;
 }
@@ -33,11 +33,6 @@
 	flex-grow: 1;
 	overflow: auto;
     border-bottom: 1px solid rgba(0,0,0,.12);
-	height: auto;
-}
-
-.sidebar-content-wrapper.collapsed {
-	height: 0;
 }
 
 .sidebar-content {
