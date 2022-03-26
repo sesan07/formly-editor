@@ -9,6 +9,8 @@ import { IRadioTemplateOptions } from './radio.types';
 })
 export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
 
+    protected supportedWrappers: WrapperType[] = [WrapperType.FORM_FIELD];
+
 	public getDefaultConfig(customType?: CustomFieldType): IFormlyField<IRadioTemplateOptions> {
 		return {
 			type: FieldType.RADIO,
@@ -29,70 +31,68 @@ export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
 		};
 	}
 
-	getProperties(): IProperty[] {
-		return [
-			...this._getSharedProperties(),
-            this._getTemplateOptionsProperty(
-                [
-					{
-						name: 'Label',
-						key: 'label',
-						type: PropertyType.TEXT,
-                        isSimple: true,
-					},
-					{
-						name: 'Placeholder',
-						key: 'placeholder',
-						type: PropertyType.TEXT,
-                        isSimple: true,
-					},
-					{
-						name: 'Description',
-						key: 'description',
-						type: PropertyType.TEXT,
-                        isSimple: true,
-					},
-					{
-						name: 'Required',
-						key: 'required',
-						type: PropertyType.BOOLEAN,
-                        isSimple: true,
-					},
-					{
-						name: 'Options',
-						key: 'options',
-						type: PropertyType.ARRAY,
-                        isSimple: true,
-						canAdd: true,
-						childProperty: {
-							type: PropertyType.OBJECT,
-							isDeletable: true,
-							childProperties: [
-								{
-                                    name: 'Label',
-									key: 'label',
-									type: PropertyType.TEXT,
-                                    isSimple: true,
-								},
-								{
-                                    name: 'Value',
-									key: 'value',
-									type: PropertyType.TEXT,
-                                    isSimple: true,
-								},
-								{
-                                    name: 'Disabled',
-									key: 'disabled',
-									type: PropertyType.BOOLEAN,
-                                    isSimple: true,
-								},
-							],
-						} as IObjectProperty
-					} as IArrayProperty,
-                ],
-                [WrapperType.FORM_FIELD]
-            ),
-			this._getWrapperProperty([WrapperType.FORM_FIELD])
-		];
-	}
+    protected _getTOChildProperties(): IProperty[] {
+        return [
+            {
+                name: 'Label',
+                key: 'label',
+                type: PropertyType.TEXT,
+                isSimple: true,
+                valueChangeDebounce: 3000,
+            },
+            {
+                name: 'Placeholder',
+                key: 'placeholder',
+                type: PropertyType.TEXT,
+                isSimple: true,
+            },
+            {
+                name: 'Description',
+                key: 'description',
+                type: PropertyType.TEXT,
+                isSimple: true,
+            },
+            {
+                name: 'Required',
+                key: 'required',
+                type: PropertyType.BOOLEAN,
+                isSimple: true,
+            },
+            {
+                name: 'Options',
+                key: 'options',
+                type: PropertyType.ARRAY,
+                isSimple: true,
+                canAdd: true,
+                childProperty: {
+                    type: PropertyType.OBJECT,
+                    isDeletable: true,
+                    childProperties: [
+                        {
+                            name: 'Label',
+                            key: 'label',
+                            type: PropertyType.TEXT,
+                            isSimple: true,
+                        },
+                        {
+                            name: 'Value',
+                            key: 'value',
+                            type: PropertyType.TEXT,
+                            isSimple: true,
+                        },
+                        {
+                            name: 'Disabled',
+                            key: 'disabled',
+                            type: PropertyType.BOOLEAN,
+                            isSimple: true,
+                        },
+                    ],
+                } as IObjectProperty
+            } as IArrayProperty,
+        ];
+    }
+
+    protected _getWrapperTypes(): WrapperType[] {
+        return [WrapperType.FORM_FIELD];
+    }
 }

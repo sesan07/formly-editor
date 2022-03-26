@@ -9,6 +9,18 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 
 	public constructor(private _styleService: StyleService) { }
 
+	public getProperties(): IProperty[] {
+        return [
+			...this._getSharedProperties(),
+            this._getTOProperty(this._getTOChildProperties(), this._getWrapperTypes()),
+            {
+                key: 'wrappers',
+                type: PropertyType.CHIP_LIST,
+                options: this._getWrapperTypes(),
+            }
+		];
+    }
+
 	protected _getSharedProperties(): IProperty[] {
 		return [
 			{
@@ -41,12 +53,12 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 				addOptions: [PropertyType.TEXT],
 				childProperties: [],
 				populateChildrenFromTarget: true,
-				valueChangeDebounce: 1000,
+				valueChangeDebounce: 2000,
 			} as IObjectProperty,
 		];
 	}
 
-    protected _getTemplateOptionsProperty(childProperties: IProperty[], wrappers: WrapperType[]): IObjectProperty {
+    private _getTOProperty(childProperties: IProperty[], wrappers: WrapperType[]): IObjectProperty {
         wrappers.forEach(wrapper => childProperties.push(...this._getWrapperTOProperties(wrapper)));
 
         // Remove duplicates with same key
@@ -60,14 +72,6 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
             isSimple: true,
         };
     }
-
-	protected _getWrapperProperty(wrappers: WrapperType[]): IChipListProperty {
-        return {
-            key: 'wrappers',
-            type: PropertyType.CHIP_LIST,
-            options: wrappers,
-        };
-	}
 
     // Wrapper template option properties
 	private _getWrapperTOProperties(wrapper: WrapperType): IProperty[] {
@@ -88,5 +92,6 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 	}
 
 	public abstract getDefaultConfig(customType?: CustomFieldType): IBaseFormlyField<T>;
-	public abstract getProperties(): IProperty[];
+	protected abstract _getTOChildProperties(): IProperty[];
+	protected abstract _getWrapperTypes(): WrapperType[];
 }

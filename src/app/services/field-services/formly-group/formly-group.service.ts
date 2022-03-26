@@ -28,11 +28,11 @@ export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> 
         return config;
     }
 
-    getProperties(): IProperty[] {
-        return [
-            ...this._getSharedProperties(),
-            this._getTemplateOptionsProperty([], [WrapperType.CARD]),
-			this._getWrapperProperty([WrapperType.CARD])
-        ];
+    protected _getTOChildProperties(): IProperty[] {
+        return [];
+    }
+
+    protected _getWrapperTypes(): WrapperType[] {
+        return [WrapperType.CARD];
     }
 }
