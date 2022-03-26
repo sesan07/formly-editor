@@ -81,7 +81,6 @@ const defaultConfig: EditorConfigOption = {
         HttpClientModule,
         FormsModule,
         FormlyModule.forRoot({
-            types: [{ name: FieldType.FORMLY_GROUP, component: EditorFormlyGroupComponent }],
             wrappers: [{ name: WrapperType.EDITOR, component: EditorWrapperComponent }],
         }),
         MatTreeModule,
