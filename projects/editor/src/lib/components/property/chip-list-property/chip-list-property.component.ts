@@ -36,15 +36,7 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
             return;
         }
 
-        if (this.target[this.property.key]) { // If the target already has some selection
-            const existingOptions: string[] = this.property.outputString
-                ? (this.target[this.property.key] as string).split(' ')
-                : this.target[this.property.key] as string[];
-
-            this.selectedOptions = [...existingOptions];
-        } else {
-            this.selectedOptions = [];
-        }
+        this._updateSelectedOptions();
 
         this.selectableOptions = [...this.property.options];
         this.filteredOptions = this.formControl.valueChanges.pipe(
@@ -62,10 +54,11 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
     onAdd(event: MatChipInputEvent): void {
         const input: HTMLInputElement = event.input;
         const value: string = event.value;
+        this._updateSelectedOptions();
 
         if ((value || '').trim()) {
             this.selectedOptions.push(value.trim());
-            this._updateProperty();
+            this._updateTarget();
         }
 
         if (input) {
@@ -76,18 +69,20 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
     }
 
     onRemove(option: string): void {
+        this._updateSelectedOptions();
         const index: number = this.selectedOptions.indexOf(option);
         if (index >= 0) {
             this.selectedOptions.splice(index, 1);
-            this._updateProperty();
+            this._updateTarget();
         }
     }
 
     onSelected(event: MatAutocompleteSelectedEvent): void {
+        this._updateSelectedOptions();
         this.selectedOptions.push(event.option.viewValue);
         this.inputElementRef.nativeElement.value = '';
         this.formControl.setValue(null);
-        this._updateProperty();
+        this._updateTarget();
     }
 
     private _filter(value: string): string[] {
@@ -95,7 +90,19 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
         return this.selectableOptions.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
     }
 
-    private _updateProperty(): void {
+    private _updateSelectedOptions(): void {
+        if (this.target[this.property.key]) { // If the target already has some selection
+            const existingOptions: string[] = this.property.outputString
+                ? (this.target[this.property.key] as string).split(' ')
+                : this.target[this.property.key] as string[];
+
+            this.selectedOptions = [...existingOptions];
+        } else {
+            this.selectedOptions = [];
+        }
+    }
+
+    private _updateTarget(): void {
         if (this.property.outputString) {
             this.target[this.property.key] = this.selectedOptions.join(' ');
         } else  {
