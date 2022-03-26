@@ -53,7 +53,7 @@
     <ng-template #inputProperty>
         <lib-input-property
             [treeLevel]="treeLevel"
-            [property]="property"
+            [property]="propertyService.getAsInputProperty(property)"
             [target]="target"
             [isSimplified]="isSimplified"
             (keyChanged)="onKeyChanged($event, property)"

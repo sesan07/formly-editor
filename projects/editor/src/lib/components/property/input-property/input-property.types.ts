@@ -1,3 +1,5 @@
 import { IBaseProperty } from '../property.types';
 
-export type IInputProperty = IBaseProperty;
+export interface IInputProperty extends IBaseProperty {
+    outputRawValue?: boolean;
+}

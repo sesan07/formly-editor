@@ -2,7 +2,7 @@
 import { FormlyTemplateOptions } from '@ngx-formly/core';
 import { Injectable } from '@angular/core';
 import { CustomFieldType, WrapperType } from './field.types';
-import { IBaseFormlyField, IChipListProperty, IObjectProperty, IProperty, PropertyType, StyleService } from 'editor';
+import { IBaseFormlyField, IChipListProperty, IInputProperty, IObjectProperty, IProperty, PropertyType, StyleService } from 'editor';
 
 @Injectable()
 export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
@@ -21,8 +21,8 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 				name: 'Default Value',
 				key: 'defaultValue',
 				type: PropertyType.TEXT,
-                isSimple: true,
-			},
+                outputRawValue: true,
+			} as IInputProperty,
 			{
 				key: 'className',
 				type: PropertyType.CHIP_LIST,
@@ -75,7 +75,7 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
             case WrapperType.CARD:
                 return [
 					{
-                        name: 'Card Title',
+                        name: 'Card Title (for cards)',
 						key: 'cardTitle',
 						type: PropertyType.TEXT,
                         isSimple: true,

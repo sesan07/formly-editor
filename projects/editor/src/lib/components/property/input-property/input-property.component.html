@@ -17,13 +17,13 @@
 		<span>:</span>
 	</span>
 	<mat-form-field class="tree-item-header-content-right" appearance="outline">
-		<input matInput [type]="property.type" [(ngModel)]="target[property.key]" (ngModelChange)="onValueChanged()">
+		<input matInput [formControl]="formControl" [type]="type">
 	</mat-form-field>
 </div>
 
 <ng-template #simplifiedView>
     <mat-form-field>
         <mat-label>{{ property.name ? property.name : property.key }}</mat-label>
-        <input matInput [type]="property.type" [(ngModel)]="target[property.key]" (ngModelChange)="onValueChanged()">
+        <input matInput [formControl]="formControl" [type]="type">
     </mat-form-field>
 </ng-template>
