@@ -28,44 +28,34 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
 		};
 	}
 
-	getProperties(): IProperty[] {
-		return [
-			...this._getSharedProperties(),
-            this._getTemplateOptionsProperty(
-                [
-                    {
-                        name: 'Label',
-                        key: 'label',
-                        type: PropertyType.TEXT,
-                        isSimple: true,
-                    },
-                    {
-                        name: 'Description',
-                        key: 'description',
-                        type: PropertyType.TEXT,
-                        isSimple: true,
-                    },
-                    {
-                        key: 'pattern',
-                        type: PropertyType.TEXT,
-                    },
-                    {
-                        name: 'Required',
-                        key: 'required',
-                        type: PropertyType.BOOLEAN,
-                        isSimple: true,
-                    },
-                ],
-                [WrapperType.FORM_FIELD]
-            ),
-			{
-				key: 'validation',
-				type: PropertyType.OBJECT,
-				addOptions: [PropertyType.OBJECT, PropertyType.BOOLEAN],
-				childProperties: [],
-				populateChildrenFromTarget: true,
-			} as IObjectProperty,
-			this._getWrapperProperty([WrapperType.FORM_FIELD])
-		];
-	}
+    protected _getTOChildProperties(): IProperty[] {
+        return [
+            {
+                name: 'Label',
+                key: 'label',
+                type: PropertyType.TEXT,
+                isSimple: true,
+            },
+            {
+                name: 'Description',
+                key: 'description',
+                type: PropertyType.TEXT,
+                isSimple: true,
+            },
+            {
+                key: 'pattern',
+                type: PropertyType.TEXT,
+            },
+            {
+                name: 'Required',
+                key: 'required',
+                type: PropertyType.BOOLEAN,
+                isSimple: true,
+            },
+        ];
+    }
+
+    protected _getWrapperTypes(): WrapperType[] {
+        return [WrapperType.FORM_FIELD];
+    }
 }

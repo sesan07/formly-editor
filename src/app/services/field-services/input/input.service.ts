@@ -32,43 +32,40 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
         return config;
 	}
 
-	getProperties(): IProperty[] {
-		return [
-			...this._getSharedProperties(),
-            this._getTemplateOptionsProperty(
-                [
-					{
-						key: 'type',
-						type: PropertyType.TEXT,
-					},
-					{
-                        name: 'Label',
-						key: 'label',
-						type: PropertyType.TEXT,
-                        isSimple: true,
-					},
-					{
-                        name: 'Placeholder',
-						key: 'placeholder',
-						type: PropertyType.TEXT,
-                        isSimple: true,
-					},
-					{
-                        name: 'Description',
-						key: 'description',
-						type: PropertyType.TEXT,
-                        isSimple: true,
-					},
-					{
-                        name: 'Required',
-						key: 'required',
-						type: PropertyType.BOOLEAN,
-                        isSimple: true,
-					},
-                ],
-                [WrapperType.FORM_FIELD]
-            ),
-			this._getWrapperProperty([WrapperType.FORM_FIELD])
-		];
-	}
+    protected _getTOChildProperties(): IProperty[] {
+        return [
+            {
+                key: 'type',
+                type: PropertyType.TEXT,
+            },
+            {
+                name: 'Label',
+                key: 'label',
+                type: PropertyType.TEXT,
+                isSimple: true,
+            },
+            {
+                name: 'Placeholder',
+                key: 'placeholder',
+                type: PropertyType.TEXT,
+                isSimple: true,
+            },
+            {
+                name: 'Description',
+                key: 'description',
+                type: PropertyType.TEXT,
+                isSimple: true,
+            },
+            {
+                name: 'Required',
+                key: 'required',
+                type: PropertyType.BOOLEAN,
+                isSimple: true,
+            },
+        ];
+    }
+
+    protected _getWrapperTypes(): WrapperType[] {
+        return [WrapperType.FORM_FIELD];
+    }
 }
