@@ -1,0 +1,200 @@
+<section>
+    <h4 class="title">Style Self<span *ngIf="parentContainer"> (Parent is a {{ getGroupStyleName(parentContainer) }})</span></h4>
+
+    <div class="breakpoints">
+        <lib-breakpoint
+            titleText="All devices"
+            [isExpanded]="true"
+            >
+            <ng-container 
+                *ngIf="parentContainer === containerType.GRID"
+                [ngTemplateOutlet]="gridOptions">
+            </ng-container>
+            <lib-property
+                [target]="editField"
+                [property]="getProperty()"
+                [isSimplified]="true"
+                [isRoot]="true"
+                (valueChanged)="valueChanged.emit()">
+            </lib-property>
+        </lib-breakpoint>
+    
+        <lib-breakpoint
+            *ngFor="let breakpointType of breakpointTypes"
+            [titleText]="getBreakpointTitle(breakpointType)"
+            [tooltipText]="getBreakpointTooltip(breakpointType)"
+            >
+            <ng-container 
+                *ngIf="parentContainer === containerType.GRID"
+                [ngTemplateOutlet]="gridOptions"
+                [ngTemplateOutletContext]="{ breakpointType: breakpointType }">
+            </ng-container>
+            <lib-property
+                [target]="editField"
+                [property]="getProperty(breakpointType)"
+                [isSimplified]="true"
+                [isRoot]="true"
+                (valueChanged)="valueChanged.emit()">
+            </lib-property>
+        </lib-breakpoint>
+    </div>
+    
+    <ng-template #gridOptions let-breakpointType="breakpointType">
+        <div class="container-sub-options">
+            <mat-form-field class="select-field">
+                <mat-label>Column Start</mat-label>
+                <mat-select
+                    [value]="getClassValue('col-start-', breakpointType)"
+                    (selectionChange)="onGridClassChanged($event.value, 'col-start-', breakpointType)"
+                    >
+                    <mat-option *ngFor="let option of columnStartOptions" [value]="option">
+                        {{ option }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+    
+            <mat-form-field class="select-field">
+                <mat-label>Column Span</mat-label>
+                <mat-select
+                    [value]="getClassValue('col-span-', breakpointType)"
+                    (selectionChange)="onGridClassChanged($event.value, 'col-span-', breakpointType)"
+                    >
+                    <mat-option *ngFor="let option of columnSpanOptions" [value]="option">
+                        {{ option }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field class="select-field">
+                <mat-label>Row Start</mat-label>
+                <mat-select
+                    [value]="getClassValue('row-start-', breakpointType)"
+                    (selectionChange)="onGridClassChanged($event.value, 'row-start-', breakpointType)"
+                    >
+                    <mat-option *ngFor="let option of rowStartOptions" [value]="option">
+                        {{ option }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field class="select-field">
+                <mat-label>Row span</mat-label>
+                <mat-select
+                    [value]="getClassValue('row-span-', breakpointType)"
+                    (selectionChange)="onGridClassChanged($event.value, 'row-span-', breakpointType)"
+                    >
+                    <mat-option *ngFor="let option of rowSpanOptions" [value]="option">
+                        {{ option }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </ng-template>
+</section>
+
+<section *ngIf="editField.canHaveChildren">
+    <h4 class="title">Style Children Container</h4>
+
+    <mat-form-field>
+        <mat-label>Container type</mat-label>
+        <mat-select [value]="childrenContainer" (selectionChange)="onChildrenGroupStyleChanged($event.value)">
+            <mat-option *ngFor="let groupStyle of containerTypes" [value]="groupStyle">{{ getGroupStyleName(groupStyle) }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    
+    <div class="breakpoints">
+        <lib-breakpoint
+            titleText="All devices"
+            [isExpanded]="true"
+            >
+            <ng-container [ngSwitch]="childrenContainer">
+                <ng-container 
+                    *ngSwitchCase="containerType.FLEX"
+                    [ngTemplateOutlet]="childrenFlexOptions">
+                </ng-container>
+                <ng-container 
+                    *ngSwitchCase="containerType.GRID"
+                    [ngTemplateOutlet]="childrenGridOptions">
+                </ng-container>
+            </ng-container>
+            <lib-property
+                [target]="editField"
+                [property]="getChildrenProperty()"
+                [isSimplified]="true"
+                [isRoot]="true"
+                (valueChanged)="valueChanged.emit()">
+            </lib-property>
+        </lib-breakpoint>
+    
+        <lib-breakpoint
+            *ngFor="let breakpointType of breakpointTypes"
+            [titleText]="getBreakpointTitle(breakpointType)"
+            [tooltipText]="getBreakpointTooltip(breakpointType)"
+            >
+            <ng-container [ngSwitch]="childrenContainer">
+                <ng-container 
+                    *ngSwitchCase="containerType.FLEX"
+                    [ngTemplateOutlet]="childrenFlexOptions"
+                    [ngTemplateOutletContext]="{ breakpointType: breakpointType }">
+                </ng-container>
+                <ng-container 
+                    *ngSwitchCase="containerType.GRID"
+                    [ngTemplateOutlet]="childrenGridOptions"
+                    [ngTemplateOutletContext]="{ breakpointType: breakpointType }">
+                </ng-container>
+            </ng-container>
+            <lib-property
+                [target]="editField"
+                [property]="getChildrenProperty(breakpointType)"
+                [isSimplified]="true"
+                [isRoot]="true"
+                (valueChanged)="valueChanged.emit()">
+            </lib-property>
+        </lib-breakpoint>
+    </div>
+
+    <ng-template #childrenFlexOptions let-breakpointType="breakpointType">
+        <div class="container-sub-options">
+            <mat-form-field class="select-field">
+                <mat-label>Flex direction</mat-label>
+                <mat-select
+                    [value]="getChildrenClassValue('flex-dir-', breakpointType)"
+                    (selectionChange)="onChildrenGridClassChanged($event.value, 'flex-dir-', breakpointType)"
+                    >
+                    <mat-option *ngFor="let option of flexOptions" [value]="option">
+                        {{ option }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </ng-template>
+
+    <ng-template #childrenGridOptions let-breakpointType="breakpointType">
+        <div class="container-sub-options">
+            <mat-form-field class="select-field">
+                <mat-label>Number of columns</mat-label>
+                <mat-select
+                    [value]="getChildrenClassValue('grid-cols-', breakpointType)"
+                    (selectionChange)="onChildrenGridClassChanged($event.value, 'grid-cols-', breakpointType)"
+                    >
+                    <mat-option *ngFor="let option of columnOptions" [value]="option">
+                        {{ option }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        
+            <mat-form-field class="select-field">
+                <mat-label>Number of rows</mat-label>
+                <mat-select
+                    [value]="getChildrenClassValue('grid-rows-', breakpointType)"
+                    (selectionChange)="onChildrenGridClassChanged($event.value, 'grid-rows-', breakpointType)"
+                    >
+                    <mat-option *ngFor="let option of rowOptions" [value]="option">
+                        {{ option }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </ng-template>
+</section>

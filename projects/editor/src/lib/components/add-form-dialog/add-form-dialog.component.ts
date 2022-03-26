@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AddFormResponse } from './add-form-dialog.types';
 
 @Component({
   selector: 'lib-add-form-dialog',
   templateUrl: './add-form-dialog.component.html',
-  styleUrls: ['./add-form-dialog.component.scss']
+  styleUrls: ['./add-form-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddFormDialogComponent {
 

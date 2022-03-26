@@ -17,6 +17,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { EditorWrapperComponent } from './components/editor-wrapper/editor-wrapper.component';
 import { FormComponent } from './components/form/form.component';
@@ -45,6 +47,8 @@ import { PropertyComponent } from './components/property/property.component';
 import { JsonFileValidatorDirective } from './components/import-form-dialog/json-file-validator/json-file-validator.directive';
 import { EditFieldDialogComponent } from './components/edit-field-dialog/edit-field-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
+import { EditFieldStylesComponent } from './components/edit-field-dialog/edit-field-styles/edit-field-styles.component';
+import { BreakpointComponent } from './components/edit-field-dialog/breakpoint/breakpoint.component';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -75,6 +79,8 @@ const defaultConfig: EditorConfigOption = {
         AddFormDialogComponent,
         JsonFileValidatorDirective,
         EditFieldDialogComponent,
+        EditFieldStylesComponent,
+        BreakpointComponent
     ],
     imports: [
         CommonModule,
@@ -99,6 +105,8 @@ const defaultConfig: EditorConfigOption = {
         DragDropModule,
         MatDialogModule,
         MatButtonToggleModule,
+        MatTooltipModule,
+        MatDividerModule,
     ],
     exports: [
         EditorComponent

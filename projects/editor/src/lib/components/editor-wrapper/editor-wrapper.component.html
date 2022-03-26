@@ -8,19 +8,19 @@
     <header *ngIf="editorService.isEditMode">
         <span>{{ editorService.getFormattedFieldName(field.name, field.key) }}</span>
         <div class="options" [class.visible]="isMouseInside" *ngIf="!hideOptions">
-            <button [disabled]="!field.canHaveChildren" mat-icon-button [matMenuTriggerFor]="addCategoryMenu" (click)="$event.stopPropagation()">
+            <button *ngIf="field.canHaveChildren" mat-icon-button [matMenuTriggerFor]="addCategoryMenu" (click)="$event.stopPropagation()">
                 <mat-icon>add</mat-icon>
             </button>
             
-            <button [disabled]="!field.parentFieldId" mat-icon-button (click)="onRemove(); $event.stopPropagation()">
+            <button *ngIf="field.parentFieldId" mat-icon-button (click)="onRemove(); $event.stopPropagation()">
                 <mat-icon>remove</mat-icon>
             </button>
 
-            <button [disabled]="isFirstChild" mat-icon-button (click)="onMoveUp()">
+            <button *ngIf="!isFirstChild" mat-icon-button (click)="onMoveUp()">
                 <mat-icon>arrow_upward</mat-icon>
             </button>
 
-            <button [disabled]="isLastChild" mat-icon-button (click)="onMoveDown()">
+            <button *ngIf="!isLastChild" mat-icon-button (click)="onMoveDown()">
                 <mat-icon>arrow_downward</mat-icon>
             </button>
 

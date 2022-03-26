@@ -1,0 +1,9 @@
+<header (click)="isExpanded = !isExpanded">
+    <button mat-icon-button>
+        <mat-icon class="expand-icon" [class.expanded-90]="isExpanded">chevron_right</mat-icon>
+    </button>
+    <span [matTooltip]="tooltipText" matTooltipPosition="above" matTooltipShowDelay="750">{{ titleText }}</span>
+</header>
+<div class="content-wrapper" *ngIf="isExpanded">
+    <ng-content></ng-content>
+</div>

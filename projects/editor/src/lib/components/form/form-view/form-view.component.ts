@@ -20,7 +20,6 @@ export class FormViewComponent implements OnInit, OnDestroy {
 
     public fields: IEditorFormlyField[];
     public formGroup: FormGroup = new FormGroup({});
-    public model: any = {};
     public options: FormlyFormOptions = {};
 
     private _destroy$: Subject<void> = new Subject();
@@ -44,7 +43,6 @@ export class FormViewComponent implements OnInit, OnDestroy {
 		this.fields = cloneDeep(this.form.fields);
 		this.formGroup = new FormGroup({});
 		this.options = {};
-		this.model = cloneDeep(this.form.model);
 
 		const logClone: IEditorFormlyField[] = cloneDeep(this.form.fields);
 		logClone.forEach(field => this._editorService.cleanField(field, true, true));
