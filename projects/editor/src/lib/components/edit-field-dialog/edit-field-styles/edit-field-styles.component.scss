@@ -1,0 +1,28 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+}
+
+.title {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0,0,0,.12);
+}
+
+.breakpoints {
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+}
+
+.container-sub-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+:host::ng-deep {
+    .select-field .mat-form-field-infix {
+        width: 9rem;
+    }
+}

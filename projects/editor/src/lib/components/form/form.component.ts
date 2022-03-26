@@ -53,14 +53,22 @@ export class FormComponent implements OnInit, OnDestroy {
 		this.editorService.formChanged$
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(formId => {
-                if (formId === this.form.id) {
-                    this._formChanged$.next();
+                if (formId !== this.form.id) {
+                    return;
                 }
+
+                this._formChanged$.next();
             });
 
 		this.editorService.fieldSelected$
 			.pipe(takeUntil(this._destroy$))
-			.subscribe(() => this._updateActiveFieldProperty());
+			.subscribe(field => {
+                if (field.formId !== this.form.id) {
+                    return;
+                }
+
+                this._updateActiveFieldProperty();
+            });
 	}
 
 	public ngOnDestroy(): void {
@@ -135,7 +143,7 @@ export class FormComponent implements OnInit, OnDestroy {
 	private _updateActiveFieldProperty(): void {
 		this.activeFieldProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
 		this._initRootProperty(this.activeFieldProperty);
-		this.activeFieldProperty.childProperties = this.form.activeField.properties;
+		this.activeFieldProperty.childProperties = cloneDeep(this.form.activeField.properties);
 		this.activeFieldProperty.populateChildrenFromTarget = false;
 		this.activeFieldProperty.addOptions = [];
 	}

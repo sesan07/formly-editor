@@ -50,6 +50,11 @@ formly-field {
     white-space: nowrap;
 }
 
+.tree-item-header-content-right {
+    flex-grow: 1;
+	margin-top: 4px;
+}
+
 button.mat-icon-button {
 	--button-size: 28px;
 	height: var(--button-size) !important;

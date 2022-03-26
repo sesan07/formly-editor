@@ -6,23 +6,15 @@
 
 .mat-dialog-content {
     display: flex;
-    column-gap: 48px;
+    column-gap: 32px;
     flex-grow: 1;
 }
 
 .mat-dialog-title { margin: 0; }
 
 .properties-section {
-    flex-grow: 1;
-    padding: 8px;
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-}
-
-.properties-content {
-    flex-grow: 1;
-    overflow: auto;
 }
 
 .preview {
@@ -33,15 +25,32 @@
 }
 
 .preview-section {
-    flex-basis: 40%;
-    flex-shrink: 1;
-    padding: 8px;
-    box-sizing: border-box;
+    flex-grow: 1;
+}
+
+.preview-options {
+    display: flex;
+    column-gap: 32px;
+}
+
+.preview-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .section-header {
+    height: 32px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+.section-header-text {
+    margin: 0;
+}
+
+.section-content {
+    height: calc(100% - 32px);
 }
 
 .divider {
@@ -51,4 +60,14 @@
 
 formly-form {
     width: 100%;
+}
+
+mat-tab-group {
+    height: 100%;
+    min-width: 400px;
+}
+
+lib-style-self {
+    display: block;
+    margin-bottom: 16px;
 }

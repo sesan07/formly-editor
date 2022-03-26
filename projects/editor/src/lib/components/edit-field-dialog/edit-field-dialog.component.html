@@ -2,27 +2,44 @@
 <mat-dialog-content>
     <section class="properties-section">
         <header class="section-header">
-            <h3>Properties</h3>
+            <h3 class="section-header-text">Properties</h3>
         </header>
-        <div class="properties-content">
-            <lib-property
-                [target]="editField"
-                [property]="property"
-                [isSimplified]="true"
-                [isRoot]="true"
-                (valueChanged)="onFieldPropertyChanged()">
-            </lib-property>
+        <div class="section-content">
+            <mat-tab-group mat-stretch-tabs>
+                <mat-tab label="General">
+                    <lib-property
+                        [target]="editField"
+                        [property]="property"
+                        [isSimplified]="true"
+                        [isRoot]="true"
+                        (valueChanged)="onPreviewChanged()">
+                    </lib-property>
+                </mat-tab>
+                <mat-tab label="Styling">
+                    <lib-edit-field-styles
+                        [editField]="editField"
+                        (valueChanged)="onPreviewChanged()">
+                    </lib-edit-field-styles>
+                </mat-tab>
+            </mat-tab-group>
         </div>
     </section>
 
     <section class="preview-section">
         <header class="section-header">
-            <h3>Preview</h3>
-            <mat-checkbox *ngIf="editField.canHaveChildren" [(ngModel)]="showChildren" (ngModelChange)="onShowChildrenChanged()">
-                Show children
-            </mat-checkbox>
+            <h3 class="section-header-text">Preview</h3>
+            <div class="preview-options">
+                <mat-slide-toggle *ngIf="editField.parentFieldId" labelPosition="before" [(ngModel)]="showParent" (ngModelChange)="onPreviewChanged()">
+                    Show parent
+                </mat-slide-toggle>
+                <mat-slide-toggle *ngIf="editField.canHaveChildren" labelPosition="before" [(ngModel)]="showChildren" (ngModelChange)="onPreviewChanged()">
+                    Show children
+                </mat-slide-toggle>
+            </div>
         </header>
-        <formly-form [fields]="[previewField]"></formly-form>
+        <div class="section-content preview-content">
+            <formly-form [form]="formGroup" [fields]="[previewField]" [model]="model"></formly-form>
+        </div>
     </section>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
