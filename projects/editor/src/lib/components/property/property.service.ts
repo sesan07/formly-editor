@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { isMoment } from 'moment';
 import { IArrayProperty } from './array-property/array-property.types';
 import { IChipListProperty } from './chip-list-property/chip-list-property.types';
+import { IInputProperty } from './input-property/input-property.types';
 import { IObjectProperty } from './object-property/object-property.types';
 import { PropertyType, IProperty, IBaseProperty } from './property.types';
 
@@ -25,6 +26,10 @@ export class PropertyService {
 
 	public getAsChiplistProperty(property: IProperty): IChipListProperty {
 		return property as IChipListProperty;
+	}
+
+	public getAsInputProperty(property: IProperty): IInputProperty {
+		return property as IInputProperty;
 	}
 
 	public getAsObjectProperty(property: IProperty): IObjectProperty {
