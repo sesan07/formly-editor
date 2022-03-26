@@ -106,7 +106,8 @@ export class EditorService {
 		const newChildren: IEditorFormlyField[] = this.getChildren(newField);
 		newChildren.push(...children);
 
-        // Copy classes
+        // Copy properties that shouldn't change
+        newField.key = field.key;
         newField.className = field.className;
         newField.fieldGroupClassName = field.fieldGroupClassName;
 
@@ -201,6 +202,7 @@ export class EditorService {
         const field: IEditorFormlyField = this.getField(modifiedField.formId, modifiedField.fieldId);
         merge(field, modifiedField);
         this._formChanged$.next(field.formId);
+        this._fieldSelected$.next(field);
     }
 
     // Move field within a parent field in a form
@@ -271,10 +273,10 @@ export class EditorService {
         // Check for 'wrappers' chip list property, make 'editor' unremovable
         const wrappersProperty: IChipListProperty = properties.find(property => property.key === 'wrappers') as IChipListProperty;
         if (wrappersProperty && wrappersProperty.type === PropertyType.CHIP_LIST) {
-            if (!wrappersProperty.notRemovableOptions) {
-                wrappersProperty.notRemovableOptions = [WrapperType.EDITOR];
+            if (!wrappersProperty.hiddenOptions) {
+                wrappersProperty.hiddenOptions = [WrapperType.EDITOR];
             } else {
-                wrappersProperty.notRemovableOptions.unshift(WrapperType.EDITOR);
+                wrappersProperty.hiddenOptions.unshift(WrapperType.EDITOR);
             }
         }
 

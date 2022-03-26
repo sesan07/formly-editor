@@ -20,8 +20,8 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
 
     public formControl: FormControl = new FormControl();
     public separatorKeysCodes: number[] = [ENTER, COMMA];
-    public selectedOptions: string[] = [];
-    public selectableOptions: string[] = [];
+    public selectedOptions: string[];
+    public selectableOptions: string[];
     public filteredOptions: Observable<string[]>;
 	public get hasOptions(): boolean {
 		return this.property.isDeletable;
@@ -42,6 +42,8 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
                 : this.target[this.property.key] as string[];
 
             this.selectedOptions = [...existingOptions];
+        } else {
+            this.selectedOptions = [];
         }
 
         this.selectableOptions = [...this.property.options];
@@ -51,10 +53,10 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
         );
     }
 
-    isRemovable(option: string): boolean {
-        return this.property.notRemovableOptions
-            ? (this.property.notRemovableOptions as string[]).indexOf(option) === -1
-            : true;
+    isHidden(option: string): boolean {
+        return this.property.hiddenOptions
+            ? this.property.hiddenOptions.includes(option)
+            : false;
     }
 
     onAdd(event: MatChipInputEvent): void {
