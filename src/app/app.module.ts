@@ -30,25 +30,20 @@ import { EditorModule, EDITOR_FIELD_SERVICE } from 'editor';
             unknownTypeName: FieldType.OTHER,
             typeCategories: [
                 {
-                    name: 'Basic',
+                    name: 'Components',
                     typeOptions: [
                         {
                             name: FieldType.CHECKBOX,
                             displayName: 'Checkbox',
                         },
                         {
-                            name: FieldType.FORMLY_GROUP,
-                            displayName: 'Formly Group',
-                            canHaveChildren: true,
-                            childrenPath: 'fieldGroup'
-                        },
-                        {
                             name: FieldType.INPUT,
                             displayName: 'Input',
                         },
                         {
-                            name: FieldType.OTHER,
-                            displayName: 'Other',
+                            name: FieldType.INPUT,
+                            displayName: 'Number',
+                            customName: CustomFieldType.NUMBER
                         },
                         {
                             name: FieldType.RADIO,
@@ -65,12 +60,13 @@ import { EditorModule, EDITOR_FIELD_SERVICE } from 'editor';
                     ]
                 },
                 {
-                    name: 'Custom',
+                    name: 'Containers',
                     typeOptions: [
                         {
-                            name: FieldType.INPUT,
-                            displayName: 'Number',
-                            customName: CustomFieldType.NUMBER
+                            name: FieldType.FORMLY_GROUP,
+                            displayName: 'Group',
+                            canHaveChildren: true,
+                            childrenPath: 'fieldGroup'
                         },
                         {
                             name: FieldType.FORMLY_GROUP,
@@ -80,7 +76,16 @@ import { EditorModule, EDITOR_FIELD_SERVICE } from 'editor';
                             childrenPath: 'fieldGroup'
                         },
                     ]
-                }
+                },
+                {
+                    name: 'Others',
+                    typeOptions: [
+                        {
+                            name: FieldType.OTHER,
+                            displayName: 'Other',
+                        },
+                    ]
+                },
             ],
             wrappers: [{ name: WrapperType.CARD, component: CardWrapperComponent }],
             validationMessages: [
