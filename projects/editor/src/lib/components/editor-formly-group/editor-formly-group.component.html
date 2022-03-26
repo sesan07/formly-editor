@@ -3,6 +3,7 @@
     [ngClass]="{ 'edit-mode': editorService.isEditMode }"
     cdkDropList
     [cdkDropListOrientation]="dropListOrientation"
+    [cdkDropListSortingDisabled]="isSortingDisabled"
     [cdkDropListEnterPredicate]="canEnter"
     [cdkDropListConnectedTo]="connectedTo"
     [cdkDropListData]="field"
