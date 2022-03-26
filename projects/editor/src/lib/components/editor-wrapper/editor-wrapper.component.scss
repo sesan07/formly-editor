@@ -1,7 +1,8 @@
 .editor-wrapper {
     display: block;
-    border: 1px solid transparent;
-    background-color: white;
+    padding: 0;
+    box-sizing: border-box;
+    transition: 0.2s ease-out;
 }
 
 header {
@@ -11,7 +12,7 @@ header {
 
 .options {
     display: flex;
-    align-items: center;
+    justify-content: space-between;
     opacity: 0;
     transition: 0.2s ease-out;
 }
@@ -22,7 +23,8 @@ header {
 
 .editor-wrapper.edit-mode {
     padding: 4px;
-    box-sizing: border-box;
+    background-color: white;
+    border: 1px solid transparent;
     border-radius: 4px;
 }
 

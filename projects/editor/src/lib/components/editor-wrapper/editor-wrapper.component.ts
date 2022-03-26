@@ -19,12 +19,27 @@ export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> imp
 
 	public isActiveField: boolean;
 	public isMouseInside: boolean;
+	public isFirstChild: boolean;
+	public isLastChild: boolean;
+    public index: number;
+	public hideOptions: boolean;
 
     private _destroy$: Subject<void> = new Subject();
 
     constructor(public editorService: EditorService, private _dialog: MatDialog) { super(); }
 
     ngOnInit(): void {
+        if (this.field.parentFieldId) {
+            const parent: IEditorFormlyField = this.editorService.getField(this.field.formId, this.field.parentFieldId);
+            const siblings: IEditorFormlyField[] = this.editorService.getChildren(parent);
+            this.index = siblings.findIndex(f => f.fieldId === this.field.fieldId);
+            this.isFirstChild = this.index === 0;
+            this.isLastChild = this.index === siblings.length - 1;
+        } else {
+            this.isFirstChild = this.isLastChild = true;
+        }
+
+        this.hideOptions = this.field.templateOptions.hideEditorWrapperOptions;
 		this._checkActiveField();
 
         this.editorService.fieldSelected$
@@ -67,6 +82,14 @@ export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> imp
                     this.editorService.updateField(field);
                 }
             });
+    }
+
+    onMoveUp(): void {
+        this.editorService.moveField(this.field.fieldId, this.field.formId, this.index, this.index - 1);
+    }
+
+    onMoveDown(): void {
+        this.editorService.moveField(this.field.fieldId, this.field.formId, this.index, this.index + 1);
     }
 
 	private _checkActiveField(): void {
