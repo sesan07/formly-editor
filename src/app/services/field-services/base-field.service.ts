@@ -2,8 +2,7 @@
 import { FormlyTemplateOptions } from '@ngx-formly/core';
 import { Injectable } from '@angular/core';
 import { CustomFieldType, WrapperType } from './field.types';
-import { StyleService } from 'src/app/services/style-service/style.service';
-import { IBaseFormlyField, IChipListProperty, IObjectProperty, IProperty, PropertyType } from 'editor';
+import { IBaseFormlyField, IChipListProperty, IObjectProperty, IProperty, PropertyType, StyleService } from 'editor';
 
 @Injectable()
 export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
@@ -27,13 +26,13 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 			{
 				key: 'className',
 				type: PropertyType.CHIP_LIST,
-				options: this._styleService.classNames,
+				options: this._styleService.getAllClassNames(),
 				outputString: true,
 			} as IChipListProperty,
 			{
 				key: 'fieldGroupClassName',
 				type: PropertyType.CHIP_LIST,
-				options: this._styleService.classNames,
+				options: this._styleService.getAllClassNames(),
 				outputString: true,
 			} as IChipListProperty,
 			{

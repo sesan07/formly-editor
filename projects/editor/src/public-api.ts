@@ -10,5 +10,6 @@ export * from './lib/components/property/input-property/input-property.types';
 export * from './lib/components/property/object-property/object-property.types';
 
 export * from './lib/components/editor/editor.component';
+export { StyleService } from './lib/services/style-service/style.service';
 export * from './lib/services/editor-service/editor.types';
 export * from './lib/editor.module';
