@@ -14,12 +14,9 @@ import { IEditorFormlyField } from '../../services/editor-service/editor.types';
 export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> implements OnInit {
     @ViewChild(CdkDropList) dropList: CdkDropList;
 
-    get dropListClasses(): string { return (this.field.fieldGroupClassName || '') + ' cdk-drop-list'; }
-    get dropListOrientation(): DropListOrientation {
-        return this.dropListClasses.includes('flex') && !this.dropListClasses.includes('flex-column')
-            ? 'horizontal' as DropListOrientation
-            : 'vertial'  as DropListOrientation;
-    }
+    public dropListClasses: string;
+    public dropListOrientation: DropListOrientation;
+    public isSortingDisabled: boolean;
 
     connectedTo: string[] = [];
 
@@ -28,11 +25,20 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
         private _dropListService: FieldDroplistService) { super(); }
 
     ngOnInit(): void {
-        if (!this.field.formId || this.field.fieldId === 'preview') {
-            return;
-        }
+        this.dropListClasses = (this.field.fieldGroupClassName || '') + ' cdk-drop-list';
 
-        this.connectedTo = this._dropListService.getDropListIds(this.field.formId);
+        const match = this.field.fieldGroupClassName
+            ? this.field.fieldGroupClassName.match(/(?<!-)flex(?!-)/)
+            : null;
+        this.dropListOrientation = !!match && !this.field.fieldGroupClassName?.includes('flex-dir-column')
+            ? 'horizontal' as DropListOrientation
+            : 'vertial'  as DropListOrientation;
+
+        this.isSortingDisabled = !match;
+
+        if (this.field.formId && this.field.fieldId !== 'preview') {
+            this.connectedTo = this._dropListService.getDropListIds(this.field.formId);
+        }
     }
 
     canEnter = (drag: CdkDrag) => {
