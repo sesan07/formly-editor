@@ -1,8 +1,23 @@
-.editor-wrapper {
+:host {
     display: block;
     padding: 0;
     box-sizing: border-box;
     transition: 0.2s ease-out;
+}
+
+:host.edit-mode {
+    padding: 4px;
+    background-color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+:host.edit-mode:hover {
+    border: 1px solid #E0E0E0;
+}
+
+:host.edit-mode.active {
+    border: 2px solid #A3A3A3;
 }
 
 header {
@@ -14,24 +29,9 @@ header {
     display: flex;
     justify-content: space-between;
     opacity: 0;
-    transition: 0.2s ease-out;
+    transition: opacity 0.2s ease-out;
 }
 
 .options.visible {
     opacity: 1;
-}
-
-.editor-wrapper.edit-mode {
-    padding: 4px;
-    background-color: white;
-    border: 1px solid transparent;
-    border-radius: 4px;
-}
-
-.editor-wrapper.edit-mode:hover {
-    border: 1px solid #E0E0E0;
-}
-
-.editor-wrapper.edit-mode.active {
-    border: 2px solid #A3A3A3;
 }

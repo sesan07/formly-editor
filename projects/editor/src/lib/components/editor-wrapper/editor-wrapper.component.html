@@ -1,36 +1,28 @@
-<div 
-    class="editor-wrapper"
-    [ngClass]="{'edit-mode': editorService.isEditMode, 'active': isActiveField}"
-    (click)="onClick($event)"
-    (mouseover)="isMouseInside = true; $event.stopPropagation()"
-    (mouseout)="isMouseInside = false"
-    >
-    <header *ngIf="editorService.isEditMode">
-        <span>{{ editorService.getFormattedFieldName(field.name, field.key) }}</span>
-        <div class="options" [class.visible]="isMouseInside" *ngIf="!hideOptions">
-            <button *ngIf="field.canHaveChildren" mat-icon-button [matMenuTriggerFor]="addCategoryMenu" (click)="$event.stopPropagation()">
-                <mat-icon>add</mat-icon>
-            </button>
-            
-            <button *ngIf="field.parentFieldId" mat-icon-button (click)="onRemove(); $event.stopPropagation()">
-                <mat-icon>remove</mat-icon>
-            </button>
+<header *ngIf="editorService.isEditMode">
+    <span>{{ editorService.getFormattedFieldName(field.name, field.key) }}</span>
+    <div class="options" [class.visible]="isMouseInside" *ngIf="!hideOptions">
+        <button *ngIf="field.canHaveChildren" mat-icon-button [matMenuTriggerFor]="addCategoryMenu" (click)="$event.stopPropagation()">
+            <mat-icon>add</mat-icon>
+        </button>
+        
+        <button *ngIf="field.parentFieldId" mat-icon-button (click)="onRemove(); $event.stopPropagation()">
+            <mat-icon>remove</mat-icon>
+        </button>
 
-            <button *ngIf="!isFirstChild" mat-icon-button (click)="onMoveUp()">
-                <mat-icon>arrow_upward</mat-icon>
-            </button>
+        <button *ngIf="!isFirstChild" mat-icon-button (click)="onMoveUp()">
+            <mat-icon>arrow_upward</mat-icon>
+        </button>
 
-            <button *ngIf="!isLastChild" mat-icon-button (click)="onMoveDown()">
-                <mat-icon>arrow_downward</mat-icon>
-            </button>
+        <button *ngIf="!isLastChild" mat-icon-button (click)="onMoveDown()">
+            <mat-icon>arrow_downward</mat-icon>
+        </button>
 
-            <button mat-icon-button (click)="onEditField()">
-                <mat-icon>edit</mat-icon>
-            </button>
-        </div>
-    </header>
-    <ng-container #fieldComponent></ng-container>
-</div>
+        <button mat-icon-button (click)="onEditField()">
+            <mat-icon>edit</mat-icon>
+        </button>
+    </div>
+</header>
+<ng-container #fieldComponent></ng-container>
             
 <mat-menu #addCategoryMenu="matMenu">
     <ng-container *ngFor="let category of editorService.fieldCategories">

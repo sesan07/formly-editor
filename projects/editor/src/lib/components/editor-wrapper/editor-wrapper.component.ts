@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, HostBinding, HostListener, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { FieldWrapper } from '@ngx-formly/core';
 import { IEditorFormlyField } from '../../services/editor-service/editor.types';
 import { EditorService } from '../../services/editor-service/editor.service';
@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { EditFieldDialogComponent } from '../edit-field-dialog/edit-field-dialog.component';
 import { EditFieldRequest } from '../edit-field-dialog/edit-field-dialog.types';
+import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
 
 @Component({
     selector: 'lib-editor-wrapper',
@@ -17,7 +18,9 @@ export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> imp
     @ViewChild('fieldComponent', {read: ViewContainerRef, static: true})
     fieldComponent: ViewContainerRef;
 
-	public isActiveField: boolean;
+    @HostBinding('class.edit-mode') get isEditMode(): boolean { return this.editorService.isEditMode; };
+    @HostBinding('class.active') get isActiveField(): boolean { return this._isActiveField; }
+
 	public isMouseInside: boolean;
 	public isFirstChild: boolean;
 	public isLastChild: boolean;
@@ -25,8 +28,26 @@ export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> imp
 	public hideOptions: boolean;
 
     private _destroy$: Subject<void> = new Subject();
+    private _isActiveField: boolean;
 
-    constructor(public editorService: EditorService, private _dialog: MatDialog) { super(); }
+    constructor(public editorService: EditorService, private _dialog: MatDialog){ super(); }
+
+    @HostListener('click', ['$event'])
+    onClick(event: MouseEvent): void {
+        this.editorService.selectField(this.field.formId, this.field.fieldId);
+        event.stopPropagation();
+    }
+
+    @HostListener('mouseover', ['$event'])
+    onMouseOver(event: MouseEvent): void {
+        this.isMouseInside = true;
+        event.stopPropagation();
+    }
+
+    @HostListener('mouseout', ['$event'])
+    onMouseOut(event: MouseEvent): void {
+        this.isMouseInside = false;
+    }
 
     ngOnInit(): void {
         if (this.field.parentFieldId) {
@@ -60,11 +81,6 @@ export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> imp
         this.editorService.removeField(this.field.formId, this.field.fieldId, this.field.parentFieldId);
     }
 
-    onClick(event: MouseEvent): void {
-        this.editorService.selectField(this.field.formId, this.field.fieldId);
-        event.stopPropagation();
-    }
-
     onEditField(): void {
         const config: MatDialogConfig<EditFieldRequest> = {
             data: {
@@ -93,6 +109,6 @@ export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> imp
     }
 
 	private _checkActiveField(): void {
-		this.isActiveField =  this.editorService.isActiveField(this.field.formId, this.field.fieldId);
+		this._isActiveField =  this.editorService.isActiveField(this.field.formId, this.field.fieldId);
 	}
 }
