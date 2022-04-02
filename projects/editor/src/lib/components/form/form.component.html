@@ -1,27 +1,26 @@
-<div id="leftSidebar" class="sidebar">
-	<lib-sidebar-section [sectionTitle]="'Fields'">
+<lib-sidebar [position]="typeOfSideBarPosition.LEFT">
+	<lib-sidebar-section
+        [sectionTitle]="'Fields'"
+        >
 		<lib-field-tree-item 
 			*ngFor="let field of form.fields"
 			[field]="field"
 			[isExpanded]="true">
 		</lib-field-tree-item>
 	</lib-sidebar-section>
-</div>
+</lib-sidebar>
 
-
-<div class="sidebar-divider" (mousedown)="onSidebarMouseDown($event, 'leftSidebar', true)"></div>
-
-<lib-form-view class="form-view"
-					[form]="form"
-					[formChanged$]="formChanged$"
-                    (modelChanged)="onModelChanged()">
+<lib-form-view 
+    class="form-view"
+    [form]="form"
+    [formChanged$]="formChanged$"
+    (modelChanged)="onModelChanged()">
 </lib-form-view>
 
-<div class="sidebar-divider" (mousedown)="onSidebarMouseDown($event, 'rightSidebar', false)"></div>
-
-<div id="rightSidebar" class="sidebar" *ngIf="form.activeField">
+<lib-sidebar [position]="typeOfSideBarPosition.RIGHT">
 	<lib-sidebar-section
-		[sectionTitle]="'Properties - ' + editorService.getFormattedFieldName(form.activeField.name, form.activeField.key)">
+		[sectionTitle]="'Properties - ' + editorService.getFormattedFieldName(form.activeField.name, form.activeField.key)"
+        >
         <lib-property
             [target]="form.activeField"
             [property]="activeFieldProperty"
@@ -32,7 +31,8 @@
 
 	<lib-sidebar-section
 		[sectionTitle]="'Model'"
-		[menuPanel]="modelOptionsMenu">
+		[menuPanel]="modelOptionsMenu"
+        >
         <lib-property
             [target]="form.model"
             [property]="modelProperty"
@@ -40,7 +40,7 @@
             (valueChanged)="onModelPropertyChanged()">
         </lib-property>
 	</lib-sidebar-section>
-</div>
+</lib-sidebar>
 
 <mat-menu #modelOptionsMenu="matMenu">
 	<button mat-menu-item (click)="onImportModel()">

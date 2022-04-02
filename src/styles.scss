@@ -1,3 +1,7 @@
+:root {
+    --header-height: 48px
+}
+
 html, body, app-root { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
@@ -25,7 +29,7 @@ formly-field {
 	display: block;
 	border-radius: 4px;
 	flex-grow: 1;
-	transition: 0.2s;
+	transition: 0.2s ease-out;
     user-select: none;
 }
 
@@ -86,7 +90,7 @@ button.mat-icon-button {
 }
 
 .expand-icon {
-    transition: transform 0.2s;
+    transition: transform 0.2s ease-out;
 }
 
 .expand-icon.expanded-90 {
@@ -129,4 +133,8 @@ button.mat-icon-button {
 .dialogBackdrop {
     background-color: white;
     opacity: 0.6 !important;
+}
+
+.resizing {
+    transition: none !important;
 }
