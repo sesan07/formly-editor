@@ -1,3 +1,4 @@
+<div class="sidebar-divider" *ngIf="index !== 0" (mousedown)="onSectionMouseDown($event)"></div>
 <div class="sidebar-header">
 	<span class="sidebar-header-left">
 		<button [disabled]="!isCollapsible" mat-icon-button (click)="onToggleExpansionClicked()">
@@ -11,8 +12,6 @@
 	</button>
 
 </div>
-<div #contentWrapper class="sidebar-content-wrapper">
-	<div class="sidebar-content" *ngIf="!isCollapsed">
-		<ng-content></ng-content>
-	</div>
+<div class="sidebar-section-content" [style.height.px]="contentHeight">
+    <ng-content></ng-content>
 </div>

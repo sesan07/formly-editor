@@ -49,6 +49,7 @@ import { EditFieldDialogComponent } from './components/edit-field-dialog/edit-fi
 import { HttpClientModule } from '@angular/common/http';
 import { EditFieldStylesComponent } from './components/edit-field-dialog/edit-field-styles/edit-field-styles.component';
 import { BreakpointComponent } from './components/edit-field-dialog/breakpoint/breakpoint.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -80,7 +81,8 @@ const defaultConfig: EditorConfigOption = {
         JsonFileValidatorDirective,
         EditFieldDialogComponent,
         EditFieldStylesComponent,
-        BreakpointComponent
+        BreakpointComponent,
+        SidebarComponent,
     ],
     imports: [
         CommonModule,

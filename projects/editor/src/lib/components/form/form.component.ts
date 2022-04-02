@@ -14,6 +14,7 @@ import { ImportJSONRequest, ImportJSONResponse } from '../import-form-dialog/imp
 import { ExportFormDialogComponent } from '../export-form-dialog/export-form-dialog.component';
 import { ExportJSONRequest, ExportJSONResponse } from '../export-form-dialog/export-json-dialog.types';
 import { FileService } from '../../services/file-service/file.service';
+import { SideBarPosition } from '../sidebar/sidebar.types';
 
 @Component({
 	selector: 'lib-form',
@@ -28,6 +29,8 @@ export class FormComponent implements OnInit, OnDestroy {
 	public get formChanged$(): Observable<void> {
 		return this._formChanged$.asObservable();
 	}
+
+	public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
 
 	private _formChanged$: Subject<void> = new Subject();
 	private _destroy$: Subject<void> = new Subject();
