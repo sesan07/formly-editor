@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Observable, Subject } from 'rxjs';
 import { EditorService } from '../../services/editor-service/editor.service';
@@ -36,17 +36,10 @@ export class FormComponent implements OnInit, OnDestroy {
 	private _formChanged$: Subject<void> = new Subject();
 	private _destroy$: Subject<void> = new Subject();
 
-	private _prevResizeX: number;
-	private _totalResizeDeltaX: number;
-	private _sidebarStartWidth: number;
-	private _stopMouseMoveListener: () => void;
-	private _stopMouseUpListener: () => void;
-
 	constructor(
 		public propertyService: PropertyService,
 		public editorService: EditorService,
         private _dialog: MatDialog,
-		private _renderer: Renderer2,
         private _fileService: FileService,
         private _fieldDropListService: FieldDroplistService) {
 	}
@@ -130,23 +123,6 @@ export class FormComponent implements OnInit, OnDestroy {
             });
     }
 
-	onSidebarMouseDown(event: MouseEvent, sidebarId: string, isReverse: boolean): void {
-		this._prevResizeX = event.clientX;
-		this._totalResizeDeltaX = 0;
-
-		const sidebar: HTMLElement = document.getElementById(sidebarId);
-		this._sidebarStartWidth = sidebar.clientWidth;
-
-		this._stopMouseMoveListener = this._renderer.listen('window', 'mousemove', (e: MouseEvent) => {
-			this._resizeSidebar(sidebarId, e.clientX, isReverse);
-			e.preventDefault();
-		});
-		this._stopMouseUpListener = this._renderer.listen('window', 'mouseup', () => {
-			this._stopMouseMoveListener();
-			this._stopMouseUpListener();
-		});
-	}
-
 	private _updateActiveFieldProperty(): void {
 		this.activeFieldProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
 		this._initRootProperty(this.activeFieldProperty);
@@ -166,16 +142,5 @@ export class FormComponent implements OnInit, OnDestroy {
 		property.key = undefined;
 		property.isDeletable = false;
 		property.isKeyEditable = false;
-	}
-
-	private _resizeSidebar(sidebarId: string, newPositionX: number, isReverse: boolean): void {
-		const resizeXDelta: number = newPositionX - this._prevResizeX;
-		this._totalResizeDeltaX += isReverse ? -resizeXDelta : resizeXDelta;
-		const targetWidth: number = this._sidebarStartWidth - this._totalResizeDeltaX;
-
-		const sidebar: HTMLElement = document.getElementById(sidebarId);
-		this._renderer.setStyle(sidebar, 'width', targetWidth + 'px');
-
-		this._prevResizeX = newPositionX;
 	}
 }
