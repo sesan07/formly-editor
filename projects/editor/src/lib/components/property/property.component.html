@@ -1,7 +1,6 @@
 <ng-container [ngSwitch]="property.type">
     <lib-array-property 
         *ngSwitchCase="propertyType.ARRAY"
-        class="tree-item"
         [treeLevel]="treeLevel"
         [target]="isRoot ? target : target[property.key]"
         [property]="propertyService.getAsArrayProperty(property)"
@@ -13,7 +12,6 @@
 
     <lib-object-property
         *ngSwitchCase="propertyType.OBJECT"
-        class="tree-item"
         [treeLevel]="treeLevel"
         [target]="isRoot ? target : target[property.key]"
         [property]="propertyService.getAsObjectProperty(property)"
@@ -26,7 +24,6 @@
 
     <lib-boolean-property
         *ngSwitchCase="propertyType.BOOLEAN"
-        class="tree-item"
         [treeLevel]="treeLevel"
         [property]="property"
         [target]="target"
@@ -38,7 +35,6 @@
 
     <lib-chip-list-property
         *ngSwitchCase="propertyType.CHIP_LIST"
-        class="tree-item"
         [treeLevel]="treeLevel"
         [property]="propertyService.getAsChiplistProperty(property)"
         [target]="target"
@@ -56,7 +52,6 @@
     </ng-container>
     <ng-template #inputProperty>
         <lib-input-property
-            class="tree-item"
             [treeLevel]="treeLevel"
             [property]="propertyService.getAsInputProperty(property)"
             [target]="target"

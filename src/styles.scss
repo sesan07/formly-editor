@@ -102,6 +102,10 @@ button.mat-icon-button {
     transform: rotate(-180deg);
 }
 
+button .mat-button-wrapper .mat-icon {
+    margin-right: 4px;
+}
+
 .mat-form-field-appearance-outline {
 	.mat-form-field-wrapper {
 		margin: 0 !important;

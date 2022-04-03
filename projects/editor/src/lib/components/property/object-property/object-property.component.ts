@@ -14,11 +14,13 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
 	@Input() isExpanded: boolean;
 
 	public propertyType: typeof PropertyType = PropertyType;
+	public addButtonPadding: number;
 
 	public propertyTypes: PropertyType[] = Object.values(PropertyType);
 	public get hasOptions(): boolean {
-		return this.property?.isDeletable || this.property?.addOptions?.length > 0;
+		return this.property.isDeletable || this.property.addOptions?.length > 0;
 	};
+    public get canAdd(): boolean { return this.property.addOptions?.length > 0; }
 
 	protected propertyname = 'Object';
 
@@ -29,6 +31,9 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
 		if (changes.property?.currentValue?.populateChildrenFromTarget) {
 			this._populateChildrenFromTarget();
 		}
+        if (changes.treeLevel) {
+            this.addButtonPadding = this.iconSize * (this.treeLevel + 2);
+        }
 	}
 
 	onAddChild(type: PropertyType, arrayType?: PropertyType): void {

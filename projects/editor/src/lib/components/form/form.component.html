@@ -1,4 +1,4 @@
-<lib-sidebar [position]="typeOfSideBarPosition.LEFT">
+<lib-sidebar class="left" [position]="typeOfSideBarPosition.LEFT">
 	<lib-sidebar-section
 		[sectionTitle]="'Add Field'">
         <lib-field-category-list
@@ -26,7 +26,7 @@
     (modelChanged)="onModelChanged()">
 </lib-form-view>
 
-<lib-sidebar [position]="typeOfSideBarPosition.RIGHT">
+<lib-sidebar class="right" [position]="typeOfSideBarPosition.RIGHT">
 	<lib-sidebar-section
 		[sectionTitle]="'Properties - ' + editorService.getFormattedFieldName(form.activeField.name, form.activeField.key)"
         >
