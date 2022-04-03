@@ -2,21 +2,24 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FieldService } from './services/field-services/field-service';
 import { CustomFieldType, FieldType, WrapperType } from './services/field-services/field.types';
-import { CardWrapperComponent } from './components/card-wrapper/card-wrapper.component';
+import { CardWrapperComponent } from './components/wrappers/card-wrapper/card-wrapper.component';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { HttpClientModule } from '@angular/common/http';
 import { EditorModule, EDITOR_FIELD_SERVICE } from 'editor';
+import { RepeatingSectionTypeComponent } from './components/types/repeating-section-type/repeating-section-type.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         CardWrapperComponent,
+        RepeatingSectionTypeComponent,
     ],
     imports: [
         BrowserModule,
@@ -24,6 +27,7 @@ import { EditorModule, EDITOR_FIELD_SERVICE } from 'editor';
         HttpClientModule,
         AppRoutingModule,
         MatCardModule,
+        MatButtonModule,
         FormlyMaterialModule,
         EditorModule.forRoot({
             defaultName: FieldType.FORMLY_GROUP,
@@ -64,16 +68,23 @@ import { EditorModule, EDITOR_FIELD_SERVICE } from 'editor';
                     typeOptions: [
                         {
                             name: FieldType.FORMLY_GROUP,
-                            displayName: 'Group',
+                            displayName: 'Card',
+                            customName: CustomFieldType.CARD,
                             canHaveChildren: true,
                             childrenPath: 'fieldGroup'
                         },
                         {
                             name: FieldType.FORMLY_GROUP,
-                            displayName: 'Card',
-                            customName: CustomFieldType.CARD,
+                            displayName: 'Group',
                             canHaveChildren: true,
                             childrenPath: 'fieldGroup'
+                        },
+                        {
+                            name: FieldType.REPEATING_SECTION,
+                            displayName: 'Repeating Section',
+                            canHaveChildren: true,
+                            childrenPath: 'fieldArray.fieldGroup',
+                            component: RepeatingSectionTypeComponent
                         },
                     ]
                 },

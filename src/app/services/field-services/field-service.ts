@@ -7,6 +7,7 @@ import { FormlyGroupService } from './formly-group/formly-group.service';
 import { InputService } from './input/input.service';
 import { OtherFieldService } from './other/other-field.service';
 import { RadioService } from './radio/radio.service';
+import { RepeatingSectionService } from './repeating-section/repeating-section.service';
 import { SelectService } from './select/select.service';
 import { TextareaService } from './textarea/textarea.service';
 
@@ -20,6 +21,7 @@ export class FieldService implements IFieldService {
         private _inputService: InputService,
         private _otherFieldService: OtherFieldService,
         private _radioService: RadioService,
+        private _repeatingSectionService: RepeatingSectionService,
         private _selectService: SelectService,
         private _textareaFieldService: TextareaService,
     ) { }
@@ -41,6 +43,7 @@ export class FieldService implements IFieldService {
             case FieldType.INPUT: return this._inputService;
             case FieldType.OTHER: return this._otherFieldService;
             case FieldType.RADIO: return this._radioService;
+            case FieldType.REPEATING_SECTION: return this._repeatingSectionService;
             case FieldType.SELECT: return this._selectService;
             case FieldType.TEXTAREA: return this._textareaFieldService;
             default:
