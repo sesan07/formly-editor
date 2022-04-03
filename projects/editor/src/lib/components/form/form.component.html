@@ -1,8 +1,17 @@
 <lib-sidebar [position]="typeOfSideBarPosition.LEFT">
 	<lib-sidebar-section
+		[sectionTitle]="'Add Field'">
+        <lib-field-category-list
+            *ngFor="let category of editorService.fieldCategories; let first = first"
+            [category]="category"
+            [formId]="form.id"
+            [isExpanded]="first">
+        </lib-field-category-list>
+	</lib-sidebar-section>
+    <lib-sidebar-section
         [sectionTitle]="'Fields'"
-        >
-		<lib-field-tree-item 
+        >		
+        <lib-field-tree-item 
 			*ngFor="let field of form.fields"
 			[field]="field"
 			[isExpanded]="true">

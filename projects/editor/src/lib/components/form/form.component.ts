@@ -9,6 +9,7 @@ import { IObjectProperty } from '../property/object-property/object-property.typ
 import { PropertyType } from '../property/property.types';
 import { PropertyService } from '../property/property.service';
 import { IArrayProperty } from '../property/array-property/array-property.types';
+import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
 import { ImportFormDialogComponent } from '../import-form-dialog/import-form-dialog.component';
 import { ImportJSONRequest, ImportJSONResponse } from '../import-form-dialog/import-json-dialog.types';
 import { ExportFormDialogComponent } from '../export-form-dialog/export-form-dialog.component';
@@ -46,12 +47,14 @@ export class FormComponent implements OnInit, OnDestroy {
 		public editorService: EditorService,
         private _dialog: MatDialog,
 		private _renderer: Renderer2,
-        private _fileService: FileService) {
+        private _fileService: FileService,
+        private _fieldDropListService: FieldDroplistService) {
 	}
 
 	public ngOnInit(): void {
 		this._updateActiveFieldProperty();
 		this._updateModelProperty();
+        this._fieldDropListService.resetDropListIds(this.form.id);
 
 		this.editorService.formChanged$
 			.pipe(takeUntil(this._destroy$))
@@ -60,6 +63,7 @@ export class FormComponent implements OnInit, OnDestroy {
                     return;
                 }
 
+                this._fieldDropListService.resetDropListIds(formId);
                 this._formChanged$.next();
             });
 
