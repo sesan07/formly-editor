@@ -10,6 +10,7 @@ formly-field {
 }
 
 .cdk-drag-placeholder {
+    display: none !important;
     height: 40px;
     line-height: 40px;
     text-align: center;

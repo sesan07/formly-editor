@@ -2,8 +2,7 @@
     [classList]="dropListClasses"
     [ngClass]="{ 'edit-mode': editorService.isEditMode }"
     cdkDropList
-    [cdkDropListOrientation]="dropListOrientation"
-    [cdkDropListSortingDisabled]="isSortingDisabled"
+    [cdkDropListSortingDisabled]="true"
     [cdkDropListEnterPredicate]="canEnter"
     [cdkDropListConnectedTo]="connectedTo"
     [cdkDropListData]="field"
