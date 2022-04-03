@@ -8,3 +8,16 @@
     padding: 16px;
     overflow: auto;
 }
+
+lib-sidebar {
+	min-width: 200px;
+	max-width: 40%;
+
+    &.left {
+        width: 20%;
+    }
+
+    &.right {
+        width: 30%;
+    }
+}

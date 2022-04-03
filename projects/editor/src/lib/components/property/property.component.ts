@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { PropertyService } from './property.service';
 import { IProperty, PropertyType } from './property.types';
 
@@ -16,6 +16,8 @@ export class PropertyComponent {
 
     @Output() public remove: EventEmitter<void> = new EventEmitter();
 	@Output() public valueChanged: EventEmitter<void> = new EventEmitter();
+
+    @HostBinding('class.tree-item') get isTreeItem(): boolean { return !this.isSimplified; }
 
 	public propertyType: typeof PropertyType = PropertyType;
 

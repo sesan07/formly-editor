@@ -1,38 +1,21 @@
 <div class="tree-item-header" *ngIf="!isSimplified">
 	<span class="tree-item-header-content-left">
-		<button mat-icon-button [ngStyle]="{'margin-right.px': treeLevelPadding}" [matMenuTriggerFor]="optionsMenu" [disabled]="!hasOptions">
+		<button mat-icon-button [matMenuTriggerFor]="optionsMenu" [disabled]="!hasOptions">
 			<mat-icon>more_vert</mat-icon>
 		</button>
-		
-		<mat-menu #optionsMenu="matMenu">
-			<button *ngIf="property?.addOptions?.length > 0" mat-menu-item [matMenuTriggerFor]="addMenu">
-				<mat-icon>add</mat-icon>
-				<span>Add</span>
-			</button>
-			<button *ngIf="property?.isDeletable" mat-menu-item color="warn" (click)="remove.emit()">
-				<mat-icon>remove</mat-icon>
-				<span>Remove</span>
-			</button>
-		</mat-menu>
+	
+        <mat-menu #optionsMenu="matMenu">
+            <button *ngIf="property?.addOptions?.length > 0" mat-menu-item [matMenuTriggerFor]="addMenu">
+                <mat-icon>add</mat-icon>
+                <span>Add</span>
+            </button>
+            <button *ngIf="property?.isDeletable" mat-menu-item color="warn" (click)="remove.emit()">
+                <mat-icon>remove</mat-icon>
+                <span>Remove</span>
+            </button>
+        </mat-menu>
 
-		<mat-menu #addMenu="matMenu">
-			<button mat-menu-item *ngIf="property.addOptions?.includes(propertyType.ARRAY)" [matMenuTriggerFor]="addArrayMenu">
-				{{propertyType.ARRAY}}
-			</button>
-			<ng-container *ngFor="let type of propertyService.possibleArrayAddTypes">
-				<button mat-menu-item *ngIf="property.addOptions?.includes(type)" (click)="onAddChild(type)">
-					{{type}}
-				</button>
-			</ng-container>
-		</mat-menu>
-
-		<mat-menu #addArrayMenu="matMenu">
-			<button *ngFor="let type of propertyService.possibleArrayAddTypes" mat-menu-item (click)="onAddChild(propertyType.ARRAY, type)">
-				{{type}}
-			</button>
-		</mat-menu>
-
-		<button mat-icon-button (click)="isExpanded = !isExpanded">
+		<button [style.margin-left.px]="treeLevelPadding" mat-icon-button (click)="isExpanded = !isExpanded">
 			<mat-icon class="expand-icon" [class.expanded-90]="isExpanded">chevron_right</mat-icon>
 		</button>
 		<span #key class="keyField" [ngClass]="{ 'editable': !!property?.isKeyEditable }" [contentEditable]="!!property?.isKeyEditable"></span>
@@ -65,4 +48,25 @@
             (valueChanged)="onValueChanged()">
         </lib-property>
 	</ng-container>
+    <button *ngIf="canAdd" [style.margin-left.px]="isSimplified ? 0 : addButtonPadding" mat-button [matMenuTriggerFor]="addMenu">
+        <mat-icon>add</mat-icon>
+        <span>Add</span>
+    </button>
 </ng-template>
+
+<mat-menu #addMenu="matMenu">
+    <button mat-menu-item *ngIf="property.addOptions?.includes(propertyType.ARRAY)" [matMenuTriggerFor]="addArrayMenu">
+        {{propertyType.ARRAY}}
+    </button>
+    <ng-container *ngFor="let type of propertyService.possibleArrayAddTypes">
+        <button mat-menu-item *ngIf="property.addOptions?.includes(type)" (click)="onAddChild(type)">
+            {{type}}
+        </button>
+    </ng-container>
+</mat-menu>
+
+<mat-menu #addArrayMenu="matMenu">
+    <button *ngFor="let type of propertyService.possibleArrayAddTypes" mat-menu-item (click)="onAddChild(propertyType.ARRAY, type)">
+        {{type}}
+    </button>
+</mat-menu>

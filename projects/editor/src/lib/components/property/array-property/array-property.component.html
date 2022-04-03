@@ -1,6 +1,6 @@
 <div class="tree-item-header" *ngIf="!isSimplified else simplifiedView">
 	<span class="tree-item-header-content-left">
-		<button mat-icon-button [ngStyle]="{'margin-right.px': treeLevelPadding}" [matMenuTriggerFor]="optionsMenu" [disabled]="!hasOptions">
+		<button mat-icon-button [matMenuTriggerFor]="optionsMenu" [disabled]="!hasOptions">
 			<mat-icon>more_vert</mat-icon>
 		</button>
 		
@@ -15,11 +15,11 @@
 			</button>
 		</mat-menu>
 		
-		<button mat-icon-button (click)="isExpanded = !isExpanded">
+		<button [style.margin-left.px]="treeLevelPadding" mat-icon-button (click)="isExpanded = !isExpanded">
 			<mat-icon class="expand-icon" [class.expanded-90]="isExpanded">chevron_right</mat-icon>
 		</button>
 		<span #key class="keyField" [ngClass]="{ 'editable': !!property.isKeyEditable }" [contentEditable]="!!property.isKeyEditable"></span>
-		<span>{{ (property?.name ? '(' + property.name + ') ' : '') + '[ ' + target.length + ' ]' }}</span>
+		<span>{{ '[ ' + target.length + ' ]' }}</span>
 	</span>
 </div>
 
@@ -58,5 +58,9 @@
             </lib-property>
             <mat-divider *ngIf="isSimplified && !last"></mat-divider>
         </ng-container>
+        <button *ngIf="property.canAdd" [style.margin-left.px]="isSimplified ? 0 : addButtonPadding" mat-button (click)="onAddChild()">
+            <mat-icon>add</mat-icon>
+            <span>Add</span>
+        </button>
     </ng-container>
 </ng-template>

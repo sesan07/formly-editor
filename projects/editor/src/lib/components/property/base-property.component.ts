@@ -30,6 +30,8 @@ export class BasePropertyComponent implements OnChanges, OnInit, AfterViewInit {
 
 	public treeLevelPadding: number;
 
+    protected iconSize = 24;
+
 	private _valueChangeSubject: Subject<void> = new Subject();
 
 
@@ -37,7 +39,7 @@ export class BasePropertyComponent implements OnChanges, OnInit, AfterViewInit {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.treeLevel) {
-            this.treeLevelPadding = 24 * this.treeLevel;
+            this.treeLevelPadding = this.iconSize * this.treeLevel;
         }
     }
 

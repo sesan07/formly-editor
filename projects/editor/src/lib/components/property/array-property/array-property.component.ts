@@ -16,6 +16,7 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnC
 
 	public propertyType: typeof PropertyType = PropertyType;
 	public isExpanded: boolean;
+	public addButtonPadding: number;
 
 	public get hasOptions(): boolean {
 		return this.property.isDeletable || this.property.canAdd;
@@ -31,6 +32,9 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnC
         super.ngOnChanges(changes);
         if (changes.property) {
             this._updateChildProperties();
+        }
+        if (changes.treeLevel) {
+            this.addButtonPadding = this.iconSize * (this.treeLevel + 2);
         }
     }
 
