@@ -1,0 +1,41 @@
+import { Injectable } from '@angular/core';
+import { BaseFieldService } from '../base-field.service';
+import { IRepeatingSectionTemplateOptions } from './repeating-section.types';
+import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
+import { IProperty, PropertyType } from 'editor';
+
+@Injectable({
+	providedIn: 'root',
+})
+export class RepeatingSectionService extends BaseFieldService<IRepeatingSectionTemplateOptions> {
+
+	public getDefaultConfig(customType?: CustomFieldType): IFormlyField<IRepeatingSectionTemplateOptions> {
+        return {
+            key: 'tempKey',
+			type: FieldType.REPEATING_SECTION,
+            wrappers: [],
+			templateOptions: {
+                addText: 'Add Section'
+			},
+            fieldArray: {
+                fieldGroup: [],
+            },
+			expressionProperties: {},
+		};
+	}
+
+    protected _getTOChildProperties(): IProperty[] {
+        return [
+            {
+                name: 'Add Text',
+                key: 'addText',
+                type: PropertyType.TEXT,
+                isSimple: true,
+            }
+        ];
+    }
+
+    protected _getWrapperTypes(): WrapperType[] {
+        return [];
+    }
+}

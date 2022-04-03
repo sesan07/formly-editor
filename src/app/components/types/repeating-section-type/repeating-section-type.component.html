@@ -1,0 +1,7 @@
+<div style="display: flex; column-gap: 16px;" *ngFor="let field of field.fieldGroup; let i = index;">
+    <formly-field style="flex-grow: 1;" [field]="field"></formly-field>
+    <button style="height: auto;" mat-button color="warn"  (click)="remove(i)">Remove</button>
+</div>
+<div style="margin:16px 0;">
+    <button mat-button color="primary" (click)="add()">{{ to.addText }}</button>
+</div>

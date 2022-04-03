@@ -39,7 +39,7 @@ export class SidebarComponent implements AfterContentInit {
         // ElementRef dimensions change after some time (even in an empty app) for some reason..........................
         setTimeout(() => {
             this._setupSections();
-        }, 300);
+        }, 1000);
     }
 
 	onSidebarMouseDown(event: MouseEvent): void {

@@ -7,6 +7,7 @@ export enum FieldType {
     INPUT = 'input',
     OTHER = 'other',
     RADIO = 'radio',
+    REPEATING_SECTION = 'repeating-section',
     SELECT = 'select',
     TEXTAREA = 'textarea',
 }

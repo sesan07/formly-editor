@@ -112,7 +112,8 @@ const defaultConfig: EditorConfigOption = {
         MatDividerModule,
     ],
     exports: [
-        EditorComponent
+        EditorComponent,
+        FormlyModule
     ],
     providers: [
         {
