@@ -1,4 +1,4 @@
-import { CdkDrag, CdkDragDrop, CdkDropList, DropListOrientation } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
 import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
@@ -15,8 +15,6 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
     @ViewChild(CdkDropList) dropList: CdkDropList;
 
     public dropListClasses: string;
-    public dropListOrientation: DropListOrientation;
-    public isSortingDisabled: boolean;
 
     connectedTo: string[] = [];
 
@@ -26,15 +24,6 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
 
     ngOnInit(): void {
         this.dropListClasses = (this.field.fieldGroupClassName || '') + ' cdk-drop-list';
-
-        const match = this.field.fieldGroupClassName
-            ? this.field.fieldGroupClassName.match(/(?<!-)flex(?!-)/)
-            : null;
-        this.dropListOrientation = !!match && !this.field.fieldGroupClassName?.includes('flex-dir-column')
-            ? 'horizontal' as DropListOrientation
-            : 'vertial'  as DropListOrientation;
-
-        this.isSortingDisabled = !match;
 
         if (this.field.formId && this.field.fieldId !== 'preview') {
             this.connectedTo = this._dropListService.getDropListIds(this.field.formId);
@@ -78,9 +67,7 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
                         field.fieldId,
                         field.formId,
                         currentParent.fieldId,
-                        targetParent.fieldId,
-                        dragDrop.previousIndex,
-                        dragDrop.currentIndex
+                        targetParent.fieldId
                     );
                 }
                 break;

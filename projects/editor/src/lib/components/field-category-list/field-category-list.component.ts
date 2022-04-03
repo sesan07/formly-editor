@@ -50,6 +50,7 @@ export class FieldCategoryListComponent implements OnInit {
             fieldId: 'temp',
         });
     }
+
     onDragReturned() {
         this.fields = this.fields.filter((f) => f.fieldId !== 'temp');
     }

@@ -226,8 +226,6 @@ export class EditorService {
             formId: string,
             currentParentId: string,
             targetParentId: string,
-            currentIndex: number,
-            targetIndex: number
         ): void {
 
         const field: IEditorFormlyField = this.getField(formId, fieldId);
@@ -235,6 +233,8 @@ export class EditorService {
         const targetParent: IEditorFormlyField = this.getField(formId, targetParentId);
         const currentSiblings: IEditorFormlyField[] = this.getChildren(currentParent);
         const targetSiblings: IEditorFormlyField[] = this.getChildren(targetParent);
+        const currentIndex: number = currentSiblings.findIndex(f => f.fieldId === field.fieldId);
+        const targetIndex: number = targetSiblings.length;
 
         transferArrayItem(currentSiblings, targetSiblings, currentIndex, targetIndex);
 
