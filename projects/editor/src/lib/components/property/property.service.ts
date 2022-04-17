@@ -52,8 +52,12 @@ export class PropertyService {
 		switch (type) {
 			case PropertyType.BOOLEAN:
 			case PropertyType.TEXT:
-			case PropertyType.NUMBER:
 				return baseProperty;
+			case PropertyType.NUMBER:
+                return {
+                    ...baseProperty,
+                    outputRawValue: true
+                } as IInputProperty;
 			case PropertyType.OBJECT:
 				return {
 					...baseProperty,
