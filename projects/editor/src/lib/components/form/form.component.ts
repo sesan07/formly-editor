@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Observable, Subject } from 'rxjs';
 import { EditorService } from '../../services/editor-service/editor.service';
-import { IForm } from '../../services/editor-service/editor.types';
+import { IEditorFormlyField, IForm } from '../../services/editor-service/editor.types';
 import { cloneDeep } from 'lodash-es';
 import { takeUntil } from 'rxjs/operators';
 import { IObjectProperty } from '../property/object-property/object-property.types';
@@ -33,6 +33,15 @@ export class FormComponent implements OnInit, OnDestroy {
 
 	public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
 
+    public jsonFields: string;
+    public selectedFormDisplay: 'form' | 'json' = 'form';
+    public get formDisplayTabIndex(): number {
+        switch (this.selectedFormDisplay) {
+            case 'form': return 0;
+            case 'json': return 1;
+        }
+    }
+
 	private _formChanged$: Subject<void> = new Subject();
 	private _destroy$: Subject<void> = new Subject();
 
@@ -47,6 +56,7 @@ export class FormComponent implements OnInit, OnDestroy {
 	public ngOnInit(): void {
 		this._updateActiveFieldProperty();
 		this._updateModelProperty();
+        this._updateJSONFields();
         this._fieldDropListService.resetDropListIds(this.form.id);
 
 		this.editorService.formChanged$
@@ -56,6 +66,7 @@ export class FormComponent implements OnInit, OnDestroy {
                     return;
                 }
 
+                this._updateJSONFields();
                 this._fieldDropListService.resetDropListIds(formId);
                 this._formChanged$.next();
             });
@@ -134,8 +145,13 @@ export class FormComponent implements OnInit, OnDestroy {
 	private _updateModelProperty(): void {
 		this.modelProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
 		this._initRootProperty(this.modelProperty);
-
 	}
+
+    private _updateJSONFields(): void {
+        const fieldsClone: IEditorFormlyField[] = cloneDeep(this.form.fields);
+        fieldsClone.forEach(field => this.editorService.cleanField(field, true, true));
+        this.jsonFields = JSON.stringify(fieldsClone, null, 2);
+    }
 
 	private _initRootProperty(property: IArrayProperty | IObjectProperty) {
 		property.name = 'root';
