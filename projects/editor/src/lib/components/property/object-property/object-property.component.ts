@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnChanges, Renderer2, SimpleChanges, TrackByFunction } from '@angular/core';
 import { BasePropertyComponent } from '../base-property.component';
 import { PropertyService } from '../property.service';
-import { IProperty, PropertyType } from '../property.types';
+import { IProperty, PropertyValueChangeType, PropertyType } from '../property.types';
 import { IObjectProperty } from './object-property.types';
 
 @Component({
@@ -39,21 +39,22 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
 	onAddChild(type: PropertyType, arrayType?: PropertyType): void {
 		const childProperty: IProperty = this.propertyService.getDefaultProperty(type, undefined,  arrayType);
 
+        let childValue: unknown;
 		switch (childProperty.type) {
 			case PropertyType.ARRAY:
-				this.target[childProperty.key] = [];
+				childValue = [];
 				break;
 			case PropertyType.BOOLEAN:
-				this.target[childProperty.key] = false;
+				childValue = false;
 				break;
 			case PropertyType.OBJECT:
-				this.target[childProperty.key] = {};
+				childValue = {};
 				break;
 			case PropertyType.NUMBER:
-				this.target[childProperty.key] = 0;
+				childValue = 0;
 				break;
 			case PropertyType.TEXT:
-				this.target[childProperty.key] = '';
+				childValue = '';
 				break;
 			default:
 				throw new Error(`Object property does not support adding ${type}`);
@@ -61,18 +62,29 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
 
 		this.property.childProperties.push(childProperty);
 		this.isExpanded = true;
-		this.onValueChanged();
+		this.onValueChanged({
+            type: PropertyValueChangeType.ADD,
+            path: this.getChildPath(childProperty.key),
+            value: childValue
+        });
 	}
 
 	onRemoveChild(index: number): void {
 		const child: IProperty = this.property.childProperties[index];
 
-		delete this.target[child.key];
 		this.property.childProperties.splice(index, 1);
-		this.onValueChanged();
+		this.onValueChanged({
+            type: PropertyValueChangeType.REMOVE,
+            path: this.getChildPath(child.key),
+            value: null
+        });
 	}
 
     trackPropertyByKey: TrackByFunction<IProperty> = (_, property: IProperty) => property.key;
+
+    getChildPath(key: string | number): string {
+        return (this.path ? this.path + '.' : '') + key;
+    }
 
 	private _populateChildrenFromTarget() {
 		Object.entries(this.target).forEach(([key, value]) => {

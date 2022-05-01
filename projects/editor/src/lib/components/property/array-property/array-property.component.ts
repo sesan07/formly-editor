@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnChanges, Renderer2, SimpleChanges, Trac
 import { cloneDeep } from 'lodash-es';
 import { BasePropertyComponent } from '../base-property.component';
 import { PropertyService } from '../property.service';
-import { IProperty, PropertyType } from '../property.types';
+import { IProperty, PropertyType, PropertyValueChangeType } from '../property.types';
 import { IArrayProperty } from './array-property.types';
 
 @Component({
@@ -31,7 +31,7 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnC
     ngOnChanges(changes: SimpleChanges): void {
         super.ngOnChanges(changes);
         if (changes.property) {
-            this._updateChildProperties();
+            this._populateChildrenFromTarget();
         }
         if (changes.treeLevel) {
             this.addButtonPadding = this.iconSize * (this.treeLevel + 2);
@@ -39,47 +39,69 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnC
     }
 
 	onAddChild(): void {
+        let childValue: unknown;
 		switch (this.property.childProperty.type) {
 			case PropertyType.BOOLEAN:
-				this.target.push(false);
+				childValue = false;
 				break;
 			case PropertyType.OBJECT:
-				this.target.push({});
+				childValue = {};
 				break;
 			case PropertyType.NUMBER:
-				this.target.push(0);
+				childValue = 0;
 				break;
 			case PropertyType.TEXT:
-				this.target.push('');
+				childValue = '';
 				break;
 			default:
 				throw new Error(`Array property does not support adding ${this.property.childProperty.type}`);
 		}
 
-		this._updateChildProperties();
-
+        const childPropertyClone: IProperty = this._getChildPropertyClone(this.childProperties.length);
+		this.childProperties.push(childPropertyClone);
 		this.isExpanded = true;
-		this.onValueChanged();
+		this.onValueChanged({
+            type: PropertyValueChangeType.ADD,
+            path: this.getChildPath(childPropertyClone.key),
+            value: childValue
+        });
 	}
 
 	onRemoveChild(index: number): void {
-		this.target.splice(index, 1);
-		this.childProperties.splice(index, 1);
+		const child: IProperty = this.childProperties[index];
 
-        this._updateChildProperties();
-        this.onValueChanged();
+		this.childProperties.splice(index, 1);
+        this._updateChildrenKeys();
+		this.onValueChanged({
+            type: PropertyValueChangeType.REMOVE,
+            path: this.getChildPath(child.key),
+            value: null
+        });
 	}
 
     trackPropertyByKey: TrackByFunction<IProperty> = (_, property: IProperty) => property.key;
 
-	private _updateChildProperties(): void {
+    getChildPath(key: string | number): string {
+        return (this.path ? this.path + '.' : '') + key;
+    }
+
+	private _updateChildrenKeys(): void {
+		this.childProperties.forEach((child, index) => child.key = index);
+	}
+
+	private _populateChildrenFromTarget() {
 		this.childProperties = [];
 
 		this.target.forEach((_, index) => {
-			const childPropertyClone: IProperty = cloneDeep(this.property.childProperty);
-			childPropertyClone.key = index;
-			childPropertyClone.isKeyEditable = false;
+			const childPropertyClone: IProperty = this._getChildPropertyClone(index);
 			this.childProperties.push(childPropertyClone);
 		});
 	}
+
+    private _getChildPropertyClone(index: number): IProperty {
+        const property: IProperty = cloneDeep(this.property.childProperty);
+        property.key = index;
+        property.isKeyEditable = false;
+        return property;
+    }
 }

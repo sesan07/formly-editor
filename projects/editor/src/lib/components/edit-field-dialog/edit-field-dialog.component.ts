@@ -6,7 +6,8 @@ import { EditorService } from '../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../services/editor-service/editor.types';
 import { IObjectProperty } from '../property/object-property/object-property.types';
 import { PropertyService } from '../property/property.service';
-import { PropertyType } from '../property/property.types';
+import { IPropertyValueChange, PropertyType } from '../property/property.types';
+import { changePropertyTarget } from '../property/property.utils';
 import { EditFieldRequest } from './edit-field-dialog.types';
 
 @Component({
@@ -67,6 +68,11 @@ export class EditFieldDialogComponent implements OnInit {
 
     onSave(): void {
         this._dialogRef.close(this.editField);
+    }
+
+    onPropertyChanged(change: IPropertyValueChange): void {
+        changePropertyTarget(change, this.editField);
+        this._updatePreviewField();
     }
 
     onPreviewChanged(): void {

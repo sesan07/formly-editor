@@ -50,11 +50,12 @@
         <ng-container *ngFor="let childProperty of childProperties; let i = index; let last = last; trackBy: trackPropertyByKey">
             <lib-property
                 [treeLevel]="treeLevel + 1"
+                [path]="getChildPath(childProperty.key)"
                 [target]="target"
                 [property]="childProperty"
                 [isSimplified]="isSimplified"
                 (remove)="onRemoveChild(i)"
-                (valueChanged)="onValueChanged()">
+                (valueChanged)="onValueChanged($event)">
             </lib-property>
             <mat-divider *ngIf="isSimplified && !last"></mat-divider>
         </ng-container>

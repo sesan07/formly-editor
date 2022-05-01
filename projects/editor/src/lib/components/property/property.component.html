@@ -2,46 +2,50 @@
     <lib-array-property 
         *ngSwitchCase="propertyType.ARRAY"
         [treeLevel]="treeLevel"
+        [path]="path"
         [target]="isRoot ? target : target[property.key]"
         [property]="propertyService.getAsArrayProperty(property)"
         [isSimplified]="isSimplified"
         (keyChanged)="onKeyChanged($event, property)"
         (remove)="remove.emit()"
-        (valueChanged)="valueChanged.emit()">
+        (valueChanged)="valueChanged.emit($event)">
     </lib-array-property>
 
     <lib-object-property
         *ngSwitchCase="propertyType.OBJECT"
         [treeLevel]="treeLevel"
+        [path]="path"
         [target]="isRoot ? target : target[property.key]"
         [property]="propertyService.getAsObjectProperty(property)"
         [isSimplified]="isSimplified"
         [isExpanded]="isRoot"
         (keyChanged)="onKeyChanged($event, property)"
         (remove)="remove.emit()"
-        (valueChanged)="valueChanged.emit()">
+        (valueChanged)="valueChanged.emit($event)">
     </lib-object-property>
 
     <lib-boolean-property
         *ngSwitchCase="propertyType.BOOLEAN"
         [treeLevel]="treeLevel"
+        [path]="path"
         [property]="property"
         [target]="target"
         [isSimplified]="isSimplified"
         (keyChanged)="onKeyChanged($event, property)"
         (remove)="remove.emit()"
-        (valueChanged)="valueChanged.emit()">
+        (valueChanged)="valueChanged.emit($event)">
     </lib-boolean-property>
 
     <lib-chip-list-property
         *ngSwitchCase="propertyType.CHIP_LIST"
         [treeLevel]="treeLevel"
+        [path]="path"
         [property]="propertyService.getAsChiplistProperty(property)"
         [target]="target"
         [isSimplified]="isSimplified"
         (keyChanged)="onKeyChanged($event, property)"
         (remove)="remove.emit()"
-        (valueChanged)="valueChanged.emit()">
+        (valueChanged)="valueChanged.emit($event)">
     </lib-chip-list-property>
 
     <ng-container *ngSwitchCase="propertyType.NUMBER">
@@ -53,12 +57,13 @@
     <ng-template #inputProperty>
         <lib-input-property
             [treeLevel]="treeLevel"
+            [path]="path"
             [property]="propertyService.getAsInputProperty(property)"
             [target]="target"
             [isSimplified]="isSimplified"
             (keyChanged)="onKeyChanged($event, property)"
             (remove)="remove.emit()"
-            (valueChanged)="valueChanged.emit()">
+            (valueChanged)="valueChanged.emit($event)">
         </lib-input-property>
     </ng-template>
 </ng-container>

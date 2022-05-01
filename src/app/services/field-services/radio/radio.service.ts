@@ -38,7 +38,6 @@ export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
                 key: 'label',
                 type: PropertyType.TEXT,
                 isSimple: true,
-                valueChangeDebounce: 3000,
             },
             {
                 name: 'Placeholder',
@@ -78,6 +77,7 @@ export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
                             name: 'Value',
                             key: 'value',
                             type: PropertyType.TEXT,
+                            outputRawValue: true,
                             isSimple: true,
                         },
                         {
