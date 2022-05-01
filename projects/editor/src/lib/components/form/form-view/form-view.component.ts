@@ -15,6 +15,7 @@ import { IEditorFormlyField, IForm } from '../../../services/editor-service/edit
 export class FormViewComponent implements OnInit, OnDestroy {
     @Input() form: IForm;
     @Input() formChanged$: Observable<void>;
+    @Input() resetModel$: Observable<void>;
 
 	@Output() modelChanged: EventEmitter<void> = new EventEmitter();
 
@@ -32,6 +33,9 @@ export class FormViewComponent implements OnInit, OnDestroy {
         this.formChanged$
             .pipe(takeUntil(this._destroy$))
             .subscribe(() => this._updateForm());
+        this.resetModel$
+            .pipe(takeUntil(this._destroy$))
+            .subscribe(() => this.options.resetModel({}));
     }
 
     public ngOnDestroy(): void {
