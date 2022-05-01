@@ -41,13 +41,13 @@
 
 <lib-sidebar class="right" [position]="typeOfSideBarPosition.RIGHT">
 	<lib-sidebar-section
-		[sectionTitle]="'Properties - ' + editorService.getFormattedFieldName(form.activeField.name, form.activeField.key)"
+		[sectionTitle]="'Active Field - ' + editorService.getFormattedFieldName(form.activeField.name, form.activeField.key)"
         >
         <lib-property
             [target]="form.activeField"
             [property]="activeFieldProperty"
             [isRoot]="true"
-            (valueChanged)="onFieldPropertyChanged()">
+            (valueChanged)="onFieldPropertyChanged($event)">
         </lib-property>
 	</lib-sidebar-section>
 
@@ -59,7 +59,7 @@
             [target]="form.model"
             [property]="modelProperty"
             [isRoot]="true"
-            (valueChanged)="onModelPropertyChanged()">
+            (valueChanged)="onModelPropertyChanged($event)">
         </lib-property>
 	</lib-sidebar-section>
 </lib-sidebar>

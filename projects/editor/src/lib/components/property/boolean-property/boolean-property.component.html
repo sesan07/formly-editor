@@ -16,11 +16,11 @@
 		<span #key class="keyField" [ngClass]="{ 'editable': !!property.isKeyEditable }" [contentEditable]="!!property.isKeyEditable"></span>
 		<span>:</span>
 	</span>
-	<mat-checkbox class="tree-item-header-content-right" [(ngModel)]="target[property.key]" (ngModelChange)="onValueChanged()"></mat-checkbox>
+	<mat-checkbox class="tree-item-header-content-right" [formControl]="formControl"></mat-checkbox>
 </div>
 
 <ng-template #simplifiedView>
-	<mat-checkbox [(ngModel)]="target[property.key]" (ngModelChange)="onValueChanged()">
+	<mat-checkbox [formControl]="formControl">
         {{ property.name ? property.name : property.key }}
     </mat-checkbox>
 </ng-template>

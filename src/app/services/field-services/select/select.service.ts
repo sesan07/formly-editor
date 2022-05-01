@@ -89,6 +89,7 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
                             name: 'Value',
                             key: 'value',
                             type: PropertyType.TEXT,
+                            outputRawValue: true,
                             isSimple: true,
                         },
                         {

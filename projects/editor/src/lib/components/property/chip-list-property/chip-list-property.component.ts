@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
@@ -7,13 +7,14 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { map, startWith } from 'rxjs/operators';
 import { IChipListProperty } from './chip-list-property.types';
 import { BasePropertyComponent } from '../base-property.component';
+import { PropertyValueChangeType } from '../property.types';
 
 @Component({
     selector: 'lib-chip-list-property',
     templateUrl: './chip-list-property.component.html',
     styleUrls: ['./chip-list-property.component.scss'],
 })
-export class ChipListPropertyComponent extends BasePropertyComponent implements OnInit, OnChanges {
+export class ChipListPropertyComponent extends BasePropertyComponent implements OnChanges {
     @Input() property: IChipListProperty;
 
     @ViewChild('input') inputElementRef: ElementRef<HTMLInputElement>;
@@ -58,7 +59,7 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
 
         if ((value || '').trim()) {
             this.selectedOptions.push(value.trim());
-            this._updateTarget();
+            this._updateValue();
         }
 
         if (input) {
@@ -73,7 +74,7 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
         const index: number = this.selectedOptions.indexOf(option);
         if (index >= 0) {
             this.selectedOptions.splice(index, 1);
-            this._updateTarget();
+            this._updateValue();
         }
     }
 
@@ -82,7 +83,7 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
         this.selectedOptions.push(event.option.viewValue);
         this.inputElementRef.nativeElement.value = '';
         this.formControl.setValue(null);
-        this._updateTarget();
+        this._updateValue();
     }
 
     private _filter(value: string): string[] {
@@ -102,13 +103,18 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
         }
     }
 
-    private _updateTarget(): void {
+    private _updateValue(): void {
+        let newValue: string | string[];
         if (this.property.outputString) {
-            this.target[this.property.key] = this.selectedOptions.join(' ');
+            newValue = this.selectedOptions.join(' ');
         } else  {
-            this.target[this.property.key] = this.selectedOptions.slice();
+            newValue = this.selectedOptions.slice();
         }
 
-		this.onValueChanged();
+        this.onValueChanged({
+            type: PropertyValueChangeType.MODIFY,
+            path: this.path,
+            value: newValue
+        });
     }
 }

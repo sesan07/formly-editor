@@ -41,11 +41,12 @@
         <lib-property
             *ngIf="isSimplified ? child.isSimple : true"
             [treeLevel]="treeLevel + 1"
+            [path]="getChildPath(child.key)"
             [target]="target"
             [property]="child"
             [isSimplified]="isSimplified"
             (remove)="onRemoveChild(i)"
-            (valueChanged)="onValueChanged()">
+            (valueChanged)="onValueChanged($event)">
         </lib-property>
 	</ng-container>
     <button *ngIf="canAdd" [style.margin-left.px]="isSimplified ? 0 : addButtonPadding" mat-button [matMenuTriggerFor]="addMenu">

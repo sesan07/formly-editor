@@ -4,7 +4,7 @@ import { IEditorFormlyField } from '../../../services/editor-service/editor.type
 import { StyleService } from '../../../services/style-service/style.service';
 import { ContainerType, BreakpointType } from '../../../services/style-service/style.types';
 import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
-import { PropertyType } from '../../property/property.types';
+import { IPropertyValueChange, PropertyType, PropertyValueChangeType } from '../../property/property.types';
 
 @Component({
     selector: 'lib-edit-field-styles',
@@ -15,7 +15,7 @@ import { PropertyType } from '../../property/property.types';
 export class EditFieldStylesComponent implements OnChanges {
     @Input() editField: IEditorFormlyField;
 
-    @Output() valueChanged: EventEmitter<void> = new EventEmitter();
+    @Output() valueChanged: EventEmitter<IPropertyValueChange> = new EventEmitter();
 
     containerType: typeof ContainerType = ContainerType;
     containerTypes: ContainerType[] = Object.values(ContainerType);
@@ -60,21 +60,26 @@ export class EditFieldStylesComponent implements OnChanges {
     }
 
     onChildrenGroupStyleChanged(value: ContainerType): void {
+        let newFieldGroupClassName: string;
         if (this.editField.fieldGroupClassName) {
             if (this.childrenContainer) {
-                this.editField.fieldGroupClassName = this.editField.fieldGroupClassName.replace(
+                newFieldGroupClassName = this.editField.fieldGroupClassName.replace(
                     new RegExp(`(?<!-)${this.childrenContainer}(?!-)`),
                     value
                 );
             } else {
-                this.editField.fieldGroupClassName = value +  ' ' + this.editField.fieldGroupClassName;
+                newFieldGroupClassName = value +  ' ' + this.editField.fieldGroupClassName;
             }
         } else {
-            this.editField.fieldGroupClassName = value;
+            newFieldGroupClassName = value;
         }
         // TODO remove related group styles (flex-direction, grid-cols...) arr.split(' ').filter(!contains prevType).join(' ')
         this.childrenContainer = value;
-        this.valueChanged.emit();
+        this.valueChanged.emit({
+            type: PropertyValueChangeType.MODIFY,
+            path: 'fieldGroupClassName',
+            value: newFieldGroupClassName
+        });
     }
 
     onGridClassChanged(value: string, classNamePrefix: string, breakpoint?: BreakpointType): void {
@@ -165,21 +170,26 @@ export class EditFieldStylesComponent implements OnChanges {
 
     private _setClassValue(property: string, value: string, classNamePrefix: string, breakpoint?: BreakpointType): void {
         const newClassName: string = classNamePrefix + value + (breakpoint ? '-' + breakpoint : '');
+        let newPropertyValue: string;
 
         if (this.editField[property]) {
             const regex = new RegExp(`${classNamePrefix}[a-zA-Z\\d-]+${breakpoint ? ('-' + breakpoint) : ''}(?![-\\w])`);
 
             // Check if class name pattern already exists.
             if (this.editField[property].search(regex) >= 0) {
-                this.editField[property] = (this.editField[property] as string).replace(regex, newClassName);
+                newPropertyValue = (this.editField[property] as string).replace(regex, newClassName);
             } else {
-                this.editField[property] += ' ' + newClassName;
+                newPropertyValue = this.editField[property] + ' ' + newClassName;
             }
         } else {
-            this.editField[property] = newClassName;
+            newPropertyValue = newClassName;
         }
         // TODO remove related group styles (flex-direction, grid-cols...) arr.split(' ').filter(!contains prevType).join(' ')
-        this.valueChanged.emit();
+        this.valueChanged.emit({
+            type: PropertyValueChangeType.MODIFY,
+            path: property,
+            value: newPropertyValue
+        });
     }
 
     private _getClassValue(property: string, classNamePrefix: string, breakpoint?: BreakpointType): string {

@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BasePropertyComponent } from '../base-property.component';
+import { PropertyValueChangeType } from '../property.types';
 import { IInputProperty } from './input-property.types';
 
 @Component({
@@ -21,7 +22,6 @@ export class InputPropertyComponent extends BasePropertyComponent implements OnC
 	protected propertyname = 'Input';
 
     ngOnInit(): void {
-        super.ngOnInit();
         this.formControl = new FormControl(this.target[this.property.key]);
         this.formControl.valueChanges.subscribe(val => {
             this._updateValue(val);
@@ -41,22 +41,27 @@ export class InputPropertyComponent extends BasePropertyComponent implements OnC
     }
 
     private _updateValue(value: string): void {
+        let newValue: string | number | boolean;
         if (value === '') {
-            this.target[this.property.key] = null;
+            newValue = null;
         } else if (this.property.outputRawValue) {
             if (value.match('\'.*\'')) {  // enforced string (when the value is wrapped in single quotes)
-                this.target[this.property.key] = value.match('(?<=\').*(?=\')')[0];
+                newValue = value.match('(?<=\').*(?=\')')[0];
             } else if (!isNaN(Number(value))) {  // Number
-                this.target[this.property.key] = Number(value);
+                newValue = Number(value);
             } else if (value === 'true' || value === 'false') {  // Boolean
-                this.target[this.property.key] = value === 'true';
+                newValue = value === 'true';
             } else {  // string
-                this.target[this.property.key] = value;
+                newValue = value;
             }
         } else {
-            this.target[this.property.key] = value;
+            newValue = value;
         }
 
-        this.onValueChanged();
+        this.onValueChanged({
+            type: PropertyValueChangeType.MODIFY,
+            path: this.path,
+            value: newValue
+        });
     }
 }

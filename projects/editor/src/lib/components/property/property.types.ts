@@ -13,6 +13,12 @@ export enum PropertyType {
 	TEXT = 'Text',
 }
 
+export enum PropertyValueChangeType {
+    ADD,
+    MODIFY,
+    REMOVE
+}
+
 export interface IBaseProperty {
 	type: PropertyType;
     name?: string;
@@ -20,7 +26,12 @@ export interface IBaseProperty {
 	isDeletable?: boolean;
 	isKeyEditable?: boolean;
     isSimple?: boolean;
-	valueChangeDebounce?: number;
+}
+
+export interface IPropertyValueChange {
+    type: PropertyValueChangeType;
+    path: string;
+    value: unknown;
 }
 
 export type IProperty = IArrayProperty | IBooleanProperty | IChipListProperty | IObjectProperty | IInputProperty;
