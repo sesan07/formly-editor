@@ -42,7 +42,12 @@ export class FormComponent implements OnInit, OnDestroy {
         }
     }
 
+	public get resetModel$(): Observable<void> {
+		return this._resetModel$.asObservable();
+	}
+
 	private _formChanged$: Subject<void> = new Subject();
+	private _resetModel$: Subject<void> = new Subject();
 	private _destroy$: Subject<void> = new Subject();
 
 	constructor(
@@ -132,6 +137,10 @@ export class FormComponent implements OnInit, OnDestroy {
                     this._fileService.saveFile(res.name, res.json);
                 }
             });
+    }
+
+    onResetModel(): void {
+        this._resetModel$.next();
     }
 
 	private _updateActiveFieldProperty(): void {

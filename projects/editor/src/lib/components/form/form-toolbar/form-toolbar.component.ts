@@ -8,4 +8,5 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class FormToolbarComponent {
     @Input() selectedDisplay: 'form' | 'json';
     @Output() selectedDisplayChange: EventEmitter<'form' | 'json'> = new EventEmitter();
+    @Output() resetModel: EventEmitter<void> = new EventEmitter();
 }
