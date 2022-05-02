@@ -51,6 +51,7 @@ import { EditFieldStylesComponent } from './components/edit-field-dialog/edit-fi
 import { BreakpointComponent } from './components/edit-field-dialog/breakpoint/breakpoint.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FormToolbarComponent } from './components/form/form-toolbar/form-toolbar.component';
+import { TextareaPropertyComponent } from './components/property/textarea-property/textarea-property.component';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -85,6 +86,7 @@ const defaultConfig: EditorConfigOption = {
         BreakpointComponent,
         SidebarComponent,
         FormToolbarComponent,
+        TextareaPropertyComponent,
     ],
     imports: [
         CommonModule,

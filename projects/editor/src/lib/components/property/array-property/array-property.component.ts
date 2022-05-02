@@ -51,6 +51,7 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnC
 				childValue = 0;
 				break;
 			case PropertyType.TEXT:
+            case PropertyType.TEXTAREA:
 				childValue = '';
 				break;
 			default:
