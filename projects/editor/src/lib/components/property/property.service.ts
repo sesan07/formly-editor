@@ -5,6 +5,7 @@ import { IChipListProperty } from './chip-list-property/chip-list-property.types
 import { IInputProperty } from './input-property/input-property.types';
 import { IObjectProperty } from './object-property/object-property.types';
 import { PropertyType, IProperty, IBaseProperty } from './property.types';
+import { ITextareaProperty } from './textarea-property/textarea-property.types';
 
 @Injectable({
 	providedIn: 'root'
@@ -15,7 +16,8 @@ export class PropertyService {
 		PropertyType.BOOLEAN,
 		PropertyType.OBJECT,
 		PropertyType.NUMBER,
-		PropertyType.TEXT
+		PropertyType.TEXT,
+		PropertyType.TEXTAREA
 	];
 
 	private _currKeyId = 0;
@@ -30,6 +32,10 @@ export class PropertyService {
 
 	public getAsInputProperty(property: IProperty): IInputProperty {
 		return property as IInputProperty;
+	}
+
+	public getAsTextareaProperty(property: IProperty): ITextareaProperty {
+		return property as ITextareaProperty;
 	}
 
 	public getAsObjectProperty(property: IProperty): IObjectProperty {
@@ -53,6 +59,11 @@ export class PropertyService {
 			case PropertyType.BOOLEAN:
 			case PropertyType.TEXT:
 				return baseProperty;
+            case PropertyType.TEXTAREA:
+                return {
+                    ...baseProperty,
+                    minRows: 2
+                } as ITextareaProperty;
 			case PropertyType.NUMBER:
                 return {
                     ...baseProperty,

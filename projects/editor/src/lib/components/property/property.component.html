@@ -48,6 +48,18 @@
         (valueChanged)="valueChanged.emit($event)">
     </lib-chip-list-property>
 
+    <lib-textarea-property
+        *ngSwitchCase="propertyType.TEXTAREA"
+        [treeLevel]="treeLevel"
+        [path]="path"
+        [property]="propertyService.getAsTextareaProperty(property)"
+        [target]="target"
+        [isSimplified]="isSimplified"
+        (keyChanged)="onKeyChanged($event, property)"
+        (remove)="remove.emit()"
+        (valueChanged)="valueChanged.emit($event)">
+    </lib-textarea-property>
+
     <ng-container *ngSwitchCase="propertyType.NUMBER">
         <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
     </ng-container>

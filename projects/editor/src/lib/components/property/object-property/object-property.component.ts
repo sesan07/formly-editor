@@ -54,6 +54,7 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
 				childValue = 0;
 				break;
 			case PropertyType.TEXT:
+			case PropertyType.TEXTAREA:
 				childValue = '';
 				break;
 			default:

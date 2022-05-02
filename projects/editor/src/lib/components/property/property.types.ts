@@ -11,6 +11,7 @@ export enum PropertyType {
 	OBJECT = 'Object',
 	NUMBER = 'Number',
 	TEXT = 'Text',
+	TEXTAREA = 'Textarea',
 }
 
 export enum PropertyValueChangeType {
