@@ -33,6 +33,7 @@ export class FormComponent implements OnInit, OnDestroy {
 	}
 
 	public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
+    public isAdvanced: boolean;
 
     public jsonFields: string;
     public selectedFormDisplay: 'form' | 'json' = 'form';
@@ -46,9 +47,13 @@ export class FormComponent implements OnInit, OnDestroy {
 	public get resetModel$(): Observable<void> {
 		return this._resetModel$.asObservable();
 	}
+	public get resizeEnd$(): Observable<void> {
+		return this._resizeEnd$.asObservable();
+	}
 
 	private _formChanged$: Subject<void> = new Subject();
 	private _resetModel$: Subject<void> = new Subject();
+	private _resizeEnd$: Subject<void> = new Subject();
 	private _destroy$: Subject<void> = new Subject();
 
 	constructor(
@@ -119,6 +124,7 @@ export class FormComponent implements OnInit, OnDestroy {
             .subscribe(res => {
                 if (res) {
                     this.form.model = JSON.parse(res.json);
+                    this._updateModelProperty();
                     this._formChanged$.next();
                 }
             });
@@ -145,6 +151,10 @@ export class FormComponent implements OnInit, OnDestroy {
 
     onResetModel(): void {
         this._resetModel$.next();
+    }
+
+    onResizeEnd(): void {
+        this._resizeEnd$.next();
     }
 
 	private _updateActiveFieldProperty(): void {

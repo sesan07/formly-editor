@@ -24,8 +24,6 @@ export const changePropertyTarget = (change: IPropertyValueChange, rootTarget: I
 
             if (Array.isArray(target)) {
                 target.splice(+key, 1);
-                console.log('key', key);
-                console.log('target', target);
             } else {
                 delete target[key];
             }

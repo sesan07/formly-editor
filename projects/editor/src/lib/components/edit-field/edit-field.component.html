@@ -1,0 +1,17 @@
+<mat-tab-group mat-stretch-tabs>
+    <mat-tab label="General">
+        <lib-property
+            [target]="field"
+            [property]="property"
+            [isSimplified]="isSimplified"
+            [isRoot]="true"
+            (valueChanged)="propertyChanged.emit($event)">
+        </lib-property>
+    </mat-tab>
+    <mat-tab label="Styling">
+        <lib-edit-field-styles
+            [editField]="field"
+            (valueChanged)="propertyChanged.emit($event)">
+        </lib-edit-field-styles>
+    </mat-tab>
+</mat-tab-group>

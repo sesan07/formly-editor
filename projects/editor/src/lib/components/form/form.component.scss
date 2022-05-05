@@ -3,13 +3,17 @@
     height: 100%;
 
     ::ng-deep {
-        mat-tab-group mat-tab-header {
+        .main mat-tab-header {
             display: none;
         }
 
-        .mat-tab-body-content {
+        .main-mat-tab-group .mat-tab-body-content {
             padding: 16px;
             box-sizing: border-box;
+        }
+        
+        .active-field-section .sidebar-section-content {
+            padding: 0;
         }
     }
 }
@@ -17,6 +21,13 @@
 .main {
     flex-grow: 1;
     height: 100%;
+}
+
+lib-sidebar-section .header-content {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 lib-form-toolbar {
