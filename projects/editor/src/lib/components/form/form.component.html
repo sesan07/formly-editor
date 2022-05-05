@@ -1,17 +1,18 @@
 <lib-sidebar class="left" [position]="typeOfSideBarPosition.LEFT">
-	<lib-sidebar-section
-		[sectionTitle]="'Add Field'">
+	<lib-sidebar-section>
+		<span headerContent>Add Field</span>
         <lib-field-category-list
+            mainContent
             *ngFor="let category of editorService.fieldCategories; let first = first"
             [category]="category"
             [formId]="form.id"
             [isExpanded]="first">
         </lib-field-category-list>
 	</lib-sidebar-section>
-    <lib-sidebar-section
-        [sectionTitle]="'Fields'"
-        >		
-        <lib-field-tree-item 
+    <lib-sidebar-section>
+		<span headerContent>Fields</span>
+        <lib-field-tree-item
+            mainContent
 			*ngFor="let field of form.fields"
 			[field]="field"
 			[isExpanded]="true">
@@ -39,23 +40,31 @@
     </mat-tab-group>
 </div>
 
-<lib-sidebar class="right" [position]="typeOfSideBarPosition.RIGHT">
-	<lib-sidebar-section
-		[sectionTitle]="'Active Field - ' + editorService.getFormattedFieldName(form.activeField.name, form.activeField.key)"
-        >
-        <lib-property
-            [target]="form.activeField"
+<lib-sidebar class="right" [position]="typeOfSideBarPosition.RIGHT" (resizeEnd)="onResizeEnd()">
+	<lib-sidebar-section class="active-field-section">
+        <div class="header-content" headerContent>
+            <span>Active Field - {{ editorService.getFormattedFieldName(form.activeField.name, form.activeField.key) }}</span>
+            <mat-slide-toggle labelPosition="before" [(ngModel)]="isAdvanced">Advanced</mat-slide-toggle>
+        </div>
+        <lib-edit-field
+            mainContent
+            [field]="form.activeField"
             [property]="activeFieldProperty"
-            [isRoot]="true"
-            (valueChanged)="onFieldPropertyChanged($event)">
-        </lib-property>
+            [isSimplified]="!isAdvanced"
+            [resizeTabHeader$]="resizeEnd$"
+            (propertyChanged)="onFieldPropertyChanged($event)">
+        </lib-edit-field>
 	</lib-sidebar-section>
 
-	<lib-sidebar-section
-		[sectionTitle]="'Model'"
-		[menuPanel]="modelOptionsMenu"
-        >
-        <lib-property
+	<lib-sidebar-section>
+        <div class="header-content" headerContent>
+            <span>Model</span>
+            <button mat-icon-button [matMenuTriggerFor]="modelOptionsMenu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+        </div>
+        <lib-property 
+            mainContent
             [target]="form.model"
             [property]="modelProperty"
             [isRoot]="true"

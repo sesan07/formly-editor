@@ -1,17 +1,12 @@
 <div class="sidebar-divider" *ngIf="index !== 0" (mousedown)="onSectionMouseDown($event)"></div>
 <div class="sidebar-header">
-	<span class="sidebar-header-left">
-		<button [disabled]="!isCollapsible" mat-icon-button (click)="onToggleExpansionClicked()">
-			<mat-icon class="expand-icon" [class.expanded-90]="!isCollapsed" *ngIf="isCollapsible">chevron_right</mat-icon>
-		</button>
-		<span>{{ sectionTitle }}</span>
-	</span>
+    <button [disabled]="!isCollapsible" mat-icon-button (click)="onToggleExpansionClicked()">
+        <mat-icon class="expand-icon" [class.expanded-90]="!isCollapsed" *ngIf="isCollapsible">chevron_right</mat-icon>
+    </button>
+    <ng-content select="[headerContent]"></ng-content>
 
-	<button *ngIf="menuPanel && !isCollapsed" mat-icon-button [matMenuTriggerFor]="menuPanel">
-		<mat-icon>more_vert</mat-icon>
-	</button>
 
 </div>
 <div class="sidebar-section-content" [style.height.px]="contentHeight">
-    <ng-content></ng-content>
+    <ng-content select="[mainContent]"></ng-content>
 </div>

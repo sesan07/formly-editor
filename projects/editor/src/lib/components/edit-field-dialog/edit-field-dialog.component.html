@@ -4,23 +4,13 @@
         <header class="section-header">
             <h3 class="section-header-text">Properties</h3>
         </header>
-        <mat-tab-group class="section-content" mat-stretch-tabs>
-            <mat-tab label="General">
-                <lib-property
-                    [target]="editField"
-                    [property]="property"
-                    [isSimplified]="true"
-                    [isRoot]="true"
-                    (valueChanged)="onPropertyChanged($event)">
-                </lib-property>
-            </mat-tab>
-            <mat-tab label="Styling">
-                <lib-edit-field-styles
-                    [editField]="editField"
-                    (valueChanged)="onPropertyChanged($event)">
-                </lib-edit-field-styles>
-            </mat-tab>
-        </mat-tab-group>
+        <lib-edit-field
+            class="section-content"
+            [field]="editField"
+            [property]="property"
+            [isSimplified]="true"
+            (propertyChanged)="onPropertyChanged($event)">
+        </lib-edit-field>
     </section>
 
     <section class="preview-section">

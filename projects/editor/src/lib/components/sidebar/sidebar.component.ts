@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ContentChildren, ElementRef, Input, QueryList, Renderer2 } from '@angular/core';
+import { AfterContentInit, Component, ContentChildren, ElementRef, EventEmitter, Input, Output, QueryList, Renderer2 } from '@angular/core';
 import { SidebarSectionComponent } from '../sidebar-section/sidebar-section.component';
 import { SideBarPosition } from './sidebar.types';
 
@@ -9,6 +9,8 @@ import { SideBarPosition } from './sidebar.types';
 })
 export class SidebarComponent implements AfterContentInit {
     @Input() position: SideBarPosition;
+
+    @Output() resizeEnd: EventEmitter<void> = new EventEmitter();
 
     @ContentChildren(SidebarSectionComponent) sections: QueryList<SidebarSectionComponent>;
 
@@ -55,6 +57,7 @@ export class SidebarComponent implements AfterContentInit {
 		this._stopMouseUpListener = this._renderer.listen('window', 'mouseup', () => {
 			this._stopMouseMoveListener();
 			this._stopMouseUpListener();
+            this.resizeEnd.emit();
 		});
 	}
 
@@ -97,6 +100,7 @@ export class SidebarComponent implements AfterContentInit {
 
 			this._stopMouseMoveListener();
 			this._stopMouseUpListener();
+            this.resizeEnd.emit();
 		});
 	}
 

@@ -1,0 +1,10 @@
+mat-tab-group {
+    height: 100%;
+}
+
+:host ::ng-deep {
+    .mat-tab-body-content {
+        padding: 8px;
+        box-sizing: border-box;
+    }
+}

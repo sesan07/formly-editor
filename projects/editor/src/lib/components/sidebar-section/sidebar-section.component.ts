@@ -9,8 +9,6 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SidebarSectionComponent {
-    @Input() sectionTitle: string;
-    @Input() menuPanel: MatMenuPanel;
     @Input() isCollapsible = true;
     @Input() isCollapsed: boolean;
 
