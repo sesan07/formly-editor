@@ -57,7 +57,7 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
 
         switch(itemData.action) {
             case DragAction.COPY:
-                this.editorService.addField(field.type, targetParent.formId, field.customType, targetParent.fieldId, dragDrop.currentIndex);
+                this.editorService.addField(field.type, targetParent.formId, field.customType, targetParent.fieldId);
                 break;
             case DragAction.MOVE:
                 if (currentParent.fieldId === targetParent.fieldId) {

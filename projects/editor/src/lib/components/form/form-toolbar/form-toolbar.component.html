@@ -10,7 +10,11 @@
 </mat-button-toggle-group>
 
 <div class="action-buttons">
+    <mat-slide-toggle labelPosition="before" [(ngModel)]="editorService.isEditMode">Edit Mode</mat-slide-toggle>
     <button mat-icon-button matTooltip="Reset Form" (click)="resetModel.emit()">
         <mat-icon>restart_alt</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Toggle sidebars" (click)="isExpanded = !isExpanded; toggleSidebars.emit(isExpanded)">
+        <mat-icon class="toggle-sidebars-icon">{{ isExpanded ? 'unfold_more' : 'unfold_less'}}</mat-icon>
     </button>
 </div>

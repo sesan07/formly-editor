@@ -1,4 +1,9 @@
-<lib-sidebar class="left" [position]="typeOfSideBarPosition.LEFT">
+<lib-sidebar
+    class="left"
+    [class.hidden]="!showSidebars"
+    [position]="typeOfSideBarPosition.LEFT"
+    (resizeEnd)="onResizeEnd()"
+    >
 	<lib-sidebar-section>
 		<span headerContent>Add Field</span>
         <lib-field-category-list
@@ -22,10 +27,12 @@
 
 <div class="main">
     <lib-form-toolbar
+        class="toolbar"
         [(selectedDisplay)]="selectedFormDisplay"
-        (resetModel)="onResetModel()">
+        (resetModel)="onResetModel()"
+        (toggleSidebars)="showSidebars = $event">
     </lib-form-toolbar>
-    <mat-tab-group [selectedIndex]="formDisplayTabIndex">
+    <mat-tab-group class="tab-group" [selectedIndex]="formDisplayTabIndex">
         <mat-tab>
             <lib-form-view
                 [form]="form"
@@ -40,7 +47,12 @@
     </mat-tab-group>
 </div>
 
-<lib-sidebar class="right" [position]="typeOfSideBarPosition.RIGHT" (resizeEnd)="onResizeEnd()">
+<lib-sidebar
+    class="right"
+    [class.hidden]="!showSidebars"
+    [position]="typeOfSideBarPosition.RIGHT"
+    (resizeEnd)="onResizeEnd()"
+    >
 	<lib-sidebar-section class="active-field-section">
         <div class="header-content" headerContent>
             <span>Active Field - {{ editorService.getFormattedFieldName(form.activeField.name, form.activeField.key) }}</span>

@@ -7,7 +7,7 @@
             display: none;
         }
 
-        .main-mat-tab-group .mat-tab-body-content {
+        .main .mat-tab-body-content {
             padding: 16px;
             box-sizing: border-box;
         }
@@ -23,19 +23,19 @@
     height: 100%;
 }
 
+.main .tab-group {
+    height: calc(100% - var(--header-height));
+}
+
+.main .toolbar {
+    height: var(--header-height);
+}
+
 lib-sidebar-section .header-content {
     flex-grow: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-lib-form-toolbar {
-    height: var(--header-height);
-}
-
-mat-tab-group {
-    height: calc(100% - var(--header-height));
 }
 
 lib-sidebar {
@@ -48,5 +48,9 @@ lib-sidebar {
 
     &.right {
         width: 30%;
+    }
+
+    &.hidden {
+        display: none;
     }
 }

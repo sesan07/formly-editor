@@ -102,7 +102,7 @@ button.mat-icon-button {
     transform: rotate(-180deg);
 }
 
-button .mat-button-wrapper .mat-icon {
+.mat-button .mat-icon {
     margin-right: 4px;
 }
 
@@ -140,6 +140,6 @@ button .mat-button-wrapper .mat-icon {
     opacity: 0.6 !important;
 }
 
-.resizing {
+lib-sidebar .resizing {
     transition: none !important;
 }
