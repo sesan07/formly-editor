@@ -6,7 +6,7 @@ import { IEditorFormlyField, IForm } from '../../services/editor-service/editor.
 import { cloneDeep } from 'lodash-es';
 import { takeUntil } from 'rxjs/operators';
 import { IObjectProperty } from '../property/object-property/object-property.types';
-import { IPropertyValueChange, PropertyType, PropertyValueChangeType } from '../property/property.types';
+import { IPropertyValueChange, PropertyType } from '../property/property.types';
 import { PropertyService } from '../property/property.service';
 import { IArrayProperty } from '../property/array-property/array-property.types';
 import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
@@ -34,6 +34,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
 	public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
     public isAdvanced: boolean;
+    public showSidebars = true;
 
     public jsonFields: string;
     public selectedFormDisplay: 'form' | 'json' = 'form';
