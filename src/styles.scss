@@ -1,5 +1,6 @@
 :root {
-    --header-height: 48px
+    --header-height: 48px;
+    --tree-item-header-height: 32px;
 }
 
 html, body, app-root { height: 100%; }
@@ -26,38 +27,27 @@ formly-field {
     border-radius: 4px;
 }
 
+.tree-container {
+    min-width: max-content;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
 .tree-item {
 	display: block;
-	border-radius: 4px;
-	flex-grow: 1;
-	transition: 0.2s ease-out;
     user-select: none;
 }
 
-.tree-item:hover {
-	background-color: rgba(0, 0, 0, 0.03);
+.property-key {
+    display: inline-flex;
+    height: var(--tree-item-header-height);
+    align-self: flex-start;
+    align-items: center;
+    column-gap: 4px;
 }
 
-.tree-item-header {
-	display: flex;
-	column-gap: 4px;
-	align-items: flex-start;
-	padding: 4px;
-    white-space: nowrap;
-	border-radius: 4px;
-}
-
-// TODO change name?
-.tree-item-header-content-left {
-	min-height: 32px;
-	display: inline-flex;
-	align-items: center;
-    white-space: nowrap;
-}
-
-.tree-item-header-content-right {
+.property-field {
     flex-grow: 1;
-	margin-top: 4px;
 }
 
 button.mat-icon-button {
@@ -73,12 +63,12 @@ button.mat-icon-button {
 
 .keyField {
 	display: inline-block;
-	margin: 0 4px;
-	padding: 0.225em;
-	border-radius: 4px;
 }
 
 .keyField.editable {
+	padding: 0.225em;
+	border-radius: 4px;
+    cursor: text;
 	outline: 1px solid rgba(0, 0, 0, 0.15);
 }
 
@@ -119,6 +109,10 @@ button.mat-icon-button {
 	
 	.mat-form-field-outline {
 		top: 0 !important;
+	}
+
+	.mat-form-field-flex {
+		margin-top: 0 !important;
 	}
 	
 	.mat-form-field-label-wrapper {

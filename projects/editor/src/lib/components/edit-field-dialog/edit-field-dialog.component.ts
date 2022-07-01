@@ -6,8 +6,7 @@ import { EditorService } from '../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../services/editor-service/editor.types';
 import { IObjectProperty } from '../property/object-property/object-property.types';
 import { PropertyService } from '../property/property.service';
-import { IPropertyValueChange, PropertyType } from '../property/property.types';
-import { changePropertyTarget } from '../property/property.utils';
+import { PropertyType } from '../property/property.types';
 import { EditFieldRequest } from './edit-field-dialog.types';
 
 @Component({
@@ -70,8 +69,7 @@ export class EditFieldDialogComponent implements OnInit {
         this._dialogRef.close(this.editField);
     }
 
-    onPropertyChanged(change: IPropertyValueChange): void {
-        changePropertyTarget(change, this.editField);
+    onFieldChanged(): void {
         this._updatePreviewField();
     }
 
@@ -83,7 +81,7 @@ export class EditFieldDialogComponent implements OnInit {
 		this.property = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
 		this.property.name = 'root';
 		this.property.key = undefined;
-		this.property.isDeletable = false;
+		this.property.isRemovable = false;
 		this.property.isKeyEditable = false;
 		this.property.childProperties = this.editField.properties;
 		this.property.populateChildrenFromTarget = false;

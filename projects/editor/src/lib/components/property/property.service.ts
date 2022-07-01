@@ -52,7 +52,7 @@ export class PropertyService {
 			type,
 			key,
 			isKeyEditable: true,
-			isDeletable: true,
+			isRemovable: true,
 		};
 
 		switch (type) {
@@ -116,6 +116,19 @@ export class PropertyService {
 				return this.getDefaultProperty(propertyType, key);
 		}
 	}
+
+    public getDefaultPropertyValue(type: PropertyType): any {
+        switch (type) {
+			case PropertyType.ARRAY: return [];
+			case PropertyType.BOOLEAN: return false;
+			case PropertyType.OBJECT: return {};
+			case PropertyType.NUMBER: return 0;
+			case PropertyType.TEXT:
+			case PropertyType.TEXTAREA: return '';
+			default:
+				throw new Error(`Object property does not support adding ${type}`);
+		}
+    }
 
 	public getPropertyType(value: any): PropertyType | undefined {
 		switch (typeof value) {

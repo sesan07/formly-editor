@@ -19,8 +19,10 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
 
 	public isActiveField: boolean;
     public childFields: IEditorFormlyField[];
-	public treeLevelPadding: number;
 	public replaceCategories: EditorTypeCategoryOption[];
+	public get hasOptions(): boolean {
+		return this.field.canHaveChildren || this.treeLevel !== 0;
+	};
 
     private _destroy$: Subject<void> = new Subject();
 
@@ -28,9 +30,7 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
     }
 
 	ngOnInit(): void {
-		this.treeLevelPadding = 24 * this.treeLevel;
 		this._renderer.addClass(this._elementRef.nativeElement, 'tree-item');
-		this._renderer.addClass(this._elementRef.nativeElement, 'cursor-pointer');
 
         this.replaceCategories = this.editorService.fieldCategories.map(category => {
             // Filter fields that can have children and aren't this field
@@ -89,24 +89,9 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
 		this.editorService.replaceParentField(type, this.field.formId, this.field.fieldId, customType);
 	}
 
-	onHeaderClicked(event: MouseEvent): void {
-		if (this.field.canHaveChildren) {
-			this.isExpanded = true;
-		}
-
+    onSelected(): void {
         this.editorService.selectField(this.field.formId, this.field.fieldId);
-		event.stopPropagation();
-	}
-
-	onToggle(event: MouseEvent): void {
-		this.isExpanded = !this.isExpanded;
-
-		if (!this.isExpanded) {
-			this.editorService.selectField(this.field.formId, this.field.fieldId);
-		}
-
-		event.stopPropagation();
-	}
+    }
 
     onExpandParent(): void {
         this.isExpanded = true;

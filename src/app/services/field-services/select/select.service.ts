@@ -77,7 +77,7 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
                 canAdd: true,
                 childProperty: {
                     type: PropertyType.OBJECT,
-                    isDeletable: true,
+                    isRemovable: true,
                     childProperties: [
                         {
                             name: 'Label',
