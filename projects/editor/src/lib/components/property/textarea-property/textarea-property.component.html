@@ -1,22 +1,19 @@
-<div class="tree-item-header" *ngIf="!isSimplified else simplifiedView">
-	<span class="tree-item-header-content-left">
-		<button mat-icon-button [matMenuTriggerFor]="optionsMenu" [disabled]="!hasOptions">
-			<mat-icon>more_vert</mat-icon>
-		</button>
-			
-		<mat-menu #optionsMenu="matMenu">
-			<button *ngIf="property.isDeletable" mat-menu-item color="warn" (click)="remove.emit()">
-				<mat-icon>remove</mat-icon>
-				<span>Remove</span>
-			</button>
-		</mat-menu>
-	
-		<!-- use a disabled button to provide padding for non expandable field -->
-		<button [style.margin-left.px]="treeLevelPadding" mat-icon-button [disabled]="true"></button>
-		<span #key class="keyField" [ngClass]="{ 'editable': !!property.isKeyEditable }" [contentEditable]="!!property.isKeyEditable"></span>
-		<span>:</span>
-	</span>
-	<mat-form-field class="tree-item-header-content-right" appearance="outline">
+<lib-tree-item-header 
+    class="cursor-pointer"
+    *ngIf="!isSimplified else simplifiedView"
+    [treeLevel]="treeLevel"
+    [hasOptions]="hasOptions"
+    [optionsMenu]="optionsMenu"
+    >
+    <span class="property-key">
+        <span #key 
+            class="keyField" 
+            [ngClass]="{ 'editable': !!property.isKeyEditable }"
+            [contentEditable]="!!property.isKeyEditable">
+        </span>
+        <span>:</span>
+    </span>
+    <mat-form-field class="property-field" appearance="outline">
         <textarea 
             matInput
             cdkTextareaAutosize
@@ -24,8 +21,8 @@
             [cdkAutosizeMinRows]="property.minRows"
             [formControl]="formControl">
         </textarea>
-	</mat-form-field>
-</div>
+    </mat-form-field>
+</lib-tree-item-header>
 
 <ng-template #simplifiedView>
     <mat-form-field>
@@ -39,3 +36,10 @@
         </textarea>
     </mat-form-field>
 </ng-template>
+
+<mat-menu #optionsMenu="matMenu">
+    <button *ngIf="property.isRemovable" mat-menu-item color="warn" (click)="remove.emit()">
+        <mat-icon>remove</mat-icon>
+        <span>Remove</span>
+    </button>
+</mat-menu>

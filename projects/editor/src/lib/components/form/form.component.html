@@ -4,24 +4,26 @@
     [position]="typeOfSideBarPosition.LEFT"
     (resizeEnd)="onResizeEnd()"
     >
-	<lib-sidebar-section>
-		<span headerContent>Add Field</span>
-        <lib-field-category-list
-            mainContent
-            *ngFor="let category of editorService.fieldCategories; let first = first"
-            [category]="category"
-            [formId]="form.id"
-            [isExpanded]="first">
-        </lib-field-category-list>
-	</lib-sidebar-section>
     <lib-sidebar-section>
 		<span headerContent>Fields</span>
-        <lib-field-tree-item
-            mainContent
-			*ngFor="let field of form.fields"
-			[field]="field"
-			[isExpanded]="true">
-		</lib-field-tree-item>
+        <div class="tree-container" mainContent>
+            <lib-field-tree-item
+                *ngFor="let field of form.fields"
+                [field]="field"
+                [isExpanded]="true">
+            </lib-field-tree-item>
+        </div>
+	</lib-sidebar-section>
+	<lib-sidebar-section>
+		<span headerContent>Add Field</span>
+        <div class="categories-wrapper" mainContent>
+            <lib-field-category-list
+                *ngFor="let category of editorService.fieldCategories; let first = first"
+                [category]="category"
+                [formId]="form.id"
+                [isExpanded]="first">
+            </lib-field-category-list>
+        </div>
 	</lib-sidebar-section>
 </lib-sidebar>
 
@@ -64,7 +66,7 @@
             [property]="activeFieldProperty"
             [isSimplified]="!isAdvanced"
             [resizeTabHeader$]="resizeEnd$"
-            (propertyChanged)="onFieldPropertyChanged($event)">
+            (fieldChanged)="onActiveFieldChanged()">
         </lib-edit-field>
 	</lib-sidebar-section>
 
@@ -75,13 +77,15 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
         </div>
-        <lib-property 
-            mainContent
-            [target]="form.model"
-            [property]="modelProperty"
-            [isRoot]="true"
-            (valueChanged)="onModelPropertyChanged($event)">
-        </lib-property>
+        
+        <div class="tree-container" mainContent>
+            <lib-property 
+                [target]="form.model"
+                [property]="modelProperty"
+                [isRoot]="true"
+                (targetChanged)="onModelPropertyChanged()">
+            </lib-property>
+        </div>
 	</lib-sidebar-section>
 </lib-sidebar>
 

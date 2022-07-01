@@ -65,7 +65,7 @@ export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
                 canAdd: true,
                 childProperty: {
                     type: PropertyType.OBJECT,
-                    isDeletable: true,
+                    isRemovable: true,
                     childProperties: [
                         {
                             name: 'Label',

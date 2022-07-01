@@ -13,10 +13,9 @@
             <lib-property
                 [target]="editField"
                 [property]="getProperty()"
-                [path]="'className'"
                 [isSimplified]="true"
                 [isRoot]="true"
-                (valueChanged)="valueChanged.emit($event)">
+                (targetChanged)="fieldChanged.emit()">
             </lib-property>
         </lib-breakpoint>
     
@@ -33,10 +32,9 @@
             <lib-property
                 [target]="editField"
                 [property]="getProperty(breakpointType)"
-                [path]="'className'"
                 [isSimplified]="true"
                 [isRoot]="true"
-                (valueChanged)="valueChanged.emit($event)">
+                (targetChanged)="fieldChanged.emit()">
             </lib-property>
         </lib-breakpoint>
     </div>
@@ -123,10 +121,9 @@
             <lib-property
                 [target]="editField"
                 [property]="getChildrenProperty()"
-                [path]="'fieldGroupClassName'"
                 [isSimplified]="true"
                 [isRoot]="true"
-                (valueChanged)="valueChanged.emit($event)">
+                (targetChanged)="fieldChanged.emit()">
             </lib-property>
         </lib-breakpoint>
     
@@ -150,10 +147,9 @@
             <lib-property
                 [target]="editField"
                 [property]="getChildrenProperty(breakpointType)"
-                [path]="'fieldGroupClassName'"
                 [isSimplified]="true"
                 [isRoot]="true"
-                (valueChanged)="valueChanged.emit($event)">
+                (targetChanged)="fieldChanged.emit()">
             </lib-property>
         </lib-breakpoint>
     </div>

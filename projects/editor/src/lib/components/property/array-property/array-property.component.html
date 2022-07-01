@@ -1,29 +1,24 @@
-<div class="tree-item-header" *ngIf="!isSimplified else simplifiedView">
-	<span class="tree-item-header-content-left">
-		<button mat-icon-button [matMenuTriggerFor]="optionsMenu" [disabled]="!hasOptions">
-			<mat-icon>more_vert</mat-icon>
-		</button>
-		
-		<mat-menu #optionsMenu="matMenu">
-			<button *ngIf="property.canAdd" mat-menu-item (click)="onAddChild()">
-				<mat-icon>add</mat-icon>
-				<span>Add {{ property.childProperty.type }}</span>
-			</button>
-			<button *ngIf="property.isDeletable" mat-menu-item (click)="remove.emit()">
-				<mat-icon>remove</mat-icon>
-				<span>Remove</span>
-			</button>
-		</mat-menu>
-		
-		<button [style.margin-left.px]="treeLevelPadding" mat-icon-button (click)="isExpanded = !isExpanded">
-			<mat-icon class="expand-icon" [class.expanded-90]="isExpanded">chevron_right</mat-icon>
-		</button>
-		<span #key class="keyField" [ngClass]="{ 'editable': !!property.isKeyEditable }" [contentEditable]="!!property.isKeyEditable"></span>
-		<span>{{ '[ ' + target.length + ' ]' }}</span>
-	</span>
-</div>
+<lib-tree-item-header 
+    class="cursor-pointer"
+    *ngIf="!isSimplified else simplifiedView"
+    [treeLevel]="treeLevel"
+    [(isExpanded)]="isExpanded"
+    [isExpandable]="true"
+    [hasOptions]="hasOptions"
+    [optionsMenu]="optionsMenu"
+    >
+    <span class="property-key">
+        <span #key 
+            class="keyField" 
+            [ngClass]="{ 'editable': !!property.isKeyEditable }"
+            [contentEditable]="!!property.isKeyEditable">
+            (click)="onKeyClicked($event)"
+        </span>
+        <span>{{ '[ ' + target.length + ' ]' }}</span>
+    </span>
+</lib-tree-item-header>
 
-<ng-container *ngIf="!isSimplified">
+<ng-container *ngIf="!isSimplified && isExpanded">
     <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
 </ng-container>
 
@@ -40,28 +35,36 @@
                 <mat-icon>add</mat-icon>
             </button>
     </div>
-    <div class="simplified-properties">
+    <div class="simplified-properties" *ngIf="isExpanded">
         <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
+        <button *ngIf="property.canAdd" mat-button (click)="onAddChild()">
+            <mat-icon>add</mat-icon>
+            <span>Add</span>
+        </button>
     </div>
 </ng-template>
 
 <ng-template #childPropertiesView>
-    <ng-container *ngIf="isExpanded">
-        <ng-container *ngFor="let childProperty of childProperties; let i = index; let last = last; trackBy: trackPropertyByKey">
-            <lib-property
-                [treeLevel]="treeLevel + 1"
-                [path]="getChildPath(childProperty.key)"
-                [target]="target"
-                [property]="childProperty"
-                [isSimplified]="isSimplified"
-                (remove)="onRemoveChild(i)"
-                (valueChanged)="onValueChanged($event)">
-            </lib-property>
-            <mat-divider *ngIf="isSimplified && !last"></mat-divider>
-        </ng-container>
-        <button *ngIf="property.canAdd" [style.margin-left.px]="isSimplified ? 0 : addButtonPadding" mat-button (click)="onAddChild()">
-            <mat-icon>add</mat-icon>
-            <span>Add</span>
-        </button>
+    <ng-container *ngFor="let childProperty of childProperties; let i = index; let last = last; trackBy: trackPropertyByKey">
+        <lib-property
+            [treeLevel]="treeLevel + 1"
+            [target]="target"
+            [property]="childProperty"
+            [isSimplified]="isSimplified"
+            (remove)="onRemoveChild(i)"
+            (targetChanged)="targetChanged.emit()">
+        </lib-property>
+        <mat-divider *ngIf="isSimplified && !last"></mat-divider>
     </ng-container>
 </ng-template>
+
+<mat-menu #optionsMenu="matMenu">
+    <button *ngIf="property.canAdd" mat-menu-item (click)="onAddChild()">
+        <mat-icon>add</mat-icon>
+        <span>Add {{ property.childProperty.type }}</span>
+    </button>
+    <button *ngIf="property.isRemovable" mat-menu-item (click)="remove.emit()">
+        <mat-icon>remove</mat-icon>
+        <span>Remove</span>
+    </button>
+</mat-menu>

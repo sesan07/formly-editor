@@ -4,7 +4,7 @@ import { IEditorFormlyField } from '../../../services/editor-service/editor.type
 import { StyleService } from '../../../services/style-service/style.service';
 import { ContainerType, BreakpointType } from '../../../services/style-service/style.types';
 import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
-import { IPropertyValueChange, PropertyType, PropertyValueChangeType } from '../../property/property.types';
+import { PropertyType } from '../../property/property.types';
 
 @Component({
     selector: 'lib-edit-field-styles',
@@ -15,7 +15,7 @@ import { IPropertyValueChange, PropertyType, PropertyValueChangeType } from '../
 export class EditFieldStylesComponent implements OnChanges {
     @Input() editField: IEditorFormlyField;
 
-    @Output() valueChanged: EventEmitter<IPropertyValueChange> = new EventEmitter();
+    @Output() fieldChanged: EventEmitter<void> = new EventEmitter();
 
     containerType: typeof ContainerType = ContainerType;
     containerTypes: ContainerType[] = Object.values(ContainerType);
@@ -75,11 +75,13 @@ export class EditFieldStylesComponent implements OnChanges {
         }
         // TODO remove related group styles (flex-direction, grid-cols...) arr.split(' ').filter(!contains prevType).join(' ')
         this.childrenContainer = value;
-        this.valueChanged.emit({
-            type: PropertyValueChangeType.MODIFY,
-            path: 'fieldGroupClassName',
-            value: newFieldGroupClassName
-        });
+        this.editField.fieldGroupClassName = newFieldGroupClassName;
+        this.fieldChanged.emit();
+        // this.fieldChanged.emit({
+        //     type: PropertyValueChangeType.MODIFY,
+        //     path: 'fieldGroupClassName',
+        //     value: newFieldGroupClassName
+        // });
     }
 
     onGridClassChanged(value: string, classNamePrefix: string, breakpoint?: BreakpointType): void {
@@ -185,11 +187,8 @@ export class EditFieldStylesComponent implements OnChanges {
             newPropertyValue = newClassName;
         }
         // TODO remove related group styles (flex-direction, grid-cols...) arr.split(' ').filter(!contains prevType).join(' ')
-        this.valueChanged.emit({
-            type: PropertyValueChangeType.MODIFY,
-            path: property,
-            value: newPropertyValue
-        });
+        this.editField[property] = newPropertyValue
+        this.fieldChanged.emit();
     }
 
     private _getClassValue(property: string, classNamePrefix: string, breakpoint?: BreakpointType): string {

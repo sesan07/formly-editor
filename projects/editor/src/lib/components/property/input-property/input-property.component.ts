@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BasePropertyComponent } from '../base-property.component';
-import { PropertyValueChangeType } from '../property.types';
 import { IInputProperty } from './input-property.types';
 
 @Component({
@@ -16,7 +15,7 @@ export class InputPropertyComponent extends BasePropertyComponent implements OnC
     public formControl: FormControl;
 
 	public get hasOptions(): boolean {
-		return this.property.isDeletable;
+		return this.property.isRemovable;
 	};
 
 	protected propertyname = 'Input';
@@ -29,8 +28,6 @@ export class InputPropertyComponent extends BasePropertyComponent implements OnC
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        super.ngOnChanges(changes);
-
         if (changes.property) {
             this.type =  this.property.type.toLowerCase();
 
@@ -58,10 +55,6 @@ export class InputPropertyComponent extends BasePropertyComponent implements OnC
             newValue = value;
         }
 
-        this.onValueChanged({
-            type: PropertyValueChangeType.MODIFY,
-            path: this.path,
-            value: newValue
-        });
+        this.modifyValue(this.property.key, newValue);
     }
 }

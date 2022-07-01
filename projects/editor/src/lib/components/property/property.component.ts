@@ -1,6 +1,6 @@
-import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { PropertyService } from './property.service';
-import { IProperty, IPropertyValueChange, PropertyType } from './property.types';
+import { IProperty, PropertyType } from './property.types';
 
 @Component({
 	selector: 'lib-property',
@@ -11,24 +11,21 @@ export class PropertyComponent {
 	@Input() treeLevel = 0;
 	@Input() target: Record<string, any> | any[];
 	@Input() property: IProperty;
-	@Input() path: string;
 	@Input() isSimplified: boolean;
 	@Input() isRoot: boolean;
 
     @Output() public remove: EventEmitter<void> = new EventEmitter();
-	@Output() public valueChanged: EventEmitter<IPropertyValueChange> = new EventEmitter();
-
-    @HostBinding('class.tree-item') get isTreeItem(): boolean { return !this.isSimplified; }
+    @Output() public targetChanged: EventEmitter<void> = new EventEmitter();
 
 	public propertyType: typeof PropertyType = PropertyType;
 
-    constructor(public propertyService: PropertyService) { }
+    constructor(public element: ElementRef, public propertyService: PropertyService) {}
 
-	onKeyChanged(newKey: string, property: IProperty): void {
-		const tempValue: any = this.target[property.key];
-		delete this.target[property.key];
-		this.target[newKey] = tempValue;
-		property.key = newKey;
-        this.valueChanged.emit();
+	onKeyChanged(newKey: string): void {
+        const value: any = this.target[this.property.key];
+        delete this.target[this.property.key];
+        this.target[newKey] = value;
+        this.property.key = newKey;
+        this.targetChanged.emit();
 	}
 }

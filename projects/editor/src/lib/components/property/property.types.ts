@@ -14,25 +14,13 @@ export enum PropertyType {
 	TEXTAREA = 'Textarea',
 }
 
-export enum PropertyValueChangeType {
-    ADD,
-    MODIFY,
-    REMOVE
-}
-
 export interface IBaseProperty {
 	type: PropertyType;
     name?: string;
 	key?: string | number;
-	isDeletable?: boolean;
+	isRemovable?: boolean;
 	isKeyEditable?: boolean;
     isSimple?: boolean;
-}
-
-export interface IPropertyValueChange {
-    type: PropertyValueChangeType;
-    path: string;
-    value: unknown;
 }
 
 export type IProperty = IArrayProperty | IBooleanProperty | IChipListProperty | IObjectProperty | IInputProperty;

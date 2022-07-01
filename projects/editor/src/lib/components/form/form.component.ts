@@ -6,7 +6,7 @@ import { IEditorFormlyField, IForm } from '../../services/editor-service/editor.
 import { cloneDeep } from 'lodash-es';
 import { takeUntil } from 'rxjs/operators';
 import { IObjectProperty } from '../property/object-property/object-property.types';
-import { IPropertyValueChange, PropertyType } from '../property/property.types';
+import { PropertyType } from '../property/property.types';
 import { PropertyService } from '../property/property.service';
 import { IArrayProperty } from '../property/array-property/array-property.types';
 import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
@@ -16,7 +16,6 @@ import { ExportFormDialogComponent } from '../export-form-dialog/export-form-dia
 import { ExportJSONRequest, ExportJSONResponse } from '../export-form-dialog/export-json-dialog.types';
 import { FileService } from '../../services/file-service/file.service';
 import { SideBarPosition } from '../sidebar/sidebar.types';
-import { changePropertyTarget } from '../property/property.utils';
 
 @Component({
 	selector: 'lib-form',
@@ -33,7 +32,7 @@ export class FormComponent implements OnInit, OnDestroy {
 	}
 
 	public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
-    public isAdvanced: boolean;
+    public isAdvanced = true;
     public showSidebars = true;
 
     public jsonFields: string;
@@ -99,14 +98,12 @@ export class FormComponent implements OnInit, OnDestroy {
 		this._destroy$.complete();
 	}
 
-	onFieldPropertyChanged(change: IPropertyValueChange): void {
-        changePropertyTarget(change, this.form.activeField);
+	onActiveFieldChanged(): void {
         this._updateJSONFields();
 		this._formChanged$.next();
 	}
 
-    onModelPropertyChanged(change: IPropertyValueChange): void {
-        changePropertyTarget(change, this.form.model);
+    onModelPropertyChanged(): void {
         this._formChanged$.next();
     }
 
@@ -180,7 +177,7 @@ export class FormComponent implements OnInit, OnDestroy {
 	private _initRootProperty(property: IArrayProperty | IObjectProperty) {
 		property.name = 'root';
 		property.key = undefined;
-		property.isDeletable = false;
+		property.isRemovable = false;
 		property.isKeyEditable = false;
 	}
 }
