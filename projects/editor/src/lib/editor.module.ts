@@ -47,12 +47,13 @@ import { PropertyComponent } from './components/property/property.component';
 import { JsonFileValidatorDirective } from './components/import-form-dialog/json-file-validator/json-file-validator.directive';
 import { EditFieldDialogComponent } from './components/edit-field-dialog/edit-field-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
-import { EditFieldStylesComponent } from './components/edit-field-dialog/edit-field-styles/edit-field-styles.component';
-import { BreakpointComponent } from './components/edit-field-dialog/breakpoint/breakpoint.component';
+import { EditFieldStylesComponent } from './components/edit-field/edit-field-styles/edit-field-styles.component';
+import { BreakpointComponent } from './components/edit-field/edit-field-styles/breakpoint/breakpoint.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FormToolbarComponent } from './components/form/form-toolbar/form-toolbar.component';
 import { TextareaPropertyComponent } from './components/property/textarea-property/textarea-property.component';
 import { EditFieldComponent } from './components/edit-field/edit-field.component';
+import { TreeItemHeaderComponent } from './components/tree-item-header/tree-item-header.component';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -89,6 +90,7 @@ const defaultConfig: EditorConfigOption = {
         FormToolbarComponent,
         TextareaPropertyComponent,
         EditFieldComponent,
+        TreeItemHeaderComponent,
     ],
     imports: [
         CommonModule,

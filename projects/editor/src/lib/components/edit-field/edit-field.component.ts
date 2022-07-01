@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { MatTabGroup, MatTabNav } from '@angular/material/tabs';
+import { MatTabGroup } from '@angular/material/tabs';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IEditorFormlyField } from '../../services/editor-service/editor.types';
-import { IProperty, IPropertyValueChange } from '../property/property.types';
+import { IProperty } from '../property/property.types';
 
 @Component({
     selector: 'lib-edit-field',
@@ -16,7 +16,7 @@ export class EditFieldComponent implements OnInit, OnDestroy {
     @Input() isSimplified: boolean;
     @Input() resizeTabHeader$: Observable<void>;
 
-    @Output() propertyChanged: EventEmitter<IPropertyValueChange> = new EventEmitter();
+	@Output() fieldChanged: EventEmitter<void> = new EventEmitter();
 
     @ViewChild(MatTabGroup) matTabGroup: MatTabGroup;
 

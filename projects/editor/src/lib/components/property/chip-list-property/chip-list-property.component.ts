@@ -7,7 +7,6 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { map, startWith } from 'rxjs/operators';
 import { IChipListProperty } from './chip-list-property.types';
 import { BasePropertyComponent } from '../base-property.component';
-import { PropertyValueChangeType } from '../property.types';
 
 @Component({
     selector: 'lib-chip-list-property',
@@ -25,14 +24,12 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
     public selectableOptions: string[];
     public filteredOptions: Observable<string[]>;
 	public get hasOptions(): boolean {
-		return this.property.isDeletable;
+		return this.property.isRemovable;
 	};
 
 	protected propertyname = 'Chiplist';
 
     ngOnChanges(changes: SimpleChanges): void {
-        super.ngOnChanges(changes);
-
         if (!changes.property) {
             return;
         }
@@ -111,10 +108,6 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
             newValue = this.selectedOptions.slice();
         }
 
-        this.onValueChanged({
-            type: PropertyValueChangeType.MODIFY,
-            path: this.path,
-            value: newValue
-        });
+        this.modifyValue(this.property.key, newValue)
     }
 }

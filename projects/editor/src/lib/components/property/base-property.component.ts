@@ -3,50 +3,52 @@ import {
     Component,
     ElementRef,
     EventEmitter,
+    HostBinding,
     Input,
-    OnChanges,
     Output,
-    Renderer2,
-    SimpleChanges,
     ViewChild
 } from '@angular/core';
-import { Subject } from 'rxjs';
-import { IBaseProperty, IPropertyValueChange } from './property.types';
+import { IBaseProperty } from './property.types';
 
 @Component({ template: '' })
-export class BasePropertyComponent implements OnChanges, AfterViewInit {
+export class BasePropertyComponent implements AfterViewInit {
 	@Input() treeLevel = 0;
-	@Input() path = '';
 	@Input() target: Record<string, any> | any[];
 	@Input() property: IBaseProperty;
 	@Input() isSimplified: boolean;
 
     @Output() public remove: EventEmitter<void> = new EventEmitter();
     @Output() public keyChanged: EventEmitter<string> = new EventEmitter();
-	@Output() public valueChanged: EventEmitter<IPropertyValueChange> = new EventEmitter();
+    @Output() public targetChanged: EventEmitter<void> = new EventEmitter();
 
 	@ViewChild('key') keyElement: ElementRef<HTMLElement>;
 
-	public treeLevelPadding: number;
-
-    protected iconSize = 24;
-
-	constructor(private _renderer: Renderer2, private _elementRef: ElementRef) {}
-
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes.treeLevel) {
-            this.treeLevelPadding = this.iconSize * this.treeLevel;
-        }
-    }
+    @HostBinding('class.tree-item') get isTreeItem(): boolean { return !this.isSimplified; }
 
 	ngAfterViewInit(): void {
+        // TODO emit targetChanged on blur for input-like properties
         if (this.keyElement) {
             this.keyElement.nativeElement.innerText = (!!this.property.key || this.property.key === 0) ? this.property.key as string : '';
             this.keyElement.nativeElement.addEventListener('blur', () => this.keyChanged.emit(this.keyElement.nativeElement.innerText));
         }
 	}
 
-	onValueChanged(change: IPropertyValueChange): void {
-        this.valueChanged.emit(change);
-	}
+    addValue(key: string | number, value: any): void {
+        this.target[key] = value;
+        this.targetChanged.emit();
+    }
+
+    modifyValue(key: string | number, value: any): void {
+        this.target[key] = value;
+        this.targetChanged.emit();
+    }
+
+    removeValue(key: string | number): void {
+        if (Array.isArray(this.target)) {
+            this.target.splice(+key, 1);
+        } else {
+            delete this.target[key];
+        }
+        this.targetChanged.emit();
+    }
 }
