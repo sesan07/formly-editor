@@ -54,6 +54,7 @@ import { FormToolbarComponent } from './components/form/form-toolbar/form-toolba
 import { TextareaPropertyComponent } from './components/property/textarea-property/textarea-property.component';
 import { EditFieldComponent } from './components/edit-field/edit-field.component';
 import { TreeItemHeaderComponent } from './components/tree-item-header/tree-item-header.component';
+import { ContainerOptionComponent } from './components/edit-field/edit-field-styles/container-option/container-option.component';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -91,6 +92,7 @@ const defaultConfig: EditorConfigOption = {
         TextareaPropertyComponent,
         EditFieldComponent,
         TreeItemHeaderComponent,
+        ContainerOptionComponent,
     ],
     imports: [
         CommonModule,

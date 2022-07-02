@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
 import { StyleService } from '../../../services/style-service/style.service';
-import { ContainerType, BreakpointType } from '../../../services/style-service/style.types';
+import { ContainerType, BreakpointType, GridChildPrefix, GridContainerPrefix, FlexContainerPrefix } from '../../../services/style-service/style.types';
 import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
 import { PropertyType } from '../../property/property.types';
 
@@ -19,20 +19,18 @@ export class EditFieldStylesComponent implements OnChanges {
 
     containerType: typeof ContainerType = ContainerType;
     containerTypes: ContainerType[] = Object.values(ContainerType);
+
+    flexContainerPrefixes: FlexContainerPrefix[] = Object.values(FlexContainerPrefix);
+    gridContainerPrefixes: GridContainerPrefix[] = Object.values(GridContainerPrefix);
+    gridChildPrefixes: GridChildPrefix[] = Object.values(GridChildPrefix);
+
     breakpointTypes: BreakpointType[] = Object.values(BreakpointType);
 
     parentContainer: ContainerType;
     childrenContainer: ContainerType;
 
     public flexOptions: string[] = ['column', 'column-reverse', 'row', 'row-reverse'];
-
-    public columnOptions: string[] = [...Array(3).keys()].map(i => i + 1 + '');
-    public rowOptions: string[] = [...Array(3).keys()].map(i => i + 1 + '');
-
-    public columnStartOptions: string[] = [ ...Array(3).keys() ].map(i => i + 1 + '');
-    public columnSpanOptions: string[] = [ ...Array(3).keys() ].map(i =>  i + 1 + '');
-    public rowStartOptions: string[] = [ ...Array(3).keys() ].map(i =>  i + 1 + '');
-    public rowSpanOptions: string[] = [ ...Array(3).keys() ].map(i =>  i + 1 + '');
+    public gridNumberOptions: string[] = [...Array(3).keys()].map(i => i + 1 + '');
 
     private _generalProperty: IChipListProperty;
     private _breakpointProperties: Map<BreakpointType, IChipListProperty> = new Map();
@@ -59,7 +57,7 @@ export class EditFieldStylesComponent implements OnChanges {
         }
     }
 
-    onChildrenGroupStyleChanged(value: ContainerType): void {
+    onChildrenContainerChanged(value: string): void {
         let newFieldGroupClassName: string;
         if (this.editField.fieldGroupClassName) {
             if (this.childrenContainer) {
@@ -74,21 +72,16 @@ export class EditFieldStylesComponent implements OnChanges {
             newFieldGroupClassName = value;
         }
         // TODO remove related group styles (flex-direction, grid-cols...) arr.split(' ').filter(!contains prevType).join(' ')
-        this.childrenContainer = value;
+        this.childrenContainer = value as ContainerType;
         this.editField.fieldGroupClassName = newFieldGroupClassName;
         this.fieldChanged.emit();
-        // this.fieldChanged.emit({
-        //     type: PropertyValueChangeType.MODIFY,
-        //     path: 'fieldGroupClassName',
-        //     value: newFieldGroupClassName
-        // });
     }
 
-    onGridClassChanged(value: string, classNamePrefix: string, breakpoint?: BreakpointType): void {
+    onClassChanged(value: string, classNamePrefix: string, breakpoint?: BreakpointType): void {
         this._setClassValue('className', value, classNamePrefix, breakpoint);
     }
 
-    onChildrenGridClassChanged(value: string, classNamePrefix: string, breakpoint?: BreakpointType): void {
+    onChildrenClassChanged(value: string, classNamePrefix: string, breakpoint?: BreakpointType): void {
         this._setClassValue('fieldGroupClassName', value, classNamePrefix, breakpoint);
     }
 
@@ -112,10 +105,22 @@ export class EditFieldStylesComponent implements OnChanges {
         }
     }
 
-    getGroupStyleName(groupStyle: ContainerType): string {
+    getContainerName(groupStyle: ContainerType): string {
         switch (groupStyle) {
             case ContainerType.FLEX: return 'Flex';
             case ContainerType.GRID: return 'Grid';
+        }
+    }
+
+    getNameFromPrefix(prefix: string): string {
+        switch (prefix) {
+            case GridContainerPrefix.COLUMNS: return 'Number of Columns';
+            case GridContainerPrefix.ROWS: return 'Number of Rows';
+            case GridChildPrefix.COLUMN_SPAN: return 'Column Span';
+            case GridChildPrefix.COLUMN_START: return 'Column Start';
+            case GridChildPrefix.ROW_SPAN: return 'Row Span';
+            case GridChildPrefix.ROW_START: return 'Row Start';
+            case FlexContainerPrefix.FLEX_DIRECTION: return 'Flex Direction';
         }
     }
 

@@ -1,5 +1,5 @@
 <section>
-    <h4 class="title">Style Self<span *ngIf="parentContainer"> (Parent is a {{ getGroupStyleName(parentContainer) }})</span></h4>
+    <h4 class="title">Style Self<span *ngIf="parentContainer">(Parent is a {{ getContainerName(parentContainer) }})</span></h4>
 
     <div class="breakpoints">
         <lib-breakpoint
@@ -41,67 +41,27 @@
     
     <ng-template #gridOptions let-breakpointType="breakpointType">
         <div class="container-sub-options">
-            <mat-form-field class="select-field">
-                <mat-label>Column Start</mat-label>
-                <mat-select
-                    [value]="getClassValue('col-start-', breakpointType)"
-                    (selectionChange)="onGridClassChanged($event.value, 'col-start-', breakpointType)"
-                    >
-                    <mat-option *ngFor="let option of columnStartOptions" [value]="option">
-                        {{ option }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-    
-            <mat-form-field class="select-field">
-                <mat-label>Column Span</mat-label>
-                <mat-select
-                    [value]="getClassValue('col-span-', breakpointType)"
-                    (selectionChange)="onGridClassChanged($event.value, 'col-span-', breakpointType)"
-                    >
-                    <mat-option *ngFor="let option of columnSpanOptions" [value]="option">
-                        {{ option }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            
-            <mat-form-field class="select-field">
-                <mat-label>Row Start</mat-label>
-                <mat-select
-                    [value]="getClassValue('row-start-', breakpointType)"
-                    (selectionChange)="onGridClassChanged($event.value, 'row-start-', breakpointType)"
-                    >
-                    <mat-option *ngFor="let option of rowStartOptions" [value]="option">
-                        {{ option }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            
-            <mat-form-field class="select-field">
-                <mat-label>Row span</mat-label>
-                <mat-select
-                    [value]="getClassValue('row-span-', breakpointType)"
-                    (selectionChange)="onGridClassChanged($event.value, 'row-span-', breakpointType)"
-                    >
-                    <mat-option *ngFor="let option of rowSpanOptions" [value]="option">
-                        {{ option }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+            <lib-container-option
+                *ngFor="let prefix of gridChildPrefixes"
+                [label]="getNameFromPrefix(prefix)"
+                [value]="getClassValue(prefix, breakpointType)"
+                [options]="gridNumberOptions"
+                (selectionChanged)="onClassChanged($event, prefix, breakpointType)">
+            </lib-container-option>
         </div>
     </ng-template>
 </section>
 
 <section *ngIf="editField.canHaveChildren">
-    <h4 class="title">Style Children Container</h4>
-
-    <mat-form-field>
-        <mat-label>Container type</mat-label>
-        <mat-select [value]="childrenContainer" (selectionChange)="onChildrenGroupStyleChanged($event.value)">
-            <mat-option *ngFor="let groupStyle of containerTypes" [value]="groupStyle">{{ getGroupStyleName(groupStyle) }}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+    <h4 class="title">Style Children</h4>
+    
+    <lib-container-option
+        [label]="'Container Type'"
+        [value]="childrenContainer"
+        [options]="containerTypes"
+        [optionDisplayFn]="getContainerName"
+        (selectionChanged)="onChildrenContainerChanged($event)">
+    </lib-container-option>
     
     <div class="breakpoints">
         <lib-breakpoint
@@ -156,45 +116,25 @@
 
     <ng-template #childrenFlexOptions let-breakpointType="breakpointType">
         <div class="container-sub-options">
-            <mat-form-field class="select-field">
-                <mat-label>Flex direction</mat-label>
-                <mat-select
-                    [value]="getChildrenClassValue('flex-dir-', breakpointType)"
-                    (selectionChange)="onChildrenGridClassChanged($event.value, 'flex-dir-', breakpointType)"
-                    >
-                    <mat-option *ngFor="let option of flexOptions" [value]="option">
-                        {{ option }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+            <lib-container-option
+                *ngFor="let prefix of flexContainerPrefixes"
+                [label]="getNameFromPrefix(prefix)"
+                [value]="getChildrenClassValue(prefix, breakpointType)"
+                [options]="flexOptions"
+                (selectionChanged)="onChildrenClassChanged($event, prefix, breakpointType)">
+            </lib-container-option>
         </div>
     </ng-template>
 
     <ng-template #childrenGridOptions let-breakpointType="breakpointType">
         <div class="container-sub-options">
-            <mat-form-field class="select-field">
-                <mat-label>Number of columns</mat-label>
-                <mat-select
-                    [value]="getChildrenClassValue('grid-cols-', breakpointType)"
-                    (selectionChange)="onChildrenGridClassChanged($event.value, 'grid-cols-', breakpointType)"
-                    >
-                    <mat-option *ngFor="let option of columnOptions" [value]="option">
-                        {{ option }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        
-            <mat-form-field class="select-field">
-                <mat-label>Number of rows</mat-label>
-                <mat-select
-                    [value]="getChildrenClassValue('grid-rows-', breakpointType)"
-                    (selectionChange)="onChildrenGridClassChanged($event.value, 'grid-rows-', breakpointType)"
-                    >
-                    <mat-option *ngFor="let option of rowOptions" [value]="option">
-                        {{ option }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+            <lib-container-option
+                *ngFor="let prefix of gridContainerPrefixes"
+                [label]="getNameFromPrefix(prefix)"
+                [value]="getChildrenClassValue(prefix, breakpointType)"
+                [options]="gridNumberOptions"
+                (selectionChanged)="onChildrenClassChanged($event, prefix, breakpointType)">
+            </lib-container-option>
         </div>
     </ng-template>
 </section>
