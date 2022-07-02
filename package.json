@@ -7,10 +7,10 @@
     "postinstall": "ngcc",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "build-app:prod": "ng build formly-editor --configuration production",
-    "build-editor": "ng build editor --watch",
+    "build-editor:dev": "ng build editor --watch",
     "build-editor:prod": "ng build editor --configuration production",
+    "build-app:prod": "ng build formly-editor --configuration production",
+    "build:deploy": "npm run build-editor:prod && npm run build-app:prod",
     "test": "ng test",
     "e2e": "ng e2e",
     "lint": "ng lint --fix",
@@ -40,7 +40,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.1002.3",
+    "@angular-devkit/build-angular": "0.1002.4",
     "@angular-eslint/builder": "1.2.0",
     "@angular-eslint/eslint-plugin": "1.2.0",
     "@angular-eslint/eslint-plugin-template": "1.2.0",
