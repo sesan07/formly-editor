@@ -1,10 +1,10 @@
 import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Observable } from 'rxjs';
+import { isObservable, Observable, Subject } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, takeUntil } from 'rxjs/operators';
 import { IChipListProperty } from './chip-list-property.types';
 import { BasePropertyComponent } from '../base-property.component';
 
@@ -29,14 +29,19 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
 
 	protected propertyname = 'Chiplist';
 
+    private _unSubOptions$: Subject<void> = new Subject();
+    private _unSubHiddenOptions$: Subject<void> = new Subject();
+    private _hiddenOptions: string[];
+
     ngOnChanges(changes: SimpleChanges): void {
         if (!changes.property) {
             return;
         }
 
+        this._setupSelectableOptions();
+        this._setupHiddenOptions();
         this._updateSelectedOptions();
 
-        this.selectableOptions = [...this.property.options];
         this.filteredOptions = this.formControl.valueChanges.pipe(
             startWith(''),
             map((option: string) => option ? this._filter(option) : this.selectableOptions.slice())
@@ -44,8 +49,8 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
     }
 
     isHidden(option: string): boolean {
-        return this.property.hiddenOptions
-            ? this.property.hiddenOptions.includes(option)
+        return this._hiddenOptions
+            ? this._hiddenOptions.includes(option)
             : false;
     }
 
@@ -81,6 +86,32 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
         this.inputElementRef.nativeElement.value = '';
         this.formControl.setValue(null);
         this._updateValue();
+    }
+
+    private _setupSelectableOptions(): void {
+        if (isObservable(this.property.options)) {
+            this._unSubOptions$.next();
+            this.property.options
+                .pipe(takeUntil(this._unSubOptions$))
+                .subscribe(options => this.selectableOptions = options)
+        } else {
+            this.selectableOptions = [...this.property.options];
+        }
+    }
+
+    private _setupHiddenOptions(): void {
+        if (!this.property.hiddenOptions) {
+            return;
+        }
+        
+        if (isObservable(this.property.hiddenOptions)) {
+            this._unSubHiddenOptions$.next();
+            this.property.hiddenOptions
+                .pipe(takeUntil(this._unSubHiddenOptions$))
+                .subscribe(options => this._hiddenOptions = options)
+        } else {
+            this._hiddenOptions = [...this.property.hiddenOptions];
+        }
     }
 
     private _filter(value: string): string[] {

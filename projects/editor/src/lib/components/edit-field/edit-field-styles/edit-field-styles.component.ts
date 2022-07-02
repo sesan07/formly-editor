@@ -203,7 +203,7 @@ export class EditFieldStylesComponent implements OnChanges {
             name: 'Custom classes',
             type: PropertyType.CHIP_LIST,
             options: this._styleService.getBreakpointClassNames(breakpoint),
-            hiddenOptions: this._styleService.getContainerClassNames(),
+            hiddenOptions: this._styleService.containerClassNames$,
             outputString: true,
             isSimple: true,
         };
