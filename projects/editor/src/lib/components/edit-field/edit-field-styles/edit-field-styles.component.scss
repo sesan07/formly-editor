@@ -20,9 +20,3 @@
     grid-template-columns: 1fr 1fr;
     gap: 8px;
 }
-
-:host::ng-deep {
-    .select-field .mat-form-field-infix {
-        width: 9rem;
-    }
-}
