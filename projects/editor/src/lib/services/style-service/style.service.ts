@@ -1,32 +1,40 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { BreakpointType, ContainerClassPrefix, ContainerType } from './style.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class StyleService {
+    public get allClassNames$(): Observable<string[]> {
+        return this._allClassNames$.asObservable();
+    }
+    public get containerClassNames$(): Observable<string[]> {
+        return this._containerClassNames$.asObservable();
+    }
+    public get generalClassNames$(): Observable<string[]> {
+        return this._generalClassNames$.asObservable();
+    }
 
 	private readonly _selectorRegexp = /\.-?[_a-zA-Z]+[\w-]*/g;
-	private _allClassNames: string[] = [];
-    private _containerClassNames: string[];
-    private _generalClassNames: string[];
-    private _breakpointClassNamesMap: Map<BreakpointType, string[]> = new Map();
+	private _allClassNames$: BehaviorSubject<string[]> = new BehaviorSubject([]);
+    private _containerClassNames$: BehaviorSubject<string[]> = new BehaviorSubject([]);
+    private _generalClassNames$: BehaviorSubject<string[]> = new BehaviorSubject([]);
+    private _breakpointClassNamesMap: Map<BreakpointType, BehaviorSubject<string[]>> = new Map();
 
 	constructor(private _http: HttpClient) {
+        // Populate breakpoint map
+        Object.values(BreakpointType).forEach(breakpoint => {
+            this._breakpointClassNamesMap.set(breakpoint, new BehaviorSubject([]));
+        })
+
+        // Set up
         this._setupClassNames();
 	}
 
-    public getAllClassNames(): string[] {
-        return this._allClassNames;
-    }
-
-    public getBreakpointClassNames(breakpointType?: BreakpointType): string[] {
-        return breakpointType ? this._breakpointClassNamesMap.get(breakpointType) : this._generalClassNames;
-    }
-
-    public getContainerClassNames(): string[] {
-        return this._containerClassNames;
+    public getBreakpointClassNames(breakpointType?: BreakpointType): Observable<string[]> {
+        return breakpointType ? this._breakpointClassNamesMap.get(breakpointType) : this._generalClassNames$;
     }
 
     private _getStyleRuleClassNames(rule: CSSStyleRule): string[] {
@@ -58,33 +66,43 @@ export class StyleService {
 
     private _setupClassNames(): void {
 		this._http.get('assets/custom-styles.css', { responseType: 'text' }).subscribe((response) => {
-			this._allClassNames.push(...this._parseClassNames(response));
-
             const containers: string[] = Object.values(ContainerType);
             const prefixes: string[] = Object.values(ContainerClassPrefix);
             const breakpoints: string[] = Object.values(BreakpointType);
 
+            const allClassNames = this._parseClassNames(response);
+
             // Container classes
-            this._containerClassNames = this._allClassNames.filter(className =>
-                prefixes.some(prefix => className.startsWith(prefix))
-            ).concat(containers);
+            const containerClassNames = allClassNames
+                .filter(className =>
+                    prefixes.some(prefix => className.startsWith(prefix))
+                )
+                .concat(containers);
 
             // Breakpoint classes
-            const validBreakpointClassNames: string[] = this._allClassNames.filter(className =>
-                !prefixes.some(prefix => className.startsWith(prefix))
-                && !containers.includes(className)
-            );
-
-            this._generalClassNames = validBreakpointClassNames.filter(className =>
-                !breakpoints.some(breakpoint => className.endsWith(breakpoint))
-            );
-            breakpoints.forEach(breakpoint => {
-                this._breakpointClassNamesMap.set(
-                    breakpoint as BreakpointType,
-                    validBreakpointClassNames.filter(className => className.endsWith(breakpoint))
+            const validBreakpointClassNames: string[] = allClassNames
+                .filter(className =>
+                    !prefixes.some(prefix => className.startsWith(prefix))
+                    && !containers.includes(className)
                 );
+
+            const generalClassNames = validBreakpointClassNames
+                .filter(className =>
+                    !breakpoints.some(breakpoint => className.endsWith(breakpoint))
+                );
+            
+            breakpoints.forEach(breakpoint => {
+                const breakpointClasses: string[] = validBreakpointClassNames
+                    .filter(className =>
+                        className.endsWith(breakpoint)
+                    )
+
+                this._breakpointClassNamesMap.get(breakpoint as BreakpointType).next(breakpointClasses);
             });
 
+			this._allClassNames$.next(allClassNames);
+            this._containerClassNames$.next(containerClassNames);
+            this._generalClassNames$.next(generalClassNames);
 		});
     }
 }

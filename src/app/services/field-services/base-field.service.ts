@@ -38,13 +38,13 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 			{
 				key: 'className',
 				type: PropertyType.CHIP_LIST,
-				options: this._styleService.getAllClassNames(),
+				options: this._styleService.allClassNames$,
 				outputString: true,
 			} as IChipListProperty,
 			{
 				key: 'fieldGroupClassName',
 				type: PropertyType.CHIP_LIST,
-				options: this._styleService.getAllClassNames(),
+				options: this._styleService.allClassNames$,
 				outputString: true,
 			} as IChipListProperty,
 			{

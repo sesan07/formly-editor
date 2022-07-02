@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { get, isEmpty, merge, set } from 'lodash-es';
-import { forkJoin, Observable, of, Subject } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { forkJoin, isObservable, Observable, of, Subject } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import {
     EDITOR_FIELD_SERVICE,
@@ -270,13 +270,17 @@ export class EditorService {
 
         // Properties
         const properties: IProperty[] = this._fieldService.getProperties(baseField.type);
-        // Check for 'wrappers' chip list property, make 'editor' unremovable
+        // Check for 'wrappers' chip list property, make 'editor' hidden
         const wrappersProperty: IChipListProperty = properties.find(property => property.key === 'wrappers') as IChipListProperty;
         if (wrappersProperty && wrappersProperty.type === PropertyType.CHIP_LIST) {
             if (!wrappersProperty.hiddenOptions) {
                 wrappersProperty.hiddenOptions = [WrapperType.EDITOR];
             } else {
-                wrappersProperty.hiddenOptions.unshift(WrapperType.EDITOR);
+                if (isObservable(wrappersProperty.hiddenOptions)) {
+                    wrappersProperty.hiddenOptions.pipe(map(options => [WrapperType.EDITOR, ...options]))
+                } else {
+                    wrappersProperty.hiddenOptions.unshift(WrapperType.EDITOR);
+                }
             }
         }
 
