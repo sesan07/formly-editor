@@ -11,7 +11,7 @@
     <span>{{ editorService.getFormattedFieldName(field.name, field.key) }}</span>
 </lib-tree-item-header>
 
-<div [ngStyle]="{ display: (childFields && isExpanded) ? 'block' : 'none' }">
+<div [class.hidden]="!isExpanded">
     <lib-field-tree-item *ngFor="let child of childFields; trackBy: trackFieldById" [field]="child"
                             [treeLevel]="treeLevel + 1"
                             (remove)="onRemoveChildField(child)"
