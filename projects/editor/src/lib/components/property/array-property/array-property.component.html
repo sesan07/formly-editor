@@ -18,9 +18,9 @@
     </span>
 </lib-tree-item-header>
 
-<ng-container *ngIf="!isSimplified && isExpanded">
+<div *ngIf="!isSimplified" [class.hidden]="!isExpanded">
     <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
-</ng-container>
+</div>
 
 <ng-template #simplifiedView>
     <div class="simplified-header" (click)="isExpanded = !isExpanded">

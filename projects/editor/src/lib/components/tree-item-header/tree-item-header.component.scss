@@ -8,13 +8,18 @@
     white-space: nowrap;
 	border-radius: 4px;
 
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.06);
+    }
+
     &.active {
         background-color: rgba(0, 0, 0, 0.1);
         border-radius: 4px;
     }
 
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.06);
+    &.active:hover {
+        background-color: rgba(0, 0, 0, 0.16);
+        border-radius: 4px;
     }
 }
 
