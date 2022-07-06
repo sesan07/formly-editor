@@ -29,7 +29,7 @@ export class BasePropertyComponent implements AfterViewInit {
         // TODO emit targetChanged on blur for input-like properties
         if (this.keyElement) {
             this.keyElement.nativeElement.innerText = (!!this.property.key || this.property.key === 0) ? this.property.key as string : '';
-            this.keyElement.nativeElement.addEventListener('blur', () => this.keyChanged.emit(this.keyElement.nativeElement.innerText));
+            this.keyElement.nativeElement.addEventListener('blur', () => this.onKeyChanged(this.keyElement.nativeElement.innerText));
         }
 	}
 
@@ -51,4 +51,12 @@ export class BasePropertyComponent implements AfterViewInit {
         }
         this.targetChanged.emit();
     }
+
+	onKeyChanged(newKey: string): void {
+        const value: any = this.target[this.property.key];
+        delete this.target[this.property.key];
+        this.target[newKey] = value;
+        this.property.key = newKey;
+        this.targetChanged.emit();
+	}
 }

@@ -14,7 +14,7 @@
             [contentEditable]="!!property.isKeyEditable">
             (click)="onKeyClicked($event)"
         </span>
-        <span>{{ '[ ' + target.length + ' ]' }}</span>
+        <span>{{ '[ ' + childrenTarget.length + ' ]' }}</span>
     </span>
 </lib-tree-item-header>
 
@@ -28,7 +28,7 @@
                 <button mat-icon-button (click)="isExpanded = !isExpanded; $event.stopPropagation()">
                     <mat-icon class="expand-icon" [class.expanded-90]="isExpanded">chevron_right</mat-icon>
                 </button>
-                <span>{{ property.name ? property.name : property.key + ' [ ' + target.length + ' ]' }}</span>
+                <span>{{ property.name ? property.name : property.key + ' [ ' + childrenTarget.length + ' ]' }}</span>
             </span>
             
             <button *ngIf="property.canAdd" mat-icon-button (click)="onAddChild(); $event.stopPropagation()">
@@ -45,15 +45,65 @@
 </ng-template>
 
 <ng-template #childPropertiesView>
-    <ng-container *ngFor="let childProperty of childProperties; let i = index; let last = last; trackBy: trackPropertyByKey">
-        <lib-property
-            [treeLevel]="treeLevel + 1"
-            [target]="target"
-            [property]="childProperty"
-            [isSimplified]="isSimplified"
-            (remove)="onRemoveChild(i)"
-            (targetChanged)="targetChanged.emit()">
-        </lib-property>
+    <ng-container *ngFor="let child of childProperties; let i = index; let last = last; trackBy: trackPropertyByKey">
+        <ng-container [ngSwitch]="child.type">
+            <lib-object-property
+                *ngSwitchCase="propertyType.OBJECT"
+                [treeLevel]="treeLevel + 1"
+                [target]="childrenTarget"
+                [property]="propertyService.getAsObjectProperty(child)"
+                [isSimplified]="isSimplified"
+                (remove)="onRemoveChild(i)"
+                (targetChanged)="targetChanged.emit()">
+            </lib-object-property>
+        
+            <lib-boolean-property
+                *ngSwitchCase="propertyType.BOOLEAN"
+                [treeLevel]="treeLevel + 1"
+                [property]="child"
+                [target]="childrenTarget"
+                [isSimplified]="isSimplified"
+                (remove)="onRemoveChild(i)"
+                (targetChanged)="targetChanged.emit()">
+            </lib-boolean-property>
+        
+            <lib-chip-list-property
+                *ngSwitchCase="propertyType.CHIP_LIST"
+                [treeLevel]="treeLevel + 1"
+                [property]="propertyService.getAsChiplistProperty(child)"
+                [target]="childrenTarget"
+                [isSimplified]="isSimplified"
+                (remove)="onRemoveChild(i)"
+                (targetChanged)="targetChanged.emit()">
+            </lib-chip-list-property>
+        
+            <lib-textarea-property
+                *ngSwitchCase="propertyType.TEXTAREA"
+                [treeLevel]="treeLevel + 1"
+                [property]="propertyService.getAsTextareaProperty(child)"
+                [target]="childrenTarget"
+                [isSimplified]="isSimplified"
+                (remove)="onRemoveChild(i)"
+                (targetChanged)="targetChanged.emit()">
+            </lib-textarea-property>
+        
+            <ng-container *ngSwitchCase="propertyType.NUMBER">
+                <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="propertyType.TEXT">
+                <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
+            </ng-container>
+            <ng-template #inputProperty>
+                <lib-input-property
+                    [treeLevel]="treeLevel + 1"
+                    [property]="propertyService.getAsInputProperty(child)"
+                    [target]="childrenTarget"
+                    [isSimplified]="isSimplified"
+                    (remove)="onRemoveChild(i)"
+                    (targetChanged)="targetChanged.emit()">
+                </lib-input-property>
+            </ng-template>
+        </ng-container>
         <mat-divider *ngIf="isSimplified && !last"></mat-divider>
     </ng-container>
 </ng-template>
