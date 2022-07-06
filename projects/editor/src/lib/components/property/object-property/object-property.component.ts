@@ -12,10 +12,12 @@ import { IObjectProperty } from './object-property.types';
 export class ObjectPropertyComponent extends BasePropertyComponent implements OnChanges {
 	@Input() property: IObjectProperty;
 	@Input() isExpanded: boolean;
+	@Input() isRoot: boolean;
 
 	public propertyType: typeof PropertyType = PropertyType;
-
 	public propertyTypes: PropertyType[] = Object.values(PropertyType);
+
+    public childrenTarget: Record<string, any>;
     public get canAdd(): boolean { return this.property.addOptions?.length > 0; }
 	public get hasOptions(): boolean {
 		return this.property.isRemovable || this.canAdd;
@@ -26,6 +28,10 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
 	constructor(public propertyService: PropertyService) { super(); }
 
 	ngOnChanges(changes: SimpleChanges): void {
+        if(changes.target) {
+            this.childrenTarget = this.isRoot ? this.target : this.target[this.property.key];
+        }
+
 		if (changes.property?.currentValue?.populateChildrenFromTarget) {
 			this._populateChildrenFromTarget();
 		}
@@ -56,7 +62,7 @@ export class ObjectPropertyComponent extends BasePropertyComponent implements On
     trackPropertyByKey: TrackByFunction<IProperty> = (_, property: IProperty) => property.key;
 
 	private _populateChildrenFromTarget() {
-		Object.entries(this.target).forEach(([key, value]) => {
+		Object.entries(this.childrenTarget).forEach(([key, value]) => {
 			// Check if property alreay exists for key
 			if (this.property.childProperties.some(p => p.key === key)) {
 				return;

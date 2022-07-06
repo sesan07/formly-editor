@@ -10,13 +10,12 @@
                 *ngIf="parentContainer === containerType.GRID"
                 [ngTemplateOutlet]="gridOptions">
             </ng-container>
-            <lib-property
+            <lib-chip-list-property
                 [target]="editField"
                 [property]="getProperty()"
                 [isSimplified]="true"
-                [isRoot]="true"
                 (targetChanged)="fieldChanged.emit()">
-            </lib-property>
+            </lib-chip-list-property>
         </lib-breakpoint>
     
         <lib-breakpoint
@@ -29,13 +28,12 @@
                 [ngTemplateOutlet]="gridOptions"
                 [ngTemplateOutletContext]="{ breakpointType: breakpointType }">
             </ng-container>
-            <lib-property
+            <lib-chip-list-property
                 [target]="editField"
                 [property]="getProperty(breakpointType)"
                 [isSimplified]="true"
-                [isRoot]="true"
                 (targetChanged)="fieldChanged.emit()">
-            </lib-property>
+            </lib-chip-list-property>
         </lib-breakpoint>
     </div>
     
@@ -78,13 +76,12 @@
                     [ngTemplateOutlet]="childrenGridOptions">
                 </ng-container>
             </ng-container>
-            <lib-property
+            <lib-chip-list-property
                 [target]="editField"
                 [property]="getChildrenProperty()"
                 [isSimplified]="true"
-                [isRoot]="true"
                 (targetChanged)="fieldChanged.emit()">
-            </lib-property>
+            </lib-chip-list-property>
         </lib-breakpoint>
     
         <lib-breakpoint
@@ -104,13 +101,12 @@
                     [ngTemplateOutletContext]="{ breakpointType: breakpointType }">
                 </ng-container>
             </ng-container>
-            <lib-property
+            <lib-chip-list-property
                 [target]="editField"
                 [property]="getChildrenProperty(breakpointType)"
                 [isSimplified]="true"
-                [isRoot]="true"
                 (targetChanged)="fieldChanged.emit()">
-            </lib-property>
+            </lib-chip-list-property>
         </lib-breakpoint>
     </div>
 

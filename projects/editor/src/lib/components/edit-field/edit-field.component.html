@@ -1,13 +1,14 @@
 <mat-tab-group mat-stretch-tabs>
     <mat-tab label="General">
         <div class="tree-container">
-            <lib-property
+            <lib-object-property
                 [target]="field"
                 [property]="property"
                 [isSimplified]="isSimplified"
+                [isExpanded]="true"
                 [isRoot]="true"
                 (targetChanged)="fieldChanged.emit()">
-            </lib-property>
+            </lib-object-property>
         </div>
     </mat-tab>
     <mat-tab label="Styling">

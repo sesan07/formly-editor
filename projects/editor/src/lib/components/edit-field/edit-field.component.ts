@@ -3,6 +3,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IEditorFormlyField } from '../../services/editor-service/editor.types';
+import { IObjectProperty } from '../property/object-property/object-property.types';
 import { IProperty } from '../property/property.types';
 
 @Component({
@@ -12,7 +13,7 @@ import { IProperty } from '../property/property.types';
 })
 export class EditFieldComponent implements OnInit, OnDestroy {
     @Input() field: IEditorFormlyField;
-    @Input() property: IProperty;
+    @Input() property: IObjectProperty;
     @Input() isSimplified: boolean;
     @Input() resizeTabHeader$: Observable<void>;
 

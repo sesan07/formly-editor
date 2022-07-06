@@ -79,12 +79,13 @@
         </div>
         
         <div class="tree-container" mainContent>
-            <lib-property 
+            <lib-object-property
                 [target]="form.model"
                 [property]="modelProperty"
+                [isExpanded]="true"
                 [isRoot]="true"
                 (targetChanged)="onModelPropertyChanged()">
-            </lib-property>
+            </lib-object-property>
         </div>
 	</lib-sidebar-section>
 </lib-sidebar>

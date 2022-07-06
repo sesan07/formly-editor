@@ -12,9 +12,11 @@ import { IArrayProperty } from './array-property.types';
 })
 export class ArrayPropertyComponent extends BasePropertyComponent implements OnChanges {
 	@Input() property: IArrayProperty;
-	@Input() target: any[];
+	@Input() isRoot: boolean;
 
 	public propertyType: typeof PropertyType = PropertyType;
+
+    public childrenTarget: any[];
 	public isExpanded: boolean;
 
 	public get hasOptions(): boolean {
@@ -28,6 +30,10 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnC
 	constructor(public propertyService: PropertyService) { super(); }
 
     ngOnChanges(changes: SimpleChanges): void {
+        if(changes.target) {
+            this.childrenTarget = this.isRoot ? this.target : this.target[this.property.key];
+        }
+
         if (changes.property) {
             this._populateChildrenFromTarget();
         }
@@ -65,7 +71,7 @@ export class ArrayPropertyComponent extends BasePropertyComponent implements OnC
 	private _populateChildrenFromTarget() {
 		this.childProperties = [];
 
-		this.target.forEach((_, index) => {
+		this.childrenTarget.forEach((_, index) => {
 			const childPropertyClone: IProperty = this._getChildPropertyClone(index);
 			this.childProperties.push(childPropertyClone);
 		});
