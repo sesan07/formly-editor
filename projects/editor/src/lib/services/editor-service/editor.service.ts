@@ -277,7 +277,7 @@ export class EditorService {
                 wrappersProperty.hiddenOptions = [WrapperType.EDITOR];
             } else {
                 if (isObservable(wrappersProperty.hiddenOptions)) {
-                    wrappersProperty.hiddenOptions.pipe(map(options => [WrapperType.EDITOR, ...options]))
+                    wrappersProperty.hiddenOptions.pipe(map(options => [WrapperType.EDITOR, ...options]));
                 } else {
                     wrappersProperty.hiddenOptions.unshift(WrapperType.EDITOR);
                 }

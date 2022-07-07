@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnChanges, Renderer2, SimpleChanges, TrackByFunction } from '@angular/core';
 import { cloneDeep } from 'lodash-es';
-import { BasePropertyComponent } from '../base-property.component';
+import { BasePropertyDirective } from '../base-property.component';
 import { PropertyService } from '../property.service';
 import { IProperty, PropertyType } from '../property.types';
 import { IArrayProperty } from './array-property.types';
@@ -10,7 +10,7 @@ import { IArrayProperty } from './array-property.types';
     templateUrl: './array-property.component.html',
     styleUrls: ['./array-property.component.scss'],
 })
-export class ArrayPropertyComponent extends BasePropertyComponent implements OnChanges {
+export class ArrayPropertyComponent extends BasePropertyDirective implements OnChanges {
 	@Input() property: IArrayProperty;
 	@Input() isRoot: boolean;
 

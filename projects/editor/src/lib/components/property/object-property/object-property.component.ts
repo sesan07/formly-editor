@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges, TrackByFunction } from '@angular/core';
-import { BasePropertyComponent } from '../base-property.component';
+import { BasePropertyDirective } from '../base-property.component';
 import { PropertyService } from '../property.service';
 import { IProperty, PropertyType } from '../property.types';
 import { IObjectProperty } from './object-property.types';
@@ -9,7 +9,7 @@ import { IObjectProperty } from './object-property.types';
 	templateUrl: './object-property.component.html',
 	styleUrls: ['./object-property.component.scss'],
 })
-export class ObjectPropertyComponent extends BasePropertyComponent implements OnChanges {
+export class ObjectPropertyComponent extends BasePropertyDirective implements OnChanges {
 	@Input() property: IObjectProperty;
 	@Input() isExpanded: boolean;
 	@Input() isRoot: boolean;

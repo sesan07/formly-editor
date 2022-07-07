@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { BasePropertyComponent } from '../base-property.component';
+import { BasePropertyDirective } from '../base-property.component';
 import { ITextareaProperty } from './textarea-property.types';
 
 @Component({
@@ -8,7 +8,7 @@ import { ITextareaProperty } from './textarea-property.types';
     templateUrl: './textarea-property.component.html',
     styleUrls: ['./textarea-property.component.scss']
 })
-export class TextareaPropertyComponent extends BasePropertyComponent implements OnInit {
+export class TextareaPropertyComponent extends BasePropertyDirective implements OnInit {
 	@Input() property: ITextareaProperty;
 
     public formControl: FormControl;

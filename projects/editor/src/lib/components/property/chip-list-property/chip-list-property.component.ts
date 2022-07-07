@@ -6,14 +6,14 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { map, startWith, takeUntil } from 'rxjs/operators';
 import { IChipListProperty } from './chip-list-property.types';
-import { BasePropertyComponent } from '../base-property.component';
+import { BasePropertyDirective } from '../base-property.component';
 
 @Component({
     selector: 'lib-chip-list-property',
     templateUrl: './chip-list-property.component.html',
     styleUrls: ['./chip-list-property.component.scss'],
 })
-export class ChipListPropertyComponent extends BasePropertyComponent implements OnChanges {
+export class ChipListPropertyComponent extends BasePropertyDirective implements OnChanges {
     @Input() property: IChipListProperty;
 
     @ViewChild('input') inputElementRef: ElementRef<HTMLInputElement>;
@@ -93,7 +93,7 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
             this._unSubOptions$.next();
             this.property.options
                 .pipe(takeUntil(this._unSubOptions$))
-                .subscribe(options => this.selectableOptions = options)
+                .subscribe(options => this.selectableOptions = options);
         } else {
             this.selectableOptions = [...this.property.options];
         }
@@ -103,12 +103,12 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
         if (!this.property.hiddenOptions) {
             return;
         }
-        
+
         if (isObservable(this.property.hiddenOptions)) {
             this._unSubHiddenOptions$.next();
             this.property.hiddenOptions
                 .pipe(takeUntil(this._unSubHiddenOptions$))
-                .subscribe(options => this._hiddenOptions = options)
+                .subscribe(options => this._hiddenOptions = options);
         } else {
             this._hiddenOptions = [...this.property.hiddenOptions];
         }
@@ -139,6 +139,6 @@ export class ChipListPropertyComponent extends BasePropertyComponent implements 
             newValue = this.selectedOptions.slice();
         }
 
-        this.modifyValue(this.property.key, newValue)
+        this.modifyValue(this.property.key, newValue);
     }
 }
