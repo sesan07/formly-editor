@@ -1,8 +1,8 @@
-import { IArrayProperty } from './array-property/array-property.types';
 import { IBooleanProperty } from './boolean-property/boolean-property.types';
 import { IChipListProperty } from './chip-list-property/chip-list-property.types';
 import { IInputProperty } from './input-property/input-property.types';
-import { IObjectProperty } from './object-property/object-property.types';
+import { IArrayProperty } from './object-array-properties/array-property.types';
+import { IObjectProperty } from './object-array-properties/object-property.types';
 
 export enum PropertyType {
 	ARRAY = 'Array',

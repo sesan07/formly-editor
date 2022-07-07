@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { cloneDeep, get } from 'lodash-es';
 import { EditorService } from '../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../services/editor-service/editor.types';
-import { IObjectProperty } from '../property/object-property/object-property.types';
+import { IObjectProperty } from '../property/object-array-properties/object-property.types';
 import { PropertyService } from '../property/property.service';
 import { PropertyType } from '../property/property.types';
 import { EditFieldRequest } from './edit-field-dialog.types';

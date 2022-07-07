@@ -23,10 +23,12 @@ import { MatDividerModule } from '@angular/material/divider';
 import { EditorWrapperComponent } from './components/editor-wrapper/editor-wrapper.component';
 import { FormComponent } from './components/form/form.component';
 import { InputPropertyComponent } from './components/property/input-property/input-property.component';
-import { ObjectPropertyComponent } from './components/property/object-property/object-property.component';
 import { FormViewComponent } from './components/form/form-view/form-view.component';
-import { ArrayPropertyComponent } from './components/property/array-property/array-property.component';
 import { BooleanPropertyComponent } from './components/property/boolean-property/boolean-property.component';
+import {
+    ArrayPropertyComponent,
+    ObjectPropertyComponent
+} from './components/property/object-array-properties/object-array-properties.component';
 import { FieldTreeItemComponent } from './components/field-tree-item/field-tree-item.component';
 import { ChipListPropertyComponent } from './components/property/chip-list-property/chip-list-property.component';
 import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG, FieldType, WrapperType } from './services/editor-service/editor.types';
