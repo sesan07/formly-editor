@@ -31,7 +31,7 @@ export class StyleService {
         // Populate breakpoint map
         Object.values(BreakpointType).forEach(breakpoint => {
             this._breakpointClassNamesMap.set(breakpoint, new BehaviorSubject([]));
-        })
+        });
 
         this._setupClassNames();
 	}
@@ -45,17 +45,17 @@ export class StyleService {
             const containers: string[] = Object.values(ContainerType);
             // Prefixes for container related classes
             const containerPrefixes: string[] = [
-                ...Object.values(GridContainerPrefix), 
-                ...Object.values(GridChildPrefix), 
+                ...Object.values(GridContainerPrefix),
+                ...Object.values(GridChildPrefix),
                 ...Object.values(FlexContainerPrefix)
-            ]
+            ];
             const breakpoints: string[] = Object.values(BreakpointType);
 
             const allClasses: string[] = this._parseClassNames(response);
 
             // Classes that start with a container prefix. And the containers ('flex' and 'grid')
-            const containerClasses: string[] = [...containers]
-            const nonContainerClasses: string[] = []
+            const containerClasses: string[] = [...containers];
+            const nonContainerClasses: string[] = [];
             allClasses.forEach(className => {
                 // If className starts with a container prefix
                 if (containerPrefixes.some(prefix => className.startsWith(prefix))) {
@@ -63,14 +63,14 @@ export class StyleService {
                 } else if (!containers.includes(className)) {
                     nonContainerClasses.push(className);
                 }
-            })
-            
+            });
+
             // Non container classes for each breakpoint
             breakpoints.forEach(breakpoint => {
                 const breakpointClasses: string[] = nonContainerClasses
                     .filter(className =>
                         className.endsWith(breakpoint)
-                    )
+                    );
 
                 this._breakpointClassNamesMap.get(breakpoint as BreakpointType).next(breakpointClasses);
             });

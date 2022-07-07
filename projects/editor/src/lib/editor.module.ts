@@ -42,7 +42,6 @@ import { ImportFormDialogComponent } from './components/import-form-dialog/impor
 import { JsonValidatorDirective } from './components/import-form-dialog/json-validator/json-validator.directive';
 import { ExportFormDialogComponent } from './components/export-form-dialog/export-form-dialog.component';
 import { AddFormDialogComponent } from './components/add-form-dialog/add-form-dialog.component';
-import { BasePropertyComponent } from './components/property/base-property.component';
 import { JsonFileValidatorDirective } from './components/import-form-dialog/json-file-validator/json-file-validator.directive';
 import { EditFieldDialogComponent } from './components/edit-field-dialog/edit-field-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -65,7 +64,6 @@ const defaultConfig: EditorConfigOption = {
     declarations: [
         EditorWrapperComponent,
         FormComponent,
-        BasePropertyComponent,
         InputPropertyComponent,
         ObjectPropertyComponent,
         FormViewComponent,

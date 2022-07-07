@@ -2,7 +2,13 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
 import { StyleService } from '../../../services/style-service/style.service';
-import { ContainerType, BreakpointType, GridChildPrefix, GridContainerPrefix, FlexContainerPrefix } from '../../../services/style-service/style.types';
+import {
+    ContainerType,
+    BreakpointType,
+    GridChildPrefix,
+    GridContainerPrefix,
+    FlexContainerPrefix
+} from '../../../services/style-service/style.types';
 import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
 import { PropertyType } from '../../property/property.types';
 
@@ -192,7 +198,7 @@ export class EditFieldStylesComponent implements OnChanges {
             newPropertyValue = newClassName;
         }
         // TODO remove related group styles (flex-direction, grid-cols...) arr.split(' ').filter(!contains prevType).join(' ')
-        this.editField[property] = newPropertyValue
+        this.editField[property] = newPropertyValue;
         this.fieldChanged.emit();
     }
 

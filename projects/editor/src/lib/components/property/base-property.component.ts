@@ -1,6 +1,6 @@
 import {
     AfterViewInit,
-    Component,
+    Directive,
     ElementRef,
     EventEmitter,
     HostBinding,
@@ -10,8 +10,8 @@ import {
 } from '@angular/core';
 import { IBaseProperty } from './property.types';
 
-@Component({ template: '' })
-export class BasePropertyComponent implements AfterViewInit {
+@Directive()
+export abstract class BasePropertyDirective implements AfterViewInit {
 	@Input() treeLevel = 0;
 	@Input() target: Record<string, any> | any[];
 	@Input() property: IBaseProperty;

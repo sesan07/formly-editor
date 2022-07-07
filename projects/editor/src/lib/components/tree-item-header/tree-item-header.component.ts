@@ -20,16 +20,11 @@ export class TreeItemHeaderComponent implements OnInit {
 	public sideLinePositions: number[];
     public stickyOptions: boolean;
 
-    @HostBinding('class.active') get isHeaderActive(): boolean { return this.isActive }
+    @HostBinding('class.active') get isHeaderActive(): boolean { return this.isActive; }
 
     private readonly _treeIndentation = 18;
 
     constructor() { }
-
-    ngOnInit(): void {
-        this.treeLevelPadding = this._treeIndentation * this.treeLevel;
-        this.sideLinePositions = [ ...Array(this.treeLevel).keys() ].map(i => ((i + 1) * this._treeIndentation));
-    }
 
     @HostListener('mouseenter')
     onMouseEnter(): void {
@@ -51,6 +46,11 @@ export class TreeItemHeaderComponent implements OnInit {
             event.stopPropagation();
         }
 	}
+
+    ngOnInit(): void {
+        this.treeLevelPadding = this._treeIndentation * this.treeLevel;
+        this.sideLinePositions = [ ...Array(this.treeLevel).keys() ].map(i => ((i + 1) * this._treeIndentation));
+    }
 
 	onToggle(event: MouseEvent): void {
 		this.isExpanded = !this.isExpanded;

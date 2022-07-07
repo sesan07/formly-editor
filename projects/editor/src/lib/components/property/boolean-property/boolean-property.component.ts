@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { BasePropertyComponent } from '../base-property.component';
+import { BasePropertyDirective } from '../base-property.component';
 import { IBooleanProperty } from './boolean-property.types';
 
 @Component({
@@ -8,7 +8,7 @@ import { IBooleanProperty } from './boolean-property.types';
     templateUrl: './boolean-property.component.html',
     styleUrls: ['./boolean-property.component.scss'],
 })
-export class BooleanPropertyComponent extends BasePropertyComponent implements OnInit {
+export class BooleanPropertyComponent extends BasePropertyDirective implements OnInit {
 	@Input() property: IBooleanProperty;
 
     public formControl: FormControl;
