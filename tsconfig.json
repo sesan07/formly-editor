@@ -16,11 +16,13 @@
       "dom"
     ],
     "paths": {
-      "editor": [
-        "dist/editor/editor",
-        "dist/editor"
-      ]
-    }
+        "@ngx-formly/*": [
+            "projects/ngx-formly/src/*/src/public_api",
+            "projects/ngx-formly/src/ui/*/src/public_api"],
+        "editor": [
+            "projects/editor/src/public-api",
+        ]
+    },
   },
   "angularCompilerOptions": {
     "strictTemplates": true
