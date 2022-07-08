@@ -1,10 +1,10 @@
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
-import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
-import { DragAction, IItemDragData } from '../../services/field-droplist-service/field-droplist.types';
-import { EditorService } from '../../services/editor-service/editor.service';
-import { IEditorFormlyField } from '../../services/editor-service/editor.types';
+import { FieldDroplistService } from '../../../services/field-droplist-service/field-droplist.service';
+import { DragAction, IItemDragData } from '../../../services/field-droplist-service/field-droplist.types';
+import { EditorService } from '../../../services/editor-service/editor.service';
+import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
 
 @Component({
     selector: 'lib-editor-formly-group',

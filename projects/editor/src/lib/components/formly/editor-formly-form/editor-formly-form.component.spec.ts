@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditorWrapperComponent } from './editor-wrapper.component';
+import { EditorFormlyFormComponent } from './editor-formly-form.component';
 
-describe('EditorWrapperComponent', () => {
-  let component: EditorWrapperComponent;
-  let fixture: ComponentFixture<EditorWrapperComponent>;
+describe('EditorFormlyFormComponent', () => {
+  let component: EditorFormlyFormComponent;
+  let fixture: ComponentFixture<EditorFormlyFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditorWrapperComponent ],
+      declarations: [ EditorFormlyFormComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditorWrapperComponent);
+    fixture = TestBed.createComponent(EditorFormlyFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

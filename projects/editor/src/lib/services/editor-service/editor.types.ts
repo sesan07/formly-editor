@@ -1,14 +1,10 @@
 import { InjectionToken } from '@angular/core';
-import { ConfigOption, FormlyFieldConfig, FormlyTemplateOptions, TypeOption } from '@ngx-formly/core';
+import { ConfigOption, FormlyFieldConfig, FormlyFieldConfigCache, FormlyTemplateOptions, TypeOption } from '@ngx-formly/core';
 import { Observable } from 'rxjs';
 import { IProperty } from '../../components/property/property.types';
 
 export enum FieldType {
     FORMLY_GROUP = 'formly-group',
-}
-
-export enum WrapperType {
-    EDITOR = 'editor',
 }
 
 export interface IBaseFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
@@ -32,6 +28,8 @@ export interface IEditorFormlyField extends IBaseFormlyField {
     canHaveChildren?: boolean;
     childrenPath?: string; // Lodash path
 }
+
+export type IEditorFormlyFieldConfigCache = IEditorFormlyField & FormlyFieldConfigCache;
 
 export interface IForm {
     id: string;

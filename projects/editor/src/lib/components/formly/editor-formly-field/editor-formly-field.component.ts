@@ -1,25 +1,37 @@
-import { Component, HostBinding, HostListener, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { FieldWrapper } from '@ngx-formly/core';
-import { IEditorFormlyField } from '../../services/editor-service/editor.types';
-import { EditorService } from '../../services/editor-service/editor.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    HostBinding,
+    HostListener,
+    Input,
+    OnDestroy,
+    OnInit,
+    Optional,
+    Renderer2,
+    ViewContainerRef
+} from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { EditFieldDialogComponent } from '../edit-field-dialog/edit-field-dialog.component';
-import { EditFieldRequest } from '../edit-field-dialog/edit-field-dialog.types';
-import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
+import { FormlyConfig, FormlyField, FormlyFieldTemplates } from '@ngx-formly/core';
+import { Subject, takeUntil } from 'rxjs';
+import { EditorService } from '../../../services/editor-service/editor.service';
+import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
+import { EditFieldDialogComponent } from '../../edit-field-dialog/edit-field-dialog.component';
+import { EditFieldRequest } from '../../edit-field-dialog/edit-field-dialog.types';
 
 @Component({
-    selector: 'lib-editor-wrapper',
-    templateUrl: './editor-wrapper.component.html',
-    styleUrls: ['./editor-wrapper.component.scss'],
+    selector: 'lib-editor-root-formly-field',
+    template: '<ng-template #container></ng-template>'
 })
-export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> implements OnInit, OnDestroy {
-    @ViewChild('fieldComponent', {read: ViewContainerRef, static: true})
-    fieldComponent: ViewContainerRef;
+export class EditorRootFormlyFieldComponent extends FormlyField { }
 
-    @HostBinding('class.edit-mode') get isEditMode(): boolean { return this.editorService.isEditMode; };
-    @HostBinding('class.active') get isActiveField(): boolean { return this._isActiveField; }
+@Component({
+  selector: 'lib-editor-formly-field',
+  templateUrl: './editor-formly-field.component.html',
+  styleUrls: ['./editor-formly-field.component.scss']
+})
+export class EditorFormlyFieldComponent extends FormlyField implements OnInit, OnDestroy {
+    @Input() field: IEditorFormlyField;
 
 	public isMouseInside: boolean;
 	public isFirstChild: boolean;
@@ -27,10 +39,23 @@ export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> imp
     public index: number;
 	public hideOptions: boolean;
 
+    // TODO make isEditMode observable, mark for check
+    @HostBinding('class.edit-mode') get isEditMode(): boolean { return this.editorService.isEditMode; };
+    @HostBinding('class.active') get isActiveField(): boolean { return this._isActiveField; }
+
     private _destroy$: Subject<void> = new Subject();
     private _isActiveField: boolean;
 
-    constructor(public editorService: EditorService, private _dialog: MatDialog){ super(); }
+    constructor(
+        public editorService: EditorService,
+        private _dialog: MatDialog,
+        private _cdRef: ChangeDetectorRef,
+        config: FormlyConfig,
+        renderer: Renderer2,
+        elementRef: ElementRef,
+        hostContainerRef: ViewContainerRef,
+        @Optional() form: FormlyFieldTemplates,
+    ){ super(config, renderer, elementRef, hostContainerRef, form); }
 
     @HostListener('click', ['$event'])
     onClick(event: MouseEvent): void {
@@ -50,6 +75,8 @@ export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> imp
     }
 
     ngOnInit(): void {
+        super.ngOnInit();
+
         if (this.field.parentFieldId) {
             const parent: IEditorFormlyField = this.editorService.getField(this.field.formId, this.field.parentFieldId);
             const siblings: IEditorFormlyField[] = this.editorService.getChildren(parent);
@@ -69,6 +96,7 @@ export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> imp
     }
 
     ngOnDestroy(): void {
+        super.ngOnDestroy();
         this._destroy$.next();
         this._destroy$.complete();
     }
@@ -110,5 +138,7 @@ export class EditorWrapperComponent extends FieldWrapper<IEditorFormlyField> imp
 
 	private _checkActiveField(): void {
 		this._isActiveField =  this.editorService.isActiveField(this.field.formId, this.field.fieldId);
+        this._cdRef.markForCheck();
 	}
+
 }
