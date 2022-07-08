@@ -1,6 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { ConfigOption, FormlyFieldConfig, FormlyTemplateOptions } from '@ngx-formly/core';
-import { TypeOption } from '@ngx-formly/core/lib/services/formly.config';
+import { ConfigOption, FormlyFieldConfig, FormlyTemplateOptions, TypeOption } from '@ngx-formly/core';
 import { Observable } from 'rxjs';
 import { IProperty } from '../../components/property/property.types';
 

@@ -1,7 +1,7 @@
 import { Inject, ModuleWithProviders, NgModule, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FormlyModule, FORMLY_CONFIG } from '@ngx-formly/core';
+import { FormlyModule, FORMLY_CONFIG, TypeOption } from '@ngx-formly/core';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -38,7 +38,6 @@ import { SidebarSectionComponent } from './components/sidebar-section/sidebar-se
 import { EditorFormlyGroupComponent } from './components/editor-formly-group/editor-formly-group.component';
 import { EditorService } from './services/editor-service/editor.service';
 import { cloneDeep } from 'lodash-es';
-import { TypeOption } from '@ngx-formly/core/lib/services/formly.config';
 import { FieldCategoryListComponent } from './components/field-category-list/field-category-list.component';
 import { ImportFormDialogComponent } from './components/import-form-dialog/import-form-dialog.component';
 import { JsonValidatorDirective } from './components/import-form-dialog/json-validator/json-validator.directive';

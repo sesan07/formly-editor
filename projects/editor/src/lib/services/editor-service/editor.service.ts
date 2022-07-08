@@ -190,7 +190,7 @@ export class EditorService {
 		this._removeEmptyProperties(field);
 	}
 
-    public getFormattedFieldName(name: string, key?: string | number | string[]): string {
+    public getFormattedFieldName(name: string, key?: string | number | (string | number)[]): string {
 		return `${name}${key ? ' (' + key + ')' : ''}`;
     }
 
