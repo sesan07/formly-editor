@@ -22,7 +22,8 @@
         </button>
     </div>
 </header>
-<ng-container #fieldComponent></ng-container>
+
+<ng-template #container></ng-template>
             
 <mat-menu #addCategoryMenu="matMenu">
     <ng-container *ngFor="let category of editorService.fieldCategories">
@@ -37,3 +38,4 @@
         </mat-menu>
     </ng-container>
 </mat-menu>
+

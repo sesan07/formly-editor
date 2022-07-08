@@ -36,15 +36,16 @@
     </lib-form-toolbar>
     <mat-tab-group class="tab-group" [selectedIndex]="formDisplayTabIndex">
         <mat-tab>
-            <lib-form-view
-                [form]="form"
-                [formChanged$]="formChanged$"
-                [resetModel$]="resetModel$"
-                (modelChanged)="onModelChanged()">
-            </lib-form-view>
+            <lib-editor-formly-form
+                [form]="formGroup"
+                [fields]="fields"
+                [model]="form.model"
+                [options]="options"
+                (modelChange)="onModelChanged()">
+            </lib-editor-formly-form>
         </mat-tab>
         <mat-tab>
-            <pre><code>{{ jsonFields }}</code></pre>
+            <pre><code>{{ fieldsJSON }}</code></pre>
         </mat-tab>
     </mat-tab-group>
 </div>

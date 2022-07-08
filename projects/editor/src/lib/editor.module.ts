@@ -20,10 +20,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
 
-import { EditorWrapperComponent } from './components/editor-wrapper/editor-wrapper.component';
 import { FormComponent } from './components/form/form.component';
 import { InputPropertyComponent } from './components/property/input-property/input-property.component';
-import { FormViewComponent } from './components/form/form-view/form-view.component';
 import { BooleanPropertyComponent } from './components/property/boolean-property/boolean-property.component';
 import {
     ArrayPropertyComponent,
@@ -31,11 +29,10 @@ import {
 } from './components/property/object-array-properties/object-array-properties.component';
 import { FieldTreeItemComponent } from './components/field-tree-item/field-tree-item.component';
 import { ChipListPropertyComponent } from './components/property/chip-list-property/chip-list-property.component';
-import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG, FieldType, WrapperType } from './services/editor-service/editor.types';
+import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG, FieldType } from './services/editor-service/editor.types';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { EditorComponent } from './components/editor/editor.component';
 import { SidebarSectionComponent } from './components/sidebar-section/sidebar-section.component';
-import { EditorFormlyGroupComponent } from './components/editor-formly-group/editor-formly-group.component';
 import { EditorService } from './services/editor-service/editor.service';
 import { cloneDeep } from 'lodash-es';
 import { FieldCategoryListComponent } from './components/field-category-list/field-category-list.component';
@@ -54,6 +51,12 @@ import { TextareaPropertyComponent } from './components/property/textarea-proper
 import { EditFieldComponent } from './components/edit-field/edit-field.component';
 import { TreeItemHeaderComponent } from './components/tree-item-header/tree-item-header.component';
 import { ContainerOptionComponent } from './components/edit-field/edit-field-styles/container-option/container-option.component';
+import { EditorFormlyGroupComponent } from './components/formly/editor-formly-group/editor-formly-group.component';
+import {
+    EditorFormlyFieldComponent,
+    EditorRootFormlyFieldComponent
+} from './components/formly/editor-formly-field/editor-formly-field.component';
+import { EditorFormlyFormComponent } from './components/formly/editor-formly-form/editor-formly-form.component';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -63,11 +66,9 @@ const defaultConfig: EditorConfigOption = {
 
 @NgModule({
     declarations: [
-        EditorWrapperComponent,
         FormComponent,
         InputPropertyComponent,
         ObjectPropertyComponent,
-        FormViewComponent,
         ArrayPropertyComponent,
         BooleanPropertyComponent,
         FieldTreeItemComponent,
@@ -90,6 +91,9 @@ const defaultConfig: EditorConfigOption = {
         EditFieldComponent,
         TreeItemHeaderComponent,
         ContainerOptionComponent,
+        EditorFormlyFieldComponent,
+        EditorRootFormlyFieldComponent,
+        EditorFormlyFormComponent,
     ],
     imports: [
         CommonModule,
@@ -97,7 +101,6 @@ const defaultConfig: EditorConfigOption = {
         FormsModule,
         FormlyModule.forRoot({
             types: [{ name: FieldType.FORMLY_GROUP, component: EditorFormlyGroupComponent }],
-            wrappers: [{ name: WrapperType.EDITOR, component: EditorWrapperComponent }],
         }),
         MatTreeModule,
         MatButtonModule,

@@ -10,7 +10,6 @@ import {
     IEditorFormlyField,
     IFieldService,
     IForm,
-    WrapperType,
     IBaseFormlyField,
     EditorConfigOption,
     EditorTypeCategoryOption,
@@ -258,31 +257,8 @@ export class EditorService {
         const baseField: IBaseFormlyField = this._fieldService.getDefaultConfig(sourceField.type, sourceField.customType);
         merge(baseField, sourceField);
 
-        // Add editor wrapper
-        if (baseField.wrappers) {
-            const index = baseField.wrappers.indexOf(WrapperType.EDITOR);
-            if (index < 0) {
-                baseField.wrappers.unshift(WrapperType.EDITOR);
-            }
-        } else {
-            baseField.wrappers = [WrapperType.EDITOR];
-        }
-
         // Properties
         const properties: IProperty[] = this._fieldService.getProperties(baseField.type);
-        // Check for 'wrappers' chip list property, make 'editor' hidden
-        const wrappersProperty: IChipListProperty = properties.find(property => property.key === 'wrappers') as IChipListProperty;
-        if (wrappersProperty && wrappersProperty.type === PropertyType.CHIP_LIST) {
-            if (!wrappersProperty.hiddenOptions) {
-                wrappersProperty.hiddenOptions = [WrapperType.EDITOR];
-            } else {
-                if (isObservable(wrappersProperty.hiddenOptions)) {
-                    wrappersProperty.hiddenOptions.pipe(map(options => [WrapperType.EDITOR, ...options]));
-                } else {
-                    wrappersProperty.hiddenOptions.unshift(WrapperType.EDITOR);
-                }
-            }
-        }
 
         // Create editor field
         const typeOption: EditorTypeOption = this._getTypeOption(baseField.type, baseField.customType);
@@ -422,10 +398,5 @@ export class EditorService {
         delete field.canHaveChildren;
         delete field.childrenPath;
         delete field.customType;
-
-        const editorIndex: number = field.wrappers.indexOf(WrapperType.EDITOR);
-        if (editorIndex !== -1) {
-            field.wrappers.splice(editorIndex, 1);
-        }
     }
 }
