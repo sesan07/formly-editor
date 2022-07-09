@@ -10,7 +10,7 @@
     "build:deploy": "ng build formly-editor --configuration production",
     "test": "ng test",
     "e2e": "ng e2e",
-    "lint": "ng lint --fix",
+    "lint:app": "ng lint formly-editor --fix",
     "lint:editor": "ng lint editor --fix"
   },
   "private": true,
