@@ -10,7 +10,7 @@ import { PropertyType } from '../property/property.types';
 import { EditFieldRequest } from './edit-field-dialog.types';
 
 @Component({
-    selector: 'lib-edit-field-dialog',
+    selector: 'editor-edit-field-dialog',
     templateUrl: './edit-field-dialog.component.html',
     styleUrls: ['./edit-field-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

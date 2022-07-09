@@ -1,4 +1,4 @@
-<lib-tree-item-header 
+<editor-tree-item-header 
     *ngIf="!isSimplified else simplifiedView"
     [treeLevel]="treeLevel"
     [hasOptions]="hasOptions"
@@ -15,7 +15,7 @@
     <span class="property-field">
         <ng-container [ngTemplateOutlet]="formField" [ngTemplateOutletContext]="{ appearance: 'outline' }"></ng-container>
     </span>
-</lib-tree-item-header>
+</editor-tree-item-header>
 
 <ng-template #simplifiedView>
     <ng-container [ngTemplateOutlet]="formField" [ngTemplateOutletContext]="{ showLabel: true }"></ng-container>

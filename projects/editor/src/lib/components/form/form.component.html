@@ -1,48 +1,48 @@
-<lib-sidebar
+<editor-sidebar
     class="left"
     [class.hidden]="!showSidebars"
     [position]="typeOfSideBarPosition.LEFT"
     (resizeEnd)="onResizeEnd()"
     >
-    <lib-sidebar-section>
+    <editor-sidebar-section>
 		<span headerContent>Fields</span>
         <div class="tree-container" mainContent>
-            <lib-field-tree-item
+            <editor-field-tree-item
                 *ngFor="let field of form.fields"
                 [field]="field"
                 [isExpanded]="true">
-            </lib-field-tree-item>
+            </editor-field-tree-item>
         </div>
-	</lib-sidebar-section>
-	<lib-sidebar-section>
+	</editor-sidebar-section>
+	<editor-sidebar-section>
 		<span headerContent>Add Field</span>
         <div class="categories-wrapper" mainContent>
-            <lib-field-category-list
+            <editor-field-category-list
                 *ngFor="let category of editorService.fieldCategories; let first = first"
                 [category]="category"
                 [formId]="form.id"
                 [isExpanded]="first">
-            </lib-field-category-list>
+            </editor-field-category-list>
         </div>
-	</lib-sidebar-section>
-</lib-sidebar>
+	</editor-sidebar-section>
+</editor-sidebar>
 
 <div class="main">
-    <lib-form-toolbar
+    <editor-form-toolbar
         class="toolbar"
         [(selectedDisplay)]="selectedFormDisplay"
         (resetModel)="onResetModel()"
         (toggleSidebars)="showSidebars = $event">
-    </lib-form-toolbar>
+    </editor-form-toolbar>
     <mat-tab-group class="tab-group" [selectedIndex]="formDisplayTabIndex">
         <mat-tab>
-            <lib-editor-formly-form
+            <editor-formly-form
                 [form]="formGroup"
                 [fields]="fields"
                 [model]="formModel"
                 [options]="options"
                 (modelChange)="onModelChanged($event)">
-            </lib-editor-formly-form>
+            </editor-formly-form>
         </mat-tab>
         <mat-tab>
             <pre><code>{{ fieldsJSON }}</code></pre>
@@ -50,28 +50,28 @@
     </mat-tab-group>
 </div>
 
-<lib-sidebar
+<editor-sidebar
     class="right"
     [class.hidden]="!showSidebars"
     [position]="typeOfSideBarPosition.RIGHT"
     (resizeEnd)="onResizeEnd()"
     >
-	<lib-sidebar-section class="active-field-section">
+	<editor-sidebar-section class="active-field-section">
         <div class="header-content" headerContent>
             <span>Active Field - {{ editorService.getFormattedFieldName(form.activeField.name, form.activeField.key) }}</span>
             <mat-slide-toggle labelPosition="before" [(ngModel)]="isAdvanced">Advanced</mat-slide-toggle>
         </div>
-        <lib-edit-field
+        <editor-edit-field
             mainContent
             [field]="form.activeField"
             [property]="activeFieldProperty"
             [isSimplified]="!isAdvanced"
             [resizeTabHeader$]="resizeEnd$"
             (fieldChanged)="onActiveFieldChanged()">
-        </lib-edit-field>
-	</lib-sidebar-section>
+        </editor-edit-field>
+	</editor-sidebar-section>
 
-	<lib-sidebar-section>
+	<editor-sidebar-section>
         <div class="header-content" headerContent>
             <span>Model</span>
             <button mat-icon-button [matMenuTriggerFor]="modelOptionsMenu">
@@ -80,16 +80,16 @@
         </div>
         
         <div class="tree-container" mainContent>
-            <lib-object-property
+            <editor-object-property
                 [target]="form.model"
                 [property]="modelProperty"
                 [isExpanded]="true"
                 [isRoot]="true"
                 (targetChanged)="onModelPropertyChanged()">
-            </lib-object-property>
+            </editor-object-property>
         </div>
-	</lib-sidebar-section>
-</lib-sidebar>
+	</editor-sidebar-section>
+</editor-sidebar>
 
 <mat-menu #modelOptionsMenu="matMenu">
 	<button mat-menu-item (click)="onImportModel()">

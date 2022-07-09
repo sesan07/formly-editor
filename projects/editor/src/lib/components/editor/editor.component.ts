@@ -14,7 +14,7 @@ import { ImportFormDialogComponent } from '../import-form-dialog/import-form-dia
 import { ImportJSONRequest, ImportJSONResponse } from '../import-form-dialog/import-json-dialog.types';
 
 @Component({
-    selector: 'lib-editor',
+    selector: 'editor-editor',
     templateUrl: './editor.component.html',
     styleUrls: ['./editor.component.scss']
 })

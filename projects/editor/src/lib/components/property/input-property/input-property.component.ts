@@ -4,7 +4,7 @@ import { BasePropertyDirective } from '../base-property.component';
 import { IInputProperty } from './input-property.types';
 
 @Component({
-	selector: 'lib-input-property',
+	selector: 'editor-input-property',
 	templateUrl: './input-property.component.html',
 	styleUrls: ['./input-property.component.scss'],
 })

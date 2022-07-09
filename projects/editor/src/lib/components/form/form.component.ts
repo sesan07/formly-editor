@@ -20,7 +20,7 @@ import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
 
 @Component({
-	selector: 'lib-form',
+	selector: 'editor-form',
 	templateUrl: './form.component.html',
 	styleUrls: ['./form.component.scss'],
 })

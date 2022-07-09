@@ -7,7 +7,7 @@ import { IObjectProperty } from '../property/object-array-properties/object-prop
 import { IProperty } from '../property/property.types';
 
 @Component({
-    selector: 'lib-edit-field',
+    selector: 'editor-edit-field',
     templateUrl: './edit-field.component.html',
     styleUrls: ['./edit-field.component.scss']
 })

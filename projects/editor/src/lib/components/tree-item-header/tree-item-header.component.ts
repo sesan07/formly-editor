@@ -2,7 +2,7 @@ import { Component, EventEmitter, HostBinding, HostListener, Input, OnInit, Outp
 import { MatMenuPanel } from '@angular/material/menu';
 
 @Component({
-    selector: 'lib-tree-item-header',
+    selector: 'editor-tree-item-header',
     templateUrl: './tree-item-header.component.html',
     styleUrls: ['./tree-item-header.component.scss']
 })

@@ -5,11 +5,11 @@ import { map } from 'rxjs/operators';
 import { FileService } from '../../../services/file-service/file.service';
 
 @Directive({
-    selector: '[libJsonFileValidator]',
+    selector: '[editorJsonFileValidator]',
     providers: [{provide: NG_ASYNC_VALIDATORS, useExisting: JsonFileValidatorDirective, multi: true}]
 })
 export class JsonFileValidatorDirective implements AsyncValidator {
-    @Input('libJsonFileValidator') fileInputElement: HTMLInputElement;
+    @Input('editorJsonFileValidator') fileInputElement: HTMLInputElement;
 
     constructor(private _fileService: FileService) {}
 

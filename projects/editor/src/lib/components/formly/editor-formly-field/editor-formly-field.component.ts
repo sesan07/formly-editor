@@ -20,13 +20,13 @@ import { EditFieldDialogComponent } from '../../edit-field-dialog/edit-field-dia
 import { EditFieldRequest } from '../../edit-field-dialog/edit-field-dialog.types';
 
 @Component({
-    selector: 'lib-editor-root-formly-field',
+    selector: 'editor-root-formly-field',
     template: '<ng-template #container></ng-template>'
 })
 export class EditorRootFormlyFieldComponent extends FormlyField { }
 
 @Component({
-  selector: 'lib-editor-formly-field',
+  selector: 'editor-formly-field',
   templateUrl: './editor-formly-field.component.html',
   styleUrls: ['./editor-formly-field.component.scss']
 })

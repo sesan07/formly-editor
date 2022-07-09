@@ -13,7 +13,7 @@
 
     <mat-form-field class="json-field">
         <mat-label>JSON</mat-label>
-        <textarea class="json-textarea" #jsonModel="ngModel" [(ngModel)]="jsonValue" matInput required spellcheck="false" libJsonValidator></textarea>
+        <textarea class="json-textarea" #jsonModel="ngModel" [(ngModel)]="jsonValue" matInput required spellcheck="false" editorJsonValidator></textarea>
         <mat-error *ngIf="jsonModel.errors?.required">This field is required</mat-error>
         <mat-error *ngIf="jsonModel.errors?.jsonFormat">Invalid JSON</mat-error>
     </mat-form-field>

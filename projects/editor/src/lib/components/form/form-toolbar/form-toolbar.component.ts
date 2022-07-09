@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { EditorService } from '../../../services/editor-service/editor.service';
 
 @Component({
-    selector: 'lib-form-toolbar',
+    selector: 'editor-form-toolbar',
     templateUrl: './form-toolbar.component.html',
     styleUrls: ['./form-toolbar.component.scss']
 })

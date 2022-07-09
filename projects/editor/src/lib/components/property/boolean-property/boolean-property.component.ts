@@ -4,7 +4,7 @@ import { BasePropertyDirective } from '../base-property.component';
 import { IBooleanProperty } from './boolean-property.types';
 
 @Component({
-    selector: 'lib-boolean-property',
+    selector: 'editor-boolean-property',
     templateUrl: './boolean-property.component.html',
     styleUrls: ['./boolean-property.component.scss'],
 })

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
-    selector: 'lib-breakpoint',
+    selector: 'editor-breakpoint',
     templateUrl: './breakpoint.component.html',
     styleUrls: ['./breakpoint.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -7,7 +7,7 @@ import { EditorService } from '../../services/editor-service/editor.service';
 import { CdkDragExit } from '@angular/cdk/drag-drop';
 
 @Component({
-    selector: 'lib-field-category-list',
+    selector: 'editor-field-category-list',
     templateUrl: './field-category-list.component.html',
     styleUrls: ['./field-category-list.component.scss']
 })
