@@ -20,11 +20,9 @@ export class TreeItemHeaderComponent implements OnInit {
 	public sideLinePositions: number[];
     public stickyOptions: boolean;
 
-    @HostBinding('class.active') get isHeaderActive(): boolean { return this.isActive; }
-
     private readonly _treeIndentation = 18;
 
-    constructor() { }
+    @HostBinding('class.active') get isHeaderActive(): boolean { return this.isActive; }
 
     @HostListener('mouseenter')
     onMouseEnter(): void {

@@ -108,7 +108,6 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "eslintConfig": "./.eslintrc",
             "lintFilePatterns": [
               "src/**/*.ts",
               "src/**/*.html"

@@ -20,14 +20,15 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
 	public isActiveField: boolean;
     public childFields: IEditorFormlyField[];
 	public replaceCategories: EditorTypeCategoryOption[];
-	public get hasOptions(): boolean {
-		return this.field.canHaveChildren || this.treeLevel !== 0;
-	};
 
     private _destroy$: Subject<void> = new Subject();
 
     constructor(public editorService: EditorService, private _renderer: Renderer2, private _elementRef: ElementRef) {
     }
+
+	public get hasOptions(): boolean {
+		return this.field.canHaveChildren || this.treeLevel !== 0;
+	};
 
 	ngOnInit(): void {
 		this._renderer.addClass(this._elementRef.nativeElement, 'tree-item');

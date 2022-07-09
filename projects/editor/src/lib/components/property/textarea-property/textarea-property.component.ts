@@ -17,8 +17,6 @@ export class TextareaPropertyComponent extends BasePropertyDirective implements 
         return this.property.isRemovable;
     };
 
-    protected propertyname = 'Textarea';
-
     ngOnInit(): void {
         this.formControl = new FormControl(this.target[this.property.key]);
         this.formControl.valueChanges.subscribe(val => this.modifyValue(this.property.key, val));

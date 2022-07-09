@@ -18,8 +18,6 @@ export class InputPropertyComponent extends BasePropertyDirective implements OnC
 		return this.property.isRemovable;
 	};
 
-	protected propertyname = 'Input';
-
     ngOnInit(): void {
         this.formControl = new FormControl(this.target[this.property.key]);
         this.formControl.valueChanges.subscribe(val => {

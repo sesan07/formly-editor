@@ -25,10 +25,6 @@ export class EditorService {
 
     // TODO make this private
     public forms: IForm[] = [];
-    public get fieldCategories(): EditorTypeCategoryOption[] { return this._editorConfig.typeCategories; };
-
-    public get formChanged$(): Observable<string> { return this._formChanged$.asObservable(); }
-    public get fieldSelected$(): Observable<IEditorFormlyField> { return this._fieldSelected$.asObservable(); }
 
     public isEditMode = true;
     public mousePosition: { x: number; y: number } = { x: 0, y: 0 };
@@ -42,6 +38,11 @@ export class EditorService {
     private _fieldtypeOptions: EditorTypeOption[] = [];
 
     constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService, private _http: HttpClient) {}
+
+    public get fieldCategories(): EditorTypeCategoryOption[] { return this._editorConfig.typeCategories; };
+
+    public get formChanged$(): Observable<string> { return this._formChanged$.asObservable(); }
+    public get fieldSelected$(): Observable<IEditorFormlyField> { return this._fieldSelected$.asObservable(); }
 
     setup(editorConfig: EditorConfigOption) {
         this._editorConfig = editorConfig;

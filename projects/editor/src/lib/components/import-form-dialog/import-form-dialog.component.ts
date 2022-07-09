@@ -23,6 +23,14 @@ export class ImportFormDialogComponent {
 
     currTabIndex = 0;
 
+    private _selectedFile: File;
+
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public data: ImportJSONRequest,
+        private _dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse>,
+        private _fileService: FileService,
+    ) { }
+
     get isFormValid(): boolean {
         if (!this.fileNameModel || !this.jsonModel) {
             return false;
@@ -42,14 +50,6 @@ export class ImportFormDialogComponent {
                 ? this.jsonModel.valid
                 : true;
     }
-
-    private _selectedFile: File;
-
-    constructor(
-        @Inject(MAT_DIALOG_DATA) public data: ImportJSONRequest,
-        private _dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse>,
-        private _fileService: FileService,
-    ) { }
 
     onFileChanged(): void {
         const file: File = this.fileSelectElement?.nativeElement.files.item(0);

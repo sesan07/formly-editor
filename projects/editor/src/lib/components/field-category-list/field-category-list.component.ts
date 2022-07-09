@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { cloneDeep } from 'lodash-es';
 import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
 import { DragAction, IItemDragData } from '../../services/field-droplist-service/field-droplist.types';
@@ -20,11 +20,11 @@ export class FieldCategoryListComponent implements OnInit {
     public fields: IEditorFormlyField[];
     public previewFields: IEditorFormlyField[];
 
+    constructor(private _editorService: EditorService, private _dropListService: FieldDroplistService) { }
+
     public get dropListIds(): string[] {
         return this._dropListService.getDropListIds(this.formId);
     }
-
-    constructor(private _editorService: EditorService, private _dropListService: FieldDroplistService) { }
 
     ngOnInit(): void {
         this.fields = this.category.typeOptions.map(option =>

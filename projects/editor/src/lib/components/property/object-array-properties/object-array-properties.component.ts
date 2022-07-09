@@ -20,15 +20,13 @@ export class ArrayPropertyComponent extends BasePropertyDirective implements OnC
     public childrenTarget: any[];
 	public isExpanded: boolean;
 
+	public childProperties: IProperty[];
+
+	constructor(public propertyService: PropertyService) { super(); }
+
 	public get hasOptions(): boolean {
 		return this.property.isRemovable || this.property.canAdd;
 	};
-
-	public childProperties: IProperty[];
-
-	protected propertyname = 'Array';
-
-	constructor(public propertyService: PropertyService) { super(); }
 
     ngOnChanges(changes: SimpleChanges): void {
         if(changes.target) {
@@ -100,14 +98,13 @@ export class ObjectPropertyComponent extends BasePropertyDirective implements On
 	public propertyTypes: PropertyType[] = Object.values(PropertyType);
 
     public childrenTarget: Record<string, any>;
+
+	constructor(public propertyService: PropertyService) { super(); }
+
     public get canAdd(): boolean { return this.property.addOptions?.length > 0; }
 	public get hasOptions(): boolean {
 		return this.property.isRemovable || this.canAdd;
 	};
-
-	protected propertyname = 'Object';
-
-	constructor(public propertyService: PropertyService) { super(); }
 
 	ngOnChanges(changes: SimpleChanges): void {
         if(changes.target) {

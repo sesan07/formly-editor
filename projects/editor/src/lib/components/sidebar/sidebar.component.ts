@@ -142,14 +142,14 @@ export class SidebarComponent implements AfterContentInit {
         this._bottomResizeIndex = section.index + 1;
         let remainingResize: number = section.cachedContentHeight;
         while (remainingResize > 0 && this._bottomResizeIndex < this.sections.length) {
-            const section: SidebarSectionComponent = this.sections.toArray()[this._bottomResizeIndex];
-            const availableHeight: number = section.availableHeight;
+            const currSection: SidebarSectionComponent = this.sections.toArray()[this._bottomResizeIndex];
+            const availableHeight: number = currSection.availableHeight;
 
             if (availableHeight - remainingResize >= 0) { // Has enough space
-                section.height -= remainingResize;
+                currSection.height -= remainingResize;
                 remainingResize = 0;
             } else { // Not enough space
-                section.height -= availableHeight;
+                currSection.height -= availableHeight;
                 remainingResize -= availableHeight;
                 this._bottomResizeIndex++;
             }
@@ -159,14 +159,14 @@ export class SidebarComponent implements AfterContentInit {
         if (remainingResize > 0) {
             this._topResizeIndex = section.index - 1;
             while (remainingResize > 0 && this._topResizeIndex >= 0) {
-                const section: SidebarSectionComponent = this.sections.toArray()[this._topResizeIndex];
-                const availableHeight: number = section.availableHeight;
+                const currSection: SidebarSectionComponent = this.sections.toArray()[this._topResizeIndex];
+                const availableHeight: number = currSection.availableHeight;
 
                 if (availableHeight - remainingResize >= 0) { // Has enough space
-                    section.height -= remainingResize;
+                    currSection.height -= remainingResize;
                     remainingResize = 0;
                 } else { // Not enough space
-                    section.height -= availableHeight;
+                    currSection.height -= availableHeight;
                     remainingResize -= availableHeight;
                     this._topResizeIndex--;
                 }

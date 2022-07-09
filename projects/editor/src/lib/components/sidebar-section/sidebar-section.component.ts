@@ -18,17 +18,6 @@ export class SidebarSectionComponent {
     public minContentHeight = 50;
     public minHeight: number;
     public maxHeight: number;
-    public get height(): number { return this._height; }
-    public set height(newHeight: number) {
-        this._height = newHeight;
-        this._renderer.setStyle(this.element, 'height', this._height + 'px');
-        this._cdRef.markForCheck();
-    }
-
-    public get contentHeight(): number { return this.height - this.minHeight; }
-    public get availableHeight(): number {
-        return this.height - (this.minHeight + (this.isCollapsed ? 0 : this.minContentHeight));
-    }
 
     private readonly _headerHeight = 48;
     private readonly _dividerHeight = 4;
@@ -38,6 +27,18 @@ export class SidebarSectionComponent {
 
     constructor(private _renderer: Renderer2, private _cdRef: ChangeDetectorRef, elementRef: ElementRef<HTMLElement>) {
         this.element = elementRef.nativeElement;
+    }
+
+    public get contentHeight(): number { return this.height - this.minHeight; }
+    public get availableHeight(): number {
+        return this.height - (this.minHeight + (this.isCollapsed ? 0 : this.minContentHeight));
+    }
+
+    public get height(): number { return this._height; }
+    public set height(newHeight: number) {
+        this._height = newHeight;
+        this._renderer.setStyle(this.element, 'height', this._height + 'px');
+        this._cdRef.markForCheck();
     }
 
 	onSectionMouseDown(event: MouseEvent): void {
