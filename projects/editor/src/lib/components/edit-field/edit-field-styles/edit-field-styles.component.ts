@@ -13,7 +13,7 @@ import { IChipListProperty } from '../../property/chip-list-property/chip-list-p
 import { PropertyType } from '../../property/property.types';
 
 @Component({
-    selector: 'lib-edit-field-styles',
+    selector: 'editor-edit-field-styles',
     templateUrl: './edit-field-styles.component.html',
     styleUrls: ['./edit-field-styles.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

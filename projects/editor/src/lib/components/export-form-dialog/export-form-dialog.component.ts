@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ExportJSONRequest, ExportJSONResponse } from './export-json-dialog.types';
 
 @Component({
-    selector: 'lib-export-form-dialog',
+    selector: 'editor-export-form-dialog',
     templateUrl: './export-form-dialog.component.html',
     styleUrls: ['./export-form-dialog.component.scss']
 })

@@ -9,7 +9,7 @@ import { IChipListProperty } from './chip-list-property.types';
 import { BasePropertyDirective } from '../base-property.component';
 
 @Component({
-    selector: 'lib-chip-list-property',
+    selector: 'editor-chip-list-property',
     templateUrl: './chip-list-property.component.html',
     styleUrls: ['./chip-list-property.component.scss'],
 })

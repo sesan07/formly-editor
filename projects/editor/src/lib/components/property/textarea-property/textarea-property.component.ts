@@ -4,7 +4,7 @@ import { BasePropertyDirective } from '../base-property.component';
 import { ITextareaProperty } from './textarea-property.types';
 
 @Component({
-    selector: 'lib-textarea-property',
+    selector: 'editor-textarea-property',
     templateUrl: './textarea-property.component.html',
     styleUrls: ['./textarea-property.component.scss']
 })

@@ -1,4 +1,4 @@
-<lib-tree-item-header 
+<editor-tree-item-header 
     *ngIf="!isSimplified else simplifiedView"
     [treeLevel]="treeLevel"
     [hasOptions]="hasOptions"
@@ -21,7 +21,7 @@
             [formControl]="formControl">
         </textarea>
     </mat-form-field>
-</lib-tree-item-header>
+</editor-tree-item-header>
 
 <ng-template #simplifiedView>
     <mat-form-field>

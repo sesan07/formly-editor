@@ -3,7 +3,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { AddFormResponse } from './add-form-dialog.types';
 
 @Component({
-  selector: 'lib-add-form-dialog',
+  selector: 'editor-add-form-dialog',
   templateUrl: './add-form-dialog.component.html',
   styleUrls: ['./add-form-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

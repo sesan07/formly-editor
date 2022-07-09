@@ -3,8 +3,8 @@ import { FormlyFieldTemplates, FormlyForm, FormlyFormBuilder } from '@ngx-formly
 import { IEditorFormlyFieldConfigCache } from '../../../services/editor-service/editor.types';
 
 @Component({
-    selector: 'lib-editor-formly-form',
-    template: '<lib-editor-root-formly-field [field]="field"></lib-editor-root-formly-field>',
+    selector: 'editor-formly-form',
+    template: '<editor-root-formly-field [field]="field"></editor-root-formly-field>',
     styleUrls: ['./editor-formly-form.component.scss'],
     providers: [FormlyFormBuilder, FormlyFieldTemplates],
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -3,7 +3,7 @@ import { MatMenuPanel } from '@angular/material/menu';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
-    selector: 'lib-sidebar-section',
+    selector: 'editor-sidebar-section',
     templateUrl: './sidebar-section.component.html',
     styleUrls: ['./sidebar-section.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

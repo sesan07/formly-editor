@@ -5,7 +5,7 @@ import { EditorService } from '../../services/editor-service/editor.service';
 import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField } from '../../services/editor-service/editor.types';
 
 @Component({
-    selector: 'lib-field-tree-item',
+    selector: 'editor-field-tree-item',
     templateUrl: './field-tree-item.component.html',
     styleUrls: ['./field-tree-item.component.scss'],
 })

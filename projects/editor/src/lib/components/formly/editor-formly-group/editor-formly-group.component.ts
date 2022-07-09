@@ -7,7 +7,7 @@ import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
 
 @Component({
-    selector: 'lib-editor-formly-group',
+    selector: 'editor-formly-group',
     templateUrl: './editor-formly-group.component.html',
     styleUrls: ['./editor-formly-group.component.scss'],
 })

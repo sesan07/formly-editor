@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-    selector: 'lib-container-option',
+    selector: 'editor-container-option',
     templateUrl: './container-option.component.html',
     styleUrls: ['./container-option.component.scss']
 })

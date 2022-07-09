@@ -1,4 +1,4 @@
-<lib-tree-item-header 
+<editor-tree-item-header 
     *ngIf="!isSimplified else simplifiedView"
     [treeLevel]="treeLevel"
     [hasOptions]="hasOptions"
@@ -13,7 +13,7 @@
         <span>:</span>
     </span>
     <mat-checkbox class="property-field" [formControl]="formControl"></mat-checkbox>
-</lib-tree-item-header>
+</editor-tree-item-header>
 
 <ng-template #simplifiedView>
 	<mat-checkbox [formControl]="formControl">

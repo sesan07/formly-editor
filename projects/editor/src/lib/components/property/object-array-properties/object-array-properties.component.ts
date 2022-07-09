@@ -7,7 +7,7 @@ import { IArrayProperty } from './array-property.types';
 import { IObjectProperty } from './object-property.types';
 
 @Component({
-    selector: 'lib-array-property',
+    selector: 'editor-array-property',
     templateUrl: './array-property.component.html',
     styleUrls: ['./array-property.component.scss'],
 })
@@ -85,7 +85,7 @@ export class ArrayPropertyComponent extends BasePropertyDirective implements OnC
 }
 
 @Component({
-	selector: 'lib-object-property',
+	selector: 'editor-object-property',
 	templateUrl: './object-property.component.html',
 	styleUrls: ['./object-property.component.scss'],
 })

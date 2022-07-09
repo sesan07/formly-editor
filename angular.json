@@ -137,7 +137,7 @@
       },
       "root": "projects/editor",
       "sourceRoot": "projects/editor/src",
-      "prefix": "lib",
+      "prefix": "editor",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",

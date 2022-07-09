@@ -33,14 +33,14 @@
     box-sizing: border-box;
 }
 
-lib-sidebar-section .header-content {
+editor-sidebar-section .header-content {
     flex-grow: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-lib-sidebar {
+editor-sidebar {
 	min-width: 200px;
 	max-width: 40%;
 

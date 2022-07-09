@@ -3,7 +3,7 @@ import { SidebarSectionComponent } from '../sidebar-section/sidebar-section.comp
 import { SideBarPosition } from './sidebar.types';
 
 @Component({
-    selector: 'lib-sidebar',
+    selector: 'editor-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss']
 })

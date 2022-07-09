@@ -5,7 +5,7 @@ import { FileService } from '../../services/file-service/file.service';
 import { ImportJSONRequest, ImportJSONResponse } from './import-json-dialog.types';
 
 @Component({
-    selector: 'lib-import-form-dialog',
+    selector: 'editor-import-form-dialog',
     templateUrl: './import-form-dialog.component.html',
     styleUrls: ['./import-form-dialog.component.scss']
 })

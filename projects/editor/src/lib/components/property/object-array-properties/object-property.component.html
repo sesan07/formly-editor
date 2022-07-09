@@ -1,4 +1,4 @@
-<lib-tree-item-header 
+<editor-tree-item-header 
     class="cursor-pointer"
     *ngIf="!isSimplified else simplifiedView"
     [treeLevel]="treeLevel"
@@ -16,7 +16,7 @@
         </span>
         <span>{{ (property?.name ? '(' + property.name + ') ' : '') + '{ ' + property.childProperties.length + ' }' }}</span>
     </span>
-</lib-tree-item-header>
+</editor-tree-item-header>
 
 <div *ngIf="!isSimplified" [class.hidden]="!isExpanded">
     <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
@@ -42,7 +42,7 @@
 	<ng-container *ngFor="let child of property.childProperties; let i = index; trackBy: trackPropertyByKey">
         <ng-container *ngIf="isSimplified ? child.isSimple : true">
             <ng-container [ngSwitch]="child.type">
-                <lib-array-property 
+                <editor-array-property 
                     *ngSwitchCase="propertyType.ARRAY"
                     [treeLevel]="treeLevel + 1"
                     [target]="childrenTarget"
@@ -50,9 +50,9 @@
                     [isSimplified]="isSimplified"
                     (remove)="onRemoveChild(i)"
                     (targetChanged)="targetChanged.emit()">
-                </lib-array-property>
+                </editor-array-property>
             
-                <lib-object-property
+                <editor-object-property
                     *ngSwitchCase="propertyType.OBJECT"
                     [treeLevel]="treeLevel + 1"
                     [target]="childrenTarget"
@@ -60,9 +60,9 @@
                     [isSimplified]="isSimplified"
                     (remove)="onRemoveChild(i)"
                     (targetChanged)="targetChanged.emit()">
-                </lib-object-property>
+                </editor-object-property>
             
-                <lib-boolean-property
+                <editor-boolean-property
                     *ngSwitchCase="propertyType.BOOLEAN"
                     [treeLevel]="treeLevel + 1"
                     [property]="property"
@@ -70,9 +70,9 @@
                     [isSimplified]="isSimplified"
                     (remove)="onRemoveChild(i)"
                     (targetChanged)="targetChanged.emit()">
-                </lib-boolean-property>
+                </editor-boolean-property>
             
-                <lib-chip-list-property
+                <editor-chip-list-property
                     *ngSwitchCase="propertyType.CHIP_LIST"
                     [treeLevel]="treeLevel + 1"
                     [property]="propertyService.getAsChiplistProperty(child)"
@@ -80,9 +80,9 @@
                     [isSimplified]="isSimplified"
                     (remove)="onRemoveChild(i)"
                     (targetChanged)="targetChanged.emit()">
-                </lib-chip-list-property>
+                </editor-chip-list-property>
             
-                <lib-textarea-property
+                <editor-textarea-property
                     *ngSwitchCase="propertyType.TEXTAREA"
                     [treeLevel]="treeLevel + 1"
                     [property]="propertyService.getAsTextareaProperty(child)"
@@ -90,7 +90,7 @@
                     [isSimplified]="isSimplified"
                     (remove)="onRemoveChild(i)"
                     (targetChanged)="targetChanged.emit()">
-                </lib-textarea-property>
+                </editor-textarea-property>
             
                 <ng-container *ngSwitchCase="propertyType.NUMBER">
                     <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
@@ -99,14 +99,14 @@
                     <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
                 </ng-container>
                 <ng-template #inputProperty>
-                    <lib-input-property
+                    <editor-input-property
                         [treeLevel]="treeLevel + 1"
                         [property]="propertyService.getAsInputProperty(child)"
                         [target]="childrenTarget"
                         [isSimplified]="isSimplified"
                         (remove)="onRemoveChild(i)"
                         (targetChanged)="targetChanged.emit()">
-                    </lib-input-property>
+                    </editor-input-property>
                 </ng-template>
             </ng-container>
         </ng-container>
