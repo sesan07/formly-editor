@@ -17,8 +17,6 @@ export class BooleanPropertyComponent extends BasePropertyDirective implements O
 		return this.property.isRemovable;
 	};
 
-	protected propertyname = 'Boolean';
-
     ngOnInit(): void {
         this.formControl = new FormControl(this.target[this.property.key]);
         this.formControl.valueChanges.subscribe(val => this.modifyValue(this.property.key, val));

@@ -23,15 +23,14 @@ export class ChipListPropertyComponent extends BasePropertyDirective implements 
     public selectedOptions: string[];
     public selectableOptions: string[];
     public filteredOptions: Observable<string[]>;
-	public get hasOptions(): boolean {
-		return this.property.isRemovable;
-	};
-
-	protected propertyname = 'Chiplist';
 
     private _unSubOptions$: Subject<void> = new Subject();
     private _unSubHiddenOptions$: Subject<void> = new Subject();
     private _hiddenOptions: string[];
+
+	public get hasOptions(): boolean {
+		return this.property.isRemovable;
+	};
 
     ngOnChanges(changes: SimpleChanges): void {
         if (!changes.property) {

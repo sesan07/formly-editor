@@ -10,7 +10,7 @@ import { IEditorFormlyFieldConfigCache } from '../../../services/editor-service/
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorFormlyFormComponent extends FormlyForm {
-    field: IEditorFormlyFieldConfigCache = { 
+    field: IEditorFormlyFieldConfigCache = {
         type: 'formly-group',
         name: undefined,
         properties: undefined,
@@ -19,5 +19,5 @@ export class EditorFormlyFormComponent extends FormlyForm {
         templateOptions: undefined,
         wrappers: undefined,
         expressionProperties: undefined,
-     }
+     };
 }

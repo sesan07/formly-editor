@@ -29,9 +29,6 @@ export class FormComponent implements OnInit, OnDestroy {
 
 	public activeFieldProperty: IObjectProperty;
 	public modelProperty: IObjectProperty;
-	public get formChanged$(): Observable<void> {
-		return this._formChanged$.asObservable();
-	}
 
 	public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
     public isAdvanced = true;
@@ -43,19 +40,6 @@ export class FormComponent implements OnInit, OnDestroy {
     public options: FormlyFormOptions = {};
     public formModel: Record<string, any> = {};
     public selectedFormDisplay: 'form' | 'json' = 'form';
-    public get formDisplayTabIndex(): number {
-        switch (this.selectedFormDisplay) {
-            case 'form': return 0;
-            case 'json': return 1;
-        }
-    }
-
-	public get resetModel$(): Observable<void> {
-		return this._resetModel$.asObservable();
-	}
-	public get resizeEnd$(): Observable<void> {
-		return this._resizeEnd$.asObservable();
-	}
 
 	private _formChanged$: Subject<void> = new Subject();
 	private _resetModel$: Subject<void> = new Subject();
@@ -68,6 +52,23 @@ export class FormComponent implements OnInit, OnDestroy {
         private _dialog: MatDialog,
         private _fileService: FileService,
         private _fieldDropListService: FieldDroplistService) {
+	}
+
+	public get formChanged$(): Observable<void> {
+		return this._formChanged$.asObservable();
+	}
+    public get formDisplayTabIndex(): number {
+        switch (this.selectedFormDisplay) {
+            case 'form': return 0;
+            case 'json': return 1;
+        }
+    }
+
+	public get resetModel$(): Observable<void> {
+		return this._resetModel$.asObservable();
+	}
+	public get resizeEnd$(): Observable<void> {
+		return this._resizeEnd$.asObservable();
 	}
 
 	public ngOnInit(): void {

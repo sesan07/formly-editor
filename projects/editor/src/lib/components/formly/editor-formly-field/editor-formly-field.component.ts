@@ -39,10 +39,6 @@ export class EditorFormlyFieldComponent extends FormlyField implements OnInit, O
     public index: number;
 	public hideOptions: boolean;
 
-    // TODO make isEditMode observable, mark for check
-    @HostBinding('class.edit-mode') get isEditMode(): boolean { return this.editorService.isEditMode; };
-    @HostBinding('class.active') get isActiveField(): boolean { return this._isActiveField; }
-
     private _destroy$: Subject<void> = new Subject();
     private _isActiveField: boolean;
 
@@ -55,7 +51,11 @@ export class EditorFormlyFieldComponent extends FormlyField implements OnInit, O
         elementRef: ElementRef,
         hostContainerRef: ViewContainerRef,
         @Optional() form: FormlyFieldTemplates,
-    ){ super(config, renderer, elementRef, hostContainerRef, form); }
+    ) { super(config, renderer, elementRef, hostContainerRef, form); }
+
+    // TODO make isEditMode observable, mark for check
+    @HostBinding('class.edit-mode') get isEditMode(): boolean { return this.editorService.isEditMode; };
+    @HostBinding('class.active') get isActiveField(): boolean { return this._isActiveField; }
 
     @HostListener('click', ['$event'])
     onClick(event: MouseEvent): void {

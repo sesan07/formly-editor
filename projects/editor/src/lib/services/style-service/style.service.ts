@@ -7,15 +7,6 @@ import { BreakpointType, ContainerType, FlexContainerPrefix, GridChildPrefix, Gr
     providedIn: 'root',
 })
 export class StyleService {
-    public get allClassNames$(): Observable<string[]> {
-        return this._allClassNames$.asObservable();
-    }
-    public get containerClassNames$(): Observable<string[]> {
-        return this._containerClassNames$.asObservable();
-    }
-    public get generalClassNames$(): Observable<string[]> {
-        return this._generalClassNames$.asObservable();
-    }
 
 	private readonly _selectorRegexp = /\.-?[_a-zA-Z]+[\w-]*/g;
     // All classes
@@ -35,6 +26,16 @@ export class StyleService {
 
         this._setupClassNames();
 	}
+
+    public get allClassNames$(): Observable<string[]> {
+        return this._allClassNames$.asObservable();
+    }
+    public get containerClassNames$(): Observable<string[]> {
+        return this._containerClassNames$.asObservable();
+    }
+    public get generalClassNames$(): Observable<string[]> {
+        return this._generalClassNames$.asObservable();
+    }
 
     public getBreakpointClassNames(breakpointType?: BreakpointType): Observable<string[]> {
         return breakpointType ? this._breakpointClassNamesMap.get(breakpointType) : this._generalClassNames$;
