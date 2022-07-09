@@ -41,6 +41,7 @@ export class FormComponent implements OnInit, OnDestroy {
     public fieldsJSON: string;
     public formGroup: FormGroup = new FormGroup({});
     public options: FormlyFormOptions = {};
+    public formModel: Record<string, any> = {};
     public selectedFormDisplay: 'form' | 'json' = 'form';
     public get formDisplayTabIndex(): number {
         switch (this.selectedFormDisplay) {
@@ -74,6 +75,10 @@ export class FormComponent implements OnInit, OnDestroy {
 		this._updateModelProperty();
         this._updateFields();
         this._fieldDropListService.resetDropListIds(this.form.id);
+
+        setTimeout(() => {
+            this.formModel = cloneDeep(this.form.model);
+        });
 
 		this.editorService.formChanged$
 			.pipe(takeUntil(this._destroy$))
@@ -109,10 +114,11 @@ export class FormComponent implements OnInit, OnDestroy {
 	}
 
     onModelPropertyChanged(): void {
-        this._formChanged$.next();
+        this.formModel = cloneDeep(this.form.model);
     }
 
-    onModelChanged(): void {
+    onModelChanged(model: Record<string, unknown>): void {
+        this.form.model = cloneDeep(model);
 		this._updateModelProperty();
     }
 
@@ -127,6 +133,7 @@ export class FormComponent implements OnInit, OnDestroy {
             .subscribe(res => {
                 if (res) {
                     this.form.model = JSON.parse(res.json);
+                    this.formModel = cloneDeep(this.form.model);
                     this._updateModelProperty();
                     this._formChanged$.next();
                 }
@@ -153,7 +160,8 @@ export class FormComponent implements OnInit, OnDestroy {
     }
 
     onResetModel(): void {
-        this._resetModel$.next();
+        this.options.resetModel({});
+        this.onModelChanged(this.formModel);
     }
 
     onResizeEnd(): void {
