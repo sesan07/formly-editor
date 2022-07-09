@@ -39,9 +39,9 @@
             <lib-editor-formly-form
                 [form]="formGroup"
                 [fields]="fields"
-                [model]="form.model"
+                [model]="formModel"
                 [options]="options"
-                (modelChange)="onModelChanged()">
+                (modelChange)="onModelChanged($event)">
             </lib-editor-formly-form>
         </mat-tab>
         <mat-tab>
