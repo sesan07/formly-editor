@@ -1,4 +1,4 @@
-<header *ngIf="editorService.isEditMode">
+<header *ngIf="isEditMode">
     <div class="header-title">
         <span>{{ editorService.getFormattedFieldName(field.name, field.key) }}</span>
         <ng-content></ng-content>

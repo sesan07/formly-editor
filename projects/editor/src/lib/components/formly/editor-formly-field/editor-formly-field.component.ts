@@ -40,8 +40,9 @@ export class EditorFormlyFieldComponent extends FormlyField implements OnInit, O
 	public hideOptions: boolean;
 
     private _form: IForm;
-    private _destroy$: Subject<void> = new Subject();
     private _isActiveField: boolean;
+    private _isEditMode: boolean;
+    private _destroy$: Subject<void> = new Subject();
 
     constructor(
         public editorService: EditorService,
@@ -54,8 +55,7 @@ export class EditorFormlyFieldComponent extends FormlyField implements OnInit, O
         @Optional() form: FormlyFieldTemplates,
     ) { super(config, renderer, elementRef, hostContainerRef, form); }
 
-    // TODO make isEditMode observable, mark for check
-    @HostBinding('class.edit-mode') get isEditMode(): boolean { return this.editorService.isEditMode; };
+    @HostBinding('class.edit-mode') get isEditMode(): boolean { return this._isEditMode; };
     @HostBinding('class.active') get isActiveField(): boolean { return this._isActiveField; }
 
     @HostListener('click', ['$event'])
@@ -71,7 +71,7 @@ export class EditorFormlyFieldComponent extends FormlyField implements OnInit, O
     }
 
     @HostListener('mouseout', ['$event'])
-    onMouseOut(event: MouseEvent): void {
+    onMouseOut(): void {
         this.isMouseInside = false;
     }
 
@@ -94,7 +94,13 @@ export class EditorFormlyFieldComponent extends FormlyField implements OnInit, O
         this._form.activeField$
             .pipe(takeUntil(this._destroy$))
             .subscribe(f => {
-                this._isActiveField = f.formId === this.field.formId && f.fieldId === this.field.fieldId;
+                this._isActiveField = f.fieldId === this.field.fieldId;
+                this._cdRef.markForCheck();
+            });
+        this._form.isEditMode$
+            .pipe(takeUntil(this._destroy$))
+            .subscribe(v => {
+                this._isEditMode = v;
                 this._cdRef.markForCheck();
             });
     }
