@@ -26,8 +26,6 @@ export class EditorService {
     // TODO make this private
     public forms: IForm[] = [];
 
-    public isEditMode = true;
-
     private _currFormId = 0;
     private _editorConfig: EditorConfigOption;
     private _formChanged$: Subject<string> = new Subject();
@@ -352,8 +350,9 @@ export class EditorService {
 			name,
 			fields,
 			fieldMap,
+			model: model ?? {},
 			activeField$: new BehaviorSubject(fields[0]),
-			model: model ?? {}
+            isEditMode$: new BehaviorSubject(true),
 		});
 
         this._notifyFormChanged(id);

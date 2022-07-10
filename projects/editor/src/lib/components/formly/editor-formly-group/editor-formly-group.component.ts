@@ -4,7 +4,7 @@ import { FieldType } from '@ngx-formly/core';
 import { FieldDroplistService } from '../../../services/field-droplist-service/field-droplist.service';
 import { DragAction, IItemDragData } from '../../../services/field-droplist-service/field-droplist.types';
 import { EditorService } from '../../../services/editor-service/editor.service';
-import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
+import { IEditorFormlyField, IForm } from '../../../services/editor-service/editor.types';
 import { Subject, takeUntil } from 'rxjs';
 import { ContainerType, FlexContainerType } from '../../../services/style-service/style.types';
 
@@ -18,7 +18,9 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
     public dropListOrientation: DropListOrientation;
     public connectedTo: string[] = [];
     public isGridContainer: boolean;
+    public isEditMode: boolean;
 
+    private _form: IForm;
     private _destroy$: Subject<void> = new Subject();
 
     constructor(
@@ -45,6 +47,11 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
                 .pipe(takeUntil(this._destroy$))
                 .subscribe(ids => this.connectedTo = ids);
         }
+
+        this._form = this.editorService.getForm(this.field.formId);
+        this._form?.isEditMode$
+            .pipe(takeUntil(this._destroy$))
+            .subscribe(v => this.isEditMode = v);
     }
 
     ngOnDestroy(): void {

@@ -31,6 +31,7 @@
     <editor-form-toolbar
         class="toolbar"
         [(selectedDisplay)]="selectedFormDisplay"
+        [isEditMode$]="form.isEditMode$"
         (resetModel)="onResetModel()"
         (toggleSidebars)="showSidebars = $event">
     </editor-form-toolbar>
