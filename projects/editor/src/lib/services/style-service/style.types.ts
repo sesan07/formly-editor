@@ -25,3 +25,10 @@ export enum GridChildPrefix {
 export enum FlexContainerPrefix {
     FLEX_DIRECTION = 'flex-dir-'
 }
+
+export enum FlexContainerType {
+    COMLUMN = 'flex-dir-column',
+    COMLUMN_REVERSE = 'flex-dir-column-reverse',
+    ROW = 'flex-dir-row',
+    ROW_REVERSE = 'flex-dir-row-reverse',
+}

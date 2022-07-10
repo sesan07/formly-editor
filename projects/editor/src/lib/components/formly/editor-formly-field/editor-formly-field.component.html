@@ -1,5 +1,8 @@
 <header *ngIf="editorService.isEditMode">
-    <span>{{ editorService.getFormattedFieldName(field.name, field.key) }}</span>
+    <div class="header-title">
+        <span>{{ editorService.getFormattedFieldName(field.name, field.key) }}</span>
+        <ng-content></ng-content>
+    </div>
     <div class="options" [class.visible]="isMouseInside" *ngIf="!hideOptions">
         <button *ngIf="field.canHaveChildren" mat-icon-button [matMenuTriggerFor]="addCategoryMenu" (click)="$event.stopPropagation()">
             <mat-icon>add</mat-icon>

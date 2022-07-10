@@ -27,8 +27,11 @@ import { FormlyFormOptions } from '@ngx-formly/core';
 export class FormComponent implements OnInit, OnDestroy {
 	@Input() form: IForm;
 
+    public activeField: IEditorFormlyField;
 	public activeFieldProperty: IObjectProperty;
+    public activeFieldTarget: IEditorFormlyField;
 	public modelProperty: IObjectProperty;
+    public modelTarget: Record<string, any>;
 
 	public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
     public isAdvanced = true;
@@ -38,11 +41,8 @@ export class FormComponent implements OnInit, OnDestroy {
     public fieldsJSON: string;
     public formGroup: FormGroup = new FormGroup({});
     public options: FormlyFormOptions = {};
-    public formModel: Record<string, any> = {};
     public selectedFormDisplay: 'form' | 'json' = 'form';
 
-	private _formChanged$: Subject<void> = new Subject();
-	private _resetModel$: Subject<void> = new Subject();
 	private _resizeEnd$: Subject<void> = new Subject();
 	private _destroy$: Subject<void> = new Subject();
 
@@ -50,13 +50,9 @@ export class FormComponent implements OnInit, OnDestroy {
 		public propertyService: PropertyService,
 		public editorService: EditorService,
         private _dialog: MatDialog,
-        private _fileService: FileService,
-        private _fieldDropListService: FieldDroplistService) {
-	}
+        private _fileService: FileService
+    ) { }
 
-	public get formChanged$(): Observable<void> {
-		return this._formChanged$.asObservable();
-	}
     public get formDisplayTabIndex(): number {
         switch (this.selectedFormDisplay) {
             case 'form': return 0;
@@ -64,43 +60,29 @@ export class FormComponent implements OnInit, OnDestroy {
         }
     }
 
-	public get resetModel$(): Observable<void> {
-		return this._resetModel$.asObservable();
-	}
 	public get resizeEnd$(): Observable<void> {
 		return this._resizeEnd$.asObservable();
 	}
 
 	public ngOnInit(): void {
-		this._updateActiveFieldProperty();
-		this._updateModelProperty();
-        this._updateFields();
-        this._fieldDropListService.resetDropListIds(this.form.id);
-
-        setTimeout(() => {
-            this.formModel = cloneDeep(this.form.model);
-        });
+        this._updateModelProperty();
+        this._updateModelTarget();
+        this._updateFormFields();
 
 		this.editorService.formChanged$
 			.pipe(takeUntil(this._destroy$))
 			.subscribe(formId => {
-                if (formId !== this.form.id) {
-                    return;
+                if (formId === this.form.id) {
+                    this._updateFormFields();
                 }
-
-                this._updateFields();
-                this._fieldDropListService.resetDropListIds(formId);
-                this._formChanged$.next();
             });
 
-		this.editorService.fieldSelected$
-			.pipe(takeUntil(this._destroy$))
-			.subscribe(field => {
-                if (field.formId !== this.form.id) {
-                    return;
-                }
-
+		this.form.activeField$
+            .pipe(takeUntil(this._destroy$))
+            .subscribe(field => {
+                this.activeField = field;
                 this._updateActiveFieldProperty();
+                this._updateActiveFieldTarget();
             });
 	}
 
@@ -109,18 +91,17 @@ export class FormComponent implements OnInit, OnDestroy {
 		this._destroy$.complete();
 	}
 
-	onActiveFieldChanged(): void {
-        this._updateFields();
-		this._formChanged$.next();
+	onActiveFieldPropertyChanged(): void {
+        this._updateActiveField();
 	}
 
     onModelPropertyChanged(): void {
-        this.formModel = cloneDeep(this.form.model);
+        this._updateFormModel();
     }
 
     onModelChanged(model: Record<string, unknown>): void {
         this.form.model = cloneDeep(model);
-		this._updateModelProperty();
+        this._updateModelTarget();
     }
 
     onImportModel(): void {
@@ -134,9 +115,7 @@ export class FormComponent implements OnInit, OnDestroy {
             .subscribe(res => {
                 if (res) {
                     this.form.model = JSON.parse(res.json);
-                    this.formModel = cloneDeep(this.form.model);
-                    this._updateModelProperty();
-                    this._formChanged$.next();
+                    this._updateModelTarget();
                 }
             });
     }
@@ -162,27 +141,14 @@ export class FormComponent implements OnInit, OnDestroy {
 
     onResetModel(): void {
         this.options.resetModel({});
-        this.onModelChanged(this.formModel);
+        this._updateModelTarget();
     }
 
     onResizeEnd(): void {
         this._resizeEnd$.next();
     }
 
-	private _updateActiveFieldProperty(): void {
-		this.activeFieldProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
-		this._initRootProperty(this.activeFieldProperty);
-		this.activeFieldProperty.childProperties = cloneDeep(this.form.activeField.properties);
-		this.activeFieldProperty.populateChildrenFromTarget = false;
-		this.activeFieldProperty.addOptions = [];
-	}
-
-	private _updateModelProperty(): void {
-		this.modelProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
-		this._initRootProperty(this.modelProperty);
-	}
-
-    private _updateFields(): void {
+    private _updateFormFields(): void {
         this.fields = cloneDeep(this.form.fields);
 		this.formGroup = new FormGroup({});
 		this.options = {};
@@ -190,6 +156,35 @@ export class FormComponent implements OnInit, OnDestroy {
         const fieldsClone: IEditorFormlyField[] = cloneDeep(this.form.fields);
         fieldsClone.forEach(field => this.editorService.cleanField(field, true, true));
         this.fieldsJSON = JSON.stringify(fieldsClone, null, 2);
+    }
+
+    private _updateFormModel(): void {
+        this.form.model = cloneDeep(this.modelTarget);
+    }
+
+	private _updateActiveFieldProperty(): void {
+		this.activeFieldProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
+		this._initRootProperty(this.activeFieldProperty);
+		this.activeFieldProperty.childProperties = this.activeField.properties;
+		this.activeFieldProperty.populateChildrenFromTarget = false;
+		this.activeFieldProperty.addOptions = [];
+	}
+
+    private _updateActiveFieldTarget(): void {
+        this.activeFieldTarget = cloneDeep(this.activeField);
+    }
+
+    private _updateActiveField(): void {
+        this.editorService.updateField(this.activeFieldTarget);
+    }
+
+	private _updateModelProperty(): void {
+		this.modelProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
+		this._initRootProperty(this.modelProperty);
+	}
+
+    private _updateModelTarget(): void {
+        this.modelTarget = cloneDeep(this.form.model);
     }
 
 	private _initRootProperty(property: IArrayProperty | IObjectProperty) {

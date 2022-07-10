@@ -1,17 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { cloneDeep } from 'lodash-es';
 import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
 import { DragAction, IItemDragData } from '../../services/field-droplist-service/field-droplist.types';
 import { IEditorFormlyField, EditorTypeCategoryOption } from '../../services/editor-service/editor.types';
 import { EditorService } from '../../services/editor-service/editor.service';
 import { CdkDragExit } from '@angular/cdk/drag-drop';
+import { FormGroup } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'editor-field-category-list',
     templateUrl: './field-category-list.component.html',
     styleUrls: ['./field-category-list.component.scss']
 })
-export class FieldCategoryListComponent implements OnInit {
+export class FieldCategoryListComponent implements OnInit, OnDestroy {
 
     @Input() category: EditorTypeCategoryOption;
     @Input() formId: string;
@@ -19,19 +21,32 @@ export class FieldCategoryListComponent implements OnInit {
 
     public fields: IEditorFormlyField[];
     public previewFields: IEditorFormlyField[];
+    public formGroup: FormGroup = new FormGroup({});
+    public model: any = {};
+    public connectedTo: string[] = [];
+
+    private _destroy$: Subject<void> = new Subject();
 
     constructor(private _editorService: EditorService, private _dropListService: FieldDroplistService) { }
-
-    public get dropListIds(): string[] {
-        return this._dropListService.getDropListIds(this.formId);
-    }
 
     ngOnInit(): void {
         this.fields = this.category.typeOptions.map(option =>
             this._editorService.getDefaultConfig(this.formId, option.name, option.customName)
         );
         this.previewFields = cloneDeep(this.fields);
-        this.previewFields.forEach(field => field.fieldId = 'preview');
+        this.previewFields.forEach(field => {
+            field.fieldId = 'preview';
+            field.key = 'preview';
+        });
+
+        this._dropListService.getDropListIds$(this.formId)
+                .pipe(takeUntil(this._destroy$))
+                .subscribe(ids => this.connectedTo = ids);
+    }
+
+    ngOnDestroy(): void {
+        this._destroy$.next();
+        this._destroy$.complete();
     }
 
     canEnter = () => false;

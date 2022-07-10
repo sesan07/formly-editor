@@ -1,48 +1,46 @@
 import { Injectable } from '@angular/core';
-import { IEditorFormlyField } from '../editor-service/editor.types';
-import { EditorService } from '../editor-service/editor.service';
+import { IEditorFormlyField, IForm } from '../editor-service/editor.types';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { getChildren } from '../../utils';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FieldDroplistService {
 
-    private _formDropListIdMap: Map<string, string[]> = new Map();  // Map<formId, dropListIds[]>
+    private _formDropListIdMap: Map<string, BehaviorSubject<string[]>> = new Map();
 
-    constructor(private _editorService: EditorService) {}
-
-    getDropListIds(formId: string): string[] {
-        return this._formDropListIdMap.get(formId).slice();
+    getDropListIds$(formId: string): Observable<string[]> {
+        return this._formDropListIdMap.get(formId);
     }
 
-    resetDropListIds(formId: string): void {
-        const levelList: IEditorFormlyField[][] = [];
-        const dropListIds: string[] = [];
-
-        const form = this._editorService.getForm(formId);
+    updateDropListIds(form: IForm): void {
+        const orderedList: IEditorFormlyField[] = [];
         form.fields.forEach(field => {
-            this._addField(field, levelList, 0);
+            this._addField(field, orderedList, 0);
         });
 
-        levelList.forEach(level => {
-            level.forEach(field => dropListIds.push(field.fieldId));
-        });
-
-        this._formDropListIdMap.set(formId, dropListIds.reverse());
+        if (this._formDropListIdMap.get(form.id)) {
+            this._formDropListIdMap.get(form.id).next(orderedList.map(f => f.fieldId));
+        } else {
+            this._formDropListIdMap.set(form.id, new BehaviorSubject(orderedList.map(f => f.fieldId)));
+        }
     }
 
-    private _addField(field: IEditorFormlyField, levelList: IEditorFormlyField[][], level: number): void {
+    removeDropListIds(formId: string): void {
+        this._formDropListIdMap.get(formId).complete();
+        this._formDropListIdMap.delete(formId);
+    }
+
+    private _addField(field: IEditorFormlyField, levelList: IEditorFormlyField[], level: number): void {
         if (field.canHaveChildren) {
-            const children: IEditorFormlyField[] = this._editorService.getChildren(field);
+            const children: IEditorFormlyField[] = getChildren(field);
             children.forEach(child => {
                 this._addField(child, levelList, level + 1);
             });
 
-            if (!levelList[level]) {
-                levelList[level] = [field];
-            } else {
-                levelList[level].push(field);
-            }
+            levelList.push(field);
         }
     }
 }

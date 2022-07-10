@@ -10,13 +10,13 @@
     cdkDropListSortingDisabled
     [cdkDropListData]="fields"
     [cdkDropListEnterPredicate]="canEnter"
-    [cdkDropListConnectedTo]="dropListIds"
+    [cdkDropListConnectedTo]="connectedTo"
     (cdkDropListExited)="onDropListExited($event)"
     (cdkDropListEntered)="onDragReturned()">
     <ng-container>
         <div class="custom-field" *ngFor="let field of fields; let i = index" cdkDrag [cdkDragData]="getItemDragData(field)" (cdkDragDropped)="onDragReturned()">
             <div>{{ field.name }}</div>
-            <formly-form [fields]="[previewFields[i]]" *cdkDragPreview></formly-form>
+            <editor-formly-form [fields]="[previewFields[i]]" *cdkDragPreview></editor-formly-form>
             <div *cdkDragPlaceholder>{{ field.name }}</div>
         </div>
     </ng-container>

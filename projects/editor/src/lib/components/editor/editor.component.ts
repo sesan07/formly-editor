@@ -28,12 +28,6 @@ export class EditorComponent {
         private _fileService: FileService
     ) { }
 
-    @HostListener('mousemove', ['$event'])
-    onMouseMove(event: MouseEvent): void {
-        this.editorService.mousePosition.x = event.clientX;
-        this.editorService.mousePosition.y = event.clientY;
-    }
-
     onAddForm(): void {
         const config: MatDialogConfig = {
             height: 'auto',

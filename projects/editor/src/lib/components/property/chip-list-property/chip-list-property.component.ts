@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { isObservable, Observable, Subject } from 'rxjs';
@@ -13,9 +13,7 @@ import { BasePropertyDirective } from '../base-property.component';
     templateUrl: './chip-list-property.component.html',
     styleUrls: ['./chip-list-property.component.scss'],
 })
-export class ChipListPropertyComponent extends BasePropertyDirective implements OnChanges {
-    @Input() property: IChipListProperty;
-
+export class ChipListPropertyComponent extends BasePropertyDirective<IChipListProperty> {
     @ViewChild('input') inputElementRef: ElementRef<HTMLInputElement>;
 
     public formControl: FormControl = new FormControl();
@@ -31,21 +29,6 @@ export class ChipListPropertyComponent extends BasePropertyDirective implements 
 	public get hasOptions(): boolean {
 		return this.property.isRemovable;
 	};
-
-    ngOnChanges(changes: SimpleChanges): void {
-        if (!changes.property) {
-            return;
-        }
-
-        this._setupSelectableOptions();
-        this._setupHiddenOptions();
-        this._updateSelectedOptions();
-
-        this.filteredOptions = this.formControl.valueChanges.pipe(
-            startWith(''),
-            map((option: string) => option ? this._filter(option) : this.selectableOptions.slice())
-        );
-    }
 
     isHidden(option: string): boolean {
         return this._hiddenOptions
@@ -87,6 +70,19 @@ export class ChipListPropertyComponent extends BasePropertyDirective implements 
         this._updateValue();
     }
 
+    protected _onChanged(isFirstChange: boolean): void {
+        if (isFirstChange) {
+            this.filteredOptions = this.formControl.valueChanges.pipe(
+                startWith(''),
+                map((option: string) => option ? this._filter(option) : this.selectableOptions.slice())
+            );
+        }
+
+        this._setupSelectableOptions();
+        this._setupHiddenOptions();
+        this._updateSelectedOptions();
+    }
+
     private _setupSelectableOptions(): void {
         if (isObservable(this.property.options)) {
             this._unSubOptions$.next();
@@ -119,10 +115,11 @@ export class ChipListPropertyComponent extends BasePropertyDirective implements 
     }
 
     private _updateSelectedOptions(): void {
-        if (this.target[this.property.key]) { // If the target already has some selection
+        const value: string | string[] = this._getPropertyValue();
+        if (value) { // If the target already has some selection
             const existingOptions: string[] = this.property.outputString
-                ? (this.target[this.property.key] as string).split(' ')
-                : this.target[this.property.key] as string[];
+                ? (value as string).split(' ')
+                : value as string[];
 
             this.selectedOptions = [...existingOptions];
         } else {
@@ -138,6 +135,6 @@ export class ChipListPropertyComponent extends BasePropertyDirective implements 
             newValue = this.selectedOptions.slice();
         }
 
-        this.modifyValue(this.property.key, newValue);
+        this._modifyValue(newValue);
     }
 }

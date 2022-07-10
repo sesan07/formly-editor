@@ -12,7 +12,6 @@
             class="keyField" 
             [ngClass]="{ 'editable': !!property.isKeyEditable }"
             [contentEditable]="!!property.isKeyEditable">
-            (click)="onKeyClicked($event)"
         </span>
         <span>{{ '[ ' + childrenTarget.length + ' ]' }}</span>
     </span>
@@ -48,7 +47,7 @@
     <ng-container *ngFor="let child of childProperties; let i = index; let last = last; trackBy: trackPropertyByKey">
         <ng-container [ngSwitch]="child.type">
             <editor-object-property
-                *ngSwitchCase="propertyType.OBJECT"
+                *ngSwitchCase="typeofProperty.OBJECT"
                 [treeLevel]="treeLevel + 1"
                 [target]="childrenTarget"
                 [property]="propertyService.getAsObjectProperty(child)"
@@ -58,7 +57,7 @@
             </editor-object-property>
         
             <editor-boolean-property
-                *ngSwitchCase="propertyType.BOOLEAN"
+                *ngSwitchCase="typeofProperty.BOOLEAN"
                 [treeLevel]="treeLevel + 1"
                 [property]="child"
                 [target]="childrenTarget"
@@ -68,7 +67,7 @@
             </editor-boolean-property>
         
             <editor-chip-list-property
-                *ngSwitchCase="propertyType.CHIP_LIST"
+                *ngSwitchCase="typeofProperty.CHIP_LIST"
                 [treeLevel]="treeLevel + 1"
                 [property]="propertyService.getAsChiplistProperty(child)"
                 [target]="childrenTarget"
@@ -78,7 +77,7 @@
             </editor-chip-list-property>
         
             <editor-textarea-property
-                *ngSwitchCase="propertyType.TEXTAREA"
+                *ngSwitchCase="typeofProperty.TEXTAREA"
                 [treeLevel]="treeLevel + 1"
                 [property]="propertyService.getAsTextareaProperty(child)"
                 [target]="childrenTarget"
@@ -87,10 +86,10 @@
                 (targetChanged)="targetChanged.emit()">
             </editor-textarea-property>
         
-            <ng-container *ngSwitchCase="propertyType.NUMBER">
+            <ng-container *ngSwitchCase="typeofProperty.NUMBER">
                 <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
             </ng-container>
-            <ng-container *ngSwitchCase="propertyType.TEXT">
+            <ng-container *ngSwitchCase="typeofProperty.TEXT">
                 <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
             </ng-container>
             <ng-template #inputProperty>

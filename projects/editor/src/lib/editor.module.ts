@@ -57,6 +57,7 @@ import {
     EditorRootFormlyFieldComponent
 } from './components/formly/editor-formly-field/editor-formly-field.component';
 import { EditorFormlyFormComponent } from './components/formly/editor-formly-form/editor-formly-form.component';
+import { installPatch } from './dnd-patch';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -142,6 +143,9 @@ export class EditorModule {
 
     constructor(editorService: EditorService, @Optional() @Inject(EDITOR_CONFIG) config: EditorConfigOption) {
         editorService.setup(config ?? defaultConfig);
+
+        // Patch drag/drop to improve nesting support
+        installPatch();
     }
 
     static forRoot(config: EditorConfigOption): ModuleWithProviders<EditorModule> {

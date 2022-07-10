@@ -39,7 +39,7 @@
             <editor-formly-form
                 [form]="formGroup"
                 [fields]="fields"
-                [model]="formModel"
+                [model]="form.model"
                 [options]="options"
                 (modelChange)="onModelChanged($event)">
             </editor-formly-form>
@@ -58,16 +58,16 @@
     >
 	<editor-sidebar-section class="active-field-section">
         <div class="header-content" headerContent>
-            <span>Active Field - {{ editorService.getFormattedFieldName(form.activeField.name, form.activeField.key) }}</span>
+            <span>Active Field - {{ editorService.getFormattedFieldName(activeField.name, activeField.key) }}</span>
             <mat-slide-toggle labelPosition="before" [(ngModel)]="isAdvanced">Advanced</mat-slide-toggle>
         </div>
         <editor-edit-field
             mainContent
-            [field]="form.activeField"
+            [field]="activeFieldTarget"
             [property]="activeFieldProperty"
             [isSimplified]="!isAdvanced"
             [resizeTabHeader$]="resizeEnd$"
-            (fieldChanged)="onActiveFieldChanged()">
+            (fieldChanged)="onActiveFieldPropertyChanged()">
         </editor-edit-field>
 	</editor-sidebar-section>
 
@@ -81,7 +81,7 @@
         
         <div class="tree-container" mainContent>
             <editor-object-property
-                [target]="form.model"
+                [target]="modelTarget"
                 [property]="modelProperty"
                 [isExpanded]="true"
                 [isRoot]="true"
