@@ -27,7 +27,7 @@
 	padding: 0 4px 0 40px ;
     box-sizing: border-box;
 	border-radius: 4px;
-    cursor: grab; // TODO Set grab and grabbing cursors globally when dragging
+    cursor: move;
 }
 
 .custom-field:hover {

@@ -1,47 +1,56 @@
-import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { CdkDragDrop, DropListOrientation } from '@angular/cdk/drag-drop';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
 import { FieldDroplistService } from '../../../services/field-droplist-service/field-droplist.service';
 import { DragAction, IItemDragData } from '../../../services/field-droplist-service/field-droplist.types';
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
+import { Subject, takeUntil } from 'rxjs';
+import { ContainerType, FlexContainerType } from '../../../services/style-service/style.types';
 
 @Component({
     selector: 'editor-formly-group',
     templateUrl: './editor-formly-group.component.html',
     styleUrls: ['./editor-formly-group.component.scss'],
 })
-export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> implements OnInit {
-    @ViewChild(CdkDropList) dropList: CdkDropList;
-
+export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> implements OnInit, OnDestroy {
     public dropListClasses: string;
+    public dropListOrientation: DropListOrientation;
+    public connectedTo: string[] = [];
+    public isGridContainer: boolean;
 
-    connectedTo: string[] = [];
+    private _destroy$: Subject<void> = new Subject();
 
     constructor(
         public editorService: EditorService,
-        private _dropListService: FieldDroplistService) { super(); }
+        private _dropListService: FieldDroplistService
+    ) { super(); }
 
     ngOnInit(): void {
-        this.dropListClasses = (this.field.fieldGroupClassName || '') + ' cdk-drop-list';
+        this.dropListClasses = this.field.fieldGroupClassName ? this.field.fieldGroupClassName : '';
+
+        const hasGrid: boolean = this._hasFieldGroupClassName(ContainerType.GRID);
+        const hasFlex: boolean = this._hasFieldGroupClassName(ContainerType.FLEX);
+
+        const isHorizontal: boolean = hasFlex && !(
+            this._hasFieldGroupClassName(FlexContainerType.COMLUMN) ||
+            this._hasFieldGroupClassName(FlexContainerType.COMLUMN_REVERSE)
+        );
+
+        this.isGridContainer = hasGrid;
+        this.dropListOrientation = !hasGrid && isHorizontal ? 'horizontal' : 'vertical';
 
         if (this.field.formId && this.field.fieldId !== 'preview') {
-            this.connectedTo = this._dropListService.getDropListIds(this.field.formId);
+            this._dropListService.getDropListIds$(this.field.formId)
+                .pipe(takeUntil(this._destroy$))
+                .subscribe(ids => this.connectedTo = ids);
         }
     }
 
-    canEnter = (drag: CdkDrag) => {
-        // The drag-drop module doesn't call canEnter for the soure droplist, it's not designed for nested droplists.
-        // If you try to drag out of a nested source you won't be able to drop back in the source.
-        // This is because canEnter() is only called for other drop lists, so it would call canEnter() for parent, which would be true.
-        // To get around that, we prevent entry into other containers if the mouse is inside the source container
-        // We also use the order of the connectedTo list to check if the target container is stacked above.
-        const isInDropContainer: boolean = this._isMouseInElement(drag.dropContainer.element.nativeElement);
-        const index: number = this.connectedTo.indexOf(this.dropList.id);
-        const dropContainerIndex: number = this.connectedTo.indexOf(drag.dropContainer.id);
-
-        return !(isInDropContainer && dropContainerIndex < index);
-    };
+    ngOnDestroy(): void {
+        this._destroy$.next();
+        this._destroy$.complete();
+    }
 
     // TODO support dragging(copy, not move) between forms? :D
     onDroplistDropped(dragDrop: CdkDragDrop<IEditorFormlyField>): void {
@@ -55,19 +64,25 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
         const currentParent: IEditorFormlyField = dragDrop.previousContainer.data;
         const targetParent: IEditorFormlyField = dragDrop.container.data;
 
+        const dropIndex: number = this.isGridContainer ? undefined : dragDrop.currentIndex;
+
         switch(itemData.action) {
             case DragAction.COPY:
-                this.editorService.addField(field.type, targetParent.formId, field.customType, targetParent.fieldId);
+                this.editorService.addField(field.type, targetParent.formId, field.customType, targetParent.fieldId, dropIndex);
                 break;
             case DragAction.MOVE:
                 if (currentParent.fieldId === targetParent.fieldId) {
-                    this.editorService.moveField(field.fieldId, field.formId, dragDrop.previousIndex, dragDrop.currentIndex);
+                    if (dragDrop.previousIndex === dragDrop.currentIndex) {
+                        return;
+                    }
+                    this.editorService.moveField(field.fieldId, field.formId, dragDrop.previousIndex, dropIndex);
                 } else {
                     this.editorService.transferField(
                         field.fieldId,
                         field.formId,
-                        currentParent.fieldId,
-                        targetParent.fieldId
+                        targetParent.fieldId,
+                        dragDrop.previousIndex,
+                        dropIndex
                     );
                 }
                 break;
@@ -81,12 +96,8 @@ export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> im
         };
     }
 
-    private _isMouseInElement(droplistElement: HTMLElement): boolean {
-        const rect: DOMRect = droplistElement.getBoundingClientRect();
-
-        const isInWidth: boolean = this.editorService.mousePosition.x >= rect.left && this.editorService.mousePosition.x <= rect.right;
-        const isInHeight: boolean = this.editorService.mousePosition.y >= rect.top && this.editorService.mousePosition.y <= rect.bottom;
-
-        return isInWidth && isInHeight;
+    private _hasFieldGroupClassName(className: string): boolean {
+        const regex = new RegExp(`(?<!-)${className}(?!-)`);
+        return !!this.field.fieldGroupClassName?.match(regex);
     }
 }

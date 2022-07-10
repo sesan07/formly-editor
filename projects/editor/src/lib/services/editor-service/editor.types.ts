@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 import { ConfigOption, FormlyFieldConfig, FormlyFieldConfigCache, FormlyTemplateOptions, TypeOption } from '@ngx-formly/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { IProperty } from '../../components/property/property.types';
 
 export enum FieldType {
@@ -34,7 +34,7 @@ export type IEditorFormlyFieldConfigCache = IEditorFormlyField & FormlyFieldConf
 export interface IForm {
     id: string;
     name: string;
-	activeField: IEditorFormlyField;
+	activeField$: BehaviorSubject<IEditorFormlyField>;
     fields: IEditorFormlyField[];
     fieldMap: Map<string, IEditorFormlyField>;
     model: Record<string, unknown>;

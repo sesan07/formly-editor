@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { get, isEmpty, merge, set } from 'lodash-es';
-import { forkJoin, isObservable, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import {
@@ -15,8 +15,8 @@ import {
     EditorTypeCategoryOption,
     EditorTypeOption,
 } from './editor.types';
-import { IProperty, PropertyType } from '../../components/property/property.types';
-import { IChipListProperty } from '../../components/property/chip-list-property/chip-list-property.types';
+import { IProperty } from '../../components/property/property.types';
+import { FieldDroplistService } from '../field-droplist-service/field-droplist.service';
 
 @Injectable({
     providedIn: 'root',
@@ -27,22 +27,23 @@ export class EditorService {
     public forms: IForm[] = [];
 
     public isEditMode = true;
-    public mousePosition: { x: number; y: number } = { x: 0, y: 0 };
 
     private _currFormId = 0;
     private _editorConfig: EditorConfigOption;
     private _formChanged$: Subject<string> = new Subject();
-    private _fieldSelected$: Subject<IEditorFormlyField> = new Subject();
 
     private _fieldIdCounterMap: Map<string, number> = new Map(); // Map<fieldType, count>
     private _fieldtypeOptions: EditorTypeOption[] = [];
 
-    constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService, private _http: HttpClient) {}
+    constructor(
+        @Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService,
+        private _http: HttpClient,
+        private _fieldDropListService: FieldDroplistService
+    ) {}
 
     public get fieldCategories(): EditorTypeCategoryOption[] { return this._editorConfig.typeCategories; };
 
     public get formChanged$(): Observable<string> { return this._formChanged$.asObservable(); }
-    public get fieldSelected$(): Observable<IEditorFormlyField> { return this._fieldSelected$.asObservable(); }
 
     setup(editorConfig: EditorConfigOption) {
         this._editorConfig = editorConfig;
@@ -59,7 +60,7 @@ export class EditorService {
 			siblings.push(newField);
 		}
 
-		this._formChanged$.next(formId);
+        this._notifyFormChanged(formId);
 		this.selectField(formId, newField.fieldId);
 
 		return newField;
@@ -74,7 +75,7 @@ export class EditorService {
             siblings.splice(index, 1);
 
             form.fieldMap.delete(fieldId);
-            this._formChanged$.next(formId);
+            this._notifyFormChanged(formId);
 
 			if (parentId) {
 				this.selectField(formId, parentId);
@@ -87,9 +88,7 @@ export class EditorService {
 	public selectField(formId: string, fieldId: string): void {
         const form: IForm = this.getForm(formId);
 		const field = form.fieldMap.get(fieldId);
-		form.activeField = form.fieldMap.get(fieldId);
-
-		this._fieldSelected$.next(field);
+		form.activeField$.next(field);
 	}
 
 	public replaceParentField(replaceType: string, formId: string, fieldId: string, replaceCustomType?: string): void {
@@ -111,12 +110,7 @@ export class EditorService {
         newField.className = field.className;
         newField.fieldGroupClassName = field.fieldGroupClassName;
 
-        this._formChanged$.next(formId);
-	}
-
-	public isActiveField(formId: string, fieldId: string): boolean {
-        const form: IForm = this.getForm(formId);
-		return form ? form.activeField.fieldId === fieldId : false;
+        this._notifyFormChanged(formId);
 	}
 
     public getDefaultConfig(formId: string, type: string, customType?: string, parentFieldId?: string): IEditorFormlyField {
@@ -171,6 +165,8 @@ export class EditorService {
     }
 
     public removeForm(index: number): void {
+        const form: IForm = this.forms[index];
+        this._fieldDropListService.removeDropListIds(form.id);
         this.forms.splice(index, 1);
     }
 
@@ -201,12 +197,12 @@ export class EditorService {
     public updateField(modifiedField: IEditorFormlyField) {
         const field: IEditorFormlyField = this.getField(modifiedField.formId, modifiedField.fieldId);
         merge(field, modifiedField);
-        this._formChanged$.next(field.formId);
-        this._fieldSelected$.next(field);
+        this._notifyFormChanged(field.formId);
+        this.selectField(field.formId, field.fieldId);
     }
 
     // Move field within a parent field in a form
-    public moveField(fieldId: string, formId: string, fromIndex: number, toIndex: number): void {
+    public moveField(fieldId: string, formId: string, fromIndex: number, toIndex?: number): void {
         const field: IEditorFormlyField = this.getField(formId, fieldId);
         if (!field.parentFieldId) {
             throw new Error('Cannot move field without parent');
@@ -215,32 +211,34 @@ export class EditorService {
         const parent: IEditorFormlyField = this.getField(formId, field.parentFieldId);
         const siblings: IEditorFormlyField[] = this.getChildren(parent);
 
+        toIndex = typeof toIndex === 'number' ? toIndex : siblings.length;
         moveItemInArray(siblings, fromIndex, toIndex);
 
-        this._formChanged$.next(field.formId);
+        this._notifyFormChanged(field.formId);
     }
 
     // Transfer field between parent fields in the same form
     public transferField(
             fieldId: string,
             formId: string,
-            currentParentId: string,
             targetParentId: string,
+            fromIndex: number,
+            toIndex?: number,
         ): void {
 
         const field: IEditorFormlyField = this.getField(formId, fieldId);
-        const currentParent: IEditorFormlyField = this.getField(formId, currentParentId);
+        const currentParent: IEditorFormlyField = this.getField(formId, field.parentFieldId);
         const targetParent: IEditorFormlyField = this.getField(formId, targetParentId);
         const currentSiblings: IEditorFormlyField[] = this.getChildren(currentParent);
         const targetSiblings: IEditorFormlyField[] = this.getChildren(targetParent);
-        const currentIndex: number = currentSiblings.findIndex(f => f.fieldId === field.fieldId);
-        const targetIndex: number = targetSiblings.length;
 
-        transferArrayItem(currentSiblings, targetSiblings, currentIndex, targetIndex);
+        toIndex = typeof toIndex === 'number' ? toIndex : targetSiblings.length;
+
+        transferArrayItem(currentSiblings, targetSiblings, fromIndex, toIndex);
 
         field.formId = targetParent.formId;
         field.parentFieldId = targetParent.fieldId;
-        this._formChanged$.next(formId);
+        this._notifyFormChanged(formId);
     }
 
     private _convertToEditorField(
@@ -354,9 +352,11 @@ export class EditorService {
 			name,
 			fields,
 			fieldMap,
-			activeField: fields[0],
+			activeField$: new BehaviorSubject(fields[0]),
 			model: model ?? {}
 		});
+
+        this._notifyFormChanged(id);
 	}
 
 	private _removeEmptyProperties(field: IEditorFormlyField): void {
@@ -399,5 +399,11 @@ export class EditorService {
         delete field.canHaveChildren;
         delete field.childrenPath;
         delete field.customType;
+    }
+
+    private _notifyFormChanged(formId: string): void {
+        const form: IForm = this.getForm(formId);
+        this._fieldDropListService.updateDropListIds(form);
+        this._formChanged$.next(formId);
     }
 }

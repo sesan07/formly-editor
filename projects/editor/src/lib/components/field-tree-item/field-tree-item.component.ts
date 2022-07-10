@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EditorService } from '../../services/editor-service/editor.service';
-import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField } from '../../services/editor-service/editor.types';
+import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField, IForm } from '../../services/editor-service/editor.types';
 
 @Component({
     selector: 'editor-field-tree-item',
@@ -21,6 +21,7 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
     public childFields: IEditorFormlyField[];
 	public replaceCategories: EditorTypeCategoryOption[];
 
+    private _form: IForm;
     private _destroy$: Subject<void> = new Subject();
 
     constructor(public editorService: EditorService, private _renderer: Renderer2, private _elementRef: ElementRef) {
@@ -54,15 +55,11 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
 			this.childFields = this.editorService.getChildren(this.field);
 		}
 
-        this._checkActiveField();
-        if (this.isActiveField) {
-            setTimeout(() => this.expandParent.emit());
-        }
-
-        this.editorService.fieldSelected$
+        this._form = this.editorService.getForm(this.field.formId);
+        this._form.activeField$
             .pipe(takeUntil(this._destroy$))
             .subscribe((f: IEditorFormlyField) => {
-                this._checkActiveField();
+                this.isActiveField = f.formId === this.field.formId && f.fieldId === this.field.fieldId;
                 if (this.isActiveField) {
                     this.expandParent.emit();
                 }
@@ -100,8 +97,4 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
     }
 
     trackFieldById: TrackByFunction<IEditorFormlyField> = (_, field: IEditorFormlyField) => field.fieldId;
-
-	private _checkActiveField(): void {
-		this.isActiveField =  this.editorService.isActiveField(this.field.formId, this.field.fieldId);
-	}
 }

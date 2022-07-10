@@ -15,7 +15,7 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 import { FormlyConfig, FormlyField, FormlyFieldTemplates } from '@ngx-formly/core';
 import { Subject, takeUntil } from 'rxjs';
 import { EditorService } from '../../../services/editor-service/editor.service';
-import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
+import { IEditorFormlyField, IForm } from '../../../services/editor-service/editor.types';
 import { EditFieldDialogComponent } from '../../edit-field-dialog/edit-field-dialog.component';
 import { EditFieldRequest } from '../../edit-field-dialog/edit-field-dialog.types';
 
@@ -39,6 +39,7 @@ export class EditorFormlyFieldComponent extends FormlyField implements OnInit, O
     public index: number;
 	public hideOptions: boolean;
 
+    private _form: IForm;
     private _destroy$: Subject<void> = new Subject();
     private _isActiveField: boolean;
 
@@ -88,11 +89,14 @@ export class EditorFormlyFieldComponent extends FormlyField implements OnInit, O
         }
 
         this.hideOptions = this.field.templateOptions.hideEditorWrapperOptions;
-		this._checkActiveField();
 
-        this.editorService.fieldSelected$
+        this._form = this.editorService.getForm(this.field.formId);
+        this._form.activeField$
             .pipe(takeUntil(this._destroy$))
-            .subscribe(() => this._checkActiveField());
+            .subscribe(f => {
+                this._isActiveField = f.formId === this.field.formId && f.fieldId === this.field.fieldId;
+                this._cdRef.markForCheck();
+            });
     }
 
     ngOnDestroy(): void {
@@ -135,10 +139,4 @@ export class EditorFormlyFieldComponent extends FormlyField implements OnInit, O
     onMoveDown(): void {
         this.editorService.moveField(this.field.fieldId, this.field.formId, this.index, this.index + 1);
     }
-
-	private _checkActiveField(): void {
-		this._isActiveField =  this.editorService.isActiveField(this.field.formId, this.field.fieldId);
-        this._cdRef.markForCheck();
-	}
-
 }

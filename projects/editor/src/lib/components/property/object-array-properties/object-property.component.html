@@ -11,10 +11,9 @@
         <span #key 
             class="keyField" 
             [ngClass]="{ 'editable': !!property.isKeyEditable }"
-            [contentEditable]="!!property.isKeyEditable"
-            (click)="onKeyClicked($event)">
+            [contentEditable]="!!property.isKeyEditable">
         </span>
-        <span>{{ (property?.name ? '(' + property.name + ') ' : '') + '{ ' + property.childProperties.length + ' }' }}</span>
+        <span>{{ (property?.name ? '(' + property.name + ') ' : '') + '{ ' + childProperties.length + ' }' }}</span>
     </span>
 </editor-tree-item-header>
 
@@ -39,11 +38,11 @@
 
 
 <ng-template #childPropertiesView>
-	<ng-container *ngFor="let child of property.childProperties; let i = index; trackBy: trackPropertyByKey">
+	<ng-container *ngFor="let child of childProperties; let i = index; trackBy: trackPropertyByKey">
         <ng-container *ngIf="isSimplified ? child.isSimple : true">
             <ng-container [ngSwitch]="child.type">
                 <editor-array-property 
-                    *ngSwitchCase="propertyType.ARRAY"
+                    *ngSwitchCase="typeofProperty.ARRAY"
                     [treeLevel]="treeLevel + 1"
                     [target]="childrenTarget"
                     [property]="propertyService.getAsArrayProperty(child)"
@@ -53,7 +52,7 @@
                 </editor-array-property>
             
                 <editor-object-property
-                    *ngSwitchCase="propertyType.OBJECT"
+                    *ngSwitchCase="typeofProperty.OBJECT"
                     [treeLevel]="treeLevel + 1"
                     [target]="childrenTarget"
                     [property]="propertyService.getAsObjectProperty(child)"
@@ -63,9 +62,9 @@
                 </editor-object-property>
             
                 <editor-boolean-property
-                    *ngSwitchCase="propertyType.BOOLEAN"
+                    *ngSwitchCase="typeofProperty.BOOLEAN"
                     [treeLevel]="treeLevel + 1"
-                    [property]="property"
+                    [property]="child"
                     [target]="childrenTarget"
                     [isSimplified]="isSimplified"
                     (remove)="onRemoveChild(i)"
@@ -73,7 +72,7 @@
                 </editor-boolean-property>
             
                 <editor-chip-list-property
-                    *ngSwitchCase="propertyType.CHIP_LIST"
+                    *ngSwitchCase="typeofProperty.CHIP_LIST"
                     [treeLevel]="treeLevel + 1"
                     [property]="propertyService.getAsChiplistProperty(child)"
                     [target]="childrenTarget"
@@ -83,7 +82,7 @@
                 </editor-chip-list-property>
             
                 <editor-textarea-property
-                    *ngSwitchCase="propertyType.TEXTAREA"
+                    *ngSwitchCase="typeofProperty.TEXTAREA"
                     [treeLevel]="treeLevel + 1"
                     [property]="propertyService.getAsTextareaProperty(child)"
                     [target]="childrenTarget"
@@ -92,10 +91,10 @@
                     (targetChanged)="targetChanged.emit()">
                 </editor-textarea-property>
             
-                <ng-container *ngSwitchCase="propertyType.NUMBER">
+                <ng-container *ngSwitchCase="typeofProperty.NUMBER">
                     <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
                 </ng-container>
-                <ng-container *ngSwitchCase="propertyType.TEXT">
+                <ng-container *ngSwitchCase="typeofProperty.TEXT">
                     <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
                 </ng-container>
                 <ng-template #inputProperty>
@@ -125,8 +124,8 @@
 </mat-menu>
 
 <mat-menu #addMenu="matMenu">
-    <button mat-menu-item *ngIf="property.addOptions?.includes(propertyType.ARRAY)" [matMenuTriggerFor]="addArrayMenu">
-        {{propertyType.ARRAY}}
+    <button mat-menu-item *ngIf="property.addOptions?.includes(typeofProperty.ARRAY)" [matMenuTriggerFor]="addArrayMenu">
+        {{typeofProperty.ARRAY}}
     </button>
     <ng-container *ngFor="let type of propertyService.possibleArrayAddTypes">
         <button mat-menu-item *ngIf="property.addOptions?.includes(type)" (click)="onAddChild(type)">
@@ -136,7 +135,7 @@
 </mat-menu>
 
 <mat-menu #addArrayMenu="matMenu">
-    <button *ngFor="let type of propertyService.possibleArrayAddTypes" mat-menu-item (click)="onAddChild(propertyType.ARRAY, type)">
+    <button *ngFor="let type of propertyService.possibleArrayAddTypes" mat-menu-item (click)="onAddChild(typeofProperty.ARRAY, type)">
         {{type}}
     </button>
 </mat-menu>

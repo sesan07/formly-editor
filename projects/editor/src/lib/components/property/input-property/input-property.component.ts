@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BasePropertyDirective } from '../base-property.component';
 import { IInputProperty } from './input-property.types';
@@ -8,31 +8,20 @@ import { IInputProperty } from './input-property.types';
 	templateUrl: './input-property.component.html',
 	styleUrls: ['./input-property.component.scss'],
 })
-export class InputPropertyComponent extends BasePropertyDirective implements OnChanges, OnInit {
-	@Input() property: IInputProperty;
-
-	public type: string;
+export class InputPropertyComponent extends BasePropertyDirective<IInputProperty> {
     public formControl: FormControl;
 
 	public get hasOptions(): boolean {
 		return this.property.isRemovable;
 	};
 
-    ngOnInit(): void {
-        this.formControl = new FormControl(this.target[this.property.key]);
-        this.formControl.valueChanges.subscribe(val => {
-            this._updateValue(val);
-        });
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes.property) {
-            this.type =  this.property.type.toLowerCase();
-
-            if (this.formControl) {
-                this.formControl.setValue(this.target[this.property.key] ?? '', { emitEvent: false });
-            }
+    protected _onChanged(isFirstChange: boolean): void {
+        if (isFirstChange) {
+            this.formControl = new FormControl(this._getPropertyValue(''));
+            this.formControl.valueChanges.subscribe(val => this._updateValue(val));
         }
+
+        this.formControl.setValue(this._getPropertyValue(''), { emitEvent: false });
     }
 
     private _updateValue(value: string): void {
@@ -53,6 +42,6 @@ export class InputPropertyComponent extends BasePropertyDirective implements OnC
             newValue = value;
         }
 
-        this.modifyValue(this.property.key, newValue);
+        this._modifyValue(newValue);
     }
 }

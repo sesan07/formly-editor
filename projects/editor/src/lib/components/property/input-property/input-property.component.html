@@ -13,14 +13,14 @@
         <span>:</span>
     </span>
     <mat-form-field class="property-field" appearance="outline">
-        <input matInput [formControl]="formControl" [type]="type">
+        <input matInput [formControl]="formControl" [type]="property.type | lowercase">
     </mat-form-field>
 </editor-tree-item-header>
 
 <ng-template #simplifiedView>
     <mat-form-field class="simplified">
         <mat-label>{{ property.name ? property.name : property.key }}</mat-label>
-        <input matInput [formControl]="formControl" [type]="type">
+        <input matInput [formControl]="formControl" [type]="property.type | lowercase">
     </mat-form-field>
 </ng-template>
 

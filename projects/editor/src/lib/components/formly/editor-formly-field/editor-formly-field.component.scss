@@ -2,7 +2,6 @@
     display: block;
     padding: 0;
     box-sizing: border-box;
-    transition: 0.2s ease-out;
 }
 
 :host.edit-mode {
@@ -22,16 +21,20 @@
 
 header {
     display: flex;
-    justify-content: space-between;
+    user-select: none;
+}
+
+.header-title{
+    flex-grow: 1;
+    position: relative;
 }
 
 .options {
     display: flex;
     justify-content: space-between;
-    opacity: 0;
-    transition: opacity 0.2s ease-out;
+    visibility: hidden;
 }
 
 .options.visible {
-    opacity: 1;
+    visibility: visible;
 }

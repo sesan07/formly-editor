@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    Output,
+    SimpleChanges
+} from '@angular/core';
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
 import { StyleService } from '../../../services/style-service/style.service';
@@ -47,19 +55,8 @@ export class EditFieldStylesComponent implements OnChanges {
     constructor(private _editorService: EditorService, private _styleService: StyleService) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (!changes.editField) {
-            return;
-        }
-
-        this._setupProperties();
-
-        if (this.editField.parentFieldId) {
-            this._setupParent();
-        }
-
-        if (this.editField.canHaveChildren) {
-            this._setupChildren();
-            this._setupChildrenProperties();
+        if (changes.editField) {
+            this._setUp();
         }
     }
 
@@ -144,6 +141,21 @@ export class EditFieldStylesComponent implements OnChanges {
 
     getChildrenProperty(breakpoint?: BreakpointType): IChipListProperty {
         return breakpoint ? this._breakpointChildrenProperties.get(breakpoint) : this._generalChildrenProperty;
+    }
+
+    private _setUp(): void {
+        this._setupProperties();
+
+        if (this.editField.parentFieldId) {
+            this._setupParent();
+        } else {
+            this.parentContainer = null;
+        }
+
+        if (this.editField.canHaveChildren) {
+            this._setupChildren();
+            this._setupChildrenProperties();
+        }
     }
 
     private _setupParent(): void {
