@@ -22,13 +22,10 @@ import { FieldDroplistService } from '../field-droplist-service/field-droplist.s
     providedIn: 'root',
 })
 export class EditorService {
-
-    // TODO make this private
-    public forms: IForm[] = [];
-
     private _currFormId = 0;
     private _editorConfig: EditorConfigOption;
     private _formChanged$: Subject<string> = new Subject();
+    private _forms$: BehaviorSubject<IForm[]> = new BehaviorSubject([]);
 
     private _fieldIdCounterMap: Map<string, number> = new Map(); // Map<fieldType, count>
     private _fieldtypeOptions: EditorTypeOption[] = [];
@@ -39,9 +36,9 @@ export class EditorService {
         private _fieldDropListService: FieldDroplistService
     ) {}
 
-    public get fieldCategories(): EditorTypeCategoryOption[] { return this._editorConfig.typeCategories; };
-
+    public get forms$(): Observable<IForm[]> { return this._forms$.asObservable(); }
     public get formChanged$(): Observable<string> { return this._formChanged$.asObservable(); }
+    public get fieldCategories(): EditorTypeCategoryOption[] { return this._editorConfig.typeCategories; };
 
     setup(editorConfig: EditorConfigOption) {
         this._editorConfig = editorConfig;
@@ -123,7 +120,7 @@ export class EditorService {
     }
 
     public getForm(formId: string): IForm {
-        return this.forms.find(f => f.id === formId);
+        return this._forms$.value.find(f => f.id === formId);
     }
 
     public addNewForm(name: string): void {
@@ -163,9 +160,10 @@ export class EditorService {
     }
 
     public removeForm(index: number): void {
-        const form: IForm = this.forms[index];
-        this._fieldDropListService.removeDropListIds(form.id);
-        this.forms.splice(index, 1);
+        const forms: IForm[] = this._forms$.value;
+        this._fieldDropListService.removeDropListIds(forms[index].id);
+        forms.splice(index, 1);
+        this._forms$.next(forms.slice());
     }
 
 	public cleanField(field: IEditorFormlyField, cleanChildren: boolean = true, removeEditorProperties?: boolean): void {
@@ -345,15 +343,18 @@ export class EditorService {
         fieldMap: Map<string, IEditorFormlyField>,
         model?: Record<string, unknown>
     ) {
-        this.forms.push({
-			id,
-			name,
-			fields,
-			fieldMap,
-			model: model ?? {},
-			activeField$: new BehaviorSubject(fields[0]),
-            isEditMode$: new BehaviorSubject(true),
-		});
+        this._forms$.next([
+            ...this._forms$.value,
+            {
+                id,
+                name,
+                fields,
+                fieldMap,
+                model: model ?? {},
+                activeField$: new BehaviorSubject(fields[0]),
+                isEditMode$: new BehaviorSubject(true),
+            }
+        ]);
 
         this._notifyFormChanged(id);
 	}

@@ -1,8 +1,8 @@
-import { Component, HostListener, TrackByFunction } from '@angular/core';
+import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash-es';
-import { of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { EditorService } from '../../services/editor-service/editor.service';
 import { IEditorFormlyField, IForm } from '../../services/editor-service/editor.types';
 import { FileService } from '../../services/file-service/file.service';
@@ -18,15 +18,28 @@ import { ImportJSONRequest, ImportJSONResponse } from '../import-form-dialog/imp
     templateUrl: './editor.component.html',
     styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent {
+export class EditorComponent implements OnInit, OnDestroy {
+    public tabIndex = 0;
+    public forms: IForm[] = [];
 
-    tabIndex = 0;
+    private _destroy$: Subject<void> = new Subject();
 
     constructor(
-        public editorService: EditorService,
+        private _editorService: EditorService,
         private _dialog: MatDialog,
         private _fileService: FileService
     ) { }
+
+    ngOnInit(): void {
+        this._editorService.forms$
+            .pipe(takeUntil(this._destroy$))
+            .subscribe(forms => this.forms = forms);
+    }
+
+    ngOnDestroy(): void {
+        this._destroy$.next();
+        this._destroy$.complete();
+    }
 
     onAddForm(): void {
         const config: MatDialogConfig = {
@@ -39,10 +52,10 @@ export class EditorComponent {
         dialogRef.afterClosed()
             .subscribe(res => {
                 if (res) {
-                    this.editorService.addNewForm(res.name);
+                    this._editorService.addNewForm(res.name);
                     // Navigate to new form. Allow some time for tab to load.
                     setTimeout(() => {
-                        this.tabIndex = this.editorService.forms.length - 1;
+                        this.tabIndex = this.forms.length - 1;
                     }, 1000);
                 }
             });
@@ -61,19 +74,19 @@ export class EditorComponent {
         dialogRef.afterClosed()
             .subscribe(res => {
                 if (res) {
-                    this.editorService.importForm(res.name, res.json);
+                    this._editorService.importForm(res.name, res.json);
                     // Navigate to new form. Allow some time for tab to load.
                     setTimeout(() => {
-                        this.tabIndex = this.editorService.forms.length - 1;
+                        this.tabIndex = this.forms.length - 1;
                     }, 1000);
                 }
             });
     }
 
     onExportForm(): void {
-        const form: IForm = this.editorService.forms[this.tabIndex];
+        const form: IForm = this.forms[this.tabIndex];
         const fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
-        fieldsClone.forEach(field => this.editorService.cleanField(field, true, true));
+        fieldsClone.forEach(field => this._editorService.cleanField(field, true, true));
 
         const config: MatDialogConfig<ExportJSONRequest> = {
             data: {
@@ -91,6 +104,10 @@ export class EditorComponent {
                     this._fileService.saveFile(res.name, res.json);
                 }
             });
+    }
+
+    onRemoveForm(index: number): void {
+        this._editorService.removeForm(index);
     }
 
     trackFormById: TrackByFunction<IForm> = (_, form: IForm) => form.id;
