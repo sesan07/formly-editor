@@ -31,6 +31,8 @@ export class EditFieldComponent implements OnInit, OnDestroy {
             .subscribe(() => {
                 this.matTabGroup._tabHeader._alignInkBarToSelectedTab();
             });
+
+        setTimeout(() => this.matTabGroup._tabHeader._alignInkBarToSelectedTab(), 1000);
     }
 
     ngOnDestroy(): void {
