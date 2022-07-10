@@ -3,14 +3,14 @@
     <span class="header-buttons">
         <button mat-button (click)="onAddForm()"><mat-icon>add</mat-icon>New Form</button>
         <button mat-button (click)="onImportForm()"><mat-icon>file_download</mat-icon>Import Form</button>
-        <button mat-button (click)="onExportForm()" [disabled]="editorService.forms.length === 0"><mat-icon>file_upload</mat-icon>Export Form</button>
+        <button mat-button (click)="onExportForm()" [disabled]="forms.length === 0"><mat-icon>file_upload</mat-icon>Export Form</button>
     </span>
 </span>
-<mat-tab-group *ngIf="editorService.forms.length > 0; else emptyView" [(selectedIndex)]="tabIndex">
-    <mat-tab *ngFor="let form of editorService.forms; let i = index; trackBy: trackFormById">
+<mat-tab-group *ngIf="forms.length > 0; else emptyView" [(selectedIndex)]="tabIndex">
+    <mat-tab *ngFor="let form of forms; let i = index; trackBy: trackFormById">
         <ng-template mat-tab-label>
             {{ form.name }}
-            <button class="close-btn" mat-icon-button (click)="editorService.removeForm(i)"><mat-icon>close</mat-icon></button>
+            <button class="close-btn" mat-icon-button (click)="onRemoveForm(i)"><mat-icon>close</mat-icon></button>
         </ng-template>
         <editor-form [form]="form"></editor-form>
     </mat-tab>
