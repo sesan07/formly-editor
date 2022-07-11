@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+
 import { AddFormResponse } from './add-form-dialog.types';
 
 @Component({

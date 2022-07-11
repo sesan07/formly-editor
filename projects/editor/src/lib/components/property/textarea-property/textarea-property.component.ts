@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
+
 import { BasePropertyDirective } from '../base-property.component';
 import { ITextareaProperty } from './textarea-property.types';
 

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { IProperty, PropertyType } from 'editor';
+
 import { BaseFieldService } from '../base-field.service';
 import { IRepeatingSectionTemplateOptions } from './repeating-section.types';
 import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
-import { IProperty, PropertyType } from 'editor';
 
 @Injectable({
 	providedIn: 'root',

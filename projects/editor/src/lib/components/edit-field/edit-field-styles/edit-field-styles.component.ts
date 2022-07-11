@@ -7,6 +7,7 @@ import {
     Output,
     SimpleChanges
 } from '@angular/core';
+
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
 import { StyleService } from '../../../services/style-service/style.service';

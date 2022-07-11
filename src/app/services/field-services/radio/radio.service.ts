@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IArrayProperty, IObjectProperty, IProperty, PropertyType } from 'editor';
+
 import { BaseFieldService } from '../base-field.service';
 import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 import { IRadioTemplateOptions } from './radio.types';

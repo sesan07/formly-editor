@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, Renderer2 } from '@angular/core';
-import { MatMenuPanel } from '@angular/material/menu';
+
 import { SidebarComponent } from '../sidebar.component';
 
 @Component({

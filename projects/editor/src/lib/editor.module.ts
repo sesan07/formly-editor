@@ -1,17 +1,17 @@
 import { Inject, ModuleWithProviders, NgModule, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { HttpClientModule } from '@angular/common/http';
 import { FORMLY_CONFIG, TypeOption } from '@ngx-formly/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { cloneDeep } from 'lodash-es';
+
 import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG } from './services/editor-service/editor.types';
 import { HomeComponent } from './components/home/home.component';
 import { EditorService } from './services/editor-service/editor.service';
-import { cloneDeep } from 'lodash-es';
-import { HttpClientModule } from '@angular/common/http';
 import { installPatch } from './dnd-patch';
 import { FileService } from './services/file-service/file.service';
 import { FieldDroplistService } from './services/field-droplist-service/field-droplist.service';

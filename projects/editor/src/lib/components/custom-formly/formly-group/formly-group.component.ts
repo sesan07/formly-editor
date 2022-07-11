@@ -1,11 +1,12 @@
 import { CdkDragDrop, DropListOrientation } from '@angular/cdk/drag-drop';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
+import { Subject, takeUntil } from 'rxjs';
+
 import { FieldDroplistService } from '../../../services/field-droplist-service/field-droplist.service';
 import { DragAction, IItemDragData } from '../../../services/field-droplist-service/field-droplist.types';
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField, IForm } from '../../../services/editor-service/editor.types';
-import { Subject, takeUntil } from 'rxjs';
 import { ContainerType, FlexContainerType } from '../../../services/style-service/style.types';
 
 @Component({

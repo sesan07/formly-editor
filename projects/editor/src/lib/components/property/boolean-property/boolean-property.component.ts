@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
+
 import { BasePropertyDirective } from '../base-property.component';
 import { IBooleanProperty } from './boolean-property.types';
 

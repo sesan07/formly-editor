@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { cloneDeep, get } from 'lodash-es';
+
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
 import { IObjectProperty } from '../../property/object-array-properties/object-property.types';
