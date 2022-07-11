@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IProperty, PropertyType, IObjectProperty } from 'editor';
+import { IProperty, PropertyType } from 'editor';
+
 import { BaseFieldService } from '../base-field.service';
 import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 import { ICheckboxTemplateOptions } from './checkbox.types';

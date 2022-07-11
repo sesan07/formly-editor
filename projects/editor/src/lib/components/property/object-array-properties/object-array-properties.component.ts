@@ -1,5 +1,6 @@
 import { Component, Input, TrackByFunction } from '@angular/core';
 import { cloneDeep } from 'lodash-es';
+
 import { BasePropertyDirective } from '../base-property.component';
 import { PropertyService } from '../property.service';
 import { PropertyType, IProperty } from '../property.types';

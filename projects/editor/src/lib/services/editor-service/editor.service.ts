@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { get, isEmpty, merge, set } from 'lodash-es';
 import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { catchError } from 'rxjs/operators';
+
 import {
     EDITOR_FIELD_SERVICE,
     FieldType,

@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } 
 import { MatTabGroup } from '@angular/material/tabs';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import { IEditorFormlyField } from '../../services/editor-service/editor.types';
 import { IObjectProperty } from '../property/object-array-properties/object-property.types';
-import { IProperty } from '../property/property.types';
 
 @Component({
     selector: 'editor-edit-field',

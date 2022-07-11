@@ -1,12 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { CdkDragExit } from '@angular/cdk/drag-drop';
+import { FormGroup } from '@angular/forms';
 import { cloneDeep } from 'lodash-es';
+import { Subject, takeUntil } from 'rxjs';
+
 import { FieldDroplistService } from '../../../services/field-droplist-service/field-droplist.service';
 import { DragAction, IItemDragData } from '../../../services/field-droplist-service/field-droplist.types';
 import { IEditorFormlyField, EditorTypeCategoryOption } from '../../../services/editor-service/editor.types';
 import { EditorService } from '../../../services/editor-service/editor.service';
-import { CdkDragExit } from '@angular/cdk/drag-drop';
-import { FormGroup } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'editor-field-category',

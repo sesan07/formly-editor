@@ -1,4 +1,5 @@
 import { AfterContentInit, Component, ContentChildren, ElementRef, EventEmitter, Input, Output, QueryList, Renderer2 } from '@angular/core';
+
 import { SidebarSectionComponent } from './sidebar-section/sidebar-section.component';
 import { SideBarPosition } from './sidebar.types';
 

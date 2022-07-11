@@ -1,8 +1,9 @@
 
 import { FormlyTemplateOptions } from '@ngx-formly/core';
 import { Injectable } from '@angular/core';
-import { CustomFieldType, WrapperType } from './field.types';
 import { IBaseFormlyField, IChipListProperty, IInputProperty, IObjectProperty, IProperty, PropertyType, StyleService } from 'editor';
+
+import { CustomFieldType, WrapperType } from './field.types';
 
 @Injectable()
 export abstract class BaseFieldService<T extends FormlyTemplateOptions> {

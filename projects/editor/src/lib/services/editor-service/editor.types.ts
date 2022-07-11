@@ -1,6 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import { ConfigOption, FormlyFieldConfig, FormlyFieldConfigCache, FormlyTemplateOptions, TypeOption } from '@ngx-formly/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+
 import { IProperty } from '../../components/property/property.types';
 
 export enum FieldType {

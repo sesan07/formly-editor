@@ -1,10 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { FormGroup } from '@angular/forms';
+import { FormlyFormOptions } from '@ngx-formly/core';
+import { cloneDeep } from 'lodash-es';
 import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 import { EditorService } from '../../services/editor-service/editor.service';
 import { IEditorFormlyField, IForm } from '../../services/editor-service/editor.types';
-import { cloneDeep } from 'lodash-es';
-import { takeUntil } from 'rxjs/operators';
 import { PropertyType } from '../property/property.types';
 import { PropertyService } from '../property/property.service';
 import { ExportFormDialogComponent } from './export-form-dialog/export-form-dialog.component';
@@ -13,8 +16,6 @@ import { FileService } from '../../services/file-service/file.service';
 import { SideBarPosition } from '../sidebar/sidebar.types';
 import { IArrayProperty } from '../property/object-array-properties/array-property.types';
 import { IObjectProperty } from '../property/object-array-properties/object-property.types';
-import { FormGroup } from '@angular/forms';
-import { FormlyFormOptions } from '@ngx-formly/core';
 import { ImportFormDialogComponent } from './import-form-dialog/import-form-dialog.component';
 import { ImportJSONRequest, ImportJSONResponse } from './import-form-dialog/import-json-dialog.types';
 

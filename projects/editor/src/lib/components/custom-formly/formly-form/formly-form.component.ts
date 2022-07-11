@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormlyFieldTemplates, FormlyForm, FormlyFormBuilder } from '@ngx-formly/core';
+
 import { IEditorFormlyFieldConfigCache } from '../../../services/editor-service/editor.types';
 
 @Component({

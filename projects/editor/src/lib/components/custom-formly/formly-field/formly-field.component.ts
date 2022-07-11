@@ -14,6 +14,7 @@ import {
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { FormlyConfig, FormlyField, FormlyFieldTemplates } from '@ngx-formly/core';
 import { Subject, takeUntil } from 'rxjs';
+
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField, IForm } from '../../../services/editor-service/editor.types';
 import { EditFieldDialogComponent } from '../../edit-field/edit-field-dialog/edit-field-dialog.component';

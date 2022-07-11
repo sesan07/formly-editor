@@ -10,6 +10,7 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
+
 import { IBaseProperty } from './property.types';
 
 @Directive()

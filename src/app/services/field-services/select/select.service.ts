@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IProperty, PropertyType, IObjectProperty, IArrayProperty } from 'editor';
+
 import { BaseFieldService } from '../base-field.service';
 import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 import { ISelectTemplateOptions } from './select.types';

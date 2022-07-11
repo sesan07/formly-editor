@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+
 import { IEditorFormlyField, IForm } from '../editor-service/editor.types';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { getChildren } from '../../utils';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class FieldDroplistService {
