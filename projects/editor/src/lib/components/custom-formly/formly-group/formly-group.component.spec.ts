@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FieldCategoryListComponent } from './field-category-list.component';
+import { FormlyGroupComponent } from './formly-group.component';
 
-describe('FieldCategoryListComponent', () => {
-  let component: FieldCategoryListComponent;
-  let fixture: ComponentFixture<FieldCategoryListComponent>;
+describe('FormlyGroupComponent', () => {
+  let component: FormlyGroupComponent;
+  let fixture: ComponentFixture<FormlyGroupComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FieldCategoryListComponent ]
+      declarations: [ FormlyGroupComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FieldCategoryListComponent);
+    fixture = TestBed.createComponent(FormlyGroupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

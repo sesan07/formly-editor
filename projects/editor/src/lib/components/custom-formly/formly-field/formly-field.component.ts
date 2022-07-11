@@ -16,21 +16,21 @@ import { FormlyConfig, FormlyField, FormlyFieldTemplates } from '@ngx-formly/cor
 import { Subject, takeUntil } from 'rxjs';
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField, IForm } from '../../../services/editor-service/editor.types';
-import { EditFieldDialogComponent } from '../../edit-field-dialog/edit-field-dialog.component';
-import { EditFieldRequest } from '../../edit-field-dialog/edit-field-dialog.types';
+import { EditFieldDialogComponent } from '../../edit-field/edit-field-dialog/edit-field-dialog.component';
+import { EditFieldRequest } from '../../edit-field/edit-field-dialog/edit-field-dialog.types';
 
 @Component({
     selector: 'editor-root-formly-field',
     template: '<ng-template #container></ng-template>'
 })
-export class EditorRootFormlyFieldComponent extends FormlyField { }
+export class RootFormlyFieldComponent extends FormlyField { }
 
 @Component({
   selector: 'editor-formly-field',
-  templateUrl: './editor-formly-field.component.html',
-  styleUrls: ['./editor-formly-field.component.scss']
+  templateUrl: './formly-field.component.html',
+  styleUrls: ['./formly-field.component.scss']
 })
-export class EditorFormlyFieldComponent extends FormlyField implements OnInit, OnDestroy {
+export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestroy {
     @Input() field: IEditorFormlyField;
 
 	public isMouseInside: boolean;

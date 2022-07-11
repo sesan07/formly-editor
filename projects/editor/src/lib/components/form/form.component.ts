@@ -7,17 +7,16 @@ import { cloneDeep } from 'lodash-es';
 import { takeUntil } from 'rxjs/operators';
 import { PropertyType } from '../property/property.types';
 import { PropertyService } from '../property/property.service';
-import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
-import { ImportFormDialogComponent } from '../import-form-dialog/import-form-dialog.component';
-import { ImportJSONRequest, ImportJSONResponse } from '../import-form-dialog/import-json-dialog.types';
-import { ExportFormDialogComponent } from '../export-form-dialog/export-form-dialog.component';
-import { ExportJSONRequest, ExportJSONResponse } from '../export-form-dialog/export-json-dialog.types';
+import { ExportFormDialogComponent } from './export-form-dialog/export-form-dialog.component';
+import { ExportJSONRequest, ExportJSONResponse } from './export-form-dialog/export-json-dialog.types';
 import { FileService } from '../../services/file-service/file.service';
 import { SideBarPosition } from '../sidebar/sidebar.types';
 import { IArrayProperty } from '../property/object-array-properties/array-property.types';
 import { IObjectProperty } from '../property/object-array-properties/object-property.types';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
+import { ImportFormDialogComponent } from './import-form-dialog/import-form-dialog.component';
+import { ImportJSONRequest, ImportJSONResponse } from './import-form-dialog/import-json-dialog.types';
 
 @Component({
 	selector: 'editor-form',

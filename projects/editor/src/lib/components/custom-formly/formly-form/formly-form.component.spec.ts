@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditorFormlyFieldComponent } from './editor-formly-field.component';
+import { FormlyFormComponent } from './formly-form.component';
 
-describe('EditorFormlyFieldComponent', () => {
-  let component: EditorFormlyFieldComponent;
-  let fixture: ComponentFixture<EditorFormlyFieldComponent>;
+describe('FormlyFormComponent', () => {
+  let component: FormlyFormComponent;
+  let fixture: ComponentFixture<FormlyFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditorFormlyFieldComponent ]
+      declarations: [ FormlyFormComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditorFormlyFieldComponent);
+    fixture = TestBed.createComponent(FormlyFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

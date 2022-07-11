@@ -6,19 +6,19 @@ import { takeUntil } from 'rxjs/operators';
 import { EditorService } from '../../services/editor-service/editor.service';
 import { IEditorFormlyField, IForm } from '../../services/editor-service/editor.types';
 import { FileService } from '../../services/file-service/file.service';
-import { AddFormDialogComponent } from '../add-form-dialog/add-form-dialog.component';
-import { AddFormResponse } from '../add-form-dialog/add-form-dialog.types';
-import { ExportFormDialogComponent } from '../export-form-dialog/export-form-dialog.component';
-import { ExportJSONRequest, ExportJSONResponse } from '../export-form-dialog/export-json-dialog.types';
-import { ImportFormDialogComponent } from '../import-form-dialog/import-form-dialog.component';
-import { ImportJSONRequest, ImportJSONResponse } from '../import-form-dialog/import-json-dialog.types';
+import { AddFormDialogComponent } from '../form/add-form-dialog/add-form-dialog.component';
+import { AddFormResponse } from '../form/add-form-dialog/add-form-dialog.types';
+import { ExportFormDialogComponent } from '../form/export-form-dialog/export-form-dialog.component';
+import { ExportJSONRequest, ExportJSONResponse } from '../form/export-form-dialog/export-json-dialog.types';
+import { ImportFormDialogComponent } from '../form/import-form-dialog/import-form-dialog.component';
+import { ImportJSONRequest, ImportJSONResponse } from '../form/import-form-dialog/import-json-dialog.types';
 
 @Component({
-    selector: 'editor-editor',
-    templateUrl: './editor.component.html',
-    styleUrls: ['./editor.component.scss']
+    selector: 'editor-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss']
 })
-export class EditorComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit, OnDestroy {
     public tabIndex = 0;
     public forms: IForm[] = [];
 

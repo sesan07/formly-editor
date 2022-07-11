@@ -18,9 +18,7 @@ import {
 import { IProperty } from '../../components/property/property.types';
 import { FieldDroplistService } from '../field-droplist-service/field-droplist.service';
 
-@Injectable({
-    providedIn: 'root',
-})
+@Injectable()
 export class EditorService {
     private _currFormId = 0;
     private _editorConfig: EditorConfigOption;

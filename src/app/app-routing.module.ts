@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { EditorComponent } from 'editor';
+import { HomeComponent } from 'editor';
 
 const routes: Routes = [
-	{ path: 'home', component: EditorComponent },
+	{ path: 'home', component: HomeComponent },
 	{ path: '',   redirectTo: '/home', pathMatch: 'full' },
 ];
 

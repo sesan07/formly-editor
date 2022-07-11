@@ -5,11 +5,11 @@ import { IEditorFormlyFieldConfigCache } from '../../../services/editor-service/
 @Component({
     selector: 'editor-formly-form',
     template: '<editor-root-formly-field [field]="field"></editor-root-formly-field>',
-    styleUrls: ['./editor-formly-form.component.scss'],
+    styleUrls: ['./formly-form.component.scss'],
     providers: [FormlyFormBuilder, FormlyFieldTemplates],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditorFormlyFormComponent extends FormlyForm {
+export class FormlyFormComponent extends FormlyForm {
     field: IEditorFormlyFieldConfigCache = {
         type: 'formly-group',
         name: undefined,

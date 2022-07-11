@@ -10,10 +10,10 @@ import { ContainerType, FlexContainerType } from '../../../services/style-servic
 
 @Component({
     selector: 'editor-formly-group',
-    templateUrl: './editor-formly-group.component.html',
-    styleUrls: ['./editor-formly-group.component.scss'],
+    templateUrl: './formly-group.component.html',
+    styleUrls: ['./formly-group.component.scss'],
 })
-export class EditorFormlyGroupComponent extends FieldType<IEditorFormlyField> implements OnInit, OnDestroy {
+export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implements OnInit, OnDestroy {
     public dropListClasses: string;
     public dropListOrientation: DropListOrientation;
     public connectedTo: string[] = [];
