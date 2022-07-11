@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { saveAs } from 'file-saver-es';
 import { Observable, Subject } from 'rxjs';
 
-@Injectable({
-    providedIn: 'root',
-})
+@Injectable()
 export class FileService {
 
     public saveFile(fileName: string, content: string): void {

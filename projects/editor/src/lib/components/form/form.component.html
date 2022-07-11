@@ -17,12 +17,12 @@
 	<editor-sidebar-section>
 		<span headerContent>Add Field</span>
         <div class="categories-wrapper" mainContent>
-            <editor-field-category-list
+            <editor-field-category
                 *ngFor="let category of editorService.fieldCategories; let first = first"
                 [category]="category"
                 [formId]="form.id"
                 [isExpanded]="first">
-            </editor-field-category-list>
+            </editor-field-category>
         </div>
 	</editor-sidebar-section>
 </editor-sidebar>

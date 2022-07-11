@@ -1,63 +1,22 @@
 import { Inject, ModuleWithProviders, NgModule, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FormlyModule, FORMLY_CONFIG, TypeOption } from '@ngx-formly/core';
-import { MatTreeModule } from '@angular/material/tree';
+import { FORMLY_CONFIG, TypeOption } from '@ngx-formly/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatInputModule } from '@angular/material/input';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatSelectModule } from '@angular/material/select';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatDividerModule } from '@angular/material/divider';
-
-import { FormComponent } from './components/form/form.component';
-import { InputPropertyComponent } from './components/property/input-property/input-property.component';
-import { BooleanPropertyComponent } from './components/property/boolean-property/boolean-property.component';
-import {
-    ArrayPropertyComponent,
-    ObjectPropertyComponent
-} from './components/property/object-array-properties/object-array-properties.component';
-import { FieldTreeItemComponent } from './components/field-tree-item/field-tree-item.component';
-import { ChipListPropertyComponent } from './components/property/chip-list-property/chip-list-property.component';
-import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG, FieldType } from './services/editor-service/editor.types';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { EditorComponent } from './components/editor/editor.component';
-import { SidebarSectionComponent } from './components/sidebar-section/sidebar-section.component';
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG } from './services/editor-service/editor.types';
+import { HomeComponent } from './components/home/home.component';
 import { EditorService } from './services/editor-service/editor.service';
 import { cloneDeep } from 'lodash-es';
-import { FieldCategoryListComponent } from './components/field-category-list/field-category-list.component';
-import { ImportFormDialogComponent } from './components/import-form-dialog/import-form-dialog.component';
-import { JsonValidatorDirective } from './components/import-form-dialog/json-validator/json-validator.directive';
-import { ExportFormDialogComponent } from './components/export-form-dialog/export-form-dialog.component';
-import { AddFormDialogComponent } from './components/add-form-dialog/add-form-dialog.component';
-import { JsonFileValidatorDirective } from './components/import-form-dialog/json-file-validator/json-file-validator.directive';
-import { EditFieldDialogComponent } from './components/edit-field-dialog/edit-field-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
-import { EditFieldStylesComponent } from './components/edit-field/edit-field-styles/edit-field-styles.component';
-import { BreakpointComponent } from './components/edit-field/edit-field-styles/breakpoint/breakpoint.component';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { FormToolbarComponent } from './components/form/form-toolbar/form-toolbar.component';
-import { TextareaPropertyComponent } from './components/property/textarea-property/textarea-property.component';
-import { EditFieldComponent } from './components/edit-field/edit-field.component';
-import { TreeItemHeaderComponent } from './components/tree-item-header/tree-item-header.component';
-import { ContainerOptionComponent } from './components/edit-field/edit-field-styles/container-option/container-option.component';
-import { EditorFormlyGroupComponent } from './components/formly/editor-formly-group/editor-formly-group.component';
-import {
-    EditorFormlyFieldComponent,
-    EditorRootFormlyFieldComponent
-} from './components/formly/editor-formly-field/editor-formly-field.component';
-import { EditorFormlyFormComponent } from './components/formly/editor-formly-form/editor-formly-form.component';
 import { installPatch } from './dnd-patch';
+import { FileService } from './services/file-service/file.service';
+import { FieldDroplistService } from './services/field-droplist-service/field-droplist.service';
+import { CustomFormlyModule } from './components/custom-formly/custom-formly.module';
+import { FormModule } from './components/form/form.module';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
@@ -67,66 +26,26 @@ const defaultConfig: EditorConfigOption = {
 
 @NgModule({
     declarations: [
-        FormComponent,
-        InputPropertyComponent,
-        ObjectPropertyComponent,
-        ArrayPropertyComponent,
-        BooleanPropertyComponent,
-        FieldTreeItemComponent,
-        ChipListPropertyComponent,
-        EditorComponent,
-        SidebarSectionComponent,
-        EditorFormlyGroupComponent,
-        FieldCategoryListComponent,
-        ImportFormDialogComponent,
-        ExportFormDialogComponent,
-        JsonValidatorDirective,
-        AddFormDialogComponent,
-        JsonFileValidatorDirective,
-        EditFieldDialogComponent,
-        EditFieldStylesComponent,
-        BreakpointComponent,
-        SidebarComponent,
-        FormToolbarComponent,
-        TextareaPropertyComponent,
-        EditFieldComponent,
-        TreeItemHeaderComponent,
-        ContainerOptionComponent,
-        EditorFormlyFieldComponent,
-        EditorRootFormlyFieldComponent,
-        EditorFormlyFormComponent,
+        HomeComponent,
     ],
     imports: [
         CommonModule,
         HttpClientModule,
         FormsModule,
-        FormlyModule.forRoot({
-            types: [{ name: FieldType.FORMLY_GROUP, component: EditorFormlyGroupComponent }],
-        }),
-        MatTreeModule,
+        FormModule,
+        CustomFormlyModule,
         MatButtonModule,
         MatIconModule,
-        MatMenuModule,
-        MatInputModule,
-        MatExpansionModule,
-        MatCheckboxModule,
-        MatSelectModule,
-        MatChipsModule,
-        ReactiveFormsModule,
-        MatAutocompleteModule,
         MatTabsModule,
-        MatSlideToggleModule,
-        DragDropModule,
-        MatDialogModule,
-        MatButtonToggleModule,
-        MatTooltipModule,
-        MatDividerModule,
     ],
     exports: [
-        EditorComponent,
-        FormlyModule
+        HomeComponent,
+        CustomFormlyModule,
     ],
     providers: [
+        EditorService,
+        FieldDroplistService,
+        FileService,
         {
             provide: MAT_DIALOG_DEFAULT_OPTIONS,
             useValue: {
@@ -136,7 +55,7 @@ const defaultConfig: EditorConfigOption = {
                 maxWidth: '1200px',
                 hasBackdrop: true
             }
-        }
+        },
     ]
 })
 export class EditorModule {

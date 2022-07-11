@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, TrackByFunction } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { EditorService } from '../../services/editor-service/editor.service';
-import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField, IForm } from '../../services/editor-service/editor.types';
+import { EditorService } from '../../../services/editor-service/editor.service';
+import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField, IForm } from '../../../services/editor-service/editor.types';
 
 @Component({
     selector: 'editor-field-tree-item',

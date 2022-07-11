@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditorFormlyGroupComponent } from './editor-formly-group.component';
+import { FormlyFieldComponent } from './formly-field.component';
 
-describe('EditorFormlyGroupComponent', () => {
-  let component: EditorFormlyGroupComponent;
-  let fixture: ComponentFixture<EditorFormlyGroupComponent>;
+describe('FormlyFieldComponent', () => {
+  let component: FormlyFieldComponent;
+  let fixture: ComponentFixture<FormlyFieldComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditorFormlyGroupComponent ]
+      declarations: [ FormlyFieldComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditorFormlyGroupComponent);
+    fixture = TestBed.createComponent(FormlyFieldComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

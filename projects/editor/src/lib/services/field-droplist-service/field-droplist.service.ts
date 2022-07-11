@@ -4,9 +4,7 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { getChildren } from '../../utils';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class FieldDroplistService {
 
     private _formDropListIdMap: Map<string, BehaviorSubject<string[]>> = new Map();

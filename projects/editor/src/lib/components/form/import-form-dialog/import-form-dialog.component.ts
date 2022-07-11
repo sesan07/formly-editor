@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FileService } from '../../services/file-service/file.service';
+import { FileService } from '../../../services/file-service/file.service';
 import { ImportJSONRequest, ImportJSONResponse } from './import-json-dialog.types';
 
 @Component({
