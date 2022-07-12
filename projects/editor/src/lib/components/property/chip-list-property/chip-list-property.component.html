@@ -26,7 +26,7 @@
         <mat-label *ngIf="showLabel">{{ property.name ? property.name : property.key }}</mat-label>
         <mat-chip-list #chipList>
             <ng-container *ngFor="let option of selectedOptions">
-                <mat-chip *ngIf="!isHidden(option)"
+                <mat-chip *ngIf="isSelectable(option)"
                             selectable
                             (removed)="onRemove(option)">
                     {{option}}
@@ -42,7 +42,7 @@
                     (matChipInputTokenEnd)="onAdd($event)">
         </mat-chip-list>
         <mat-autocomplete #autoComplete="matAutocomplete" (optionSelected)="onSelected($event)">
-            <mat-option *ngFor="let option of filteredOptions | async"
+            <mat-option *ngFor="let option of filteredOptions"
                         [value]="option">
                 {{option}}
             </mat-option>

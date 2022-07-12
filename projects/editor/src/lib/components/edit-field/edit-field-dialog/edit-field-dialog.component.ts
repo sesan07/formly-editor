@@ -67,6 +67,13 @@ export class EditFieldDialogComponent implements OnInit {
     }
 
     onSave(): void {
+        // Add children from target
+        if (this.editField.canHaveChildren) {
+            const children = this._editorService.getChildren(this.editField);
+            children.length = 0;
+            children.push(...this._editorService.getChildren(this._targetField));
+        }
+
         this._dialogRef.close(this.editField);
     }
 
