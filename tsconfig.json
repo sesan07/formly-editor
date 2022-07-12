@@ -9,6 +9,7 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "noImplicitOverride": true,
     "target": "es2015",
     "module": "es2020",
     "lib": [
