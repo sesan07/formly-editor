@@ -190,10 +190,15 @@ export class EditorService {
 	}
 
     public updateField(modifiedField: IEditorFormlyField) {
-        const field: IEditorFormlyField = this.getField(modifiedField.formId, modifiedField.fieldId);
-        merge(field, modifiedField);
-        this._notifyFormChanged(field.formId);
-        this.selectField(field.formId, field.fieldId);
+        const siblings: IEditorFormlyField[] = this._getSiblings(modifiedField.formId, modifiedField.parentFieldId);
+        const index: number = siblings.findIndex(f => f.fieldId = modifiedField.fieldId);
+        if (index >= 0) {
+            siblings[index] = modifiedField;
+            const form: IForm = this.getForm(modifiedField.formId);
+            form.fieldMap.set(modifiedField.fieldId, modifiedField);
+            this._notifyFormChanged(form.id);
+            this.selectField(form.id, modifiedField.fieldId);
+        }
     }
 
     // Move field within a parent field in a form

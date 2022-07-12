@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
 import { cloneDeep } from 'lodash-es';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { EditorService } from '../../services/editor-service/editor.service';
 import { IEditorFormlyField, IForm } from '../../services/editor-service/editor.types';
@@ -28,10 +28,14 @@ export class FormComponent implements OnInit, OnDestroy {
 	@Input() form: IForm;
 
     public activeField: IEditorFormlyField;
+
 	public activeFieldProperty: IObjectProperty;
     public activeFieldTarget: IEditorFormlyField;
 	public modelProperty: IObjectProperty;
     public modelTarget: Record<string, any>;
+
+    public activeFieldTargetChange$: Subject<void> = new Subject();
+    public modelTargetChange$: Subject<void> = new Subject();
 
 	public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
     public isAdvanced = true;
@@ -45,6 +49,8 @@ export class FormComponent implements OnInit, OnDestroy {
 
 	private _resizeEnd$: Subject<void> = new Subject();
 	private _destroy$: Subject<void> = new Subject();
+
+    private readonly _debounceTime: number = 1000;
 
 	constructor(
 		public propertyService: PropertyService,
@@ -84,20 +90,20 @@ export class FormComponent implements OnInit, OnDestroy {
                 this._updateActiveFieldProperty();
                 this._updateActiveFieldTarget();
             });
+
+        this.activeFieldTargetChange$
+            .pipe(debounceTime(this._debounceTime))
+            .subscribe(() => this._updateActiveField());
+
+        this.modelTargetChange$
+            .pipe(debounceTime(this._debounceTime))
+            .subscribe(() => this._updateFormModel());
 	}
 
 	public ngOnDestroy(): void {
 		this._destroy$.next();
 		this._destroy$.complete();
 	}
-
-	onActiveFieldPropertyChanged(): void {
-        this._updateActiveField();
-	}
-
-    onModelPropertyChanged(): void {
-        this._updateFormModel();
-    }
 
     onModelChanged(model: Record<string, unknown>): void {
         this.form.model = cloneDeep(model);

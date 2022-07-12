@@ -68,7 +68,7 @@
             [property]="activeFieldProperty"
             [isSimplified]="!isAdvanced"
             [resizeTabHeader$]="resizeEnd$"
-            (fieldChanged)="onActiveFieldPropertyChanged()">
+            (fieldChanged)="activeFieldTargetChange$.next()">
         </editor-edit-field>
 	</editor-sidebar-section>
 
@@ -86,7 +86,7 @@
                 [property]="modelProperty"
                 [isExpanded]="true"
                 [isRoot]="true"
-                (targetChanged)="onModelPropertyChanged()">
+                (targetChanged)="modelTargetChange$.next()">
             </editor-object-property>
         </div>
 	</editor-sidebar-section>

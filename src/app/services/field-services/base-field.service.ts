@@ -22,7 +22,7 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 		];
     }
 
-	protected _getSharedProperties(): IProperty[] {
+	private _getSharedProperties(): IProperty[] {
 		return [
 			{
 				name: 'Key',
