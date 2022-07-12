@@ -11,7 +11,7 @@ import { IEditorFormlyFieldConfigCache } from '../../../services/editor-service/
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormlyFormComponent extends FormlyForm {
-    field: IEditorFormlyFieldConfigCache = {
+    override field: IEditorFormlyFieldConfigCache = {
         type: 'formly-group',
         name: undefined,
         properties: undefined,

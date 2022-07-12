@@ -32,7 +32,7 @@ export class RootFormlyFieldComponent extends FormlyField { }
   styleUrls: ['./formly-field.component.scss']
 })
 export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestroy {
-    @Input() field: IEditorFormlyField;
+    @Input() override field: IEditorFormlyField;
 
 	public isMouseInside: boolean;
 	public isFirstChild: boolean;
@@ -76,7 +76,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         this.isMouseInside = false;
     }
 
-    ngOnInit(): void {
+    override ngOnInit(): void {
         super.ngOnInit();
 
         if (this.field.parentFieldId) {
@@ -106,7 +106,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
             });
     }
 
-    ngOnDestroy(): void {
+    override ngOnDestroy(): void {
         super.ngOnDestroy();
         this._destroy$.next();
         this._destroy$.complete();
