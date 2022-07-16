@@ -8,36 +8,29 @@ import {
     IEditorFormlyField,
     IForm
 } from '../../services/editor-service/editor.types';
-import { FieldDroplistService } from '../../services/field-droplist-service/field-droplist.service';
 import { getFieldChildren } from '../../utils';
 
 @Injectable()
 export class FormService {
     private _id: string;
-    private _fields: IEditorFormlyField[];
     private _fieldMap: Map<string, IEditorFormlyField> = new Map();
 
-	private _activeField$: BehaviorSubject<IEditorFormlyField>;
-    private _isEditMode$: BehaviorSubject<boolean>;
-    private _formChanged$: Subject<void> = new Subject();
+    private _fields$: BehaviorSubject<IEditorFormlyField[]> = new BehaviorSubject([]);
+	private _activeField$: BehaviorSubject<IEditorFormlyField> = new BehaviorSubject(null);
+    private _isEditMode$: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
-    constructor(
-        private _editorService: EditorService,
-        private _fieldDropListService: FieldDroplistService
-    ) { }
+    constructor(private _editorService: EditorService) { }
 
-    public get formChanged$(): Observable<void> { return this._formChanged$.asObservable(); }
+    public get fields$(): Observable<IEditorFormlyField[]> { return this._fields$.asObservable(); }
     public get activeField$(): Observable<IEditorFormlyField> { return this._activeField$.asObservable(); }
     public get isEditMode$(): Observable<boolean> { return this._isEditMode$.asObservable(); }
 
     public setup(form: IForm) {
         this._id = form.id;
-        this._fields = form.fields;
-        this._activeField$ = new BehaviorSubject(this._fields[0]);
-        this._isEditMode$ = new BehaviorSubject(true);
 
-        this._fields.forEach(field => this._addToFieldMap(field));
-        this._fieldDropListService.updateDropListIds(this._id, this._fields);
+        form.fields.forEach(field => this._addToFieldMap(field));
+        this._fields$.next(form.fields);
+        this._activeField$.next(this._fields$.value[0]);
     }
 
     public setEditMode(isEditMode: boolean): void {
@@ -54,7 +47,7 @@ export class FormService {
 		}
 
         this._addToFieldMap(newField);
-        this._notifyFormChanged();
+        this._fields$.next(this._fields$.value);
 		this.selectField(newField.fieldId);
 
 		return newField;
@@ -69,12 +62,12 @@ export class FormService {
             siblings.splice(index, 1);
 
             this._removeFromFieldMap(field);
-            this._notifyFormChanged();
+            this._fields$.next(this._fields$.value);
 
 			if (parentId) {
 				this.selectField(parentId);
-			} else if (this._fields[0]?.fieldId) {
-				this.selectField(this._fields[0].fieldId);
+			} else if (this._fields$[0]?.fieldId) {
+				this.selectField(this._fields$[0].fieldId);
 			}
         }
     }
@@ -85,7 +78,7 @@ export class FormService {
         if (index >= 0) {
             siblings[index] = modifiedField;
             this._fieldMap.set(modifiedField.fieldId, modifiedField);
-            this._notifyFormChanged();
+            this._fields$.next(this._fields$.value);
             this.selectField(modifiedField.fieldId);
         }
     }
@@ -108,7 +101,7 @@ export class FormService {
         toIndex = typeof toIndex === 'number' ? toIndex : siblings.length;
         moveItemInArray(siblings, fromIndex, toIndex);
 
-        this._notifyFormChanged();
+        this._fields$.next(this._fields$.value);
     }
 
     // Transfer field between parent fields in the same form
@@ -130,7 +123,7 @@ export class FormService {
 
         field.formId = targetParent.formId;
         field.parentFieldId = targetParent.fieldId;
-        this._notifyFormChanged();
+        this._fields$.next(this._fields$.value);
     }
 
 	public replaceParentField(replaceType: string, fieldId: string, replaceCustomType?: string): void {
@@ -153,7 +146,7 @@ export class FormService {
         newField.className = field.className;
         newField.fieldGroupClassName = field.fieldGroupClassName;
 
-        this._notifyFormChanged();
+        this._fields$.next(this._fields$.value);
 	}
 
     public getField(fieldId: string): IEditorFormlyField {
@@ -165,7 +158,7 @@ export class FormService {
 			const parentField: IEditorFormlyField = this.getField(parentFieldId);
 			return getFieldChildren(parentField);
 		} else {
-			return this._fields;
+			return this._fields$.value;
 		}
 	}
 
@@ -189,10 +182,5 @@ export class FormService {
             const children: IEditorFormlyField[] = getFieldChildren(field);
             children.forEach(child => this._removeFromFieldMap(child));
         }
-    }
-
-    private _notifyFormChanged(): void {
-        this._fieldDropListService.updateDropListIds(this._id, this._fields);
-        this._formChanged$.next();
     }
 }

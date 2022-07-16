@@ -61,7 +61,6 @@ import { FormService } from './form.service';
     ],
     exports: [
         FormComponent,
-    ],
-    providers: [{ provide: FormService, useValue: {}}]
+    ]
 })
 export class FormModule { }

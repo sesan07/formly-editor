@@ -16,7 +16,6 @@ import {
     EditorTypeOption,
 } from './editor.types';
 import { IProperty } from '../../components/property/property.types';
-import { FieldDroplistService } from '../field-droplist-service/field-droplist.service';
 
 @Injectable()
 export class EditorService {
@@ -30,8 +29,7 @@ export class EditorService {
 
     constructor(
         @Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService,
-        private _http: HttpClient,
-        private _fieldDropListService: FieldDroplistService
+        private _http: HttpClient
     ) {}
 
     public get forms$(): Observable<IForm[]> { return this._forms$.asObservable(); }
@@ -88,7 +86,6 @@ export class EditorService {
 
     public removeForm(index: number): void {
         const forms: IForm[] = this._forms$.value;
-        this._fieldDropListService.removeDropListIds(forms[index].id);
         forms.splice(index, 1);
         this._forms$.next(forms.slice());
     }

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FieldDroplistService } from './field-droplist.service';
+import { DroplistService } from './droplist.service';
 
-describe('FieldDroplistService', () => {
-  let service: FieldDroplistService;
+describe('DroplistService', () => {
+  let service: DroplistService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(FieldDroplistService);
+    service = TestBed.inject(DroplistService);
   });
 
   it('should be created', () => {
