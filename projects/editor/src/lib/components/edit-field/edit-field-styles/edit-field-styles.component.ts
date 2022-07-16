@@ -8,7 +8,6 @@ import {
     SimpleChanges
 } from '@angular/core';
 
-import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
 import { StyleService } from '../../../services/style-service/style.service';
 import {
@@ -18,6 +17,7 @@ import {
     GridContainerPrefix,
     FlexContainerPrefix
 } from '../../../services/style-service/style.types';
+import { FormService } from '../../form/form.service';
 import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
 import { PropertyType } from '../../property/property.types';
 
@@ -53,7 +53,7 @@ export class EditFieldStylesComponent implements OnChanges {
     private _generalChildrenProperty: IChipListProperty;
     private _breakpointChildrenProperties: Map<BreakpointType, IChipListProperty> = new Map();
 
-    constructor(private _editorService: EditorService, private _styleService: StyleService) { }
+    constructor(private _formService: FormService, private _styleService: StyleService) { }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.editField) {
@@ -160,7 +160,7 @@ export class EditFieldStylesComponent implements OnChanges {
     }
 
     private _setupParent(): void {
-        const parent: IEditorFormlyField = this._editorService.getField(this.editField.formId, this.editField.parentFieldId);
+        const parent: IEditorFormlyField = this._formService.getField(this.editField.parentFieldId);
         const fieldGroupClassNames: string[] = parent.fieldGroupClassName?.split(' ') ?? [];
 
         // TODO use regex to match without '-' prefix and suffix

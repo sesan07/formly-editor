@@ -16,10 +16,11 @@ import { FormlyConfig, FormlyField, FormlyFieldTemplates } from '@ngx-formly/cor
 import { Subject, takeUntil } from 'rxjs';
 
 import { EditorService } from '../../../services/editor-service/editor.service';
-import { IEditorFormlyField, IForm } from '../../../services/editor-service/editor.types';
+import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
 import { getFieldChildren, getFormattedFieldName } from '../../../utils';
 import { EditFieldDialogComponent } from '../../edit-field/edit-field-dialog/edit-field-dialog.component';
 import { EditFieldRequest } from '../../edit-field/edit-field-dialog/edit-field-dialog.types';
+import { FormService } from '../../form/form.service';
 
 @Component({
     selector: 'editor-root-formly-field',
@@ -41,13 +42,13 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     public index: number;
 	public hideOptions: boolean;
 
-    private _form: IForm;
     private _isActiveField: boolean;
     private _isEditMode: boolean;
     private _destroy$: Subject<void> = new Subject();
 
     constructor(
         public editorService: EditorService,
+        private _formService: FormService,
         private _dialog: MatDialog,
         private _cdRef: ChangeDetectorRef,
         config: FormlyConfig,
@@ -62,7 +63,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
 
     @HostListener('click', ['$event'])
     onClick(event: MouseEvent): void {
-        this.editorService.selectField(this.field.formId, this.field.fieldId);
+        this._formService.selectField(this.field.fieldId);
         event.stopPropagation();
     }
 
@@ -81,7 +82,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         super.ngOnInit();
 
         if (this.field.parentFieldId) {
-            const parent: IEditorFormlyField = this.editorService.getField(this.field.formId, this.field.parentFieldId);
+            const parent: IEditorFormlyField = this._formService.getField(this.field.parentFieldId);
             const siblings: IEditorFormlyField[] = getFieldChildren(parent);
             this.index = siblings.findIndex(f => f.fieldId === this.field.fieldId);
             this.isFirstChild = this.index === 0;
@@ -92,14 +93,13 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
 
         this.hideOptions = this.field.templateOptions.hideEditorWrapperOptions;
 
-        this._form = this.editorService.getForm(this.field.formId);
-        this._form.activeField$
+        this._formService.activeField$
             .pipe(takeUntil(this._destroy$))
             .subscribe(f => {
                 this._isActiveField = f.fieldId === this.field.fieldId;
                 this._cdRef.markForCheck();
             });
-        this._form.isEditMode$
+        this._formService.isEditMode$
             .pipe(takeUntil(this._destroy$))
             .subscribe(v => {
                 this._isEditMode = v;
@@ -116,11 +116,11 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     getFormattedFieldName = (f: IEditorFormlyField) => getFormattedFieldName(f);
 
     onAddChildField(type: string, customType?: string): void {
-        this.editorService.addField(type, this.field.formId, customType, this.field.fieldId);
+        this._formService.addField(type, customType, this.field.fieldId);
     }
 
     onRemove(): void {
-        this.editorService.removeField(this.field.formId, this.field.fieldId, this.field.parentFieldId);
+        this._formService.removeField(this.field.fieldId, this.field.parentFieldId);
     }
 
     onEditField(): void {
@@ -137,16 +137,16 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         dialogRef.afterClosed()
             .subscribe(field => {
                 if (field) {
-                    this.editorService.updateField(field);
+                    this._formService.updateField(field);
                 }
             });
     }
 
     onMoveUp(): void {
-        this.editorService.moveField(this.field.fieldId, this.field.formId, this.index, this.index - 1);
+        this._formService.moveField(this.field.fieldId, this.index, this.index - 1);
     }
 
     onMoveDown(): void {
-        this.editorService.moveField(this.field.fieldId, this.field.formId, this.index, this.index + 1);
+        this._formService.moveField(this.field.fieldId, this.index, this.index + 1);
     }
 }

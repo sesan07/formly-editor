@@ -36,10 +36,7 @@ export interface IForm {
     id: string;
     name: string;
     fields: IEditorFormlyField[];
-    fieldMap: Map<string, IEditorFormlyField>;
     model: Record<string, unknown>;
-	activeField$: BehaviorSubject<IEditorFormlyField>;
-    isEditMode$: BehaviorSubject<boolean>;
 }
 
 export interface IFieldService {

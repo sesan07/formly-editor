@@ -3,9 +3,9 @@ import { FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { cloneDeep, get } from 'lodash-es';
 
-import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
-import { getFieldChildren } from '../../../utils';
+import { cleanField, getFieldChildren } from '../../../utils';
+import { FormService } from '../../form/form.service';
 import { IObjectProperty } from '../../property/object-array-properties/object-property.types';
 import { PropertyService } from '../../property/property.service';
 import { PropertyType } from '../../property/property.types';
@@ -37,20 +37,20 @@ export class EditFieldDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: EditFieldRequest,
         public propertyService: PropertyService,
         private _dialogRef: MatDialogRef<EditFieldDialogComponent, IEditorFormlyField>,
-        private _editorService: EditorService
+        private _formService: FormService,
     ) { }
 
     ngOnInit(): void {
-        this._targetField = this._editorService.getField(this.data.formId, this.data.fieldId);
+        this._targetField = this._formService.getField(this.data.fieldId);
         this.editField = cloneDeep(this._targetField);
 
         if (this._targetField.parentFieldId) {
-            const parent: IEditorFormlyField = this._editorService.getField(this._targetField.formId, this._targetField.parentFieldId);
+            const parent: IEditorFormlyField = this._formService.getField(this._targetField.parentFieldId);
             const siblings: IEditorFormlyField[] = getFieldChildren(parent);
             this._targetIndex = siblings.findIndex(f => f.fieldId === this._targetField.fieldId);
 
             this._cleanParent = cloneDeep(parent);
-            this._editorService.cleanField(this._cleanParent, true, true);
+            cleanField(this._cleanParent, true, true);
             this._siblingsPath = parent.childrenPath;
         }
 
@@ -60,7 +60,7 @@ export class EditFieldDialogComponent implements OnInit {
 
             // Store copy of cleaned children to be reused
             this._cleanChildren = cloneDeep(getFieldChildren(this._targetField));
-            this._cleanChildren.forEach(child => this._editorService.cleanField(child, true, true));
+            this._cleanChildren.forEach(child => cleanField(child, true, true));
         }
 
         this._updatePreviewField();
@@ -118,7 +118,7 @@ export class EditFieldDialogComponent implements OnInit {
         }
 
         const previewTargetClone: IEditorFormlyField = cloneDeep(previewTarget);
-        this._editorService.cleanField(previewTargetClone, false, true);
+        cleanField(previewTargetClone, false, true);
 
         console.log('PREVIEW FIELD', JSON.stringify(previewTargetClone, null, 2));
 

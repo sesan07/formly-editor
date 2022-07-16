@@ -18,12 +18,14 @@ import { IArrayProperty } from '../property/object-array-properties/array-proper
 import { IObjectProperty } from '../property/object-array-properties/object-property.types';
 import { ImportFormDialogComponent } from './import-form-dialog/import-form-dialog.component';
 import { ImportJSONRequest, ImportJSONResponse } from './import-form-dialog/import-json-dialog.types';
-import { getFormattedFieldName } from '../../utils';
+import { cleanField, getFormattedFieldName } from '../../utils';
+import { FormService } from './form.service';
 
 @Component({
 	selector: 'editor-form',
 	templateUrl: './form.component.html',
 	styleUrls: ['./form.component.scss'],
+    providers: [FormService]
 })
 export class FormComponent implements OnInit, OnDestroy {
 	@Input() form: IForm;
@@ -37,13 +39,14 @@ export class FormComponent implements OnInit, OnDestroy {
 
     public activeFieldTargetChange$: Subject<void> = new Subject();
     public modelTargetChange$: Subject<void> = new Subject();
+    public isEditMode$: Observable<boolean>;
 
 	public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
     public isAdvanced = true;
     public showSidebars = true;
 
-    public fields: IEditorFormlyField[];
-    public fieldsJSON: string;
+    public formFields: IEditorFormlyField[];
+    public formFieldsJSON: string;
     public formGroup: FormGroup = new FormGroup({});
     public options: FormlyFormOptions = {};
     public selectedFormDisplay: 'form' | 'json' = 'form';
@@ -56,6 +59,7 @@ export class FormComponent implements OnInit, OnDestroy {
 	constructor(
 		public propertyService: PropertyService,
 		public editorService: EditorService,
+        private _formService: FormService,
         private _dialog: MatDialog,
         private _fileService: FileService
     ) { }
@@ -72,19 +76,18 @@ export class FormComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit(): void {
+        this._formService.setup(this.form);
+        this.isEditMode$ = this._formService.isEditMode$;
+
         this._updateModelProperty();
         this._updateModelTarget();
         this._updateFormFields();
 
-		this.editorService.formChanged$
+		this._formService.formChanged$
 			.pipe(takeUntil(this._destroy$))
-			.subscribe(formId => {
-                if (formId === this.form.id) {
-                    this._updateFormFields();
-                }
-            });
+			.subscribe(() => this._updateFormFields());
 
-		this.form.activeField$
+		this._formService.activeField$
             .pipe(takeUntil(this._destroy$))
             .subscribe(field => {
                 this.activeField = field;
@@ -107,6 +110,10 @@ export class FormComponent implements OnInit, OnDestroy {
 	}
 
     getFormattedFieldName = (f: IEditorFormlyField) => getFormattedFieldName(f);
+
+    onEditModeChanged(isEditMode: boolean): void {
+        this._formService.setEditMode(isEditMode);
+    }
 
     onModelChanged(model: Record<string, unknown>): void {
         this.form.model = cloneDeep(model);
@@ -158,13 +165,13 @@ export class FormComponent implements OnInit, OnDestroy {
     }
 
     private _updateFormFields(): void {
-        this.fields = cloneDeep(this.form.fields);
+        this.formFields = cloneDeep(this.form.fields);
 		this.formGroup = new FormGroup({});
 		this.options = {};
 
         const fieldsClone: IEditorFormlyField[] = cloneDeep(this.form.fields);
-        fieldsClone.forEach(field => this.editorService.cleanField(field, true, true));
-        this.fieldsJSON = JSON.stringify(fieldsClone, null, 2);
+        fieldsClone.forEach(field => cleanField(field, true, true));
+        this.formFieldsJSON = JSON.stringify(fieldsClone, null, 2);
     }
 
     private _updateFormModel(): void {
@@ -184,7 +191,7 @@ export class FormComponent implements OnInit, OnDestroy {
     }
 
     private _updateActiveField(): void {
-        this.editorService.updateField(this.activeFieldTarget);
+        this._formService.updateField(this.activeFieldTarget);
     }
 
 	private _updateModelProperty(): void {

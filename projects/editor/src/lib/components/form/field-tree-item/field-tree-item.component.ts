@@ -3,8 +3,9 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { EditorService } from '../../../services/editor-service/editor.service';
-import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField, IForm } from '../../../services/editor-service/editor.types';
+import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField } from '../../../services/editor-service/editor.types';
 import { getFieldChildren, getFormattedFieldName } from '../../../utils';
+import { FormService } from '../form.service';
 
 @Component({
     selector: 'editor-field-tree-item',
@@ -23,10 +24,13 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
     public childFields: IEditorFormlyField[];
 	public replaceCategories: EditorTypeCategoryOption[];
 
-    private _form: IForm;
     private _destroy$: Subject<void> = new Subject();
 
-    constructor(public editorService: EditorService, private _renderer: Renderer2, private _elementRef: ElementRef) {
+    constructor(
+        public editorService: EditorService,
+        private _formService: FormService,
+        private _renderer: Renderer2,
+        private _elementRef: ElementRef) {
     }
 
 	public get hasOptions(): boolean {
@@ -57,8 +61,7 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
 			this.childFields = getFieldChildren(this.field);
 		}
 
-        this._form = this.editorService.getForm(this.field.formId);
-        this._form.activeField$
+        this._formService.activeField$
             .pipe(takeUntil(this._destroy$))
             .subscribe((f: IEditorFormlyField) => {
                 this.isActiveField = f.formId === this.field.formId && f.fieldId === this.field.fieldId;
@@ -80,19 +83,19 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
 			this.isExpanded = true;
 		}
 
-        this.editorService.addField(type, this.field.formId, customType, this.field.fieldId);
+        this._formService.addField(type, customType, this.field.fieldId);
     }
 
     onRemoveChildField(childField: IEditorFormlyField): void {
-        this.editorService.removeField(this.field.formId, childField.fieldId, this.field.fieldId);
+        this._formService.removeField(childField.fieldId, this.field.fieldId);
     }
 
 	onReplaceParentField(type: string, customType?: string): void {
-		this.editorService.replaceParentField(type, this.field.formId, this.field.fieldId, customType);
+		this._formService.replaceParentField(type, this.field.fieldId, customType);
 	}
 
     onSelected(): void {
-        this.editorService.selectField(this.field.formId, this.field.fieldId);
+        this._formService.selectField(this.field.fieldId);
     }
 
     onExpandParent(): void {
