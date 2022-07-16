@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { IEditorFormlyField, IForm } from '../editor-service/editor.types';
-import { getChildren } from '../../utils';
+import { getFieldChildren } from '../../utils';
 
 @Injectable()
 export class FieldDroplistService {
@@ -33,7 +33,7 @@ export class FieldDroplistService {
 
     private _addField(field: IEditorFormlyField, levelList: IEditorFormlyField[], level: number): void {
         if (field.canHaveChildren) {
-            const children: IEditorFormlyField[] = getChildren(field);
+            const children: IEditorFormlyField[] = getFieldChildren(field);
             children.forEach(child => {
                 this._addField(child, levelList, level + 1);
             });

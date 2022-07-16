@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed()
             .subscribe(res => {
                 if (res) {
-                    this._editorService.addNewForm(res.name);
+                    this._editorService.addForm(res.name);
                     // Navigate to new form. Allow some time for tab to load.
                     setTimeout(() => {
                         this.tabIndex = this.forms.length - 1;

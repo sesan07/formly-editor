@@ -8,7 +8,7 @@
     [optionsMenu]="optionsMenu"
     (isExpandedChange)="onSelected()"
     >
-    <span>{{ editorService.getFormattedFieldName(field.name, field.key) }}</span>
+    <span>{{ getFormattedFieldName(field) }}</span>
 </editor-tree-item-header>
 
 <div [class.hidden]="!isExpanded">

@@ -5,6 +5,7 @@ import { cloneDeep, get } from 'lodash-es';
 
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
+import { getFieldChildren } from '../../../utils';
 import { IObjectProperty } from '../../property/object-array-properties/object-property.types';
 import { PropertyService } from '../../property/property.service';
 import { PropertyType } from '../../property/property.types';
@@ -45,7 +46,7 @@ export class EditFieldDialogComponent implements OnInit {
 
         if (this._targetField.parentFieldId) {
             const parent: IEditorFormlyField = this._editorService.getField(this._targetField.formId, this._targetField.parentFieldId);
-            const siblings: IEditorFormlyField[] = this._editorService.getChildren(parent);
+            const siblings: IEditorFormlyField[] = getFieldChildren(parent);
             this._targetIndex = siblings.findIndex(f => f.fieldId === this._targetField.fieldId);
 
             this._cleanParent = cloneDeep(parent);
@@ -55,10 +56,10 @@ export class EditFieldDialogComponent implements OnInit {
 
         if (this._targetField.canHaveChildren) {
             // Remove children from editField
-            this._editorService.getChildren(this.editField).length = 0;
+            getFieldChildren(this.editField).length = 0;
 
             // Store copy of cleaned children to be reused
-            this._cleanChildren = cloneDeep(this._editorService.getChildren(this._targetField));
+            this._cleanChildren = cloneDeep(getFieldChildren(this._targetField));
             this._cleanChildren.forEach(child => this._editorService.cleanField(child, true, true));
         }
 
@@ -69,9 +70,9 @@ export class EditFieldDialogComponent implements OnInit {
     onSave(): void {
         // Add children from target
         if (this.editField.canHaveChildren) {
-            const children = this._editorService.getChildren(this.editField);
+            const children = getFieldChildren(this.editField);
             children.length = 0;
-            children.push(...this._editorService.getChildren(this._targetField));
+            children.push(...getFieldChildren(this._targetField));
         }
 
         this._dialogRef.close(this.editField);
@@ -113,7 +114,7 @@ export class EditFieldDialogComponent implements OnInit {
         }
 
         if (this.showChildren && this._targetField.canHaveChildren) {
-            this._editorService.getChildren(previewTarget).push(...cloneDeep(this._cleanChildren));
+            getFieldChildren(previewTarget).push(...cloneDeep(this._cleanChildren));
         }
 
         const previewTargetClone: IEditorFormlyField = cloneDeep(previewTarget);
