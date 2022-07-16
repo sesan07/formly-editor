@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { EditorService } from '../../../services/editor-service/editor.service';
@@ -6,7 +6,8 @@ import { EditorService } from '../../../services/editor-service/editor.service';
 @Component({
     selector: 'editor-form-toolbar',
     templateUrl: './form-toolbar.component.html',
-    styleUrls: ['./form-toolbar.component.scss']
+    styleUrls: ['./form-toolbar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormToolbarComponent {
     @Input() selectedDisplay: 'form' | 'json';

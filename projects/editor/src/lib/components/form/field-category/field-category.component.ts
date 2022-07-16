@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CdkDragExit } from '@angular/cdk/drag-drop';
 import { FormGroup } from '@angular/forms';
 import { cloneDeep } from 'lodash-es';
@@ -12,7 +12,8 @@ import { IItemDragData, DragAction } from '../droplist.types';
 @Component({
     selector: 'editor-field-category',
     templateUrl: './field-category.component.html',
-    styleUrls: ['./field-category.component.scss']
+    styleUrls: ['./field-category.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FieldCategoryComponent implements OnInit, OnDestroy {
     @Input() category: EditorTypeCategoryOption;

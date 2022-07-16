@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -9,7 +9,8 @@ import { IObjectProperty } from '../property/object-array-properties/object-prop
 @Component({
     selector: 'editor-edit-field',
     templateUrl: './edit-field.component.html',
-    styleUrls: ['./edit-field.component.scss']
+    styleUrls: ['./edit-field.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditFieldComponent implements OnInit, OnDestroy {
     @Input() field: IEditorFormlyField;
