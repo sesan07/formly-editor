@@ -1,4 +1,16 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, TrackByFunction } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    Renderer2,
+    TrackByFunction
+} from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -11,6 +23,7 @@ import { FormService } from '../form.service';
     selector: 'editor-field-tree-item',
     templateUrl: './field-tree-item.component.html',
     styleUrls: ['./field-tree-item.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FieldTreeItemComponent implements OnInit, OnDestroy {
     @Input() public field: IEditorFormlyField;
@@ -30,7 +43,8 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
         public editorService: EditorService,
         private _formService: FormService,
         private _renderer: Renderer2,
-        private _elementRef: ElementRef) {
+        private _elementRef: ElementRef,
+        private _cdRef: ChangeDetectorRef) {
     }
 
 	public get hasOptions(): boolean {
@@ -68,6 +82,8 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
                 if (this.isActiveField) {
                     this.expandParent.emit();
                 }
+
+                this._cdRef.markForCheck();
             });
 	}
 

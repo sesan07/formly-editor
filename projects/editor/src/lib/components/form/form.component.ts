@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
@@ -26,7 +26,8 @@ import { DroplistService } from './droplist.service';
 	selector: 'editor-form',
 	templateUrl: './form.component.html',
 	styleUrls: ['./form.component.scss'],
-    providers: [FormService, DroplistService]
+    providers: [FormService, DroplistService],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormComponent implements OnInit, OnDestroy {
 	@Input() form: IForm;
@@ -62,7 +63,8 @@ export class FormComponent implements OnInit, OnDestroy {
 		public editorService: EditorService,
         private _formService: FormService,
         private _dialog: MatDialog,
-        private _fileService: FileService
+        private _fileService: FileService,
+        private _cdRef: ChangeDetectorRef,
     ) { }
 
     public get formDisplayTabIndex(): number {
@@ -126,12 +128,10 @@ export class FormComponent implements OnInit, OnDestroy {
         };
 
         const dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse> = this._dialog.open(ImportFormDialogComponent, config);
-
         dialogRef.afterClosed()
             .subscribe(res => {
                 if (res) {
-                    this.form.model = JSON.parse(res.json);
-                    this._updateModelTarget();
+                    this.onModelChanged(JSON.parse(res.json));
                 }
             });
     }
@@ -146,7 +146,6 @@ export class FormComponent implements OnInit, OnDestroy {
         };
 
         const dialogRef: MatDialogRef<ExportFormDialogComponent, ExportJSONResponse> = this._dialog.open(ExportFormDialogComponent, config);
-
         dialogRef.afterClosed()
             .subscribe(res => {
                 if (res) {
@@ -172,10 +171,12 @@ export class FormComponent implements OnInit, OnDestroy {
         const fieldsClone: IEditorFormlyField[] = cloneDeep(fields);
         fieldsClone.forEach(field => cleanField(field, true, true));
         this.formFieldsJSON = JSON.stringify(fieldsClone, null, 2);
+        this._cdRef.markForCheck();
     }
 
     private _updateFormModel(): void {
         this.form.model = cloneDeep(this.modelTarget);
+        this._cdRef.markForCheck();
     }
 
 	private _updateActiveFieldProperty(): void {
@@ -184,23 +185,28 @@ export class FormComponent implements OnInit, OnDestroy {
 		this.activeFieldProperty.childProperties = this.activeField.properties;
 		this.activeFieldProperty.populateChildrenFromTarget = false;
 		this.activeFieldProperty.addOptions = [];
+        this._cdRef.markForCheck();
 	}
 
     private _updateActiveFieldTarget(): void {
         this.activeFieldTarget = cloneDeep(this.activeField);
+        this._cdRef.markForCheck();
     }
 
     private _updateActiveField(): void {
         this._formService.updateField(this.activeFieldTarget);
+        this._cdRef.markForCheck();
     }
 
 	private _updateModelProperty(): void {
 		this.modelProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
 		this._initRootProperty(this.modelProperty);
+        this._cdRef.markForCheck();
 	}
 
     private _updateModelTarget(): void {
         this.modelTarget = cloneDeep(this.form.model);
+        this._cdRef.markForCheck();
     }
 
 	private _initRootProperty(property: IArrayProperty | IObjectProperty) {

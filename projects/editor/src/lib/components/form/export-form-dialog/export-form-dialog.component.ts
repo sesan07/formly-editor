@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { ExportJSONRequest, ExportJSONResponse } from './export-json-dialog.types';
@@ -6,7 +6,8 @@ import { ExportJSONRequest, ExportJSONResponse } from './export-json-dialog.type
 @Component({
     selector: 'editor-export-form-dialog',
     templateUrl: './export-form-dialog.component.html',
-    styleUrls: ['./export-form-dialog.component.scss']
+    styleUrls: ['./export-form-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExportFormDialogComponent implements OnInit {
 
