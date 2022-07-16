@@ -25,6 +25,7 @@ import { TreeModule } from '../tree/tree.module';
 import { SidebarModule } from '../sidebar/sidebar.module';
 import { JsonFileValidatorDirective } from './json-file-validator/json-file-validator.directive';
 import { JsonValidatorDirective } from './json-validator/json-validator.directive';
+import { FormService } from './form.service';
 
 
 
@@ -60,6 +61,7 @@ import { JsonValidatorDirective } from './json-validator/json-validator.directiv
     ],
     exports: [
         FormComponent,
-    ]
+    ],
+    providers: [{ provide: FormService, useValue: {}}]
 })
 export class FormModule { }

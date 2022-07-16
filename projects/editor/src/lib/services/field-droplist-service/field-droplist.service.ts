@@ -13,16 +13,16 @@ export class FieldDroplistService {
         return this._formDropListIdMap.get(formId);
     }
 
-    updateDropListIds(form: IForm): void {
+    updateDropListIds(formId: string, fields: IEditorFormlyField[]): void {
         const orderedList: IEditorFormlyField[] = [];
-        form.fields.forEach(field => {
+        fields.forEach(field => {
             this._addField(field, orderedList, 0);
         });
 
-        if (this._formDropListIdMap.get(form.id)) {
-            this._formDropListIdMap.get(form.id).next(orderedList.map(f => f.fieldId));
+        if (this._formDropListIdMap.get(formId)) {
+            this._formDropListIdMap.get(formId).next(orderedList.map(f => f.fieldId));
         } else {
-            this._formDropListIdMap.set(form.id, new BehaviorSubject(orderedList.map(f => f.fieldId)));
+            this._formDropListIdMap.set(formId, new BehaviorSubject(orderedList.map(f => f.fieldId)));
         }
     }
 

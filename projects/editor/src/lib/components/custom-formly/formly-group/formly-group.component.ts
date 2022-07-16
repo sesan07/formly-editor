@@ -6,8 +6,9 @@ import { Subject, takeUntil } from 'rxjs';
 import { FieldDroplistService } from '../../../services/field-droplist-service/field-droplist.service';
 import { DragAction, IItemDragData } from '../../../services/field-droplist-service/field-droplist.types';
 import { EditorService } from '../../../services/editor-service/editor.service';
-import { IEditorFormlyField, IForm } from '../../../services/editor-service/editor.types';
+import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
 import { ContainerType, FlexContainerType } from '../../../services/style-service/style.types';
+import { FormService } from '../../form/form.service';
 
 @Component({
     selector: 'editor-formly-group',
@@ -21,11 +22,11 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
     public isGridContainer: boolean;
     public isEditMode: boolean;
 
-    private _form: IForm;
     private _destroy$: Subject<void> = new Subject();
 
     constructor(
         public editorService: EditorService,
+        private _formService: FormService,
         private _dropListService: FieldDroplistService
     ) { super(); }
 
@@ -49,8 +50,7 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
                 .subscribe(ids => this.connectedTo = ids);
         }
 
-        this._form = this.editorService.getForm(this.field.formId);
-        this._form?.isEditMode$
+        this._formService.isEditMode$
             .pipe(takeUntil(this._destroy$))
             .subscribe(v => this.isEditMode = v);
     }
@@ -76,18 +76,17 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
 
         switch(itemData.action) {
             case DragAction.COPY:
-                this.editorService.addField(field.type, targetParent.formId, field.customType, targetParent.fieldId, dropIndex);
+                this._formService.addField(field.type, field.customType, targetParent.fieldId, dropIndex);
                 break;
             case DragAction.MOVE:
                 if (currentParent.fieldId === targetParent.fieldId) {
                     if (dragDrop.previousIndex === dragDrop.currentIndex) {
                         return;
                     }
-                    this.editorService.moveField(field.fieldId, field.formId, dragDrop.previousIndex, dropIndex);
+                    this._formService.moveField(field.fieldId, dragDrop.previousIndex, dropIndex);
                 } else {
-                    this.editorService.transferField(
+                    this._formService.transferField(
                         field.fieldId,
-                        field.formId,
                         targetParent.fieldId,
                         dragDrop.previousIndex,
                         dropIndex

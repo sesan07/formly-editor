@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { EditorService } from '../../services/editor-service/editor.service';
 import { IEditorFormlyField, IForm } from '../../services/editor-service/editor.types';
 import { FileService } from '../../services/file-service/file.service';
+import { cleanField } from '../../utils';
 import { AddFormDialogComponent } from '../form/add-form-dialog/add-form-dialog.component';
 import { AddFormResponse } from '../form/add-form-dialog/add-form-dialog.types';
 import { ExportFormDialogComponent } from '../form/export-form-dialog/export-form-dialog.component';
@@ -87,7 +88,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     onExportForm(): void {
         const form: IForm = this.forms[this.tabIndex];
         const fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
-        fieldsClone.forEach(field => this._editorService.cleanField(field, true, true));
+        fieldsClone.forEach(field => cleanField(field, true, true));
 
         const config: MatDialogConfig<ExportJSONRequest> = {
             data: {

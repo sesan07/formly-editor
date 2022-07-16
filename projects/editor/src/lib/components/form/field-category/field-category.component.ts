@@ -31,7 +31,7 @@ export class FieldCategoryComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.fields = this.category.typeOptions.map(option =>
-            this._editorService.getDefaultConfig(this.formId, option.name, option.customName)
+            this._editorService.getDefaultField(this.formId, option.name, option.customName)
         );
         this.previewFields = cloneDeep(this.fields);
         this.previewFields.forEach(field => {

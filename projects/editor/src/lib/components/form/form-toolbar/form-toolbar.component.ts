@@ -10,9 +10,10 @@ import { EditorService } from '../../../services/editor-service/editor.service';
 })
 export class FormToolbarComponent {
     @Input() selectedDisplay: 'form' | 'json';
-    @Input() isEditMode$: BehaviorSubject<boolean>;
+    @Input() isEditMode: boolean;
 
     @Output() selectedDisplayChange: EventEmitter<'form' | 'json'> = new EventEmitter();
+    @Output() isEditModeChange: EventEmitter<boolean> = new EventEmitter();
     @Output() resetModel: EventEmitter<void> = new EventEmitter();
     @Output() toggleSidebars: EventEmitter<boolean> = new EventEmitter();
 
