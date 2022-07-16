@@ -18,8 +18,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
 import { getFieldChildren, getFormattedFieldName } from '../../../utils';
-import { EditFieldDialogComponent } from '../../edit-field/edit-field-dialog/edit-field-dialog.component';
-import { EditFieldRequest } from '../../edit-field/edit-field-dialog/edit-field-dialog.types';
 import { FormService } from '../../form/form.service';
 
 @Component({
@@ -121,25 +119,6 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
 
     onRemove(): void {
         this._formService.removeField(this.field.fieldId, this.field.parentFieldId);
-    }
-
-    onEditField(): void {
-        const config: MatDialogConfig<EditFieldRequest> = {
-            data: {
-                formId: this.field.formId,
-                fieldId: this.field.fieldId
-            }
-        };
-
-        const dialogRef: MatDialogRef<EditFieldDialogComponent, IEditorFormlyField> =
-            this._dialog.open(EditFieldDialogComponent, config);
-
-        dialogRef.afterClosed()
-            .subscribe(field => {
-                if (field) {
-                    this._formService.updateField(field);
-                }
-            });
     }
 
     onMoveUp(): void {

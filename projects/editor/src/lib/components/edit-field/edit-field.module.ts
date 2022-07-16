@@ -9,7 +9,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 
-import { EditFieldDialogComponent } from './edit-field-dialog/edit-field-dialog.component';
 import { EditFieldStylesComponent } from './edit-field-styles/edit-field-styles.component';
 import { EditFieldComponent } from './edit-field.component';
 import { CustomFormlyModule } from '../custom-formly/custom-formly.module';
@@ -21,7 +20,6 @@ import { PropertyModule } from '../property/property.module';
     declarations: [
         BreakpointComponent,
         ContainerOptionComponent,
-        EditFieldDialogComponent,
         EditFieldStylesComponent,
         EditFieldComponent,
     ],
@@ -39,7 +37,6 @@ import { PropertyModule } from '../property/property.module';
         MatTabsModule,
     ],
     exports: [
-        EditFieldDialogComponent,
         EditFieldComponent,
     ]
 })
