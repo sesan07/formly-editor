@@ -17,6 +17,7 @@ import { Subject, takeUntil } from 'rxjs';
 
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField, IForm } from '../../../services/editor-service/editor.types';
+import { getFieldChildren, getFormattedFieldName } from '../../../utils';
 import { EditFieldDialogComponent } from '../../edit-field/edit-field-dialog/edit-field-dialog.component';
 import { EditFieldRequest } from '../../edit-field/edit-field-dialog/edit-field-dialog.types';
 
@@ -81,7 +82,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
 
         if (this.field.parentFieldId) {
             const parent: IEditorFormlyField = this.editorService.getField(this.field.formId, this.field.parentFieldId);
-            const siblings: IEditorFormlyField[] = this.editorService.getChildren(parent);
+            const siblings: IEditorFormlyField[] = getFieldChildren(parent);
             this.index = siblings.findIndex(f => f.fieldId === this.field.fieldId);
             this.isFirstChild = this.index === 0;
             this.isLastChild = this.index === siblings.length - 1;
@@ -111,6 +112,8 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         this._destroy$.next();
         this._destroy$.complete();
     }
+
+    getFormattedFieldName = (f: IEditorFormlyField) => getFormattedFieldName(f);
 
     onAddChildField(type: string, customType?: string): void {
         this.editorService.addField(type, this.field.formId, customType, this.field.fieldId);

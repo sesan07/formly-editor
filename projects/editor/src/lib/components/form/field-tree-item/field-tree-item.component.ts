@@ -4,6 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField, IForm } from '../../../services/editor-service/editor.types';
+import { getFieldChildren, getFormattedFieldName } from '../../../utils';
 
 @Component({
     selector: 'editor-field-tree-item',
@@ -53,7 +54,7 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
         }).filter(category => category.typeOptions.length > 0); // Remove categories with empty fields
 
 		if (this.field.canHaveChildren) {
-			this.childFields = this.editorService.getChildren(this.field);
+			this.childFields = getFieldChildren(this.field);
 		}
 
         this._form = this.editorService.getForm(this.field.formId);
@@ -71,6 +72,8 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
         this._destroy$.next();
         this._destroy$.complete();
     }
+
+    getFormattedFieldName = (f: IEditorFormlyField) => getFormattedFieldName(f);
 
     onAddChildField(type: string, customType?: string): void {
 		if (this.field.canHaveChildren) {

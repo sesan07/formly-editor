@@ -1,6 +1,6 @@
 <header *ngIf="isEditMode">
     <div class="header-title">
-        <span>{{ editorService.getFormattedFieldName(field.name, field.key) }}</span>
+        <span>{{ getFormattedFieldName(field) }}</span>
         <ng-content></ng-content>
     </div>
     <div class="options" [class.visible]="isMouseInside" *ngIf="!hideOptions">

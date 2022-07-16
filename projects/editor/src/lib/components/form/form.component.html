@@ -59,7 +59,7 @@
     >
 	<editor-sidebar-section class="active-field-section">
         <div class="header-content" headerContent>
-            <span>Active Field - {{ editorService.getFormattedFieldName(activeField.name, activeField.key) }}</span>
+            <span>Active Field - {{ getFormattedFieldName(activeField) }}</span>
             <mat-slide-toggle labelPosition="before" [(ngModel)]="isAdvanced">Advanced</mat-slide-toggle>
         </div>
         <editor-edit-field

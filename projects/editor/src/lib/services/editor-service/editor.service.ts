@@ -18,6 +18,7 @@ import {
 } from './editor.types';
 import { IProperty } from '../../components/property/property.types';
 import { FieldDroplistService } from '../field-droplist-service/field-droplist.service';
+import { getFieldChildren } from '../../utils';
 
 @Injectable()
 export class EditorService {
@@ -46,6 +47,7 @@ export class EditorService {
     }
 
     public addField(type: string, formId: string, customType?: string, parentFieldId?: string, index?: number): IEditorFormlyField {
+        const form: IForm = this.getForm(formId);
         const newField: IEditorFormlyField = this.getDefaultConfig(formId, type, customType, parentFieldId);
 		const siblings: IEditorFormlyField[] = this._getSiblings(formId, parentFieldId);
 		if (typeof index === 'number') {
@@ -53,6 +55,7 @@ export class EditorService {
 		} else {
 			siblings.push(newField);
 		}
+        this._addToFieldMap(newField, form.fieldMap);
 
         this._notifyFormChanged(formId);
 		this.selectField(formId, newField.fieldId);
@@ -62,13 +65,15 @@ export class EditorService {
 
     public removeField(formId: string, fieldId: string, parentId?: string): void {
         const form: IForm = this.getForm(formId);
+        console.log('Before: ', Array.from(form.fieldMap.keys()).toString());
 		const siblings: IEditorFormlyField[] = this._getSiblings(formId, parentId);
 
-        const index: number = siblings.findIndex(field => field.fieldId === fieldId);
+        const index: number = siblings.findIndex(f => f.fieldId === fieldId);
         if (index !== -1) {
+            const field = this.getField(formId, fieldId);
             siblings.splice(index, 1);
 
-            form.fieldMap.delete(fieldId);
+            this._removeFromFieldMap(field, form.fieldMap);
             this._notifyFormChanged(formId);
 
 			if (parentId) {
@@ -79,24 +84,76 @@ export class EditorService {
         }
     }
 
+    public updateField(modifiedField: IEditorFormlyField) {
+        const siblings: IEditorFormlyField[] = this._getSiblings(modifiedField.formId, modifiedField.parentFieldId);
+        const index: number = siblings.findIndex(f => f.fieldId === modifiedField.fieldId);
+        if (index >= 0) {
+            siblings[index] = modifiedField;
+            const form: IForm = this.getForm(modifiedField.formId);
+            form.fieldMap.set(modifiedField.fieldId, modifiedField);
+            this._notifyFormChanged(form.id);
+            this.selectField(form.id, modifiedField.fieldId);
+        }
+    }
+
 	public selectField(formId: string, fieldId: string): void {
         const form: IForm = this.getForm(formId);
 		const field = form.fieldMap.get(fieldId);
 		form.activeField$.next(field);
 	}
 
+    // Move field within a parent field in a form
+    public moveField(fieldId: string, formId: string, fromIndex: number, toIndex?: number): void {
+        const field: IEditorFormlyField = this.getField(formId, fieldId);
+        if (!field.parentFieldId) {
+            throw new Error('Cannot move field without parent');
+        }
+
+        const parent: IEditorFormlyField = this.getField(formId, field.parentFieldId);
+        const siblings: IEditorFormlyField[] = getFieldChildren(parent);
+
+        toIndex = typeof toIndex === 'number' ? toIndex : siblings.length;
+        moveItemInArray(siblings, fromIndex, toIndex);
+
+        this._notifyFormChanged(field.formId);
+    }
+
+    // Transfer field between parent fields in the same form
+    public transferField(
+            fieldId: string,
+            formId: string,
+            targetParentId: string,
+            fromIndex: number,
+            toIndex?: number,
+        ): void {
+
+        const field: IEditorFormlyField = this.getField(formId, fieldId);
+        const currentParent: IEditorFormlyField = this.getField(formId, field.parentFieldId);
+        const targetParent: IEditorFormlyField = this.getField(formId, targetParentId);
+        const currentSiblings: IEditorFormlyField[] = getFieldChildren(currentParent);
+        const targetSiblings: IEditorFormlyField[] = getFieldChildren(targetParent);
+
+        toIndex = typeof toIndex === 'number' ? toIndex : targetSiblings.length;
+
+        transferArrayItem(currentSiblings, targetSiblings, fromIndex, toIndex);
+
+        field.formId = targetParent.formId;
+        field.parentFieldId = targetParent.fieldId;
+        this._notifyFormChanged(formId);
+    }
+
 	public replaceParentField(replaceType: string, formId: string, fieldId: string, replaceCustomType?: string): void {
 		const field: IEditorFormlyField = this.getField(formId, fieldId);
 		const siblings: IEditorFormlyField[] = this._getSiblings(formId, field.parentFieldId);
 		const index: number = siblings.findIndex(f => f.fieldId === fieldId);
-		const children = this.getChildren(field);
+		const children = getFieldChildren(field);
 
 		this.removeField(formId, fieldId, field.parentFieldId);
 		const newField: IEditorFormlyField = this.addField(replaceType, formId, replaceCustomType, field.parentFieldId, index);
 
 		// Copy children to new field's children
 		children.forEach(child => child.parentFieldId = newField.fieldId);
-		const newChildren: IEditorFormlyField[] = this.getChildren(newField);
+		const newChildren: IEditorFormlyField[] = getFieldChildren(newField);
 		newChildren.push(...children);
 
         // Copy properties that shouldn't change
@@ -110,7 +167,8 @@ export class EditorService {
     public getDefaultConfig(formId: string, type: string, customType?: string, parentFieldId?: string): IEditorFormlyField {
         const form: IForm = this.getForm(formId);
         const defaultField: IBaseFormlyField = this._fieldService.getDefaultConfig(type, customType);
-        return this._convertToEditorField(defaultField, formId, form.fieldMap, parentFieldId);
+        const field: IEditorFormlyField = this._convertToEditorField(defaultField, formId, parentFieldId);
+        return field;
     }
 
     public getField(formId: string, fieldId: string): IEditorFormlyField {
@@ -122,7 +180,7 @@ export class EditorService {
         return this._forms$.value.find(f => f.id === formId);
     }
 
-    public addNewForm(name: string): void {
+    public addForm(name: string): void {
         const formId: string = this._getNextFormId(this._currFormId++);
 
 		this._addForm(formId, name, [], new Map());
@@ -149,10 +207,14 @@ export class EditorService {
         const fieldMap: Map<string, IEditorFormlyField> = new Map();
         if (Array.isArray(loadedForm)) {
             loadedForm.forEach(field => {
-                fields.push(this._convertToEditorField(field, formId, fieldMap));
+                const editorField: IEditorFormlyField = this._convertToEditorField(field, formId);
+                this._addToFieldMap(editorField, fieldMap);
+                fields.push(editorField);
             });
         } else {
-            fields.push(this._convertToEditorField(loadedForm, formId, fieldMap));
+            const editorField: IEditorFormlyField = this._convertToEditorField(loadedForm, formId);
+            this._addToFieldMap(editorField, fieldMap);
+            fields.push(editorField);
         }
 
 		this._addForm(formId, name, fields, fieldMap, model);
@@ -169,82 +231,42 @@ export class EditorService {
 		delete field.properties;
 
 		if (cleanChildren && field.canHaveChildren) {
-            this.getChildren(field).forEach(child => {
+            getFieldChildren(field).forEach(child => {
                 this.cleanField(child, cleanChildren, removeEditorProperties);
             });
 		}
 
 		if (removeEditorProperties) {
 			this._removeEditorProperties(field);
+            this._removeEmptyProperties(field);
 		}
-
-		this._removeEmptyProperties(field);
 	}
 
-    public getFormattedFieldName(name: string, key?: string | number | (string | number)[]): string {
-		return `${name}${key ? ' (' + key + ')' : ''}`;
-    }
+    private _addToFieldMap(field: IEditorFormlyField, fieldMap: Map<string, IEditorFormlyField>): void {
+        fieldMap.set(field.fieldId, field);
 
-	public getChildren(field: IEditorFormlyField): IEditorFormlyField[] | undefined {
-        return get(field, field.childrenPath);
-	}
-
-    public updateField(modifiedField: IEditorFormlyField) {
-        const siblings: IEditorFormlyField[] = this._getSiblings(modifiedField.formId, modifiedField.parentFieldId);
-        const index: number = siblings.findIndex(f => f.fieldId = modifiedField.fieldId);
-        if (index >= 0) {
-            siblings[index] = modifiedField;
-            const form: IForm = this.getForm(modifiedField.formId);
-            form.fieldMap.set(modifiedField.fieldId, modifiedField);
-            this._notifyFormChanged(form.id);
-            this.selectField(form.id, modifiedField.fieldId);
+        // Process children (e.g. 'fieldGroup')
+        const typeOption: EditorTypeOption = this._getTypeOption(field.type, field.customType);// Process children (e.g. 'fieldGroup')
+        if (typeOption.canHaveChildren) {
+            const children: IEditorFormlyField[] = getFieldChildren(field);
+            children.forEach(child => this._addToFieldMap(child, fieldMap));
         }
     }
 
-    // Move field within a parent field in a form
-    public moveField(fieldId: string, formId: string, fromIndex: number, toIndex?: number): void {
-        const field: IEditorFormlyField = this.getField(formId, fieldId);
-        if (!field.parentFieldId) {
-            throw new Error('Cannot move field without parent');
+    private _removeFromFieldMap(field: IEditorFormlyField, fieldMap: Map<string, IEditorFormlyField>): void {
+        fieldMap.delete(field.fieldId);
+
+        // Process children (e.g. 'fieldGroup')
+        const typeOption: EditorTypeOption = this._getTypeOption(field.type, field.customType);
+        if (typeOption.canHaveChildren) {
+            const children: IEditorFormlyField[] = getFieldChildren(field);
+            children.forEach(child => this._removeFromFieldMap(child, fieldMap));
         }
-
-        const parent: IEditorFormlyField = this.getField(formId, field.parentFieldId);
-        const siblings: IEditorFormlyField[] = this.getChildren(parent);
-
-        toIndex = typeof toIndex === 'number' ? toIndex : siblings.length;
-        moveItemInArray(siblings, fromIndex, toIndex);
-
-        this._notifyFormChanged(field.formId);
-    }
-
-    // Transfer field between parent fields in the same form
-    public transferField(
-            fieldId: string,
-            formId: string,
-            targetParentId: string,
-            fromIndex: number,
-            toIndex?: number,
-        ): void {
-
-        const field: IEditorFormlyField = this.getField(formId, fieldId);
-        const currentParent: IEditorFormlyField = this.getField(formId, field.parentFieldId);
-        const targetParent: IEditorFormlyField = this.getField(formId, targetParentId);
-        const currentSiblings: IEditorFormlyField[] = this.getChildren(currentParent);
-        const targetSiblings: IEditorFormlyField[] = this.getChildren(targetParent);
-
-        toIndex = typeof toIndex === 'number' ? toIndex : targetSiblings.length;
-
-        transferArrayItem(currentSiblings, targetSiblings, fromIndex, toIndex);
-
-        field.formId = targetParent.formId;
-        field.parentFieldId = targetParent.fieldId;
-        this._notifyFormChanged(formId);
     }
 
     private _convertToEditorField(
         sourceField: IBaseFormlyField,
         formId: string,
-        fieldMap?: Map<string, IEditorFormlyField>,
         parentFieldId?: string
     ): IEditorFormlyField {
         // Special case to specify 'formly-group' type
@@ -273,16 +295,11 @@ export class EditorService {
             properties,
         };
 
-        // Update fieldMap with field if provided
-        if (fieldMap) {
-            fieldMap.set(field.fieldId, field);
-        }
-
         // Process children (e.g. 'fieldGroup')
         if (typeOption.canHaveChildren) {
             const baseChildren: IBaseFormlyField[] = get(baseField, typeOption.childrenPath);
             const children: IEditorFormlyField[] = baseChildren?.map(child =>
-                this._convertToEditorField(child, formId, fieldMap, field.fieldId)
+                this._convertToEditorField(child, formId, field.fieldId)
             );
             set(field, typeOption.childrenPath, children);
         }
@@ -333,7 +350,7 @@ export class EditorService {
 	private _getSiblings(formId: string, parentFieldId?: string): IEditorFormlyField[] {
 		if (parentFieldId) {
 			const parentField: IEditorFormlyField = this.getField(formId, parentFieldId);
-			return this.getChildren(parentField);
+			return getFieldChildren(parentField);
 		} else {
         	const form: IForm = this.getForm(formId);
 			return form.fields;

@@ -18,6 +18,7 @@ import { IArrayProperty } from '../property/object-array-properties/array-proper
 import { IObjectProperty } from '../property/object-array-properties/object-property.types';
 import { ImportFormDialogComponent } from './import-form-dialog/import-form-dialog.component';
 import { ImportJSONRequest, ImportJSONResponse } from './import-form-dialog/import-json-dialog.types';
+import { getFormattedFieldName } from '../../utils';
 
 @Component({
 	selector: 'editor-form',
@@ -104,6 +105,8 @@ export class FormComponent implements OnInit, OnDestroy {
 		this._destroy$.next();
 		this._destroy$.complete();
 	}
+
+    getFormattedFieldName = (f: IEditorFormlyField) => getFormattedFieldName(f);
 
     onModelChanged(model: Record<string, unknown>): void {
         this.form.model = cloneDeep(model);
