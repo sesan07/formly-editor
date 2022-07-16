@@ -14,7 +14,6 @@ import { HomeComponent } from './components/home/home.component';
 import { EditorService } from './services/editor-service/editor.service';
 import { installPatch } from './dnd-patch';
 import { FileService } from './services/file-service/file.service';
-import { FieldDroplistService } from './services/field-droplist-service/field-droplist.service';
 import { CustomFormlyModule } from './components/custom-formly/custom-formly.module';
 import { FormModule } from './components/form/form.module';
 
@@ -44,7 +43,6 @@ const defaultConfig: EditorConfigOption = {
     ],
     providers: [
         EditorService,
-        FieldDroplistService,
         FileService,
         {
             provide: MAT_DIALOG_DEFAULT_OPTIONS,

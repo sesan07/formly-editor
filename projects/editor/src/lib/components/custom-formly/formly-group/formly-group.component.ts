@@ -3,11 +3,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
 import { Subject, takeUntil } from 'rxjs';
 
-import { FieldDroplistService } from '../../../services/field-droplist-service/field-droplist.service';
-import { DragAction, IItemDragData } from '../../../services/field-droplist-service/field-droplist.types';
 import { EditorService } from '../../../services/editor-service/editor.service';
 import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
 import { ContainerType, FlexContainerType } from '../../../services/style-service/style.types';
+import { DroplistService } from '../../form/droplist.service';
+import { DragAction, IItemDragData } from '../../form/droplist.types';
 import { FormService } from '../../form/form.service';
 
 @Component({
@@ -27,7 +27,7 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
     constructor(
         public editorService: EditorService,
         private _formService: FormService,
-        private _dropListService: FieldDroplistService
+        private _droplistService: DroplistService
     ) { super(); }
 
     ngOnInit(): void {
@@ -45,7 +45,7 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
         this.dropListOrientation = !hasGrid && isHorizontal ? 'horizontal' : 'vertical';
 
         if (this.field.formId && this.field.fieldId !== 'preview') {
-            this._dropListService.getDropListIds$(this.field.formId)
+            this._droplistService.droplistIds$
                 .pipe(takeUntil(this._destroy$))
                 .subscribe(ids => this.connectedTo = ids);
         }

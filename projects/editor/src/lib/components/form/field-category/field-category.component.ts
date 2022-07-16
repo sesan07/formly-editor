@@ -4,10 +4,10 @@ import { FormGroup } from '@angular/forms';
 import { cloneDeep } from 'lodash-es';
 import { Subject, takeUntil } from 'rxjs';
 
-import { FieldDroplistService } from '../../../services/field-droplist-service/field-droplist.service';
-import { DragAction, IItemDragData } from '../../../services/field-droplist-service/field-droplist.types';
 import { IEditorFormlyField, EditorTypeCategoryOption } from '../../../services/editor-service/editor.types';
 import { EditorService } from '../../../services/editor-service/editor.service';
+import { DroplistService } from '../droplist.service';
+import { IItemDragData, DragAction } from '../droplist.types';
 
 @Component({
     selector: 'editor-field-category',
@@ -27,7 +27,7 @@ export class FieldCategoryComponent implements OnInit, OnDestroy {
 
     private _destroy$: Subject<void> = new Subject();
 
-    constructor(private _editorService: EditorService, private _dropListService: FieldDroplistService) { }
+    constructor(private _editorService: EditorService, private _dropListService: DroplistService) { }
 
     ngOnInit(): void {
         this.fields = this.category.typeOptions.map(option =>
@@ -39,7 +39,7 @@ export class FieldCategoryComponent implements OnInit, OnDestroy {
             field.key = 'preview';
         });
 
-        this._dropListService.getDropListIds$(this.formId)
+        this._dropListService.droplistIds$
                 .pipe(takeUntil(this._destroy$))
                 .subscribe(ids => this.connectedTo = ids);
     }

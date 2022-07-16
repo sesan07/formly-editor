@@ -20,12 +20,13 @@ import { ImportFormDialogComponent } from './import-form-dialog/import-form-dial
 import { ImportJSONRequest, ImportJSONResponse } from './import-form-dialog/import-json-dialog.types';
 import { cleanField, getFormattedFieldName } from '../../utils';
 import { FormService } from './form.service';
+import { DroplistService } from './droplist.service';
 
 @Component({
 	selector: 'editor-form',
 	templateUrl: './form.component.html',
 	styleUrls: ['./form.component.scss'],
-    providers: [FormService]
+    providers: [FormService, DroplistService]
 })
 export class FormComponent implements OnInit, OnDestroy {
 	@Input() form: IForm;
@@ -81,11 +82,10 @@ export class FormComponent implements OnInit, OnDestroy {
 
         this._updateModelProperty();
         this._updateModelTarget();
-        this._updateFormFields();
 
-		this._formService.formChanged$
+		this._formService.fields$
 			.pipe(takeUntil(this._destroy$))
-			.subscribe(() => this._updateFormFields());
+			.subscribe(fields => this._updateFormFields(fields));
 
 		this._formService.activeField$
             .pipe(takeUntil(this._destroy$))
@@ -164,12 +164,12 @@ export class FormComponent implements OnInit, OnDestroy {
         this._resizeEnd$.next();
     }
 
-    private _updateFormFields(): void {
-        this.formFields = cloneDeep(this.form.fields);
+    private _updateFormFields(fields: IEditorFormlyField[]): void {
+        this.formFields = cloneDeep(fields);
 		this.formGroup = new FormGroup({});
 		this.options = {};
 
-        const fieldsClone: IEditorFormlyField[] = cloneDeep(this.form.fields);
+        const fieldsClone: IEditorFormlyField[] = cloneDeep(fields);
         fieldsClone.forEach(field => cleanField(field, true, true));
         this.formFieldsJSON = JSON.stringify(fieldsClone, null, 2);
     }

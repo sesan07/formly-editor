@@ -1,4 +1,4 @@
-import { IEditorFormlyField } from '../editor-service/editor.types';
+import { IEditorFormlyField } from '../../services/editor-service/editor.types';
 
 export enum DragAction {
     COPY,
