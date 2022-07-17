@@ -28,14 +28,14 @@
 </editor-sidebar>
 
 <div class="main">
-    <editor-form-toolbar
+    <editor-toolbar
         class="toolbar"
         [(selectedDisplay)]="selectedFormDisplay"
         [isEditMode]="isEditMode$ | async"
         (isEditModeChange)="onEditModeChanged($event)"
         (resetModel)="onResetModel()"
         (toggleSidebars)="showSidebars = $event">
-    </editor-form-toolbar>
+    </editor-toolbar>
     <mat-tab-group class="tab-group" [selectedIndex]="formDisplayTabIndex">
         <mat-tab>
             <editor-formly-form
