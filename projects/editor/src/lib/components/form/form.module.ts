@@ -14,7 +14,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AddFormDialogComponent } from './add-form-dialog/add-form-dialog.component';
 import { ExportFormDialogComponent } from './export-form-dialog/export-form-dialog.component';
 import { FieldCategoryComponent } from './field-category/field-category.component';
-import { FormToolbarComponent } from './form-toolbar/form-toolbar.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 import { FormComponent } from './form.component';
 import { ImportFormDialogComponent } from './import-form-dialog/import-form-dialog.component';
 import { PropertyModule } from '../property/property.module';
@@ -34,7 +34,7 @@ import { FormService } from './form.service';
         AddFormDialogComponent,
         ImportFormDialogComponent,
         ExportFormDialogComponent,
-        FormToolbarComponent,
+        ToolbarComponent,
         FieldTreeItemComponent,
         FieldCategoryComponent,
         JsonValidatorDirective,

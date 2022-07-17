@@ -4,12 +4,12 @@ import { BehaviorSubject } from 'rxjs';
 import { EditorService } from '../../../services/editor-service/editor.service';
 
 @Component({
-    selector: 'editor-form-toolbar',
-    templateUrl: './form-toolbar.component.html',
-    styleUrls: ['./form-toolbar.component.scss'],
+    selector: 'editor-toolbar',
+    templateUrl: './toolbar.component.html',
+    styleUrls: ['./toolbar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormToolbarComponent {
+export class ToolbarComponent {
     @Input() selectedDisplay: 'form' | 'json';
     @Input() isEditMode: boolean;
 
