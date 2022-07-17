@@ -21,7 +21,7 @@ import { ImportJSONRequest, ImportJSONResponse } from '../form/import-form-dialo
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-    public tabIndex = 0;
+    public tabIndex: number;
     public forms: IForm[] = [];
 
     private _destroy$: Subject<void> = new Subject();
@@ -36,6 +36,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         this._editorService.forms$
             .pipe(takeUntil(this._destroy$))
             .subscribe(forms => this.forms = forms);
+        this._editorService.activeFormIndex$
+            .pipe(takeUntil(this._destroy$))
+            .subscribe(index => this.tabIndex = index);
     }
 
     ngOnDestroy(): void {
@@ -55,10 +58,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             .subscribe(res => {
                 if (res) {
                     this._editorService.addForm(res.name);
-                    // Navigate to new form. Allow some time for tab to load.
-                    setTimeout(() => {
-                        this.tabIndex = this.forms.length - 1;
-                    }, 1000);
                 }
             });
     }
@@ -77,10 +76,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             .subscribe(res => {
                 if (res) {
                     this._editorService.importForm(res.name, res.json);
-                    // Navigate to new form. Allow some time for tab to load.
-                    setTimeout(() => {
-                        this.tabIndex = this.forms.length - 1;
-                    }, 1000);
                 }
             });
     }
@@ -110,6 +105,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     onRemoveForm(index: number): void {
         this._editorService.removeForm(index);
+    }
+
+    onTabChange(index: number): void {
+        this._editorService.setActiveFormIndex(index);
     }
 
     trackFormById: TrackByFunction<IForm> = (_, form: IForm) => form.id;

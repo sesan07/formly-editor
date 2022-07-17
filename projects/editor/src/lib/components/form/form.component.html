@@ -33,6 +33,7 @@
         [(selectedDisplay)]="selectedFormDisplay"
         [isEditMode]="isEditMode$ | async"
         (isEditModeChange)="onEditModeChanged($event)"
+        (duplicateForm)="onDuplicateForm()"
         (resetModel)="onResetModel()"
         (toggleSidebars)="showSidebars = $event">
     </editor-toolbar>

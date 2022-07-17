@@ -11,6 +11,9 @@
 
 <div class="action-buttons">
     <mat-slide-toggle labelPosition="before" [ngModel]="isEditMode" (ngModelChange)="isEditModeChange.emit($event)">Edit Mode</mat-slide-toggle>
+    <button mat-icon-button matTooltip="Duplicate Form" (click)="duplicateForm.emit()">
+        <mat-icon>content_copy</mat-icon>
+    </button>
     <button mat-icon-button matTooltip="Reset Form" (click)="resetModel.emit()">
         <mat-icon>restart_alt</mat-icon>
     </button>

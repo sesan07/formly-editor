@@ -166,8 +166,7 @@ export class FormService {
         this._fieldMap.set(field.fieldId, field);
 
         // Process children (e.g. 'fieldGroup')
-        const typeOption: EditorTypeOption = this._editorService.getTypeOption(field.type, field.customType);
-        if (typeOption.canHaveChildren) {
+        if (field.canHaveChildren) {
             const children: IEditorFormlyField[] = getFieldChildren(field);
             children.forEach(child => this._addToFieldMap(child));
         }
@@ -177,8 +176,7 @@ export class FormService {
         this._fieldMap.delete(field.fieldId);
 
         // Process children (e.g. 'fieldGroup')
-        const typeOption: EditorTypeOption = this._editorService.getTypeOption(field.type, field.customType);
-        if (typeOption.canHaveChildren) {
+        if (field.canHaveChildren) {
             const children: IEditorFormlyField[] = getFieldChildren(field);
             children.forEach(child => this._removeFromFieldMap(child));
         }

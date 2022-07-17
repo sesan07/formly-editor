@@ -117,6 +117,10 @@ export class FormComponent implements OnInit, OnDestroy {
         this._formService.setEditMode(isEditMode);
     }
 
+    onDuplicateForm(): void {
+        this.editorService.duplicateForm(this.form.id);
+    }
+
     onModelChanged(model: Record<string, unknown>): void {
         this.form.model = cloneDeep(model);
         this._updateModelTarget();

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { get, merge, set } from 'lodash-es';
+import { cloneDeep, get, merge, set } from 'lodash-es';
 import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -16,13 +16,14 @@ import {
     EditorTypeOption,
 } from './editor.types';
 import { IProperty } from '../../components/property/property.types';
+import { getFieldChildren } from '../../utils';
 
 @Injectable()
 export class EditorService {
     private _currFormId = 0;
     private _editorConfig: EditorConfigOption;
-    private _formChanged$: Subject<string> = new Subject();
     private _forms$: BehaviorSubject<IForm[]> = new BehaviorSubject([]);
+    private _activeFormIndex$: BehaviorSubject<number> = new BehaviorSubject(null);
 
     private _fieldIdCounterMap: Map<string, number> = new Map(); // Map<fieldType, count>
     private _fieldtypeOptions: EditorTypeOption[] = [];
@@ -33,7 +34,7 @@ export class EditorService {
     ) {}
 
     public get forms$(): Observable<IForm[]> { return this._forms$.asObservable(); }
-    public get formChanged$(): Observable<string> { return this._formChanged$.asObservable(); }
+    public get activeFormIndex$(): Observable<number> { return this._activeFormIndex$.asObservable(); }
     public get fieldCategories(): EditorTypeCategoryOption[] { return this._editorConfig.typeCategories; };
 
     setup(editorConfig: EditorConfigOption) {
@@ -50,7 +51,7 @@ export class EditorService {
             this._editorConfig.defaultCustomName
         );
 
-		this._addForm(formId, name, [field], new Map());
+		this._addForm(formId, name, [field], {});
     }
 
     public importForm(name: string, source: string | IBaseFormlyField | IBaseFormlyField[], model?: Record<string, unknown>): void {
@@ -70,7 +71,6 @@ export class EditorService {
         this._currFormId++;
 
         const fields: IEditorFormlyField[] = [];
-        const fieldMap: Map<string, IEditorFormlyField> = new Map();
         if (Array.isArray(loadedForm)) {
             loadedForm.forEach(field => {
                 const editorField: IEditorFormlyField = this._convertToEditorField(formId, field);
@@ -81,7 +81,7 @@ export class EditorService {
             fields.push(editorField);
         }
 
-		this._addForm(formId, name, fields, fieldMap, model);
+		this._addForm(formId, name, fields, model);
     }
 
     public removeForm(index: number): void {
@@ -90,28 +90,31 @@ export class EditorService {
         this._forms$.next(forms.slice());
     }
 
+    public duplicateForm(formId: string): void {
+        const sourceForm: IForm = this._forms$.value.find(f => f.id === formId);
+
+        const newFormId: string = this._getNextFormId(this._currFormId++);
+        const fieldsClone: IEditorFormlyField[] = cloneDeep(sourceForm.fields);
+        fieldsClone.forEach(field => {
+            field.parentFieldId = null;
+            this._updateDuplicateField(newFormId, field);
+        });
+
+		this._addForm(
+            this._getNextFormId(this._currFormId++),
+            sourceForm.name + ' Copy',
+            fieldsClone,
+            cloneDeep(sourceForm.model)
+        );
+    }
+
+    public setActiveFormIndex(index: number): void {
+        this._activeFormIndex$.next(index);
+    }
+
     public getDefaultField(formId: string, type: string, customType?: string, parentFieldId?: string): IEditorFormlyField {
         const defaultField: IBaseFormlyField = this._fieldService.getDefaultConfig(type, customType);
         return this._convertToEditorField(formId, defaultField, parentFieldId);
-    }
-
-    public getTypeOption(type: string, customType?: string): EditorTypeOption {
-        let typeOption: EditorTypeOption = this._fieldtypeOptions.find(
-            option => option.name === type && option.customName === customType
-        );
-
-        if (!typeOption && this._editorConfig.unknownTypeName) {
-            typeOption = this._fieldtypeOptions.find(
-                option => option.name === this._editorConfig.unknownTypeName
-            );
-        }
-
-        if(!typeOption) {
-            console.warn('EditorTypeOption not configured for type: ' + type);
-            typeOption = { name: undefined, displayName: 'Unknown Type' };
-        }
-
-        return typeOption;
     }
 
     private _convertToEditorField(
@@ -132,7 +135,7 @@ export class EditorService {
         const properties: IProperty[] = this._fieldService.getProperties(baseField.type);
 
         // Create editor field
-        const typeOption: EditorTypeOption = this.getTypeOption(baseField.type, baseField.customType);
+        const typeOption: EditorTypeOption = this._getTypeOption(baseField.type, baseField.customType);
         const field: IEditorFormlyField = {
             ...baseField,
             name: typeOption.displayName,
@@ -201,7 +204,6 @@ export class EditorService {
         id: string,
         name: string,
         fields: IEditorFormlyField[],
-        fieldMap: Map<string, IEditorFormlyField>,
         model?: Record<string, unknown>
     ) {
         this._forms$.next([
@@ -213,5 +215,39 @@ export class EditorService {
                 model: model ?? {},
             }
         ]);
+        this._activeFormIndex$.next(this._forms$.value.length - 1);
 	}
+
+    private _updateDuplicateField(formId: string, field: IEditorFormlyField) {
+        field.formId = formId;
+        field.fieldId = this._getNextFieldId(field.type);
+
+        // Process children (e.g. 'fieldGroup')
+        if (field.canHaveChildren) {
+            const children: IEditorFormlyField[] = getFieldChildren(field);
+            children.forEach(child => {
+                child.parentFieldId = field.fieldId;
+                this._updateDuplicateField(formId, child);
+            });
+        }
+    }
+
+    private _getTypeOption(type: string, customType?: string): EditorTypeOption {
+        let typeOption: EditorTypeOption = this._fieldtypeOptions.find(
+            option => option.name === type && option.customName === customType
+        );
+
+        if (!typeOption && this._editorConfig.unknownTypeName) {
+            typeOption = this._fieldtypeOptions.find(
+                option => option.name === this._editorConfig.unknownTypeName
+            );
+        }
+
+        if(!typeOption) {
+            console.warn('EditorTypeOption not configured for type: ' + type);
+            typeOption = { name: undefined, displayName: 'Unknown Type' };
+        }
+
+        return typeOption;
+    }
 }

@@ -38,11 +38,13 @@ export class SidebarComponent implements AfterContentInit {
             return;
         }
 
-        // Some browsers dimensions at AfterContentInit are not correct, so wait a bit
-        // ElementRef dimensions change after some time (even in an empty app) for some reason..........................
-        setTimeout(() => {
-            this._setupSections();
-        }, 1000);
+        // Wait until sidebar is in DOM to setup sections
+        const int = setInterval(() => {
+            if (this._elementRef.nativeElement.clientHeight > 0) {
+                this._setupSections();
+                clearInterval(int);
+            }
+        }, 200);
     }
 
 	onSidebarMouseDown(event: MouseEvent): void {
