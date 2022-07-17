@@ -3,8 +3,8 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { IEditorFormlyField } from '../../services/editor-service/editor.types';
-import { IObjectProperty } from '../property/object-array-properties/object-property.types';
+import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
+import { IObjectProperty } from '../../property/object-array-properties/object-property.types';
 
 @Component({
     selector: 'editor-edit-field',
