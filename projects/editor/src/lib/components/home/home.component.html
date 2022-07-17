@@ -6,7 +6,7 @@
         <button mat-button (click)="onExportForm()" [disabled]="forms.length === 0"><mat-icon>file_upload</mat-icon>Export Form</button>
     </span>
 </span>
-<mat-tab-group *ngIf="forms.length > 0; else emptyView" [(selectedIndex)]="tabIndex">
+<mat-tab-group *ngIf="forms.length > 0; else emptyView" [selectedIndex]="tabIndex" (selectedIndexChange)="onTabChange($event)">
     <mat-tab *ngFor="let form of forms; let i = index; trackBy: trackFormById">
         <ng-template mat-tab-label>
             {{ form.name }}
