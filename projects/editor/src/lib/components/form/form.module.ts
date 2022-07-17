@@ -18,14 +18,18 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { FormComponent } from './form.component';
 import { ImportFormDialogComponent } from './import-form-dialog/import-form-dialog.component';
 import { PropertyModule } from '../property/property.module';
-import { EditFieldModule } from '../edit-field/edit-field.module';
 import { CustomFormlyModule } from '../custom-formly/custom-formly.module';
 import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
 import { TreeModule } from '../tree/tree.module';
 import { SidebarModule } from '../sidebar/sidebar.module';
 import { JsonFileValidatorDirective } from './json-file-validator/json-file-validator.directive';
 import { JsonValidatorDirective } from './json-validator/json-validator.directive';
-import { FormService } from './form.service';
+import { BreakpointComponent } from './edit-field/edit-field-styles/breakpoint/breakpoint.component';
+import { ContainerOptionComponent } from './edit-field/edit-field-styles/container-option/container-option.component';
+import { EditFieldStylesComponent } from './edit-field/edit-field-styles/edit-field-styles.component';
+import { EditFieldComponent } from './edit-field/edit-field.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -37,6 +41,10 @@ import { FormService } from './form.service';
         ToolbarComponent,
         FieldTreeItemComponent,
         FieldCategoryComponent,
+        BreakpointComponent,
+        ContainerOptionComponent,
+        EditFieldStylesComponent,
+        EditFieldComponent,
         JsonValidatorDirective,
         JsonFileValidatorDirective,
         FormComponent,
@@ -47,7 +55,6 @@ import { FormService } from './form.service';
         CustomFormlyModule,
         TreeModule,
         PropertyModule,
-        EditFieldModule,
         SidebarModule,
         MatIconModule,
         MatButtonModule,
@@ -58,6 +65,8 @@ import { FormService } from './form.service';
         MatDialogModule,
         MatTabsModule,
         DragDropModule,
+        MatSelectModule,
+        MatTooltipModule,
     ],
     exports: [
         FormComponent,

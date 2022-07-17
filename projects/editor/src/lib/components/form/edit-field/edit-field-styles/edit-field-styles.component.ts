@@ -8,18 +8,18 @@ import {
     SimpleChanges
 } from '@angular/core';
 
-import { IEditorFormlyField } from '../../../services/editor-service/editor.types';
-import { StyleService } from '../../../services/style-service/style.service';
+import { IEditorFormlyField } from '../../../../services/editor-service/editor.types';
+import { StyleService } from '../../../../services/style-service/style.service';
 import {
     ContainerType,
     BreakpointType,
     GridChildPrefix,
     GridContainerPrefix,
     FlexContainerPrefix
-} from '../../../services/style-service/style.types';
-import { FormService } from '../../form/form.service';
-import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
-import { PropertyType } from '../../property/property.types';
+} from '../../../../services/style-service/style.types';
+import { FormService } from '../../form.service';
+import { IChipListProperty } from '../../../property/chip-list-property/chip-list-property.types';
+import { PropertyType } from '../../../property/property.types';
 
 @Component({
     selector: 'editor-edit-field-styles',
