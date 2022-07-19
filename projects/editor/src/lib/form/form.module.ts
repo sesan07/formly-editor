@@ -10,8 +10,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AddFormDialogComponent } from './add-form-dialog/add-form-dialog.component';
 import { ExportFormDialogComponent } from './export-form-dialog/export-form-dialog.component';
@@ -24,12 +22,9 @@ import { CustomFormlyModule } from '../custom-formly/custom-formly.module';
 import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
 import { TreeModule } from '../tree/tree.module';
 import { SidebarModule } from '../sidebar/sidebar.module';
-import { ContainerOptionComponent } from './edit-field/container-option/container-option.component';
-import { BreakpointComponent } from './edit-field/breakpoint/breakpoint.component';
-import { EditFieldStylesComponent } from './edit-field/edit-field-styles/edit-field-styles.component';
-import { EditFieldComponent } from './edit-field/edit-field.component';
 import { JsonFileValidatorDirective } from './json-file-validator/json-file-validator.directive';
 import { JsonValidatorDirective } from './json-validator/json-validator.directive';
+import { EditFieldModule } from '../edit-field/edit-field.module';
 
 
 
@@ -41,10 +36,6 @@ import { JsonValidatorDirective } from './json-validator/json-validator.directiv
         ToolbarComponent,
         FieldTreeItemComponent,
         FieldCategoryComponent,
-        BreakpointComponent,
-        ContainerOptionComponent,
-        EditFieldStylesComponent,
-        EditFieldComponent,
         JsonValidatorDirective,
         JsonFileValidatorDirective,
         FormComponent,
@@ -53,6 +44,7 @@ import { JsonValidatorDirective } from './json-validator/json-validator.directiv
         CommonModule,
         FormsModule,
         CustomFormlyModule,
+        EditFieldModule,
         TreeModule,
         PropertyModule,
         SidebarModule,
@@ -65,8 +57,6 @@ import { JsonValidatorDirective } from './json-validator/json-validator.directiv
         MatDialogModule,
         MatTabsModule,
         DragDropModule,
-        MatSelectModule,
-        MatTooltipModule,
     ],
     exports: [
         FormComponent,

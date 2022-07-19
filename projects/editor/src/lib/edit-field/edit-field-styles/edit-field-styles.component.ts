@@ -8,18 +8,17 @@ import {
     SimpleChanges
 } from '@angular/core';
 
-import { IEditorFormlyField } from '../../../editor.types';
-import { FormService } from '../../form.service';
-import { IChipListProperty } from '../../../property/chip-list-property/chip-list-property.types';
-import { PropertyType } from '../../../property/property.types';
-import { StyleService } from '../../../shared/services/style-service/style.service';
+import { IEditorFormlyField } from '../../editor.types';
+import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
+import { PropertyType } from '../../property/property.types';
+import { StyleService } from '../../shared/services/style-service/style.service';
 import {
     ContainerType,
     FlexContainerPrefix,
     GridContainerPrefix,
     GridChildPrefix,
     BreakpointType
-} from '../../../shared/services/style-service/style.types';
+} from '../../shared/services/style-service/style.types';
 
 @Component({
     selector: 'editor-edit-field-styles',
@@ -29,6 +28,7 @@ import {
 })
 export class EditFieldStylesComponent implements OnChanges {
     @Input() editField: IEditorFormlyField;
+    @Input() parentField?: IEditorFormlyField;
 
     @Output() fieldChanged: EventEmitter<void> = new EventEmitter();
 
@@ -53,7 +53,7 @@ export class EditFieldStylesComponent implements OnChanges {
     private _generalChildrenProperty: IChipListProperty;
     private _breakpointChildrenProperties: Map<BreakpointType, IChipListProperty> = new Map();
 
-    constructor(private _formService: FormService, private _styleService: StyleService) { }
+    constructor(private _styleService: StyleService) { }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.editField) {
@@ -147,7 +147,7 @@ export class EditFieldStylesComponent implements OnChanges {
     private _setUp(): void {
         this._setupProperties();
 
-        if (this.editField.parentFieldId) {
+        if (this.parentField) {
             this._setupParent();
         } else {
             this.parentContainer = null;
@@ -160,8 +160,7 @@ export class EditFieldStylesComponent implements OnChanges {
     }
 
     private _setupParent(): void {
-        const parent: IEditorFormlyField = this._formService.getField(this.editField.parentFieldId);
-        const fieldGroupClassNames: string[] = parent.fieldGroupClassName?.split(' ') ?? [];
+        const fieldGroupClassNames: string[] = this.parentField.fieldGroupClassName?.split(' ') ?? [];
 
         // TODO use regex to match without '-' prefix and suffix
         this.parentContainer = fieldGroupClassNames.find(
