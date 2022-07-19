@@ -158,6 +158,23 @@ button.mat-icon-button {
 	}
 }
 
+.form-tab-group > .mat-tab-header {
+    .mat-tab-label {
+        padding: 0 16px;
+    }
+    
+    .mat-tab-label-content, .inner-tab-label-content {
+        width: 100%;
+    }
+
+    .inner-tab-label-content {
+        display: inline-flex;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: 8px;
+    }
+}
+
 .mat-tab-body-wrapper {
     flex-grow: 1;
 }
