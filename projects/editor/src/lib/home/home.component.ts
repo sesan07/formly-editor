@@ -111,5 +111,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         this._editorService.setActiveFormIndex(index);
     }
 
+    onTabLabelMouseDown(event: MouseEvent, index: number): void {
+        if (event.button === 1) {
+            this.onRemoveForm(index);
+        }
+    }
+
     trackFormById: TrackByFunction<IForm> = (_, form: IForm) => form.id;
 }
