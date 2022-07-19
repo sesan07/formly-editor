@@ -9,13 +9,13 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash-es';
 
-import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG } from './services/editor-service/editor.types';
-import { HomeComponent } from './components/home/home.component';
-import { EditorService } from './services/editor-service/editor.service';
+import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG } from './editor.types';
+import { HomeComponent } from './home/home.component';
+import { EditorService } from './editor.service';
+import { CustomFormlyModule } from './custom-formly/custom-formly.module';
+import { FormModule } from './form/form.module';
+import { FileService } from './shared/services/file-service/file.service';
 import { installPatch } from './dnd-patch';
-import { FileService } from './services/file-service/file.service';
-import { CustomFormlyModule } from './components/custom-formly/custom-formly.module';
-import { FormModule } from './components/form/form.module';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
