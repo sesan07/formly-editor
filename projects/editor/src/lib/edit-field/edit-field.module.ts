@@ -9,7 +9,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 
-import { EditFieldStylesComponent } from './edit-field-styles/edit-field-styles.component';
+import { StylesComponent } from './styles/styles.component';
 import { EditFieldComponent } from './edit-field.component';
 import { CustomFormlyModule } from '../custom-formly/custom-formly.module';
 import { BreakpointComponent } from './breakpoint/breakpoint.component';
@@ -20,7 +20,7 @@ import { PropertyModule } from '../property/property.module';
     declarations: [
         BreakpointComponent,
         ContainerOptionComponent,
-        EditFieldStylesComponent,
+        StylesComponent,
         EditFieldComponent,
     ],
     imports: [

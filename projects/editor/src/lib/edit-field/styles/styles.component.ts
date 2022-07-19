@@ -11,22 +11,22 @@ import {
 import { IEditorFormlyField } from '../../editor.types';
 import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
 import { PropertyType } from '../../property/property.types';
-import { StyleService } from '../../shared/services/style-service/style.service';
+import { StylesService } from './styles.service';
 import {
     ContainerType,
     FlexContainerPrefix,
     GridContainerPrefix,
     GridChildPrefix,
     BreakpointType
-} from '../../shared/services/style-service/style.types';
+} from './styles.types';
 
 @Component({
-    selector: 'editor-edit-field-styles',
-    templateUrl: './edit-field-styles.component.html',
-    styleUrls: ['./edit-field-styles.component.scss'],
+    selector: 'editor-styles',
+    templateUrl: './styles.component.html',
+    styleUrls: ['./styles.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditFieldStylesComponent implements OnChanges {
+export class StylesComponent implements OnChanges {
     @Input() editField: IEditorFormlyField;
     @Input() parentField?: IEditorFormlyField;
 
@@ -53,7 +53,7 @@ export class EditFieldStylesComponent implements OnChanges {
     private _generalChildrenProperty: IChipListProperty;
     private _breakpointChildrenProperties: Map<BreakpointType, IChipListProperty> = new Map();
 
-    constructor(private _styleService: StyleService) { }
+    constructor(private _stylesService: StylesService) { }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.editField) {
@@ -225,7 +225,7 @@ export class EditFieldStylesComponent implements OnChanges {
             key,
             name: 'Custom classes',
             type: PropertyType.CHIP_LIST,
-            options: this._styleService.getBreakpointClassNames(breakpoint),
+            options: this._stylesService.getBreakpointClassNames(breakpoint),
             outputString: true,
             isSimple: true,
         };

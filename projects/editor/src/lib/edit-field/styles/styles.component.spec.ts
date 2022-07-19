@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditFieldStylesComponent } from './edit-field-styles.component';
+import { StylesComponent } from './styles.component';
 
-describe('StyleChildrenComponent', () => {
-  let component: EditFieldStylesComponent;
-  let fixture: ComponentFixture<EditFieldStylesComponent>;
+describe('StylesComponent', () => {
+  let component: StylesComponent;
+  let fixture: ComponentFixture<StylesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditFieldStylesComponent ]
+      declarations: [ StylesComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditFieldStylesComponent);
+    fixture = TestBed.createComponent(StylesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
