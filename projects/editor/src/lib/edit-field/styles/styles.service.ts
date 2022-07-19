@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { BreakpointType, ContainerType, FlexContainerPrefix, GridChildPrefix, GridContainerPrefix } from './style.types';
+import { BreakpointType, ContainerType, FlexContainerPrefix, GridChildPrefix, GridContainerPrefix } from './styles.types';
 
 @Injectable({
     providedIn: 'root',
 })
-export class StyleService {
+export class StylesService {
 
 	private readonly _selectorRegexp = /\.-?[_a-zA-Z]+[\w-]*/g;
     // All classes
