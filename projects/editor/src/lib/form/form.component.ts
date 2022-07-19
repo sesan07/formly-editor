@@ -33,6 +33,7 @@ export class FormComponent implements OnInit, OnDestroy {
 	@Input() form: IForm;
 
     public activeField: IEditorFormlyField;
+    public activeFieldParent: IEditorFormlyField;
 
 	public activeFieldProperty: IObjectProperty;
     public activeFieldTarget: IEditorFormlyField;
@@ -93,6 +94,7 @@ export class FormComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._destroy$))
             .subscribe(field => {
                 this.activeField = field;
+                this.activeFieldParent = this._formService.getField(field.parentFieldId);
                 this._updateActiveFieldProperty();
                 this._updateActiveFieldTarget();
             });

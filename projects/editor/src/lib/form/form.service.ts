@@ -149,7 +149,7 @@ export class FormService {
         this._fields$.next(this._fields$.value);
 	}
 
-    public getField(fieldId: string): IEditorFormlyField {
+    public getField(fieldId: string): IEditorFormlyField | undefined {
         return this._fieldMap.get(fieldId);
     }
 
