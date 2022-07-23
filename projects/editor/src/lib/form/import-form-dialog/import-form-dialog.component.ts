@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -10,7 +10,8 @@ import { FileService } from '../../shared/services/file-service/file.service';
     templateUrl: './import-form-dialog.component.html',
     styleUrls: ['./import-form-dialog.component.scss']
 })
-export class ImportFormDialogComponent {
+export class ImportFormDialogComponent implements AfterViewInit {
+    @ViewChild('nameModel', { read: ElementRef }) nameElement: ElementRef<HTMLInputElement>;
 
     @ViewChild('nameModel') nameModel: NgModel;
     @ViewChild('fileNameModel') fileNameModel: NgModel;
@@ -50,6 +51,10 @@ export class ImportFormDialogComponent {
             : this.currTabIndex === 1
                 ? this.jsonModel.valid
                 : true;
+    }
+
+    ngAfterViewInit(): void {
+        setTimeout(() => this.nameElement.nativeElement.focus());
     }
 
     onFileChanged(): void {
