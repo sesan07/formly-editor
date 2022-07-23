@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { ExportJSONRequest, ExportJSONResponse } from './export-json-dialog.types';
@@ -9,7 +9,8 @@ import { ExportJSONRequest, ExportJSONResponse } from './export-json-dialog.type
     styleUrls: ['./export-form-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ExportFormDialogComponent implements OnInit {
+export class ExportFormDialogComponent implements OnInit, AfterViewInit {
+    @ViewChild('nameModel', { read: ElementRef }) nameElement: ElementRef<HTMLInputElement>;
 
     nameValue: string;
     jsonValue: string;
@@ -22,6 +23,10 @@ export class ExportFormDialogComponent implements OnInit {
     ngOnInit(): void {
         this.nameValue = this.data.name;
         this.jsonValue = this.data.json;
+    }
+
+    ngAfterViewInit(): void {
+        setTimeout(() => this.nameElement.nativeElement.focus());
     }
 
     onExport(): void {

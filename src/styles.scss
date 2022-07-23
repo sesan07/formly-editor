@@ -160,18 +160,21 @@ button.mat-icon-button {
 
 .form-tab-group > .mat-tab-header {
     .mat-tab-label {
-        padding: 0 16px;
+        padding: 0;
     }
     
     .mat-tab-label-content, .inner-tab-label-content {
+        height: 100%;
         width: 100%;
     }
 
     .inner-tab-label-content {
         display: inline-flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         column-gap: 8px;
+        padding: 0 16px;
+        box-sizing: border-box;
     }
 }
 
