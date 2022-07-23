@@ -79,13 +79,13 @@ import { RepeatingSectionTypeComponent } from './components/types/repeating-sect
                             canHaveChildren: true,
                             childrenPath: 'fieldGroup'
                         },
-                        {
-                            name: FieldType.REPEATING_SECTION,
-                            displayName: 'Repeating Section',
-                            canHaveChildren: true,
-                            childrenPath: 'fieldArray.fieldGroup',
-                            component: RepeatingSectionTypeComponent
-                        },
+                        // {
+                        //     name: FieldType.REPEATING_SECTION,
+                        //     displayName: 'Repeating Section',
+                        //     canHaveChildren: true,
+                        //     childrenPath: 'fieldArray.fieldGroup',
+                        //     component: RepeatingSectionTypeComponent
+                        // },
                     ]
                 },
                 {
