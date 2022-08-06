@@ -10,39 +10,44 @@ import { DragRef, DropListRef } from '@angular/cdk/drag-drop';
 // console.log("Targets: " + reflistToString(targets));
 
 export function installPatch() {
-    DropListRef.prototype._getSiblingContainerFromPosition = function(item: DragRef, x: number, y: number): DropListRef | undefined {
-    // Hack to access private member DropListRef._siblings
-    const this__siblings = (this as any)._siblings as DropListRef[];
+    DropListRef.prototype._getSiblingContainerFromPosition = function (
+        item: DragRef,
+        x: number,
+        y: number
+    ): DropListRef | undefined {
+        // Hack to access private member DropListRef._siblings
+        const this__siblings = (this as any)._siblings as DropListRef[];
 
-    // Possible targets include siblings and this
-    const targets = [this, ...this__siblings];
+        // Possible targets include siblings and this
+        const targets = [this, ...this__siblings];
 
-    // Only consider targets where the drag postition is within the client rect
-    // (this avoids calling enterPredicate on each possible target)
-    const matchingTargets = targets.filter(ref => {
-      // Hack to access private member DropListRef._clientRect
-      const ref__clientRect = (ref as any)._clientRect as ClientRect | undefined;
-      return ref__clientRect && isInsideClientRect(ref__clientRect, x, y);
-    });
+        // Only consider targets where the drag postition is within the client rect
+        // (this avoids calling enterPredicate on each possible target)
+        const matchingTargets = targets.filter(ref => {
+            // Hack to access private member DropListRef._clientRect
+            const ref__clientRect = (ref as any)._clientRect as ClientRect | undefined;
+            return ref__clientRect && isInsideClientRect(ref__clientRect, x, y);
+        });
 
-    // Stop if no targets match the coordinates
-    if (matchingTargets.length == 0)
-        {return undefined;}
+        // Stop if no targets match the coordinates
+        if (matchingTargets.length == 0) {
+            return undefined;
+        }
 
-    // Order candidates by DOM hierarchy and z-index
-    const orderedMatchingTargets = orderByHierarchy(matchingTargets);
+        // Order candidates by DOM hierarchy and z-index
+        const orderedMatchingTargets = orderByHierarchy(matchingTargets);
 
-    // The drop target is the last matching target in the list
-    const matchingTarget = orderedMatchingTargets[orderedMatchingTargets.length-1];
+        // The drop target is the last matching target in the list
+        const matchingTarget = orderedMatchingTargets[orderedMatchingTargets.length - 1];
 
-    // Return the target if it is a sibling and can recieve the item
-    return matchingTarget != this && matchingTarget._canReceive(item, x, y) ? matchingTarget : undefined;
-  };
+        // Return the target if it is a sibling and can recieve the item
+        return matchingTarget != this && matchingTarget._canReceive(item, x, y) ? matchingTarget : undefined;
+    };
 }
 
 // Not possible to improt isInsideClientRect from @angular/cdk/drag-drop/client-rect
 function isInsideClientRect(clientRect: ClientRect, x: number, y: number) {
-    const {top, bottom, left, right} = clientRect;
+    const { top, bottom, left, right } = clientRect;
     return y >= top && y <= bottom && x >= left && x <= right;
 }
 
@@ -53,43 +58,48 @@ function orderByHierarchy(refs: DropListRef[]) {
     // Build a map from HTMLElement to DropListRef
     const refsByElement: Map<HTMLElement, DropListRef> = new Map();
     refs.forEach(ref => {
-    refsByElement.set(coerceElement(ref.element), ref);
+        refsByElement.set(coerceElement(ref.element), ref);
     });
 
     // Function to identify the closest ancestor among th DropListRefs
     const findAncestor = (ref: DropListRef) => {
-    let ancestor = coerceElement(ref.element).parentElement;
+        let ancestor = coerceElement(ref.element).parentElement;
 
-    while (ancestor) {
-        if (refsByElement.has(ancestor))
-            {return refsByElement.get(ancestor);}
+        while (ancestor) {
+            if (refsByElement.has(ancestor)) {
+                return refsByElement.get(ancestor);
+            }
 
-        ancestor = ancestor.parentElement;
-    }
+            ancestor = ancestor.parentElement;
+        }
 
-    return undefined;
+        return undefined;
     };
 
     // Node type for tree structure
-    type NodeType = {ref: DropListRef; parent?: NodeType; children: NodeType[]};
+    type NodeType = {
+        ref: DropListRef;
+        parent?: NodeType;
+        children: NodeType[];
+    };
 
     // Add all refs as nodes to the tree
     const tree: Map<DropListRef, NodeType> = new Map();
     refs.forEach(ref => {
-    tree.set(ref, {ref, children: []});
+        tree.set(ref, { ref, children: [] });
     });
 
     // Build parent-child links in tree
     refs.forEach(ref => {
-    const parent = findAncestor(ref);
+        const parent = findAncestor(ref);
 
-    if (parent) {
-        const node = tree.get(ref);
-        const parentNode = tree.get(parent);
+        if (parent) {
+            const node = tree.get(ref);
+            const parentNode = tree.get(parent);
 
-        node!.parent = parentNode;
-        parentNode!.children.push(node!);
-    }
+            node!.parent = parentNode;
+            parentNode!.children.push(node!);
+        }
     });
 
     // Find tree roots
@@ -97,9 +107,11 @@ function orderByHierarchy(refs: DropListRef[]) {
 
     // Function to recursively build ordered list from roots and down
     const buildOrderedList = (nodes: NodeType[], list: DropListRef[]) => {
-    list.push(... nodes.map(node => node.ref));
+        list.push(...nodes.map(node => node.ref));
 
-    nodes.forEach(node => {buildOrderedList(node.children, list);});
+        nodes.forEach(node => {
+            buildOrderedList(node.children, list);
+        });
     };
 
     // Build and return the ordered list

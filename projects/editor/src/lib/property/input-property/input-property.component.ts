@@ -5,16 +5,16 @@ import { BasePropertyDirective } from '../base-property.component';
 import { IInputProperty } from './input-property.types';
 
 @Component({
-	selector: 'editor-input-property',
-	templateUrl: './input-property.component.html',
-	styleUrls: ['./input-property.component.scss'],
+    selector: 'editor-input-property',
+    templateUrl: './input-property.component.html',
+    styleUrls: ['./input-property.component.scss'],
 })
 export class InputPropertyComponent extends BasePropertyDirective<IInputProperty> {
     public formControl: FormControl;
 
-	public get hasOptions(): boolean {
-		return this.property.isRemovable;
-	};
+    public get hasOptions(): boolean {
+        return this.property.isRemovable;
+    }
 
     protected _onChanged(isFirstChange: boolean): void {
         if (isFirstChange) {
@@ -22,7 +22,9 @@ export class InputPropertyComponent extends BasePropertyDirective<IInputProperty
             this.formControl.valueChanges.subscribe(val => this._updateValue(val));
         }
 
-        this.formControl.setValue(this._getPropertyValue(''), { emitEvent: false });
+        this.formControl.setValue(this._getPropertyValue(''), {
+            emitEvent: false,
+        });
     }
 
     private _updateValue(value: string): void {
@@ -30,13 +32,17 @@ export class InputPropertyComponent extends BasePropertyDirective<IInputProperty
         if (value === '') {
             newValue = null;
         } else if (this.property.outputRawValue) {
-            if (value.match('\'.*\'')) {  // enforced string (when the value is wrapped in single quotes)
-                newValue = value.match('(?<=\').*(?=\')')[0];
-            } else if (!isNaN(Number(value))) {  // Number
+            if (value.match("'.*'")) {
+                // enforced string (when the value is wrapped in single quotes)
+                newValue = value.match("(?<=').*(?=')")[0];
+            } else if (!isNaN(Number(value))) {
+                // Number
                 newValue = Number(value);
-            } else if (value === 'true' || value === 'false') {  // Boolean
+            } else if (value === 'true' || value === 'false') {
+                // Boolean
                 newValue = value === 'true';
-            } else {  // string
+            } else {
+                // string
                 newValue = value;
             }
         } else {

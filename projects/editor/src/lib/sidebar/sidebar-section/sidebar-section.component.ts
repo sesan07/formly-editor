@@ -6,7 +6,7 @@ import { SidebarComponent } from '../sidebar.component';
     selector: 'editor-sidebar-section',
     templateUrl: './sidebar-section.component.html',
     styleUrls: ['./sidebar-section.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarSectionComponent {
     @Input() isCollapsible = true;
@@ -29,19 +29,23 @@ export class SidebarSectionComponent {
         this.element = elementRef.nativeElement;
     }
 
-    public get contentHeight(): number { return this.height - this.minHeight; }
+    public get contentHeight(): number {
+        return this.height - this.minHeight;
+    }
     public get availableHeight(): number {
         return this.height - (this.minHeight + (this.isCollapsed ? 0 : this.minContentHeight));
     }
 
-    public get height(): number { return this._height; }
+    public get height(): number {
+        return this._height;
+    }
     public set height(newHeight: number) {
         this._height = newHeight;
         this._renderer.setStyle(this.element, 'height', this._height + 'px');
         this._cdRef.markForCheck();
     }
 
-	onSectionMouseDown(event: MouseEvent): void {
+    onSectionMouseDown(event: MouseEvent): void {
         this._sideBar.onSectionMouseDown(event, this);
     }
 

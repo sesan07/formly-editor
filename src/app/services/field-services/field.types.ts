@@ -23,14 +23,14 @@ export enum WrapperType {
 }
 
 export interface IFormlyField<T = FormlyTemplateOptions> extends IBaseFormlyField {
-	templateOptions: T;
+    templateOptions: T;
     fieldGroup?: IFormlyField[];
 }
 
 export interface IForm {
     id: string;
     name: string;
-	activeField: IFormlyField;
+    activeField: IFormlyField;
     fields: IFormlyField[];
     fieldMap: Map<string, IFormlyField>;
     model: Record<string, unknown>;

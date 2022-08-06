@@ -1,59 +1,95 @@
 <h2 mat-dialog-title>Import {{ data.type }} JSON</h2>
 <mat-dialog-content>
-        <mat-tab-group (selectedIndexChange)="currTabIndex = $event">
-            <mat-tab label="File">
-                    <mat-form-field *ngIf="data.showName">
-                        <mat-label>{{ data.type }} name</mat-label>
-                        <input 
-                            #nameModel="ngModel" 
-                            [(ngModel)]="nameValue" 
-                            matInput required>
-                        <mat-error *ngIf="nameModel.errors?.required">Please enter a name</mat-error>
-                    </mat-form-field>
-                    
-                    <div class="file-select">
-                        <mat-form-field class="file-select-field" (click)="fileSelect.click()">
-                            <mat-label>File</mat-label>
-                            <input 
-                                #fileNameModel="ngModel" 
-                                [(ngModel)]="fileNameValue" 
-                                matInput
-                                required 
-                                readonly
-                                [editorJsonFileValidator]="fileSelect">
-                            <mat-error *ngIf="fileNameModel.errors?.required">Please select a file</mat-error>
-                            <mat-error *ngIf="fileNameModel.errors?.jsonFormat">Invalid JSON</mat-error>
-                        </mat-form-field>
-                        <button mat-button type="button" (click)="fileSelect.click()">
-                            <mat-icon>upload_file</mat-icon>
-                            <span>Select File</span>
-                        </button>
-                        <input #fileSelect type="file" hidden [accept]="'.json, .txt'" (input)="onFileChanged()"/>
-                    </div>
+    <mat-tab-group (selectedIndexChange)="currTabIndex = $event">
+        <mat-tab label="File">
+            <mat-form-field *ngIf="data.showName">
+                <mat-label>{{ data.type }} name</mat-label>
+                <input
+                    #nameModel="ngModel"
+                    [(ngModel)]="nameValue"
+                    matInput
+                    required
+                />
+                <mat-error *ngIf="nameModel.errors?.required">Please enter a name</mat-error>
+            </mat-form-field>
 
-            </mat-tab>
-            <mat-tab label="JSON">
-                <mat-form-field *ngIf="data.showName">
-                    <mat-label>{{ data.type }} name</mat-label>
-                    <input #nameModel="ngModel" [(ngModel)]="nameValue" matInput required>
-                    <mat-error *ngIf="nameModel.errors?.required">Please enter a name</mat-error>
+            <div class="file-select">
+                <mat-form-field
+                    class="file-select-field"
+                    (click)="fileSelect.click()"
+                >
+                    <mat-label>File</mat-label>
+                    <input
+                        #fileNameModel="ngModel"
+                        [(ngModel)]="fileNameValue"
+                        matInput
+                        required
+                        readonly
+                        [editorJsonFileValidator]="fileSelect"
+                    />
+                    <mat-error *ngIf="fileNameModel.errors?.required">Please select a file</mat-error>
+                    <mat-error *ngIf="fileNameModel.errors?.jsonFormat">Invalid JSON</mat-error>
                 </mat-form-field>
-                
-                <mat-form-field class="json-field">
-                    <mat-label>JSON</mat-label>
-                    <textarea class="json-textarea" #jsonModel="ngModel" [(ngModel)]="jsonValue" matInput required spellcheck="false" editorJsonValidator></textarea>
-                    <mat-error *ngIf="jsonModel.errors?.required">This field is required</mat-error>
-                    <mat-error *ngIf="jsonModel.errors?.jsonFormat">Invalid JSON</mat-error>
-                </mat-form-field>
-            </mat-tab>
-        </mat-tab-group>
+                <button
+                    mat-button
+                    type="button"
+                    (click)="fileSelect.click()"
+                >
+                    <mat-icon>upload_file</mat-icon>
+                    <span>Select File</span>
+                </button>
+                <input
+                    #fileSelect
+                    type="file"
+                    hidden
+                    [accept]="'.json, .txt'"
+                    (input)="onFileChanged()"
+                />
+            </div>
+        </mat-tab>
+        <mat-tab label="JSON">
+            <mat-form-field *ngIf="data.showName">
+                <mat-label>{{ data.type }} name</mat-label>
+                <input
+                    #nameModel="ngModel"
+                    [(ngModel)]="nameValue"
+                    matInput
+                    required
+                />
+                <mat-error *ngIf="nameModel.errors?.required">Please enter a name</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="json-field">
+                <mat-label>JSON</mat-label>
+                <textarea
+                    class="json-textarea"
+                    #jsonModel="ngModel"
+                    [(ngModel)]="jsonValue"
+                    matInput
+                    required
+                    spellcheck="false"
+                    editorJsonValidator
+                ></textarea>
+                <mat-error *ngIf="jsonModel.errors?.required">This field is required</mat-error>
+                <mat-error *ngIf="jsonModel.errors?.jsonFormat">Invalid JSON</mat-error>
+            </mat-form-field>
+        </mat-tab>
+    </mat-tab-group>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>
+    <button
+        mat-button
+        mat-dialog-close
+    >
         <mat-icon>close</mat-icon>
         <span>Cancel</span>
     </button>
-    <button mat-flat-button color="primary" [disabled]="!isFormValid" (click)="onImport()">
+    <button
+        mat-flat-button
+        color="primary"
+        [disabled]="!isFormValid"
+        (click)="onImport()"
+    >
         <mat-icon>file_download</mat-icon>
         <span>Import</span>
     </button>

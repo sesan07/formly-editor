@@ -1,5 +1,11 @@
 import { InjectionToken } from '@angular/core';
-import { ConfigOption, FormlyFieldConfig, FormlyFieldConfigCache, FormlyTemplateOptions, TypeOption } from '@ngx-formly/core';
+import {
+    ConfigOption,
+    FormlyFieldConfig,
+    FormlyFieldConfigCache,
+    FormlyTemplateOptions,
+    TypeOption,
+} from '@ngx-formly/core';
 import { Observable } from 'rxjs';
 
 import { IProperty } from './property/property.types';
@@ -11,10 +17,11 @@ export enum FieldType {
 export interface IBaseFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
     type: string;
     customType?: string;
-	templateOptions: T; // TODO make optional. property should initialize key in target of empty
+    templateOptions: T; // TODO make optional. property should initialize key in target of empty
     wrappers: string[]; // TODO remove this. property should initialize key in target of empty
     fieldGroup?: IBaseFormlyField[];
-    expressionProperties: { // TODO remove this. property should initialize key in target of empty
+    expressionProperties: {
+        // TODO remove this. property should initialize key in target of empty
         [property: string]: string | ((model: any, formState: any, field?: FormlyFieldConfig) => any) | Observable<any>;
     };
 }

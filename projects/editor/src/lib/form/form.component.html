@@ -3,28 +3,36 @@
     [class.hidden]="!showSidebars"
     [position]="typeOfSideBarPosition.LEFT"
     (resizeEnd)="onResizeEnd()"
-    >
+>
     <editor-sidebar-section>
-		<span headerContent>Fields</span>
-        <div class="tree-container" mainContent>
+        <span headerContent>Fields</span>
+        <div
+            class="tree-container"
+            mainContent
+        >
             <editor-field-tree-item
                 *ngFor="let field of form.fields"
                 [field]="field"
-                [isExpanded]="true">
+                [isExpanded]="true"
+            >
             </editor-field-tree-item>
         </div>
-	</editor-sidebar-section>
-	<editor-sidebar-section>
-		<span headerContent>Add Field</span>
-        <div class="categories-wrapper" mainContent>
+    </editor-sidebar-section>
+    <editor-sidebar-section>
+        <span headerContent>Add Field</span>
+        <div
+            class="categories-wrapper"
+            mainContent
+        >
             <editor-field-category
                 *ngFor="let category of editorService.fieldCategories; let first = first"
                 [category]="category"
                 [formId]="form.id"
-                [isExpanded]="first">
+                [isExpanded]="first"
+            >
             </editor-field-category>
         </div>
-	</editor-sidebar-section>
+    </editor-sidebar-section>
 </editor-sidebar>
 
 <div class="main">
@@ -35,16 +43,21 @@
         (isEditModeChange)="onEditModeChanged($event)"
         (duplicateForm)="onDuplicateForm()"
         (resetModel)="onResetModel()"
-        (toggleSidebars)="showSidebars = $event">
+        (toggleSidebars)="showSidebars = $event"
+    >
     </editor-toolbar>
-    <mat-tab-group class="tab-group" [selectedIndex]="formDisplayTabIndex">
+    <mat-tab-group
+        class="tab-group"
+        [selectedIndex]="formDisplayTabIndex"
+    >
         <mat-tab>
             <editor-formly-form
                 [form]="formGroup"
                 [fields]="formFields"
                 [model]="form.model"
                 [options]="options"
-                (modelChange)="onModelChanged($event)">
+                (modelChange)="onModelChanged()"
+            >
             </editor-formly-form>
         </mat-tab>
         <mat-tab>
@@ -58,11 +71,18 @@
     [class.hidden]="!showSidebars"
     [position]="typeOfSideBarPosition.RIGHT"
     (resizeEnd)="onResizeEnd()"
-    >
-	<editor-sidebar-section class="active-field-section">
-        <div class="header-content" headerContent>
+>
+    <editor-sidebar-section class="active-field-section">
+        <div
+            class="header-content"
+            headerContent
+        >
             <span>Active Field - {{ getFormattedFieldName(activeField) }}</span>
-            <mat-slide-toggle labelPosition="before" [(ngModel)]="isAdvanced">Advanced</mat-slide-toggle>
+            <mat-slide-toggle
+                labelPosition="before"
+                [(ngModel)]="isAdvanced"
+                >Advanced</mat-slide-toggle
+            >
         </div>
         <editor-edit-field
             mainContent
@@ -71,37 +91,54 @@
             [property]="activeFieldProperty"
             [isSimplified]="!isAdvanced"
             [resizeTabHeader$]="resizeEnd$"
-            (fieldChanged)="activeFieldTargetChange$.next()">
+            (fieldChanged)="activeFieldTargetChange$.next()"
+        >
         </editor-edit-field>
-	</editor-sidebar-section>
+    </editor-sidebar-section>
 
-	<editor-sidebar-section>
-        <div class="header-content" headerContent>
+    <editor-sidebar-section>
+        <div
+            class="header-content"
+            headerContent
+        >
             <span>Model</span>
-            <button mat-icon-button [matMenuTriggerFor]="modelOptionsMenu">
+            <button
+                mat-icon-button
+                [matMenuTriggerFor]="modelOptionsMenu"
+            >
                 <mat-icon>more_vert</mat-icon>
             </button>
         </div>
-        
-        <div class="tree-container" mainContent>
+
+        <div
+            class="tree-container"
+            mainContent
+        >
             <editor-object-property
                 [target]="modelTarget"
                 [property]="modelProperty"
                 [isExpanded]="true"
                 [isRoot]="true"
-                (targetChanged)="modelTargetChange$.next()">
+                (targetChanged)="modelTargetChange$.next()"
+            >
             </editor-object-property>
         </div>
-	</editor-sidebar-section>
+    </editor-sidebar-section>
 </editor-sidebar>
 
 <mat-menu #modelOptionsMenu="matMenu">
-	<button mat-menu-item (click)="onImportModel()">
-		<mat-icon>file_download</mat-icon>
-		<span>Import</span>
-	</button>
-	<button mat-menu-item (click)="onExportModel()">
-		<mat-icon>file_upload</mat-icon>
-		<span>Export</span>
-	</button>
+    <button
+        mat-menu-item
+        (click)="onImportModel()"
+    >
+        <mat-icon>file_download</mat-icon>
+        <span>Import</span>
+    </button>
+    <button
+        mat-menu-item
+        (click)="onExportModel()"
+    >
+        <mat-icon>file_upload</mat-icon>
+        <span>Export</span>
+    </button>
 </mat-menu>

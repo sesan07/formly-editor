@@ -12,9 +12,9 @@ import { IBooleanProperty } from './boolean-property.types';
 export class BooleanPropertyComponent extends BasePropertyDirective<IBooleanProperty> {
     public formControl: FormControl;
 
-	public get hasOptions(): boolean {
-		return this.property.isRemovable;
-	};
+    public get hasOptions(): boolean {
+        return this.property.isRemovable;
+    }
 
     protected _onChanged(isFirstChange: boolean): void {
         if (isFirstChange) {
@@ -22,6 +22,8 @@ export class BooleanPropertyComponent extends BasePropertyDirective<IBooleanProp
             this.formControl.valueChanges.subscribe(val => this._modifyValue(val));
         }
 
-        this.formControl.setValue(this._getPropertyValue(''), { emitEvent: false });
+        this.formControl.setValue(this._getPropertyValue(''), {
+            emitEvent: false,
+        });
     }
 }

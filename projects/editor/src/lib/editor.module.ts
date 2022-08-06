@@ -19,14 +19,11 @@ import { installPatch } from './dnd-patch';
 
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
-    typeCategories: []
+    typeCategories: [],
 };
 
-
 @NgModule({
-    declarations: [
-        HomeComponent,
-    ],
+    declarations: [HomeComponent],
     imports: [
         CommonModule,
         HttpClientModule,
@@ -37,10 +34,7 @@ const defaultConfig: EditorConfigOption = {
         MatIconModule,
         MatTabsModule,
     ],
-    exports: [
-        HomeComponent,
-        CustomFormlyModule,
-    ],
+    exports: [HomeComponent, CustomFormlyModule],
     providers: [
         EditorService,
         FileService,
@@ -51,13 +45,12 @@ const defaultConfig: EditorConfigOption = {
                 width: '80%',
                 maxHeight: '675px',
                 maxWidth: '1200px',
-                hasBackdrop: true
-            }
+                hasBackdrop: true,
+            },
         },
-    ]
+    ],
 })
 export class EditorModule {
-
     constructor(editorService: EditorService, @Optional() @Inject(EDITOR_CONFIG) config: EditorConfigOption) {
         editorService.setup(config ?? defaultConfig);
 
@@ -94,12 +87,16 @@ export class EditorModule {
             defaultCustomName: config.defaultCustomName,
             unknownTypeName: config.unknownTypeName,
             typeCategories: config.typeCategories,
-         };
+        };
 
         return {
             ngModule: EditorModule,
             providers: [
-                { provide: EDITOR_CONFIG, useValue: editorConfig, deps: [EditorService] },
+                {
+                    provide: EDITOR_CONFIG,
+                    useValue: editorConfig,
+                    deps: [EditorService],
+                },
                 { provide: FORMLY_CONFIG, useValue: formlyConfig, multi: true },
             ],
         };

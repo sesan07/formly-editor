@@ -13,7 +13,7 @@ import { IItemDragData, DragAction } from '../droplist.types';
     selector: 'editor-field-category',
     templateUrl: './field-category.component.html',
     styleUrls: ['./field-category.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FieldCategoryComponent implements OnInit, OnDestroy {
     @Input() category: EditorTypeCategoryOption;
@@ -28,7 +28,7 @@ export class FieldCategoryComponent implements OnInit, OnDestroy {
 
     private _destroy$: Subject<void> = new Subject();
 
-    constructor(private _editorService: EditorService, private _dropListService: DroplistService) { }
+    constructor(private _editorService: EditorService, private _dropListService: DroplistService) {}
 
     ngOnInit(): void {
         this.fields = this.category.typeOptions.map(option =>
@@ -40,9 +40,7 @@ export class FieldCategoryComponent implements OnInit, OnDestroy {
             field.key = 'preview';
         });
 
-        this._dropListService.droplistIds$
-                .pipe(takeUntil(this._destroy$))
-                .subscribe(ids => this.connectedTo = ids);
+        this._dropListService.droplistIds$.pipe(takeUntil(this._destroy$)).subscribe(ids => (this.connectedTo = ids));
     }
 
     ngOnDestroy(): void {
@@ -55,7 +53,7 @@ export class FieldCategoryComponent implements OnInit, OnDestroy {
     getItemDragData(field: IEditorFormlyField): IItemDragData {
         return {
             action: DragAction.COPY,
-            field
+            field,
         };
     }
 
@@ -68,7 +66,6 @@ export class FieldCategoryComponent implements OnInit, OnDestroy {
     }
 
     onDragReturned() {
-        this.fields = this.fields.filter((f) => f.fieldId !== 'temp');
+        this.fields = this.fields.filter(f => f.fieldId !== 'temp');
     }
-
 }

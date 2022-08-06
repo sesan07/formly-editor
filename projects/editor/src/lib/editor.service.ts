@@ -28,14 +28,17 @@ export class EditorService {
     private _fieldIdCounterMap: Map<string, number> = new Map(); // Map<fieldType, count>
     private _fieldtypeOptions: EditorTypeOption[] = [];
 
-    constructor(
-        @Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService,
-        private _http: HttpClient
-    ) {}
+    constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService, private _http: HttpClient) {}
 
-    public get forms$(): Observable<IForm[]> { return this._forms$.asObservable(); }
-    public get activeFormIndex$(): Observable<number> { return this._activeFormIndex$.asObservable(); }
-    public get fieldCategories(): EditorTypeCategoryOption[] { return this._editorConfig.typeCategories; };
+    public get forms$(): Observable<IForm[]> {
+        return this._forms$.asObservable();
+    }
+    public get activeFormIndex$(): Observable<number> {
+        return this._activeFormIndex$.asObservable();
+    }
+    public get fieldCategories(): EditorTypeCategoryOption[] {
+        return this._editorConfig.typeCategories;
+    }
 
     setup(editorConfig: EditorConfigOption) {
         this._editorConfig = editorConfig;
@@ -51,15 +54,19 @@ export class EditorService {
             this._editorConfig.defaultCustomName
         );
 
-		this._addForm(formId, name, [field], {});
+        this._addForm(formId, name, [field], {});
     }
 
-    public importForm(name: string, source: string | IBaseFormlyField | IBaseFormlyField[], model?: Record<string, unknown>): void {
+    public importForm(
+        name: string,
+        source: string | IBaseFormlyField | IBaseFormlyField[],
+        model?: Record<string, unknown>
+    ): void {
         let loadedForm: IBaseFormlyField | IBaseFormlyField[];
         if (typeof source === 'string') {
             try {
                 loadedForm = JSON.parse(source);
-            } catch(e) {
+            } catch (e) {
                 console.error('Unable to parse form');
                 return;
             }
@@ -81,7 +88,7 @@ export class EditorService {
             fields.push(editorField);
         }
 
-		this._addForm(formId, name, fields, model);
+        this._addForm(formId, name, fields, model);
     }
 
     public removeForm(index: number): void {
@@ -100,7 +107,7 @@ export class EditorService {
             this._updateDuplicateField(newFormId, field);
         });
 
-		this._addForm(
+        this._addForm(
             this._getNextFormId(this._currFormId++),
             sourceForm.name + ' Copy',
             fieldsClone,
@@ -112,7 +119,12 @@ export class EditorService {
         this._activeFormIndex$.next(index);
     }
 
-    public getDefaultField(formId: string, type: string, customType?: string, parentFieldId?: string): IEditorFormlyField {
+    public getDefaultField(
+        formId: string,
+        type: string,
+        customType?: string,
+        parentFieldId?: string
+    ): IEditorFormlyField {
         const defaultField: IBaseFormlyField = this._fieldService.getDefaultConfig(type, customType);
         return this._convertToEditorField(formId, defaultField, parentFieldId);
     }
@@ -128,7 +140,10 @@ export class EditorService {
         }
 
         // Merge with default properties
-        const baseField: IBaseFormlyField = this._fieldService.getDefaultConfig(sourceField.type, sourceField.customType);
+        const baseField: IBaseFormlyField = this._fieldService.getDefaultConfig(
+            sourceField.type,
+            sourceField.customType
+        );
         merge(baseField, sourceField);
 
         // Properties
@@ -177,9 +192,8 @@ export class EditorService {
                     console.warn('Unable to load default model, using {}');
                     return of({});
                 })
-            )
-        ])
-        .subscribe(([form, model]) => {
+            ),
+        ]).subscribe(([form, model]) => {
             this.importForm('Form Zero', form, model);
         });
     }
@@ -200,12 +214,7 @@ export class EditorService {
         return type + '__' + id;
     }
 
-	private _addForm(
-        id: string,
-        name: string,
-        fields: IEditorFormlyField[],
-        model?: Record<string, unknown>
-    ) {
+    private _addForm(id: string, name: string, fields: IEditorFormlyField[], model?: Record<string, unknown>) {
         this._forms$.next([
             ...this._forms$.value,
             {
@@ -213,10 +222,10 @@ export class EditorService {
                 name,
                 fields,
                 model: model ?? {},
-            }
+            },
         ]);
         this._activeFormIndex$.next(this._forms$.value.length - 1);
-	}
+    }
 
     private _updateDuplicateField(formId: string, field: IEditorFormlyField) {
         field.formId = formId;
@@ -238,12 +247,10 @@ export class EditorService {
         );
 
         if (!typeOption && this._editorConfig.unknownTypeName) {
-            typeOption = this._fieldtypeOptions.find(
-                option => option.name === this._editorConfig.unknownTypeName
-            );
+            typeOption = this._fieldtypeOptions.find(option => option.name === this._editorConfig.unknownTypeName);
         }
 
-        if(!typeOption) {
+        if (!typeOption) {
             console.warn('EditorTypeOption not configured for type: ' + type);
             typeOption = { name: undefined, displayName: 'Unknown Type' };
         }

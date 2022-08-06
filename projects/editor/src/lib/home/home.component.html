@@ -1,17 +1,47 @@
 <span class="header">
     <span class="header-title">Formly Editor</span>
     <span class="header-buttons">
-        <button mat-button (click)="onAddForm()"><mat-icon>add</mat-icon>New Form</button>
-        <button mat-button (click)="onImportForm()"><mat-icon>file_download</mat-icon>Import Form</button>
-        <button mat-button (click)="onExportForm()" [disabled]="forms.length === 0"><mat-icon>file_upload</mat-icon>Export Form</button>
+        <button
+            mat-button
+            (click)="onAddForm()"
+        >
+            <mat-icon>add</mat-icon>New Form
+        </button>
+        <button
+            mat-button
+            (click)="onImportForm()"
+        >
+            <mat-icon>file_download</mat-icon>Import Form
+        </button>
+        <button
+            mat-button
+            (click)="onExportForm()"
+            [disabled]="forms.length === 0"
+        >
+            <mat-icon>file_upload</mat-icon>Export Form
+        </button>
     </span>
 </span>
-<mat-tab-group class="form-tab-group" *ngIf="forms.length > 0; else emptyView" [selectedIndex]="tabIndex" (selectedIndexChange)="onTabChange($event)">
+<mat-tab-group
+    class="form-tab-group"
+    *ngIf="forms.length > 0; else emptyView"
+    [selectedIndex]="tabIndex"
+    (selectedIndexChange)="onTabChange($event)"
+>
     <mat-tab *ngFor="let form of forms; let i = index; trackBy: trackFormById">
         <ng-template mat-tab-label>
-            <div class="inner-tab-label-content" (mousedown)="onTabLabelMouseDown($event, i)">
+            <div
+                class="inner-tab-label-content"
+                (mousedown)="onTabLabelMouseDown($event, i)"
+            >
                 <span>{{ form.name }}</span>
-                <button class="close-btn" mat-icon-button (click)="onRemoveForm(i)"><mat-icon>close</mat-icon></button>
+                <button
+                    class="close-btn"
+                    mat-icon-button
+                    (click)="onRemoveForm(i)"
+                >
+                    <mat-icon>close</mat-icon>
+                </button>
             </div>
         </ng-template>
         <editor-form [form]="form"></editor-form>
@@ -21,6 +51,12 @@
 <ng-template #emptyView>
     <div class="empty-view">
         <div>[ Cool Logo Here ]</div>
-        <button mat-flat-button color="primary" (click)="onAddForm()"><mat-icon>add</mat-icon>New Form</button>
+        <button
+            mat-flat-button
+            color="primary"
+            (click)="onAddForm()"
+        >
+            <mat-icon>add</mat-icon>New Form
+        </button>
     </div>
 </ng-template>

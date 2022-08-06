@@ -16,11 +16,7 @@ import { EditorModule, EDITOR_FIELD_SERVICE } from 'editor';
 import { RepeatingSectionTypeComponent } from './components/types/repeating-section-type/repeating-section-type.component';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        CardWrapperComponent,
-        RepeatingSectionTypeComponent,
-    ],
+    declarations: [AppComponent, CardWrapperComponent, RepeatingSectionTypeComponent],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -47,7 +43,7 @@ import { RepeatingSectionTypeComponent } from './components/types/repeating-sect
                         {
                             name: FieldType.INPUT,
                             displayName: 'Number',
-                            customName: CustomFieldType.NUMBER
+                            customName: CustomFieldType.NUMBER,
                         },
                         {
                             name: FieldType.RADIO,
@@ -61,7 +57,7 @@ import { RepeatingSectionTypeComponent } from './components/types/repeating-sect
                             name: FieldType.TEXTAREA,
                             displayName: 'Textarea',
                         },
-                    ]
+                    ],
                 },
                 {
                     name: 'Containers',
@@ -71,13 +67,13 @@ import { RepeatingSectionTypeComponent } from './components/types/repeating-sect
                             displayName: 'Card',
                             customName: CustomFieldType.CARD,
                             canHaveChildren: true,
-                            childrenPath: 'fieldGroup'
+                            childrenPath: 'fieldGroup',
                         },
                         {
                             name: FieldType.FORMLY_GROUP,
                             displayName: 'Group',
                             canHaveChildren: true,
-                            childrenPath: 'fieldGroup'
+                            childrenPath: 'fieldGroup',
                         },
                         // {
                         //     name: FieldType.REPEATING_SECTION,
@@ -86,7 +82,7 @@ import { RepeatingSectionTypeComponent } from './components/types/repeating-sect
                         //     childrenPath: 'fieldArray.fieldGroup',
                         //     component: RepeatingSectionTypeComponent
                         // },
-                    ]
+                    ],
                 },
                 {
                     name: 'Others',
@@ -95,17 +91,14 @@ import { RepeatingSectionTypeComponent } from './components/types/repeating-sect
                             name: FieldType.OTHER,
                             displayName: 'Other',
                         },
-                    ]
+                    ],
                 },
             ],
             wrappers: [{ name: WrapperType.CARD, component: CardWrapperComponent }],
-            validationMessages: [
-                { name: 'required', message: 'This field is required' },
-            ],
+            validationMessages: [{ name: 'required', message: 'This field is required' }],
         }),
     ],
     providers: [{ provide: EDITOR_FIELD_SERVICE, useClass: FieldService }],
     bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

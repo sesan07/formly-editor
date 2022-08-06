@@ -1,13 +1,13 @@
 export enum ContainerType {
     FLEX = 'flex',
-    GRID = 'grid'
+    GRID = 'grid',
 }
 
 export enum BreakpointType {
     SMALL = 'sm',
     MEDIUM = 'md',
     LARGE = 'lg',
-    EXTRA_LARGE = 'xl'
+    EXTRA_LARGE = 'xl',
 }
 
 export enum GridContainerPrefix {
@@ -23,7 +23,7 @@ export enum GridChildPrefix {
 }
 
 export enum FlexContainerPrefix {
-    FLEX_DIRECTION = 'flex-dir-'
+    FLEX_DIRECTION = 'flex-dir-',
 }
 
 export enum FlexContainerType {

@@ -1,23 +1,43 @@
-<mat-button-toggle-group [value]="selectedDisplay" (valueChange)="selectedDisplayChange.emit($event)">
-    <mat-button-toggle value='form'>
+<mat-button-toggle-group
+    [value]="selectedDisplay"
+    (valueChange)="selectedDisplayChange.emit($event)"
+>
+    <mat-button-toggle value="form">
         <mat-icon>dashboard</mat-icon>
         <span>Form</span>
     </mat-button-toggle>
-    <mat-button-toggle value='json'>
+    <mat-button-toggle value="json">
         <mat-icon>code</mat-icon>
         <span>JSON</span>
     </mat-button-toggle>
 </mat-button-toggle-group>
 
 <div class="action-buttons">
-    <mat-slide-toggle labelPosition="before" [ngModel]="isEditMode" (ngModelChange)="isEditModeChange.emit($event)">Edit Mode</mat-slide-toggle>
-    <button mat-icon-button matTooltip="Duplicate Form" (click)="duplicateForm.emit()">
+    <mat-slide-toggle
+        labelPosition="before"
+        [ngModel]="isEditMode"
+        (ngModelChange)="isEditModeChange.emit($event)"
+        >Edit Mode</mat-slide-toggle
+    >
+    <button
+        mat-icon-button
+        matTooltip="Duplicate Form"
+        (click)="duplicateForm.emit()"
+    >
         <mat-icon>content_copy</mat-icon>
     </button>
-    <button mat-icon-button matTooltip="Reset Form" (click)="resetModel.emit()">
+    <button
+        mat-icon-button
+        matTooltip="Reset Form"
+        (click)="resetModel.emit()"
+    >
         <mat-icon>restart_alt</mat-icon>
     </button>
-    <button mat-icon-button matTooltip="Toggle sidebars" (click)="isExpanded = !isExpanded; toggleSidebars.emit(isExpanded)">
-        <mat-icon class="toggle-sidebars-icon">{{ isExpanded ? 'unfold_more' : 'unfold_less'}}</mat-icon>
+    <button
+        mat-icon-button
+        matTooltip="Toggle sidebars"
+        (click)="isExpanded = !isExpanded; toggleSidebars.emit(isExpanded)"
+    >
+        <mat-icon class="toggle-sidebars-icon">{{ isExpanded ? 'unfold_more' : 'unfold_less' }}</mat-icon>
     </button>
 </div>

@@ -6,31 +6,30 @@ import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.
 import { ISelectTemplateOptions } from './select.types';
 
 @Injectable({
-	providedIn: 'root',
+    providedIn: 'root',
 })
 export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
-
-	public getDefaultConfig(customType?: CustomFieldType): IFormlyField<ISelectTemplateOptions> {
-		return {
-			type: FieldType.SELECT,
-			wrappers: [WrapperType.FORM_FIELD],
-			templateOptions: {
-				label: 'Label',
-				placeholder: 'Placeholder',
-				description: 'Description',
-				required: true,
-				multiple: true,
-				selectAllOption: 'Select All',
-				options: [
-					{ value: 1, label: 'Option 1' },
-					{ value: 2, label: 'Option 2' },
-					{ value: 3, label: 'Option 3' },
-					{ value: 4, label: 'Option 4', disabled: true },
-				],
-			},
-			expressionProperties: {},
-		};
-	}
+    public getDefaultConfig(customType?: CustomFieldType): IFormlyField<ISelectTemplateOptions> {
+        return {
+            type: FieldType.SELECT,
+            wrappers: [WrapperType.FORM_FIELD],
+            templateOptions: {
+                label: 'Label',
+                placeholder: 'Placeholder',
+                description: 'Description',
+                required: true,
+                multiple: true,
+                selectAllOption: 'Select All',
+                options: [
+                    { value: 1, label: 'Option 1' },
+                    { value: 2, label: 'Option 2' },
+                    { value: 3, label: 'Option 3' },
+                    { value: 4, label: 'Option 4', disabled: true },
+                ],
+            },
+            expressionProperties: {},
+        };
+    }
 
     protected _getTOChildProperties(): IProperty[] {
         return [
@@ -100,7 +99,7 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
                             isSimple: true,
                         },
                     ],
-                } as IObjectProperty
+                } as IObjectProperty,
             } as IArrayProperty,
         ];
     }

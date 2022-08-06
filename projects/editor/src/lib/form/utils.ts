@@ -2,12 +2,17 @@ import { get, isEmpty } from 'lodash-es';
 
 import { IEditorFormlyField } from '../editor.types';
 
-export const getFieldChildren = (field: IEditorFormlyField): IEditorFormlyField[] | undefined => get(field, field.childrenPath);
+export const getFieldChildren = (field: IEditorFormlyField): IEditorFormlyField[] | undefined =>
+    get(field, field.childrenPath);
 
 export const getFormattedFieldName = (field: IEditorFormlyField): string =>
     `${field.name}${field.key ? `(${field.key})` : ''}`;
 
-export const cleanField = (field: IEditorFormlyField, cleanChildren: boolean = true, removeEditorProperties?: boolean): void => {
+export const cleanField = (
+    field: IEditorFormlyField,
+    cleanChildren: boolean = true,
+    removeEditorProperties?: boolean
+): void => {
     delete field.properties;
 
     if (cleanChildren && field.canHaveChildren) {

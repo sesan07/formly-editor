@@ -1,7 +1,17 @@
-<div class="header" (click)="isExpanded = !isExpanded">
+<div
+    class="header"
+    (click)="isExpanded = !isExpanded"
+>
     {{ category.name }}
-    <button mat-icon-button (click)="isExpanded = !isExpanded; $event.stopPropagation()">
-        <mat-icon class="expand-icon" [class.expanded-90]="isExpanded">chevron_right</mat-icon>
+    <button
+        mat-icon-button
+        (click)="isExpanded = !isExpanded; $event.stopPropagation()"
+    >
+        <mat-icon
+            class="expand-icon"
+            [class.expanded-90]="isExpanded"
+            >chevron_right</mat-icon
+        >
     </button>
 </div>
 <div
@@ -12,11 +22,21 @@
     [cdkDropListEnterPredicate]="canEnter"
     [cdkDropListConnectedTo]="connectedTo"
     (cdkDropListExited)="onDropListExited($event)"
-    (cdkDropListEntered)="onDragReturned()">
+    (cdkDropListEntered)="onDragReturned()"
+>
     <ng-container>
-        <div class="custom-field" *ngFor="let field of fields; let i = index" cdkDrag [cdkDragData]="getItemDragData(field)" (cdkDragDropped)="onDragReturned()">
+        <div
+            class="custom-field"
+            *ngFor="let field of fields; let i = index"
+            cdkDrag
+            [cdkDragData]="getItemDragData(field)"
+            (cdkDragDropped)="onDragReturned()"
+        >
             <div>{{ field.name }}</div>
-            <editor-formly-form [fields]="[previewFields[i]]" *cdkDragPreview></editor-formly-form>
+            <editor-formly-form
+                [fields]="[previewFields[i]]"
+                *cdkDragPreview
+            ></editor-formly-form>
             <div *cdkDragPlaceholder>{{ field.name }}</div>
         </div>
     </ng-container>

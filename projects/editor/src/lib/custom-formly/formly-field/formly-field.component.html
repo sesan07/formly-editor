@@ -3,38 +3,65 @@
         <span>{{ getFormattedFieldName(field) }}</span>
         <ng-content></ng-content>
     </div>
-    <div class="options" [class.visible]="isMouseInside" *ngIf="!hideOptions">
-        <button *ngIf="field.canHaveChildren" mat-icon-button [matMenuTriggerFor]="addCategoryMenu" (click)="$event.stopPropagation()">
+    <div
+        class="options"
+        [class.visible]="isMouseInside"
+        *ngIf="!hideOptions"
+    >
+        <button
+            *ngIf="field.canHaveChildren"
+            mat-icon-button
+            [matMenuTriggerFor]="addCategoryMenu"
+            (click)="$event.stopPropagation()"
+        >
             <mat-icon>add</mat-icon>
         </button>
-        
-        <button *ngIf="field.parentFieldId" mat-icon-button (click)="onRemove(); $event.stopPropagation()">
+
+        <button
+            *ngIf="field.parentFieldId"
+            mat-icon-button
+            (click)="onRemove(); $event.stopPropagation()"
+        >
             <mat-icon>remove</mat-icon>
         </button>
 
-        <button *ngIf="!isFirstChild" mat-icon-button (click)="onMoveUp()">
+        <button
+            *ngIf="!isFirstChild"
+            mat-icon-button
+            (click)="onMoveUp()"
+        >
             <mat-icon>arrow_upward</mat-icon>
         </button>
 
-        <button *ngIf="!isLastChild" mat-icon-button (click)="onMoveDown()">
+        <button
+            *ngIf="!isLastChild"
+            mat-icon-button
+            (click)="onMoveDown()"
+        >
             <mat-icon>arrow_downward</mat-icon>
         </button>
     </div>
 </header>
 
 <ng-template #container></ng-template>
-            
+
 <mat-menu #addCategoryMenu="matMenu">
     <ng-container *ngFor="let category of editorService.fieldCategories">
-        <button mat-menu-item [matMenuTriggerFor]="addFieldMenu">
+        <button
+            mat-menu-item
+            [matMenuTriggerFor]="addFieldMenu"
+        >
             {{ category.name }}
         </button>
 
         <mat-menu #addFieldMenu="matMenu">
-            <button mat-menu-item  *ngFor="let option of category.typeOptions" (click)="onAddChildField(option.name, option.customName)">
+            <button
+                mat-menu-item
+                *ngFor="let option of category.typeOptions"
+                (click)="onAddChildField(option.name, option.customName)"
+            >
                 {{ option.displayName }}
             </button>
         </mat-menu>
     </ng-container>
 </mat-menu>
-

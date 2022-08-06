@@ -7,7 +7,13 @@ import { FileService } from '../../shared/services/file-service/file.service';
 
 @Directive({
     selector: '[editorJsonFileValidator]',
-    providers: [{provide: NG_ASYNC_VALIDATORS, useExisting: JsonFileValidatorDirective, multi: true}]
+    providers: [
+        {
+            provide: NG_ASYNC_VALIDATORS,
+            useExisting: JsonFileValidatorDirective,
+            multi: true,
+        },
+    ],
 })
 export class JsonFileValidatorDirective implements AsyncValidator {
     @Input('editorJsonFileValidator') fileInputElement: HTMLInputElement;
@@ -17,16 +23,17 @@ export class JsonFileValidatorDirective implements AsyncValidator {
     validate(): Observable<ValidationErrors | null> {
         const file: File = this.fileInputElement.files.item(0);
         if (file) {
-            return this._fileService.readFile(file).pipe(map(text => {
-                try {
-                    JSON.parse(text);
-                    return {};
-                } catch (e) {
-                    return { jsonFormat: true };
-                }
-            }));
+            return this._fileService.readFile(file).pipe(
+                map(text => {
+                    try {
+                        JSON.parse(text);
+                        return {};
+                    } catch (e) {
+                        return { jsonFormat: true };
+                    }
+                })
+            );
         }
         return of({});
     }
-
 }

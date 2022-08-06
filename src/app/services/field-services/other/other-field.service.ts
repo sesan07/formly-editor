@@ -9,10 +9,9 @@ import { CustomFieldType, IFormlyField, WrapperType } from '../field.types';
     providedIn: 'root',
 })
 export class OtherFieldService extends BaseFieldService<FormlyTemplateOptions> {
-
-	public getDefaultConfig(customType?: CustomFieldType): IFormlyField {
+    public getDefaultConfig(customType?: CustomFieldType): IFormlyField {
         return {
-			type: undefined,
+            type: undefined,
             wrappers: [],
             templateOptions: {},
             expressionProperties: {},

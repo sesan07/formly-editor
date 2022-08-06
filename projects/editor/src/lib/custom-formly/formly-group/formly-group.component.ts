@@ -28,7 +28,9 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
         public editorService: EditorService,
         private _formService: FormService,
         private _droplistService: DroplistService
-    ) { super(); }
+    ) {
+        super();
+    }
 
     ngOnInit(): void {
         this.dropListClasses = this.field.fieldGroupClassName ? this.field.fieldGroupClassName : '';
@@ -36,10 +38,12 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
         const hasGrid: boolean = this._hasFieldGroupClassName(ContainerType.GRID);
         const hasFlex: boolean = this._hasFieldGroupClassName(ContainerType.FLEX);
 
-        const isHorizontal: boolean = hasFlex && !(
-            this._hasFieldGroupClassName(FlexContainerType.COMLUMN) ||
-            this._hasFieldGroupClassName(FlexContainerType.COMLUMN_REVERSE)
-        );
+        const isHorizontal: boolean =
+            hasFlex &&
+            !(
+                this._hasFieldGroupClassName(FlexContainerType.COMLUMN) ||
+                this._hasFieldGroupClassName(FlexContainerType.COMLUMN_REVERSE)
+            );
 
         this.isGridContainer = hasGrid;
         this.dropListOrientation = !hasGrid && isHorizontal ? 'horizontal' : 'vertical';
@@ -47,12 +51,10 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
         if (this.field.formId && this.field.fieldId !== 'preview') {
             this._droplistService.droplistIds$
                 .pipe(takeUntil(this._destroy$))
-                .subscribe(ids => this.connectedTo = ids);
+                .subscribe(ids => (this.connectedTo = ids));
         }
 
-        this._formService.isEditMode$
-            .pipe(takeUntil(this._destroy$))
-            .subscribe(v => this.isEditMode = v);
+        this._formService.isEditMode$.pipe(takeUntil(this._destroy$)).subscribe(v => (this.isEditMode = v));
     }
 
     ngOnDestroy(): void {
@@ -74,7 +76,7 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
 
         const dropIndex: number = this.isGridContainer ? undefined : dragDrop.currentIndex;
 
-        switch(itemData.action) {
+        switch (itemData.action) {
             case DragAction.COPY:
                 this._formService.addField(field.type, field.customType, targetParent.fieldId, dropIndex);
                 break;
@@ -99,7 +101,7 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
     getItemDragData(field: IEditorFormlyField): IItemDragData {
         return {
             action: DragAction.MOVE,
-            field
+            field,
         };
     }
 

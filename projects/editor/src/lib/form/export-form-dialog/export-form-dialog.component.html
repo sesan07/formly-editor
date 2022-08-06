@@ -2,28 +2,46 @@
 <mat-dialog-content>
     <mat-form-field>
         <mat-label>{{ data.type }} file name</mat-label>
-        <input 
-            #nameModel="ngModel" 
-            [(ngModel)]="nameValue" 
-            matInput required
-            pattern="^([\w\s]+\.)+json$">
+        <input
+            #nameModel="ngModel"
+            [(ngModel)]="nameValue"
+            matInput
+            required
+            pattern="^([\w\s]+\.)+json$"
+        />
         <mat-error *ngIf="nameModel.errors?.required">Please enter a name</mat-error>
         <mat-error *ngIf="nameModel.errors?.pattern">Invalid file name (must end with '.json')</mat-error>
     </mat-form-field>
 
     <mat-form-field class="json-field">
         <mat-label>JSON</mat-label>
-        <textarea class="json-textarea" #jsonModel="ngModel" [(ngModel)]="jsonValue" matInput required spellcheck="false" editorJsonValidator></textarea>
+        <textarea
+            class="json-textarea"
+            #jsonModel="ngModel"
+            [(ngModel)]="jsonValue"
+            matInput
+            required
+            spellcheck="false"
+            editorJsonValidator
+        ></textarea>
         <mat-error *ngIf="jsonModel.errors?.required">This field is required</mat-error>
         <mat-error *ngIf="jsonModel.errors?.jsonFormat">Invalid JSON</mat-error>
     </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>
+    <button
+        mat-button
+        mat-dialog-close
+    >
         <mat-icon>close</mat-icon>
         <span>Cancel</span>
     </button>
-    <button mat-flat-button color="primary" [disabled]="!(nameModel?.valid && jsonModel?.valid)" (click)="onExport()">
+    <button
+        mat-flat-button
+        color="primary"
+        [disabled]="!(nameModel?.valid && jsonModel?.valid)"
+        (click)="onExport()"
+    >
         <mat-icon>file_upload</mat-icon>
         <span>Export</span>
     </button>

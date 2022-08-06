@@ -9,7 +9,7 @@ import {
     OnInit,
     Optional,
     Renderer2,
-    ViewContainerRef
+    ViewContainerRef,
 } from '@angular/core';
 import { FormlyConfig, FormlyField, FormlyFieldTemplates } from '@ngx-formly/core';
 import { Subject, takeUntil } from 'rxjs';
@@ -21,23 +21,23 @@ import { getFieldChildren, getFormattedFieldName } from '../../form/utils';
 
 @Component({
     selector: 'editor-root-formly-field',
-    template: '<ng-template #container></ng-template>'
+    template: '<ng-template #container></ng-template>',
 })
-export class RootFormlyFieldComponent extends FormlyField { }
+export class RootFormlyFieldComponent extends FormlyField {}
 
 @Component({
-  selector: 'editor-formly-field',
-  templateUrl: './formly-field.component.html',
-  styleUrls: ['./formly-field.component.scss']
+    selector: 'editor-formly-field',
+    templateUrl: './formly-field.component.html',
+    styleUrls: ['./formly-field.component.scss'],
 })
 export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestroy {
     @Input() override field: IEditorFormlyField;
 
-	public isMouseInside: boolean;
-	public isFirstChild: boolean;
-	public isLastChild: boolean;
+    public isMouseInside: boolean;
+    public isFirstChild: boolean;
+    public isLastChild: boolean;
     public index: number;
-	public hideOptions: boolean;
+    public hideOptions: boolean;
 
     private _isActiveField: boolean;
     private _isEditMode: boolean;
@@ -51,11 +51,17 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         renderer: Renderer2,
         elementRef: ElementRef,
         hostContainerRef: ViewContainerRef,
-        @Optional() form: FormlyFieldTemplates,
-    ) { super(config, renderer, elementRef, hostContainerRef, form); }
+        @Optional() form: FormlyFieldTemplates
+    ) {
+        super(config, renderer, elementRef, hostContainerRef, form);
+    }
 
-    @HostBinding('class.edit-mode') get isEditMode(): boolean { return this._isEditMode; };
-    @HostBinding('class.active') get isActiveField(): boolean { return this._isActiveField; }
+    @HostBinding('class.edit-mode') get isEditMode(): boolean {
+        return this._isEditMode;
+    }
+    @HostBinding('class.active') get isActiveField(): boolean {
+        return this._isActiveField;
+    }
 
     @HostListener('click', ['$event'])
     onClick(event: MouseEvent): void {
@@ -89,18 +95,14 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
 
         this.hideOptions = this.field.templateOptions.hideEditorWrapperOptions;
 
-        this._formService.activeField$
-            .pipe(takeUntil(this._destroy$))
-            .subscribe(f => {
-                this._isActiveField = f.fieldId === this.field.fieldId;
-                this._cdRef.markForCheck();
-            });
-        this._formService.isEditMode$
-            .pipe(takeUntil(this._destroy$))
-            .subscribe(v => {
-                this._isEditMode = v;
-                this._cdRef.markForCheck();
-            });
+        this._formService.activeField$.pipe(takeUntil(this._destroy$)).subscribe(f => {
+            this._isActiveField = f.fieldId === this.field.fieldId;
+            this._cdRef.markForCheck();
+        });
+        this._formService.isEditMode$.pipe(takeUntil(this._destroy$)).subscribe(v => {
+            this._isEditMode = v;
+            this._cdRef.markForCheck();
+        });
     }
 
     override ngOnDestroy(): void {

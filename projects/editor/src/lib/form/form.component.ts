@@ -23,28 +23,28 @@ import { FormService } from './form.service';
 import { DroplistService } from './droplist.service';
 
 @Component({
-	selector: 'editor-form',
-	templateUrl: './form.component.html',
-	styleUrls: ['./form.component.scss'],
+    selector: 'editor-form',
+    templateUrl: './form.component.html',
+    styleUrls: ['./form.component.scss'],
     providers: [FormService, DroplistService],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormComponent implements OnInit, OnDestroy {
-	@Input() form: IForm;
+    @Input() form: IForm;
 
     public activeField: IEditorFormlyField;
     public activeFieldParent: IEditorFormlyField;
 
-	public activeFieldProperty: IObjectProperty;
+    public activeFieldProperty: IObjectProperty;
     public activeFieldTarget: IEditorFormlyField;
-	public modelProperty: IObjectProperty;
+    public modelProperty: IObjectProperty;
     public modelTarget: Record<string, any>;
 
     public activeFieldTargetChange$: Subject<void> = new Subject();
     public modelTargetChange$: Subject<void> = new Subject();
     public isEditMode$: Observable<boolean>;
 
-	public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
+    public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
     public isAdvanced = true;
     public showSidebars = true;
 
@@ -54,64 +54,58 @@ export class FormComponent implements OnInit, OnDestroy {
     public options: FormlyFormOptions = {};
     public selectedFormDisplay: 'form' | 'json' = 'form';
 
-	private _resizeEnd$: Subject<void> = new Subject();
-	private _destroy$: Subject<void> = new Subject();
+    private _resizeEnd$: Subject<void> = new Subject();
+    private _destroy$: Subject<void> = new Subject();
 
-    private readonly _debounceTime: number = 1000;
+    private readonly _debounceTime: number = 500;
 
-	constructor(
-		public propertyService: PropertyService,
-		public editorService: EditorService,
+    constructor(
+        public propertyService: PropertyService,
+        public editorService: EditorService,
         private _formService: FormService,
         private _dialog: MatDialog,
         private _fileService: FileService,
-        private _cdRef: ChangeDetectorRef,
-    ) { }
+        private _cdRef: ChangeDetectorRef
+    ) {}
 
     public get formDisplayTabIndex(): number {
         switch (this.selectedFormDisplay) {
-            case 'form': return 0;
-            case 'json': return 1;
+            case 'form':
+                return 0;
+            case 'json':
+                return 1;
         }
     }
 
-	public get resizeEnd$(): Observable<void> {
-		return this._resizeEnd$.asObservable();
-	}
+    public get resizeEnd$(): Observable<void> {
+        return this._resizeEnd$.asObservable();
+    }
 
-	public ngOnInit(): void {
+    public ngOnInit(): void {
         this._formService.setup(this.form);
         this.isEditMode$ = this._formService.isEditMode$;
 
         this._updateModelProperty();
         this._updateModelTarget();
 
-		this._formService.fields$
-			.pipe(takeUntil(this._destroy$))
-			.subscribe(fields => this._updateFormFields(fields));
+        this._formService.fields$.pipe(takeUntil(this._destroy$)).subscribe(fields => this._updateFormFields(fields));
 
-		this._formService.activeField$
-            .pipe(takeUntil(this._destroy$))
-            .subscribe(field => {
-                this.activeField = field;
-                this.activeFieldParent = this._formService.getField(field.parentFieldId);
-                this._updateActiveFieldProperty();
-                this._updateActiveFieldTarget();
-            });
+        this._formService.activeField$.pipe(takeUntil(this._destroy$)).subscribe(field => {
+            this.activeField = field;
+            this.activeFieldParent = this._formService.getField(field.parentFieldId);
+            this._updateActiveFieldProperty();
+            this._updateActiveFieldTarget();
+        });
 
-        this.activeFieldTargetChange$
-            .pipe(debounceTime(this._debounceTime))
-            .subscribe(() => this._updateActiveField());
+        this.activeFieldTargetChange$.pipe(debounceTime(this._debounceTime)).subscribe(() => this._updateActiveField());
 
-        this.modelTargetChange$
-            .pipe(debounceTime(this._debounceTime))
-            .subscribe(() => this._updateFormModel());
-	}
+        this.modelTargetChange$.pipe(debounceTime(this._debounceTime)).subscribe(() => this._updateFormModel());
+    }
 
-	public ngOnDestroy(): void {
-		this._destroy$.next();
-		this._destroy$.complete();
-	}
+    public ngOnDestroy(): void {
+        this._destroy$.next();
+        this._destroy$.complete();
+    }
 
     getFormattedFieldName = (f: IEditorFormlyField) => getFormattedFieldName(f);
 
@@ -123,23 +117,25 @@ export class FormComponent implements OnInit, OnDestroy {
         this.editorService.duplicateForm(this.form.id);
     }
 
-    onModelChanged(model: Record<string, unknown>): void {
-        this.form.model = cloneDeep(model);
+    onModelChanged(): void {
         this._updateModelTarget();
     }
 
     onImportModel(): void {
         const config: MatDialogConfig<ImportJSONRequest> = {
-            data: { type: 'Model' }
+            data: { type: 'Model' },
         };
 
-        const dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse> = this._dialog.open(ImportFormDialogComponent, config);
-        dialogRef.afterClosed()
-            .subscribe(res => {
-                if (res) {
-                    this.onModelChanged(JSON.parse(res.json));
-                }
-            });
+        const dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse> = this._dialog.open(
+            ImportFormDialogComponent,
+            config
+        );
+        dialogRef.afterClosed().subscribe(res => {
+            if (res) {
+                this.form.model = JSON.parse(res.json);
+                this._updateModelTarget();
+            }
+        });
     }
 
     onExportModel(): void {
@@ -147,17 +143,19 @@ export class FormComponent implements OnInit, OnDestroy {
             data: {
                 type: 'Model',
                 name: this.form.name + '.model.json',
-                json: JSON.stringify(this.form.model, null, 2)
-            }
+                json: JSON.stringify(this.form.model, null, 2),
+            },
         };
 
-        const dialogRef: MatDialogRef<ExportFormDialogComponent, ExportJSONResponse> = this._dialog.open(ExportFormDialogComponent, config);
-        dialogRef.afterClosed()
-            .subscribe(res => {
-                if (res) {
-                    this._fileService.saveFile(res.name, res.json);
-                }
-            });
+        const dialogRef: MatDialogRef<ExportFormDialogComponent, ExportJSONResponse> = this._dialog.open(
+            ExportFormDialogComponent,
+            config
+        );
+        dialogRef.afterClosed().subscribe(res => {
+            if (res) {
+                this._fileService.saveFile(res.name, res.json);
+            }
+        });
     }
 
     onResetModel(): void {
@@ -171,8 +169,8 @@ export class FormComponent implements OnInit, OnDestroy {
 
     private _updateFormFields(fields: IEditorFormlyField[]): void {
         this.formFields = cloneDeep(fields);
-		this.formGroup = new FormGroup({});
-		this.options = {};
+        this.formGroup = new FormGroup({});
+        this.options = {};
 
         const fieldsClone: IEditorFormlyField[] = cloneDeep(fields);
         fieldsClone.forEach(field => cleanField(field, true, true));
@@ -181,21 +179,21 @@ export class FormComponent implements OnInit, OnDestroy {
     }
 
     private _updateFormModel(): void {
-        this.form.model = cloneDeep(this.modelTarget);
+        this.form.model = { ...this.modelTarget };
         this._cdRef.markForCheck();
     }
 
-	private _updateActiveFieldProperty(): void {
-		this.activeFieldProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
-		this._initRootProperty(this.activeFieldProperty);
-		this.activeFieldProperty.childProperties = this.activeField.properties;
-		this.activeFieldProperty.populateChildrenFromTarget = false;
-		this.activeFieldProperty.addOptions = [];
+    private _updateActiveFieldProperty(): void {
+        this.activeFieldProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
+        this._initRootProperty(this.activeFieldProperty);
+        this.activeFieldProperty.childProperties = this.activeField.properties;
+        this.activeFieldProperty.populateChildrenFromTarget = false;
+        this.activeFieldProperty.addOptions = [];
         this._cdRef.markForCheck();
-	}
+    }
 
     private _updateActiveFieldTarget(): void {
-        this.activeFieldTarget = cloneDeep(this.activeField);
+        this.activeFieldTarget = { ...this.activeField };
         this._cdRef.markForCheck();
     }
 
@@ -204,21 +202,21 @@ export class FormComponent implements OnInit, OnDestroy {
         this._cdRef.markForCheck();
     }
 
-	private _updateModelProperty(): void {
-		this.modelProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
-		this._initRootProperty(this.modelProperty);
-        this._cdRef.markForCheck();
-	}
-
-    private _updateModelTarget(): void {
-        this.modelTarget = cloneDeep(this.form.model);
+    private _updateModelProperty(): void {
+        this.modelProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
+        this._initRootProperty(this.modelProperty);
         this._cdRef.markForCheck();
     }
 
-	private _initRootProperty(property: IArrayProperty | IObjectProperty) {
-		property.name = 'root';
-		property.key = undefined;
-		property.isRemovable = false;
-		property.isKeyEditable = false;
-	}
+    private _updateModelTarget(): void {
+        this.modelTarget = { ...this.form.model };
+        this._cdRef.markForCheck();
+    }
+
+    private _initRootProperty(property: IArrayProperty | IObjectProperty) {
+        property.name = 'root';
+        property.key = undefined;
+        property.isRemovable = false;
+        property.isKeyEditable = false;
+    }
 }

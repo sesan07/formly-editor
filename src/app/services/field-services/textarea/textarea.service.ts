@@ -6,23 +6,22 @@ import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.
 import { ITextareaTemplateOptions } from './textarea.types';
 
 @Injectable({
-	providedIn: 'root',
+    providedIn: 'root',
 })
 export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> {
-
-	public getDefaultConfig(customType?: CustomFieldType): IFormlyField<ITextareaTemplateOptions> {
-		return {
-			type: FieldType.TEXTAREA,
-			wrappers: [WrapperType.FORM_FIELD],
-			templateOptions: {
-				label: 'Label',
-				placeholder: 'Placeholder',
-				description: 'Description',
-				required: true
-			},
-			expressionProperties: {},
-		};
-	}
+    public getDefaultConfig(customType?: CustomFieldType): IFormlyField<ITextareaTemplateOptions> {
+        return {
+            type: FieldType.TEXTAREA,
+            wrappers: [WrapperType.FORM_FIELD],
+            templateOptions: {
+                label: 'Label',
+                placeholder: 'Placeholder',
+                description: 'Description',
+                required: true,
+            },
+            expressionProperties: {},
+        };
+    }
 
     protected _getTOChildProperties(): IProperty[] {
         return [

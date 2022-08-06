@@ -6,31 +6,30 @@ import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.
 import { IRadioTemplateOptions } from './radio.types';
 
 @Injectable({
-	providedIn: 'root',
+    providedIn: 'root',
 })
 export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
-
     protected supportedWrappers: WrapperType[] = [WrapperType.FORM_FIELD];
 
-	public getDefaultConfig(customType?: CustomFieldType): IFormlyField<IRadioTemplateOptions> {
-		return {
-			type: FieldType.RADIO,
-			wrappers: [WrapperType.FORM_FIELD],
-			templateOptions: {
-				label: 'Label',
-				placeholder: 'Placeholder',
-				description: 'Description',
-				required: true,
-				options: [
-					{ value: 1, label: 'Option 1' },
-					{ value: 2, label: 'Option 2' },
-					{ value: 3, label: 'Option 3' },
-					{ value: 4, label: 'Option 4', disabled: true },
-				],
-			},
-			expressionProperties: {},
-		};
-	}
+    public getDefaultConfig(customType?: CustomFieldType): IFormlyField<IRadioTemplateOptions> {
+        return {
+            type: FieldType.RADIO,
+            wrappers: [WrapperType.FORM_FIELD],
+            templateOptions: {
+                label: 'Label',
+                placeholder: 'Placeholder',
+                description: 'Description',
+                required: true,
+                options: [
+                    { value: 1, label: 'Option 1' },
+                    { value: 2, label: 'Option 2' },
+                    { value: 3, label: 'Option 3' },
+                    { value: 4, label: 'Option 4', disabled: true },
+                ],
+            },
+            expressionProperties: {},
+        };
+    }
 
     protected _getTOChildProperties(): IProperty[] {
         return [
@@ -88,7 +87,7 @@ export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
                             isSimple: true,
                         },
                     ],
-                } as IObjectProperty
+                } as IObjectProperty,
             } as IArrayProperty,
         ];
     }

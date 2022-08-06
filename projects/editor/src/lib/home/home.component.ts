@@ -18,7 +18,7 @@ import { ImportJSONRequest, ImportJSONResponse } from '../form/import-form-dialo
 @Component({
     selector: 'editor-home',
     templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss']
+    styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
     public tabIndex: number;
@@ -26,19 +26,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     private _destroy$: Subject<void> = new Subject();
 
-    constructor(
-        private _editorService: EditorService,
-        private _dialog: MatDialog,
-        private _fileService: FileService
-    ) { }
+    constructor(private _editorService: EditorService, private _dialog: MatDialog, private _fileService: FileService) {}
 
     ngOnInit(): void {
-        this._editorService.forms$
-            .pipe(takeUntil(this._destroy$))
-            .subscribe(forms => this.forms = forms);
+        this._editorService.forms$.pipe(takeUntil(this._destroy$)).subscribe(forms => (this.forms = forms));
         this._editorService.activeFormIndex$
             .pipe(takeUntil(this._destroy$))
-            .subscribe(index => this.tabIndex = index);
+            .subscribe(index => (this.tabIndex = index));
     }
 
     ngOnDestroy(): void {
@@ -49,35 +43,39 @@ export class HomeComponent implements OnInit, OnDestroy {
     onAddForm(): void {
         const config: MatDialogConfig = {
             height: 'auto',
-            maxWidth: '600px'
+            maxWidth: '600px',
         };
 
-        const dialogRef: MatDialogRef<AddFormDialogComponent, AddFormResponse> = this._dialog.open(AddFormDialogComponent, config);
+        const dialogRef: MatDialogRef<AddFormDialogComponent, AddFormResponse> = this._dialog.open(
+            AddFormDialogComponent,
+            config
+        );
 
-        dialogRef.afterClosed()
-            .subscribe(res => {
-                if (res) {
-                    this._editorService.addForm(res.name);
-                }
-            });
+        dialogRef.afterClosed().subscribe(res => {
+            if (res) {
+                this._editorService.addForm(res.name);
+            }
+        });
     }
 
     onImportForm(): void {
         const config: MatDialogConfig<ImportJSONRequest> = {
             data: {
                 type: 'Form',
-                showName: true
-            }
+                showName: true,
+            },
         };
 
-        const dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse> = this._dialog.open(ImportFormDialogComponent, config);
+        const dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse> = this._dialog.open(
+            ImportFormDialogComponent,
+            config
+        );
 
-        dialogRef.afterClosed()
-            .subscribe(res => {
-                if (res) {
-                    this._editorService.importForm(res.name, res.json);
-                }
-            });
+        dialogRef.afterClosed().subscribe(res => {
+            if (res) {
+                this._editorService.importForm(res.name, res.json);
+            }
+        });
     }
 
     onExportForm(): void {
@@ -89,18 +87,20 @@ export class HomeComponent implements OnInit, OnDestroy {
             data: {
                 type: 'Form',
                 name: form.name + '.json',
-                json: JSON.stringify(fieldsClone, null, 2)
-            }
+                json: JSON.stringify(fieldsClone, null, 2),
+            },
         };
 
-        const dialogRef: MatDialogRef<ExportFormDialogComponent, ExportJSONResponse> = this._dialog.open(ExportFormDialogComponent, config);
+        const dialogRef: MatDialogRef<ExportFormDialogComponent, ExportJSONResponse> = this._dialog.open(
+            ExportFormDialogComponent,
+            config
+        );
 
-        dialogRef.afterClosed()
-            .subscribe(res => {
-                if (res) {
-                    this._fileService.saveFile(res.name, res.json);
-                }
-            });
+        dialogRef.afterClosed().subscribe(res => {
+            if (res) {
+                this._fileService.saveFile(res.name, res.json);
+            }
+        });
     }
 
     onRemoveForm(index: number): void {

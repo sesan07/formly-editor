@@ -2,7 +2,7 @@ import { IEditorFormlyField } from '../editor.types';
 
 export enum DragAction {
     COPY,
-    MOVE
+    MOVE,
 }
 
 export interface IItemDragData {

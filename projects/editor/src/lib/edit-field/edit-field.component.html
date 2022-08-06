@@ -7,7 +7,8 @@
                 [isSimplified]="isSimplified"
                 [isExpanded]="true"
                 [isRoot]="true"
-                (targetChanged)="fieldChanged.emit()">
+                (targetChanged)="fieldChanged.emit()"
+            >
             </editor-object-property>
         </div>
     </mat-tab>
@@ -16,7 +17,8 @@
             <editor-styles
                 [editField]="field"
                 [parentField]="parentField"
-                (fieldChanged)="fieldChanged.emit()">
+                (fieldChanged)="fieldChanged.emit()"
+            >
             </editor-styles>
         </div>
     </mat-tab>

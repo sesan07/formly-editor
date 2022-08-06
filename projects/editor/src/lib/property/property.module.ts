@@ -12,11 +12,12 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { BooleanPropertyComponent } from './boolean-property/boolean-property.component';
 import { ChipListPropertyComponent } from './chip-list-property/chip-list-property.component';
 import { InputPropertyComponent } from './input-property/input-property.component';
-import { ObjectPropertyComponent, ArrayPropertyComponent } from './object-array-properties/object-array-properties.component';
+import {
+    ObjectPropertyComponent,
+    ArrayPropertyComponent,
+} from './object-array-properties/object-array-properties.component';
 import { TreeModule } from '../tree/tree.module';
 import { TextareaPropertyComponent } from './textarea-property/textarea-property.component';
-
-
 
 @NgModule({
     declarations: [
@@ -46,6 +47,6 @@ import { TextareaPropertyComponent } from './textarea-property/textarea-property
         BooleanPropertyComponent,
         ChipListPropertyComponent,
         TextareaPropertyComponent,
-    ]
+    ],
 })
-export class PropertyModule { }
+export class PropertyModule {}

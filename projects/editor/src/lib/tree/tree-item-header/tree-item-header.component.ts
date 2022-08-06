@@ -4,25 +4,27 @@ import { MatMenuPanel } from '@angular/material/menu';
 @Component({
     selector: 'editor-tree-item-header',
     templateUrl: './tree-item-header.component.html',
-    styleUrls: ['./tree-item-header.component.scss']
+    styleUrls: ['./tree-item-header.component.scss'],
 })
 export class TreeItemHeaderComponent implements OnInit {
-	@Input() treeLevel = 0;
-	@Input() isExpanded: boolean;
-	@Input() isExpandable: boolean;
-	@Input() isActive: boolean;
-	@Input() hasOptions: boolean;
-	@Input() optionsMenu: MatMenuPanel;
+    @Input() treeLevel = 0;
+    @Input() isExpanded: boolean;
+    @Input() isExpandable: boolean;
+    @Input() isActive: boolean;
+    @Input() hasOptions: boolean;
+    @Input() optionsMenu: MatMenuPanel;
 
     @Output() isExpandedChange: EventEmitter<boolean> = new EventEmitter();
 
-	public treeLevelPadding: number;
-	public sideLinePositions: number[];
+    public treeLevelPadding: number;
+    public sideLinePositions: number[];
     public stickyOptions: boolean;
 
     private readonly _treeIndentation = 18;
 
-    @HostBinding('class.active') get isHeaderActive(): boolean { return this.isActive; }
+    @HostBinding('class.active') get isHeaderActive(): boolean {
+        return this.isActive;
+    }
 
     @HostListener('mouseenter')
     onMouseEnter(): void {
@@ -35,24 +37,24 @@ export class TreeItemHeaderComponent implements OnInit {
     }
 
     @HostListener('click', ['$event'])
-	onClicked(event: MouseEvent): void {
-		if (this.isActive !== false) {
+    onClicked(event: MouseEvent): void {
+        if (this.isActive !== false) {
             this.onToggle(event);
-		} else {
-			this.isExpanded = true;
+        } else {
+            this.isExpanded = true;
             this.isExpandedChange.emit(this.isExpanded);
             event.stopPropagation();
         }
-	}
+    }
 
     ngOnInit(): void {
         this.treeLevelPadding = this._treeIndentation * this.treeLevel;
-        this.sideLinePositions = [ ...Array(this.treeLevel).keys() ].map(i => ((i + 1) * this._treeIndentation));
+        this.sideLinePositions = [...Array(this.treeLevel).keys()].map(i => (i + 1) * this._treeIndentation);
     }
 
-	onToggle(event: MouseEvent): void {
-		this.isExpanded = !this.isExpanded;
+    onToggle(event: MouseEvent): void {
+        this.isExpanded = !this.isExpanded;
         this.isExpandedChange.emit(this.isExpanded);
-		event.stopPropagation();
-	}
+        event.stopPropagation();
+    }
 }

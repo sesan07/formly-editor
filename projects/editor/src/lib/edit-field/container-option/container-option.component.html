@@ -1,8 +1,13 @@
 <mat-form-field class="select-field">
     <mat-label>{{ label }}</mat-label>
-    <mat-select [value]="value"
-        (selectionChange)="selectionChanged.emit($event.value)">
-        <mat-option *ngFor="let option of options" [value]="option">
+    <mat-select
+        [value]="value"
+        (selectionChange)="selectionChanged.emit($event.value)"
+    >
+        <mat-option
+            *ngFor="let option of options"
+            [value]="option"
+        >
             {{ optionDisplayFn ? optionDisplayFn(option) : option }}
         </mat-option>
     </mat-select>
