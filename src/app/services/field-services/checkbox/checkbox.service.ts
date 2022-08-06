@@ -6,28 +6,27 @@ import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.
 import { ICheckboxTemplateOptions } from './checkbox.types';
 
 @Injectable({
-	providedIn: 'root',
+    providedIn: 'root',
 })
 export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> {
-
-	public getDefaultConfig(customType?: CustomFieldType): IFormlyField<ICheckboxTemplateOptions> {
-		return {
-			type: FieldType.CHECKBOX,
-			wrappers: [WrapperType.FORM_FIELD],
-			templateOptions: {
-				label: 'Accept terms',
-				description: 'In order to proceed, please accept terms',
-				pattern: 'true',
-				required: true
-			},
-			validation: {
-				messages: {
-					pattern: 'Please accept the terms',
-				},
-			},
-			expressionProperties: {},
-		};
-	}
+    public getDefaultConfig(customType?: CustomFieldType): IFormlyField<ICheckboxTemplateOptions> {
+        return {
+            type: FieldType.CHECKBOX,
+            wrappers: [WrapperType.FORM_FIELD],
+            templateOptions: {
+                label: 'Accept terms',
+                description: 'In order to proceed, please accept terms',
+                pattern: 'true',
+                required: true,
+            },
+            validation: {
+                messages: {
+                    pattern: 'Please accept the terms',
+                },
+            },
+            expressionProperties: {},
+        };
+    }
 
     protected _getTOChildProperties(): IProperty[] {
         return [

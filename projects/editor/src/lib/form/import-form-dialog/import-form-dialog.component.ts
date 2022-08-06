@@ -8,10 +8,11 @@ import { FileService } from '../../shared/services/file-service/file.service';
 @Component({
     selector: 'editor-import-form-dialog',
     templateUrl: './import-form-dialog.component.html',
-    styleUrls: ['./import-form-dialog.component.scss']
+    styleUrls: ['./import-form-dialog.component.scss'],
 })
 export class ImportFormDialogComponent implements AfterViewInit {
-    @ViewChild('nameModel', { read: ElementRef }) nameElement: ElementRef<HTMLInputElement>;
+    @ViewChild('nameModel', { read: ElementRef })
+    nameElement: ElementRef<HTMLInputElement>;
 
     @ViewChild('nameModel') nameModel: NgModel;
     @ViewChild('fileNameModel') fileNameModel: NgModel;
@@ -30,8 +31,8 @@ export class ImportFormDialogComponent implements AfterViewInit {
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: ImportJSONRequest,
         private _dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse>,
-        private _fileService: FileService,
-    ) { }
+        private _fileService: FileService
+    ) {}
 
     get isFormValid(): boolean {
         if (!this.fileNameModel || !this.jsonModel) {
@@ -42,15 +43,15 @@ export class ImportFormDialogComponent implements AfterViewInit {
             return this.currTabIndex === 0
                 ? this.nameModel.valid && this.fileNameModel.valid
                 : this.currTabIndex === 1
-                    ? this.nameModel.valid && this.jsonModel.valid
-                    : true;
+                ? this.nameModel.valid && this.jsonModel.valid
+                : true;
         }
 
         return this.currTabIndex === 0
             ? this.fileNameModel.valid
             : this.currTabIndex === 1
-                ? this.jsonModel.valid
-                : true;
+            ? this.jsonModel.valid
+            : true;
     }
 
     ngAfterViewInit(): void {
@@ -71,15 +72,14 @@ export class ImportFormDialogComponent implements AfterViewInit {
             this._fileService.readFile(this._selectedFile).subscribe(text => {
                 this._dialogRef.close({
                     name: this.nameValue,
-                    json: text
+                    json: text,
                 });
             });
         } else if (this.currTabIndex === 1) {
             this._dialogRef.close({
                 name: this.nameValue,
-                json: this.jsonValue
+                json: this.jsonValue,
             });
         }
     }
-
 }

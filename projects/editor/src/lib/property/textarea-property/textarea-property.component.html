@@ -1,24 +1,30 @@
-<editor-tree-item-header 
-    *ngIf="!isSimplified else simplifiedView"
+<editor-tree-item-header
+    *ngIf="!isSimplified; else simplifiedView"
     [treeLevel]="treeLevel"
     [hasOptions]="hasOptions"
     [optionsMenu]="optionsMenu"
-    >
+>
     <span class="property-key">
-        <span #key 
-            class="keyField" 
-            [ngClass]="{ 'editable': !!property.isKeyEditable }"
-            [contentEditable]="!!property.isKeyEditable">
+        <span
+            #key
+            class="keyField"
+            [ngClass]="{ editable: !!property.isKeyEditable }"
+            [contentEditable]="!!property.isKeyEditable"
+        >
         </span>
         <span>:</span>
     </span>
-    <mat-form-field class="property-field" appearance="outline">
-        <textarea 
+    <mat-form-field
+        class="property-field"
+        appearance="outline"
+    >
+        <textarea
             matInput
             cdkTextareaAutosize
             [cdkAutosizeMaxRows]="property.maxRows"
             [cdkAutosizeMinRows]="property.minRows"
-            [formControl]="formControl">
+            [formControl]="formControl"
+        >
         </textarea>
     </mat-form-field>
 </editor-tree-item-header>
@@ -26,18 +32,24 @@
 <ng-template #simplifiedView>
     <mat-form-field>
         <mat-label>{{ property.name ? property.name : property.key }}</mat-label>
-        <textarea 
+        <textarea
             matInput
             cdkTextareaAutosize
             [cdkAutosizeMaxRows]="property.maxRows"
             [cdkAutosizeMinRows]="property.minRows"
-            [formControl]="formControl">
+            [formControl]="formControl"
+        >
         </textarea>
     </mat-form-field>
 </ng-template>
 
 <mat-menu #optionsMenu="matMenu">
-    <button *ngIf="property.isRemovable" mat-menu-item color="warn" (click)="remove.emit()">
+    <button
+        *ngIf="property.isRemovable"
+        mat-menu-item
+        color="warn"
+        (click)="remove.emit()"
+    >
         <mat-icon>remove</mat-icon>
         <span>Remove</span>
     </button>

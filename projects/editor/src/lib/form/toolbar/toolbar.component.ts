@@ -6,7 +6,7 @@ import { EditorService } from '../../editor.service';
     selector: 'editor-toolbar',
     templateUrl: './toolbar.component.html',
     styleUrls: ['./toolbar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToolbarComponent {
     @Input() selectedDisplay: 'form' | 'json';

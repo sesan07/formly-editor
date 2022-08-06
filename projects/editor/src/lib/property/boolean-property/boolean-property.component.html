@@ -1,28 +1,38 @@
-<editor-tree-item-header 
-    *ngIf="!isSimplified else simplifiedView"
+<editor-tree-item-header
+    *ngIf="!isSimplified; else simplifiedView"
     [treeLevel]="treeLevel"
     [hasOptions]="hasOptions"
     [optionsMenu]="optionsMenu"
-    >
+>
     <span class="property-key">
-        <span #key 
-            class="keyField" 
-            [ngClass]="{ 'editable': !!property.isKeyEditable }"
-            [contentEditable]="!!property.isKeyEditable">
+        <span
+            #key
+            class="keyField"
+            [ngClass]="{ editable: !!property.isKeyEditable }"
+            [contentEditable]="!!property.isKeyEditable"
+        >
         </span>
         <span>:</span>
     </span>
-    <mat-checkbox class="property-field" [formControl]="formControl"></mat-checkbox>
+    <mat-checkbox
+        class="property-field"
+        [formControl]="formControl"
+    ></mat-checkbox>
 </editor-tree-item-header>
 
 <ng-template #simplifiedView>
-	<mat-checkbox [formControl]="formControl">
+    <mat-checkbox [formControl]="formControl">
         {{ property.name ? property.name : property.key }}
     </mat-checkbox>
 </ng-template>
 
 <mat-menu #optionsMenu="matMenu">
-    <button *ngIf="property.isRemovable" mat-menu-item color="warn" (click)="remove.emit()">
+    <button
+        *ngIf="property.isRemovable"
+        mat-menu-item
+        color="warn"
+        (click)="remove.emit()"
+    >
         <mat-icon>remove</mat-icon>
         <span>Remove</span>
     </button>

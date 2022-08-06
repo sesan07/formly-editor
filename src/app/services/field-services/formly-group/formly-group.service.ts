@@ -9,15 +9,14 @@ import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.
     providedIn: 'root',
 })
 export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> {
-
-	public getDefaultConfig(customType?: CustomFieldType): IFormlyField {
+    public getDefaultConfig(customType?: CustomFieldType): IFormlyField {
         const config: IFormlyField = {
-			type: FieldType.FORMLY_GROUP,
+            type: FieldType.FORMLY_GROUP,
             wrappers: [],
             templateOptions: {},
             fieldGroup: [],
             expressionProperties: {},
-		};
+        };
 
         switch (customType) {
             case CustomFieldType.CARD:

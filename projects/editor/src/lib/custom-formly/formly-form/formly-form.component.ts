@@ -20,5 +20,5 @@ export class FormlyFormComponent extends FormlyForm {
         templateOptions: undefined,
         wrappers: undefined,
         expressionProperties: undefined,
-     };
+    };
 }

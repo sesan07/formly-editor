@@ -14,16 +14,16 @@ import { FormlyFormComponent } from './formly-form/formly-form.component';
 import { PropertyModule } from '../property/property.module';
 
 @NgModule({
-    declarations: [
-        FormlyGroupComponent,
-        FormlyFieldComponent,
-        RootFormlyFieldComponent,
-        FormlyFormComponent,
-    ],
+    declarations: [FormlyGroupComponent, FormlyFieldComponent, RootFormlyFieldComponent, FormlyFormComponent],
     imports: [
         CommonModule,
         FormlyModule.forRoot({
-            types: [{ name: FieldType.FORMLY_GROUP, component: FormlyGroupComponent }],
+            types: [
+                {
+                    name: FieldType.FORMLY_GROUP,
+                    component: FormlyGroupComponent,
+                },
+            ],
         }),
         MatMenuModule,
         MatIconModule,
@@ -31,9 +31,6 @@ import { PropertyModule } from '../property/property.module';
         DragDropModule,
         PropertyModule,
     ],
-    exports: [
-        FormlyFormComponent,
-        FormlyModule,
-    ]
+    exports: [FormlyFormComponent, FormlyModule],
 })
-export class CustomFormlyModule { }
+export class CustomFormlyModule {}

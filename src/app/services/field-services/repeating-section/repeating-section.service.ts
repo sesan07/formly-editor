@@ -6,24 +6,23 @@ import { IRepeatingSectionTemplateOptions } from './repeating-section.types';
 import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 
 @Injectable({
-	providedIn: 'root',
+    providedIn: 'root',
 })
 export class RepeatingSectionService extends BaseFieldService<IRepeatingSectionTemplateOptions> {
-
-	public getDefaultConfig(customType?: CustomFieldType): IFormlyField<IRepeatingSectionTemplateOptions> {
+    public getDefaultConfig(customType?: CustomFieldType): IFormlyField<IRepeatingSectionTemplateOptions> {
         return {
             key: 'tempKey',
-			type: FieldType.REPEATING_SECTION,
+            type: FieldType.REPEATING_SECTION,
             wrappers: [],
-			templateOptions: {
-                addText: 'Add Section'
-			},
+            templateOptions: {
+                addText: 'Add Section',
+            },
             fieldArray: {
                 fieldGroup: [],
             },
-			expressionProperties: {},
-		};
-	}
+            expressionProperties: {},
+        };
+    }
 
     protected _getTOChildProperties(): IProperty[] {
         return [
@@ -32,7 +31,7 @@ export class RepeatingSectionService extends BaseFieldService<IRepeatingSectionT
                 key: 'addText',
                 type: PropertyType.TEXT,
                 isSimple: true,
-            }
+            },
         ];
     }
 

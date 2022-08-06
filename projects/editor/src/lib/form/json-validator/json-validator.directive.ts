@@ -3,11 +3,16 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@an
 
 @Directive({
     selector: '[editorJsonValidator]',
-    providers: [{ provide: NG_VALIDATORS, useExisting: JsonValidatorDirective, multi: true }]
+    providers: [
+        {
+            provide: NG_VALIDATORS,
+            useExisting: JsonValidatorDirective,
+            multi: true,
+        },
+    ],
 })
 export class JsonValidatorDirective implements Validator {
-
-    constructor() { }
+    constructor() {}
 
     validate(control: AbstractControl): ValidationErrors | null {
         if (control.value) {

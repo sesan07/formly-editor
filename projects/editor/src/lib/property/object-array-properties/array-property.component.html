@@ -1,42 +1,68 @@
-<editor-tree-item-header 
+<editor-tree-item-header
     class="cursor-pointer"
-    *ngIf="!isSimplified else simplifiedView"
+    *ngIf="!isSimplified; else simplifiedView"
     [treeLevel]="treeLevel"
     [(isExpanded)]="isExpanded"
     [isExpandable]="true"
     [hasOptions]="hasOptions"
     [optionsMenu]="optionsMenu"
-    >
+>
     <span class="property-key">
-        <span #key 
-            class="keyField" 
-            [ngClass]="{ 'editable': !!property.isKeyEditable }"
-            [contentEditable]="!!property.isKeyEditable">
+        <span
+            #key
+            class="keyField"
+            [ngClass]="{ editable: !!property.isKeyEditable }"
+            [contentEditable]="!!property.isKeyEditable"
+        >
         </span>
         <span>{{ '[ ' + childrenTarget.length + ' ]' }}</span>
     </span>
 </editor-tree-item-header>
 
-<div *ngIf="!isSimplified" [class.hidden]="!isExpanded">
+<div
+    *ngIf="!isSimplified"
+    [class.hidden]="!isExpanded"
+>
     <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
 </div>
 
 <ng-template #simplifiedView>
-    <div class="simplified-header" (click)="isExpanded = !isExpanded">
-            <span class="simplified-header-left">
-                <button mat-icon-button (click)="isExpanded = !isExpanded; $event.stopPropagation()">
-                    <mat-icon class="expand-icon" [class.expanded-90]="isExpanded">chevron_right</mat-icon>
-                </button>
-                <span>{{ property.name ? property.name : property.key + ' [ ' + childrenTarget.length + ' ]' }}</span>
-            </span>
-            
-            <button *ngIf="property.canAdd" mat-icon-button (click)="onAddChild(); $event.stopPropagation()">
-                <mat-icon>add</mat-icon>
+    <div
+        class="simplified-header"
+        (click)="isExpanded = !isExpanded"
+    >
+        <span class="simplified-header-left">
+            <button
+                mat-icon-button
+                (click)="isExpanded = !isExpanded; $event.stopPropagation()"
+            >
+                <mat-icon
+                    class="expand-icon"
+                    [class.expanded-90]="isExpanded"
+                    >chevron_right</mat-icon
+                >
             </button>
+            <span>{{ property.name ? property.name : property.key + ' [ ' + childrenTarget.length + ' ]' }}</span>
+        </span>
+
+        <button
+            *ngIf="property.canAdd"
+            mat-icon-button
+            (click)="onAddChild(); $event.stopPropagation()"
+        >
+            <mat-icon>add</mat-icon>
+        </button>
     </div>
-    <div class="simplified-properties" *ngIf="isExpanded">
+    <div
+        class="simplified-properties"
+        *ngIf="isExpanded"
+    >
         <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
-        <button *ngIf="property.canAdd" mat-button (click)="onAddChild()">
+        <button
+            *ngIf="property.canAdd"
+            mat-button
+            (click)="onAddChild()"
+        >
             <mat-icon>add</mat-icon>
             <span>Add</span>
         </button>
@@ -53,9 +79,10 @@
                 [property]="propertyService.getAsObjectProperty(child)"
                 [isSimplified]="isSimplified"
                 (remove)="onRemoveChild(i)"
-                (targetChanged)="targetChanged.emit()">
+                (targetChanged)="targetChanged.emit()"
+            >
             </editor-object-property>
-        
+
             <editor-boolean-property
                 *ngSwitchCase="typeofProperty.BOOLEAN"
                 [treeLevel]="treeLevel + 1"
@@ -63,9 +90,10 @@
                 [target]="childrenTarget"
                 [isSimplified]="isSimplified"
                 (remove)="onRemoveChild(i)"
-                (targetChanged)="targetChanged.emit()">
+                (targetChanged)="targetChanged.emit()"
+            >
             </editor-boolean-property>
-        
+
             <editor-chip-list-property
                 *ngSwitchCase="typeofProperty.CHIP_LIST"
                 [treeLevel]="treeLevel + 1"
@@ -73,9 +101,10 @@
                 [target]="childrenTarget"
                 [isSimplified]="isSimplified"
                 (remove)="onRemoveChild(i)"
-                (targetChanged)="targetChanged.emit()">
+                (targetChanged)="targetChanged.emit()"
+            >
             </editor-chip-list-property>
-        
+
             <editor-textarea-property
                 *ngSwitchCase="typeofProperty.TEXTAREA"
                 [treeLevel]="treeLevel + 1"
@@ -83,9 +112,10 @@
                 [target]="childrenTarget"
                 [isSimplified]="isSimplified"
                 (remove)="onRemoveChild(i)"
-                (targetChanged)="targetChanged.emit()">
+                (targetChanged)="targetChanged.emit()"
+            >
             </editor-textarea-property>
-        
+
             <ng-container *ngSwitchCase="typeofProperty.NUMBER">
                 <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
             </ng-container>
@@ -99,7 +129,8 @@
                     [target]="childrenTarget"
                     [isSimplified]="isSimplified"
                     (remove)="onRemoveChild(i)"
-                    (targetChanged)="targetChanged.emit()">
+                    (targetChanged)="targetChanged.emit()"
+                >
                 </editor-input-property>
             </ng-template>
         </ng-container>
@@ -108,11 +139,19 @@
 </ng-template>
 
 <mat-menu #optionsMenu="matMenu">
-    <button *ngIf="property.canAdd" mat-menu-item (click)="onAddChild()">
+    <button
+        *ngIf="property.canAdd"
+        mat-menu-item
+        (click)="onAddChild()"
+    >
         <mat-icon>add</mat-icon>
         <span>Add {{ property.childProperty.type }}</span>
     </button>
-    <button *ngIf="property.isRemovable" mat-menu-item (click)="remove.emit()">
+    <button
+        *ngIf="property.isRemovable"
+        mat-menu-item
+        (click)="remove.emit()"
+    >
         <mat-icon>remove</mat-icon>
         <span>Remove</span>
     </button>

@@ -26,9 +26,9 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
 
     private _unSubOptions$: Subject<void> = new Subject();
 
-	public get hasOptions(): boolean {
-		return this.property.isRemovable;
-	};
+    public get hasOptions(): boolean {
+        return this.property.isRemovable;
+    }
 
     isSelectable(option: string): boolean {
         return this.selectableOptions.includes(option);
@@ -70,8 +70,7 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
 
     protected _onChanged(isFirstChange: boolean): void {
         if (isFirstChange) {
-            this.formControl.valueChanges
-                .subscribe((options) => this._updateFilteredOptions(options));
+            this.formControl.valueChanges.subscribe(options => this._updateFilteredOptions(options));
         }
 
         this._setupSelectableOptions();
@@ -84,7 +83,7 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
             this._unSubOptions$.next();
             this.property.options
                 .pipe(takeUntil(this._unSubOptions$))
-                .subscribe(options => this.selectableOptions = options);
+                .subscribe(options => (this.selectableOptions = options));
         } else {
             this.selectableOptions = [...this.property.options];
         }
@@ -97,10 +96,11 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
 
     private _updateSelectedOptions(): void {
         const value: string | string[] = this._getPropertyValue();
-        if (value) { // If the target already has some selection
+        if (value) {
+            // If the target already has some selection
             const existingOptions: string[] = this.property.outputString
                 ? (value as string).split(' ')
-                : value as string[];
+                : (value as string[]);
 
             this.selectedOptions = [...existingOptions];
         } else {
@@ -116,7 +116,7 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
         let newValue: string | string[];
         if (this.property.outputString) {
             newValue = this.selectedOptions.join(' ');
-        } else  {
+        } else {
             newValue = this.selectedOptions.slice();
         }
 

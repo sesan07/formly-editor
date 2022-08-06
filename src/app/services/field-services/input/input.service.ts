@@ -6,22 +6,21 @@ import { IInputTemplateOptions } from './input.types';
 import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 
 @Injectable({
-	providedIn: 'root',
+    providedIn: 'root',
 })
 export class InputService extends BaseFieldService<IInputTemplateOptions> {
-
-	public getDefaultConfig(customType?: CustomFieldType): IFormlyField<IInputTemplateOptions> {
+    public getDefaultConfig(customType?: CustomFieldType): IFormlyField<IInputTemplateOptions> {
         const config: IFormlyField<IInputTemplateOptions> = {
-			type: FieldType.INPUT,
-			wrappers: [WrapperType.FORM_FIELD],
-			templateOptions: {
-				label: 'Label',
-				placeholder: 'Placeholder',
-				description: 'Description',
-				required: true
-			},
-			expressionProperties: {},
-		};
+            type: FieldType.INPUT,
+            wrappers: [WrapperType.FORM_FIELD],
+            templateOptions: {
+                label: 'Label',
+                placeholder: 'Placeholder',
+                description: 'Description',
+                required: true,
+            },
+            expressionProperties: {},
+        };
 
         switch (customType) {
             case CustomFieldType.NUMBER:
@@ -31,7 +30,7 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
         }
 
         return config;
-	}
+    }
 
     protected _getTOChildProperties(): IProperty[] {
         return [

@@ -2,19 +2,29 @@
 <mat-dialog-content>
     <mat-form-field>
         <mat-label>Form name</mat-label>
-        <input 
-            #nameModel="ngModel" 
-            [(ngModel)]="nameValue" 
-            matInput required>
+        <input
+            #nameModel="ngModel"
+            [(ngModel)]="nameValue"
+            matInput
+            required
+        />
         <mat-error *ngIf="nameModel.errors?.required">Please enter a name</mat-error>
     </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>
+    <button
+        mat-button
+        mat-dialog-close
+    >
         <mat-icon>close</mat-icon>
         <span>Cancel</span>
     </button>
-    <button mat-flat-button color="primary" [disabled]="!nameModel?.valid" (click)="onAdd()">
+    <button
+        mat-flat-button
+        color="primary"
+        [disabled]="!nameModel?.valid"
+        (click)="onAdd()"
+    >
         <mat-icon>add</mat-icon>
         <span>Add</span>
     </button>

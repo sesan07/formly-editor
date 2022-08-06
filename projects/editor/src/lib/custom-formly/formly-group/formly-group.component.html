@@ -1,4 +1,5 @@
-<div [id]="field.fieldId"
+<div
+    [id]="field.fieldId"
     [class]="dropListClasses"
     [class.edit-mode]="isEditMode"
     cdkDropList
@@ -6,12 +7,14 @@
     [cdkDropListSortingDisabled]="isGridContainer"
     [cdkDropListConnectedTo]="connectedTo"
     [cdkDropListData]="field"
-    (cdkDropListDropped)="onDroplistDropped($event)">
+    (cdkDropListDropped)="onDroplistDropped($event)"
+>
     <editor-formly-field
-        *ngFor="let f of field.fieldGroup" 
-        [field]="f" 
+        *ngFor="let f of field.fieldGroup"
+        [field]="f"
         cdkDrag
-        [cdkDragData]="getItemDragData(f)">
+        [cdkDragData]="getItemDragData(f)"
+    >
         <div *cdkDragPlaceholder>Drop Here</div>
         <div cdkDragHandle></div>
     </editor-formly-field>

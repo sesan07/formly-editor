@@ -13,19 +13,19 @@ import { SelectService } from './select/select.service';
 import { TextareaService } from './textarea/textarea.service';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class FieldService implements IFieldService {
-
-    constructor(private _checkboxService: CheckboxService,
+    constructor(
+        private _checkboxService: CheckboxService,
         private _formlyGroupService: FormlyGroupService,
         private _inputService: InputService,
         private _otherFieldService: OtherFieldService,
         private _radioService: RadioService,
         private _repeatingSectionService: RepeatingSectionService,
         private _selectService: SelectService,
-        private _textareaFieldService: TextareaService,
-    ) { }
+        private _textareaFieldService: TextareaService
+    ) {}
 
     getDefaultConfig(type: FieldType, customType?: CustomFieldType): IBaseFormlyField {
         const fieldService: BaseFieldService<any> = this._getFieldService(type);
@@ -39,14 +39,22 @@ export class FieldService implements IFieldService {
 
     private _getFieldService(type: FieldType): BaseFieldService<any> {
         switch (type) {
-            case FieldType.CHECKBOX: return this._checkboxService;
-            case FieldType.FORMLY_GROUP: return this._formlyGroupService;
-            case FieldType.INPUT: return this._inputService;
-            case FieldType.OTHER: return this._otherFieldService;
-            case FieldType.RADIO: return this._radioService;
-            case FieldType.REPEATING_SECTION: return this._repeatingSectionService;
-            case FieldType.SELECT: return this._selectService;
-            case FieldType.TEXTAREA: return this._textareaFieldService;
+            case FieldType.CHECKBOX:
+                return this._checkboxService;
+            case FieldType.FORMLY_GROUP:
+                return this._formlyGroupService;
+            case FieldType.INPUT:
+                return this._inputService;
+            case FieldType.OTHER:
+                return this._otherFieldService;
+            case FieldType.RADIO:
+                return this._radioService;
+            case FieldType.REPEATING_SECTION:
+                return this._repeatingSectionService;
+            case FieldType.SELECT:
+                return this._selectService;
+            case FieldType.TEXTAREA:
+                return this._textareaFieldService;
             default:
                 console.warn(`Unknown formly type: '${type}', treating as 'other' type`);
                 return this._otherFieldService;

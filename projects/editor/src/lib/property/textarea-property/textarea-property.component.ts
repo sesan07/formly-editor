@@ -7,14 +7,14 @@ import { ITextareaProperty } from './textarea-property.types';
 @Component({
     selector: 'editor-textarea-property',
     templateUrl: './textarea-property.component.html',
-    styleUrls: ['./textarea-property.component.scss']
+    styleUrls: ['./textarea-property.component.scss'],
 })
 export class TextareaPropertyComponent extends BasePropertyDirective<ITextareaProperty> {
     public formControl: FormControl;
 
     public get hasOptions(): boolean {
         return this.property.isRemovable;
-    };
+    }
 
     protected _onChanged(isFirstChange: boolean): void {
         if (isFirstChange) {
@@ -22,6 +22,8 @@ export class TextareaPropertyComponent extends BasePropertyDirective<ITextareaPr
             this.formControl.valueChanges.subscribe(val => this._modifyValue(val));
         }
 
-        this.formControl.setValue(this._getPropertyValue(''), { emitEvent: false });
+        this.formControl.setValue(this._getPropertyValue(''), {
+            emitEvent: false,
+        });
     }
 }

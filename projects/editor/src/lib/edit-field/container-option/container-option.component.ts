@@ -4,10 +4,10 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
     selector: 'editor-container-option',
     templateUrl: './container-option.component.html',
     styleUrls: ['./container-option.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContainerOptionComponent {
-	@Input() label: string;
+    @Input() label: string;
     @Input() value: string;
     @Input() options: string[];
     @Input() optionDisplayFn: (option: string) => string;

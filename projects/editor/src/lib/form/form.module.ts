@@ -26,8 +26,6 @@ import { JsonFileValidatorDirective } from './json-file-validator/json-file-vali
 import { JsonValidatorDirective } from './json-validator/json-validator.directive';
 import { EditFieldModule } from '../edit-field/edit-field.module';
 
-
-
 @NgModule({
     declarations: [
         AddFormDialogComponent,
@@ -58,8 +56,6 @@ import { EditFieldModule } from '../edit-field/edit-field.module';
         MatTabsModule,
         DragDropModule,
     ],
-    exports: [
-        FormComponent,
-    ]
+    exports: [FormComponent],
 })
-export class FormModule { }
+export class FormModule {}

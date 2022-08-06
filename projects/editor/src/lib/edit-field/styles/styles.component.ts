@@ -5,7 +5,7 @@ import {
     Input,
     OnChanges,
     Output,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 import { IEditorFormlyField } from '../../editor.types';
@@ -17,14 +17,14 @@ import {
     FlexContainerPrefix,
     GridContainerPrefix,
     GridChildPrefix,
-    BreakpointType
+    BreakpointType,
 } from './styles.types';
 
 @Component({
     selector: 'editor-styles',
     templateUrl: './styles.component.html',
     styleUrls: ['./styles.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StylesComponent implements OnChanges {
     @Input() editField: IEditorFormlyField;
@@ -53,7 +53,7 @@ export class StylesComponent implements OnChanges {
     private _generalChildrenProperty: IChipListProperty;
     private _breakpointChildrenProperties: Map<BreakpointType, IChipListProperty> = new Map();
 
-    constructor(private _stylesService: StylesService) { }
+    constructor(private _stylesService: StylesService) {}
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.editField) {
@@ -70,7 +70,7 @@ export class StylesComponent implements OnChanges {
                     value
                 );
             } else {
-                newFieldGroupClassName = value +  ' ' + this.editField.fieldGroupClassName;
+                newFieldGroupClassName = value + ' ' + this.editField.fieldGroupClassName;
             }
         } else {
             newFieldGroupClassName = value;
@@ -90,41 +90,60 @@ export class StylesComponent implements OnChanges {
     }
 
     getBreakpointTitle(breakpointType: BreakpointType): string {
-        switch(breakpointType) {
-            case BreakpointType.SMALL: return 'Small devices';
-            case BreakpointType.MEDIUM: return 'Medium devices';
-            case BreakpointType.LARGE: return 'Large devices';
-            case BreakpointType.EXTRA_LARGE: return 'Extra large devices';
-            default: throw new Error('Unknown breakpoint');
+        switch (breakpointType) {
+            case BreakpointType.SMALL:
+                return 'Small devices';
+            case BreakpointType.MEDIUM:
+                return 'Medium devices';
+            case BreakpointType.LARGE:
+                return 'Large devices';
+            case BreakpointType.EXTRA_LARGE:
+                return 'Extra large devices';
+            default:
+                throw new Error('Unknown breakpoint');
         }
     }
 
     getBreakpointTooltip(breakpointType: BreakpointType): string {
-        switch(breakpointType) {
-            case BreakpointType.SMALL: return 'Portrait tablets and large phones, 600px and up';
-            case BreakpointType.MEDIUM: return 'Landscape tablets, 768px and up';
-            case BreakpointType.LARGE: return 'Laptops/desktops, 992px and up';
-            case BreakpointType.EXTRA_LARGE: return 'Large laptops and desktops, 1200px and up';
-            default: throw new Error('Unknown breakpoint');
+        switch (breakpointType) {
+            case BreakpointType.SMALL:
+                return 'Portrait tablets and large phones, 600px and up';
+            case BreakpointType.MEDIUM:
+                return 'Landscape tablets, 768px and up';
+            case BreakpointType.LARGE:
+                return 'Laptops/desktops, 992px and up';
+            case BreakpointType.EXTRA_LARGE:
+                return 'Large laptops and desktops, 1200px and up';
+            default:
+                throw new Error('Unknown breakpoint');
         }
     }
 
     getContainerName(groupStyle: ContainerType): string {
         switch (groupStyle) {
-            case ContainerType.FLEX: return 'Flex';
-            case ContainerType.GRID: return 'Grid';
+            case ContainerType.FLEX:
+                return 'Flex';
+            case ContainerType.GRID:
+                return 'Grid';
         }
     }
 
     getNameFromPrefix(prefix: string): string {
         switch (prefix) {
-            case GridContainerPrefix.COLUMNS: return 'Number of Columns';
-            case GridContainerPrefix.ROWS: return 'Number of Rows';
-            case GridChildPrefix.COLUMN_SPAN: return 'Column Span';
-            case GridChildPrefix.COLUMN_START: return 'Column Start';
-            case GridChildPrefix.ROW_SPAN: return 'Row Span';
-            case GridChildPrefix.ROW_START: return 'Row Start';
-            case FlexContainerPrefix.FLEX_DIRECTION: return 'Flex Direction';
+            case GridContainerPrefix.COLUMNS:
+                return 'Number of Columns';
+            case GridContainerPrefix.ROWS:
+                return 'Number of Rows';
+            case GridChildPrefix.COLUMN_SPAN:
+                return 'Column Span';
+            case GridChildPrefix.COLUMN_START:
+                return 'Column Start';
+            case GridChildPrefix.ROW_SPAN:
+                return 'Row Span';
+            case GridChildPrefix.ROW_START:
+                return 'Row Start';
+            case FlexContainerPrefix.FLEX_DIRECTION:
+                return 'Flex Direction';
         }
     }
 
@@ -163,8 +182,8 @@ export class StylesComponent implements OnChanges {
         const fieldGroupClassNames: string[] = this.parentField.fieldGroupClassName?.split(' ') ?? [];
 
         // TODO use regex to match without '-' prefix and suffix
-        this.parentContainer = fieldGroupClassNames.find(
-            className => (this.containerTypes as string[]).includes(className)
+        this.parentContainer = fieldGroupClassNames.find(className =>
+            (this.containerTypes as string[]).includes(className)
         ) as ContainerType;
     }
 
@@ -193,12 +212,17 @@ export class StylesComponent implements OnChanges {
         });
     }
 
-    private _setClassValue(property: string, value: string, classNamePrefix: string, breakpoint?: BreakpointType): void {
+    private _setClassValue(
+        property: string,
+        value: string,
+        classNamePrefix: string,
+        breakpoint?: BreakpointType
+    ): void {
         const newClassName: string = classNamePrefix + value + (breakpoint ? '-' + breakpoint : '');
         let newPropertyValue: string;
 
         if (this.editField[property]) {
-            const regex = new RegExp(`${classNamePrefix}[a-zA-Z\\d-]+${breakpoint ? ('-' + breakpoint) : ''}(?![-\\w])`);
+            const regex = new RegExp(`${classNamePrefix}[a-zA-Z\\d-]+${breakpoint ? '-' + breakpoint : ''}(?![-\\w])`);
 
             // Check if class name pattern already exists.
             if (this.editField[property].search(regex) >= 0) {
@@ -215,7 +239,9 @@ export class StylesComponent implements OnChanges {
     }
 
     private _getClassValue(property: string, classNamePrefix: string, breakpoint?: BreakpointType): string {
-        const regex = new RegExp(`(?<=${classNamePrefix})[a-zA-Z\\d]+(-reverse){0,1}(?=${breakpoint ? `-${breakpoint}` : '(\\s|$)'})`);
+        const regex = new RegExp(
+            `(?<=${classNamePrefix})[a-zA-Z\\d]+(-reverse){0,1}(?=${breakpoint ? `-${breakpoint}` : '(\\s|$)'})`
+        );
         const matches: string[] | null = this.editField[property]?.match(regex);
         return matches ? matches[0] : null;
     }

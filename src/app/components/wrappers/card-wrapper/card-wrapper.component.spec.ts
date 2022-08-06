@@ -3,23 +3,22 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CardWrapperComponent } from './card-wrapper.component';
 
 describe('CardWrapperComponent', () => {
-  let component: CardWrapperComponent;
-  let fixture: ComponentFixture<CardWrapperComponent>;
+    let component: CardWrapperComponent;
+    let fixture: ComponentFixture<CardWrapperComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ CardWrapperComponent ]
-    })
-    .compileComponents();
-  });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [CardWrapperComponent],
+        }).compileComponents();
+    });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(CardWrapperComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(CardWrapperComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

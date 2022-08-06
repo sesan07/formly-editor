@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class FileService {
-
     public saveFile(fileName: string, content: string): void {
         const blob: Blob = new Blob([content], { type: 'application/json' });
         saveAs(blob, fileName);

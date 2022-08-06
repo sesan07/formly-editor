@@ -17,12 +17,7 @@ import { ContainerOptionComponent } from './container-option/container-option.co
 import { PropertyModule } from '../property/property.module';
 
 @NgModule({
-    declarations: [
-        BreakpointComponent,
-        ContainerOptionComponent,
-        StylesComponent,
-        EditFieldComponent,
-    ],
+    declarations: [BreakpointComponent, ContainerOptionComponent, StylesComponent, EditFieldComponent],
     imports: [
         CommonModule,
         FormsModule,
@@ -36,8 +31,6 @@ import { PropertyModule } from '../property/property.module';
         MatTooltipModule,
         MatTabsModule,
     ],
-    exports: [
-        EditFieldComponent,
-    ]
+    exports: [EditFieldComponent],
 })
-export class EditFieldModule { }
+export class EditFieldModule {}

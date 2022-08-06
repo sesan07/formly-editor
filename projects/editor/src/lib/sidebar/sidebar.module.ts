@@ -6,21 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { SidebarSectionComponent } from './sidebar-section/sidebar-section.component';
 import { SidebarComponent } from './sidebar.component';
 
-
-
 @NgModule({
-    declarations: [
-        SidebarComponent,
-        SidebarSectionComponent,
-    ],
-    imports: [
-        CommonModule,
-        MatIconModule,
-        MatButtonModule,
-    ],
-    exports: [
-        SidebarComponent,
-        SidebarSectionComponent,
-    ]
+    declarations: [SidebarComponent, SidebarSectionComponent],
+    imports: [CommonModule, MatIconModule, MatButtonModule],
+    exports: [SidebarComponent, SidebarSectionComponent],
 })
-export class SidebarModule { }
+export class SidebarModule {}

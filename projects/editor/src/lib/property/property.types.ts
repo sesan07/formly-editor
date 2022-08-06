@@ -5,21 +5,21 @@ import { IArrayProperty } from './object-array-properties/array-property.types';
 import { IObjectProperty } from './object-array-properties/object-property.types';
 
 export enum PropertyType {
-	ARRAY = 'Array',
-	BOOLEAN = 'Boolean',
-	CHIP_LIST = 'Chip List',
-	OBJECT = 'Object',
-	NUMBER = 'Number',
-	TEXT = 'Text',
-	TEXTAREA = 'Textarea',
+    ARRAY = 'Array',
+    BOOLEAN = 'Boolean',
+    CHIP_LIST = 'Chip List',
+    OBJECT = 'Object',
+    NUMBER = 'Number',
+    TEXT = 'Text',
+    TEXTAREA = 'Textarea',
 }
 
 export interface IBaseProperty {
-	type: PropertyType;
+    type: PropertyType;
     name?: string;
-	key?: string | number;
-	isRemovable?: boolean;
-	isKeyEditable?: boolean;
+    key?: string | number;
+    isRemovable?: boolean;
+    isKeyEditable?: boolean;
     isSimple?: boolean;
 }
 
