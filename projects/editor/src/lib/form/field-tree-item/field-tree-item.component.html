@@ -2,7 +2,7 @@
     class="cursor-pointer"
     [treeLevel]="treeLevel"
     [(isExpanded)]="isExpanded"
-    [isExpandable]="field.canHaveChildren"
+    [isExpandable]="fieldInfo.canHaveChildren"
     [isActive]="isActiveField"
     [hasOptions]="hasOptions"
     [optionsMenu]="optionsMenu"
@@ -24,7 +24,7 @@
 
 <mat-menu #optionsMenu="matMenu">
     <button
-        *ngIf="field.canHaveChildren"
+        *ngIf="fieldInfo.canHaveChildren"
         mat-menu-item
         [matMenuTriggerFor]="addCategoryMenu"
     >
@@ -32,7 +32,7 @@
         <span>Add</span>
     </button>
     <button
-        *ngIf="field.canHaveChildren && replaceCategories.length > 0"
+        *ngIf="fieldInfo.canHaveChildren && replaceCategories.length > 0"
         mat-menu-item
         [matMenuTriggerFor]="replaceCategoryMenu"
     >

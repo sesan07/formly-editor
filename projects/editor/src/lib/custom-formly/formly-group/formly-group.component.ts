@@ -48,7 +48,7 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
         this.isGridContainer = hasGrid;
         this.dropListOrientation = !hasGrid && isHorizontal ? 'horizontal' : 'vertical';
 
-        if (this.field.formId && this.field.fieldId !== 'preview') {
+        if (this.field._info.formId && this.field._info.fieldId !== 'preview') {
             this._droplistService.droplistIds$
                 .pipe(takeUntil(this._destroy$))
                 .subscribe(ids => (this.connectedTo = ids));
@@ -78,18 +78,18 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
 
         switch (itemData.action) {
             case DragAction.COPY:
-                this._formService.addField(field.type, field.customType, targetParent.fieldId, dropIndex);
+                this._formService.addField(field.type, field.customType, targetParent._info.fieldId, dropIndex);
                 break;
             case DragAction.MOVE:
-                if (currentParent.fieldId === targetParent.fieldId) {
+                if (currentParent._info.fieldId === targetParent._info.fieldId) {
                     if (dragDrop.previousIndex === dragDrop.currentIndex) {
                         return;
                     }
-                    this._formService.moveField(field.fieldId, dragDrop.previousIndex, dropIndex);
+                    this._formService.moveField(field._info.fieldId, dragDrop.previousIndex, dropIndex);
                 } else {
                     this._formService.transferField(
-                        field.fieldId,
-                        targetParent.fieldId,
+                        field._info.fieldId,
+                        targetParent._info.fieldId,
                         dragDrop.previousIndex,
                         dropIndex
                     );

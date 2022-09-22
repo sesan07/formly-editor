@@ -15,7 +15,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { EditorService } from '../../editor.service';
-import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField } from '../../editor.types';
+import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField, IEditorFieldInfo } from '../../editor.types';
 import { getFieldChildren, getFormattedFieldName } from '../utils';
 import { FormService } from '../form.service';
 
@@ -36,6 +36,7 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
     public isActiveField: boolean;
     public childFields: IEditorFormlyField[];
     public replaceCategories: EditorTypeCategoryOption[];
+    public fieldInfo: IEditorFieldInfo;
 
     private _destroy$: Subject<void> = new Subject();
 
@@ -48,12 +49,13 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
     ) {}
 
     public get hasOptions(): boolean {
-        return this.field.canHaveChildren || this.treeLevel !== 0;
+        return this.fieldInfo.canHaveChildren || this.treeLevel !== 0;
     }
 
     ngOnInit(): void {
         this._renderer.addClass(this._elementRef.nativeElement, 'tree-item');
 
+        this.fieldInfo = this.field._info;
         this.replaceCategories = this.editorService.fieldCategories
             .map(category => {
                 // Filter fields that can have children and aren't this field
@@ -73,12 +75,12 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
             })
             .filter(category => category.typeOptions.length > 0); // Remove categories with empty fields
 
-        if (this.field.canHaveChildren) {
+        if (this.fieldInfo.canHaveChildren) {
             this.childFields = getFieldChildren(this.field);
         }
 
         this._formService.activeField$.pipe(takeUntil(this._destroy$)).subscribe((f: IEditorFormlyField) => {
-            this.isActiveField = f.formId === this.field.formId && f.fieldId === this.field.fieldId;
+            this.isActiveField = f._info.formId === this.fieldInfo.formId && f._info.fieldId === this.fieldInfo.fieldId;
             if (this.isActiveField) {
                 this.expandParent.emit();
             }
@@ -95,23 +97,23 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
     getFormattedFieldName = (f: IEditorFormlyField) => getFormattedFieldName(f);
 
     onAddChildField(type: string, customType?: string): void {
-        if (this.field.canHaveChildren) {
+        if (this.fieldInfo.canHaveChildren) {
             this.isExpanded = true;
         }
 
-        this._formService.addField(type, customType, this.field.fieldId);
+        this._formService.addField(type, customType, this.fieldInfo.fieldId);
     }
 
     onRemoveChildField(childField: IEditorFormlyField): void {
-        this._formService.removeField(childField.fieldId, this.field.fieldId);
+        this._formService.removeField(childField._info.fieldId, this.fieldInfo.fieldId);
     }
 
     onReplaceParentField(type: string, customType?: string): void {
-        this._formService.replaceParentField(type, this.field.fieldId, customType);
+        this._formService.replaceParentField(type, this.fieldInfo.fieldId, customType);
     }
 
     onSelected(): void {
-        this._formService.selectField(this.field.fieldId);
+        this._formService.selectField(this.fieldInfo.fieldId);
     }
 
     onExpandParent(): void {
@@ -119,5 +121,5 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
         this.expandParent.emit();
     }
 
-    trackFieldById: TrackByFunction<IEditorFormlyField> = (_, field: IEditorFormlyField) => field.fieldId;
+    trackFieldById: TrackByFunction<IEditorFormlyField> = (_, field: IEditorFormlyField) => field._info.fieldId;
 }

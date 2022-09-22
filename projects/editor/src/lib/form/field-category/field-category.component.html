@@ -32,12 +32,12 @@
             [cdkDragData]="getItemDragData(field)"
             (cdkDragDropped)="onDragReturned()"
         >
-            <div>{{ field.name }}</div>
+            <div>{{ field._info.name }}</div>
             <editor-formly-form
                 [fields]="[previewFields[i]]"
                 *cdkDragPreview
             ></editor-formly-form>
-            <div *cdkDragPlaceholder>{{ field.name }}</div>
+            <div *cdkDragPlaceholder>{{ field._info.name }}</div>
         </div>
     </ng-container>
 </div>

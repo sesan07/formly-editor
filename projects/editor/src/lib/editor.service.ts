@@ -14,6 +14,7 @@ import {
     EditorConfigOption,
     EditorTypeCategoryOption,
     EditorTypeOption,
+    IEditorFieldInfo,
 } from './editor.types';
 import { IProperty } from './property/property.types';
 import { getFieldChildren } from './form/utils';
@@ -103,7 +104,7 @@ export class EditorService {
         const newFormId: string = this._getNextFormId(this._currFormId++);
         const fieldsClone: IEditorFormlyField[] = cloneDeep(sourceForm.fields);
         fieldsClone.forEach(field => {
-            field.parentFieldId = null;
+            field._info.parentFieldId = null;
             this._updateDuplicateField(newFormId, field);
         });
 
@@ -149,27 +150,31 @@ export class EditorService {
         // Properties
         const properties: IProperty[] = this._fieldService.getProperties(baseField.type);
 
-        // Create editor field
+        // Editor information
         const typeOption: EditorTypeOption = this._getTypeOption(baseField.type, baseField.customType);
-        const field: IEditorFormlyField = {
-            ...baseField,
+        const fieldInfo: IEditorFieldInfo = {
             name: typeOption.displayName,
-            fieldGroup: undefined,
             formId,
             fieldId: this._getNextFieldId(baseField.type),
             parentFieldId,
             canHaveChildren: typeOption.canHaveChildren,
             childrenPath: typeOption.childrenPath,
-            properties,
+        };
+
+        // Create field
+        const field: IEditorFormlyField = {
+            ...baseField,
+            _info: fieldInfo,
+            fieldGroup: undefined,
         };
 
         // Process children (e.g. 'fieldGroup')
-        if (typeOption.canHaveChildren) {
-            const baseChildren: IBaseFormlyField[] = get(baseField, typeOption.childrenPath);
+        if (fieldInfo.canHaveChildren) {
+            const baseChildren: IBaseFormlyField[] = get(baseField, fieldInfo.childrenPath);
             const children: IEditorFormlyField[] = baseChildren?.map(child =>
-                this._convertToEditorField(formId, child, field.fieldId)
+                this._convertToEditorField(formId, child, fieldInfo.fieldId)
             );
-            set(field, typeOption.childrenPath, children);
+            set(field, fieldInfo.childrenPath, children);
         }
 
         return field;
@@ -228,14 +233,15 @@ export class EditorService {
     }
 
     private _updateDuplicateField(formId: string, field: IEditorFormlyField) {
-        field.formId = formId;
-        field.fieldId = this._getNextFieldId(field.type);
+        const fieldInfo = field._info;
+        fieldInfo.formId = formId;
+        fieldInfo.fieldId = this._getNextFieldId(field.type);
 
         // Process children (e.g. 'fieldGroup')
-        if (field.canHaveChildren) {
+        if (fieldInfo.canHaveChildren) {
             const children: IEditorFormlyField[] = getFieldChildren(field);
             children.forEach(child => {
-                child.parentFieldId = field.fieldId;
+                child._info.parentFieldId = fieldInfo.fieldId;
                 this._updateDuplicateField(formId, child);
             });
         }

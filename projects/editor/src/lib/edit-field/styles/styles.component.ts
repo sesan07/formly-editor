@@ -172,7 +172,7 @@ export class StylesComponent implements OnChanges {
             this.parentContainer = null;
         }
 
-        if (this.editField.canHaveChildren) {
+        if (this.editField._info.canHaveChildren) {
             this._setupChildren();
             this._setupChildrenProperties();
         }
