@@ -12,11 +12,12 @@ import { IEditorFormlyFieldConfigCache } from '../../editor.types';
 })
 export class FormlyFormComponent extends FormlyForm {
     override field: IEditorFormlyFieldConfigCache = {
+        _info: {
+            name: undefined,
+            formId: undefined,
+            fieldId: undefined,
+        },
         type: 'formly-group',
-        name: undefined,
-        properties: undefined,
-        formId: undefined,
-        fieldId: undefined,
         templateOptions: undefined,
         wrappers: undefined,
         expressionProperties: undefined,

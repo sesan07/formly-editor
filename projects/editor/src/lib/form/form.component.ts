@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
@@ -7,8 +7,8 @@ import { Observable, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { EditorService } from '../editor.service';
-import { IEditorFormlyField, IForm } from '../editor.types';
-import { PropertyType } from '../property/property.types';
+import { EDITOR_FIELD_SERVICE, IEditorFormlyField, IFieldService, IForm } from '../editor.types';
+import { IProperty, PropertyType } from '../property/property.types';
 import { PropertyService } from '../property/property.service';
 import { ExportFormDialogComponent } from './export-form-dialog/export-form-dialog.component';
 import { ExportJSONRequest, ExportJSONResponse } from './export-form-dialog/export-json-dialog.types';
@@ -63,6 +63,7 @@ export class FormComponent implements OnInit, OnDestroy {
         public propertyService: PropertyService,
         public editorService: EditorService,
         private _formService: FormService,
+        @Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService,
         private _dialog: MatDialog,
         private _fileService: FileService,
         private _cdRef: ChangeDetectorRef
@@ -92,7 +93,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
         this._formService.activeField$.pipe(takeUntil(this._destroy$)).subscribe(field => {
             this.activeField = field;
-            this.activeFieldParent = this._formService.getField(field.parentFieldId);
+            this.activeFieldParent = this._formService.getField(field._info.parentFieldId);
             this._updateActiveFieldProperty();
             this._updateActiveFieldTarget();
         });
@@ -186,7 +187,8 @@ export class FormComponent implements OnInit, OnDestroy {
     private _updateActiveFieldProperty(): void {
         this.activeFieldProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
         this._initRootProperty(this.activeFieldProperty);
-        this.activeFieldProperty.childProperties = this.activeField.properties;
+        const properties = this._fieldService.getProperties(this.activeField.type);
+        this.activeFieldProperty.childProperties = properties;
         this.activeFieldProperty.populateChildrenFromTarget = false;
         this.activeFieldProperty.addOptions = [];
         this._cdRef.markForCheck();

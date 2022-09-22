@@ -18,6 +18,7 @@ import {
 } from './object-array-properties/object-array-properties.component';
 import { TreeModule } from '../tree/tree.module';
 import { TextareaPropertyComponent } from './textarea-property/textarea-property.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [
@@ -33,6 +34,7 @@ import { TextareaPropertyComponent } from './textarea-property/textarea-property
         ReactiveFormsModule,
         TreeModule,
         MatIconModule,
+        MatButtonModule,
         MatMenuModule,
         MatInputModule,
         MatCheckboxModule,

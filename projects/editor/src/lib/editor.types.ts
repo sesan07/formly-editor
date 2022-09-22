@@ -14,6 +14,15 @@ export enum FieldType {
     FORMLY_GROUP = 'formly-group',
 }
 
+export interface IEditorFieldInfo {
+    name: string;
+    formId: string;
+    fieldId: string;
+    parentFieldId?: string;
+    canHaveChildren?: boolean;
+    childrenPath?: string; // Lodash path
+}
+
 export interface IBaseFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
     type: string;
     customType?: string;
@@ -27,14 +36,14 @@ export interface IBaseFormlyField<T = FormlyTemplateOptions> extends FormlyField
 }
 
 export interface IEditorFormlyField extends IBaseFormlyField {
-    name: string;
+    _info: IEditorFieldInfo;
+    // name: string;
     fieldGroup?: IEditorFormlyField[];
-    properties: IProperty[];
-    formId: string;
-    fieldId: string;
-    parentFieldId?: string;
-    canHaveChildren?: boolean;
-    childrenPath?: string; // Lodash path
+    // formId: string;
+    // fieldId: string;
+    // parentFieldId?: string;
+    // canHaveChildren?: boolean;
+    // childrenPath?: string; // Lodash path
 }
 
 export type IEditorFormlyFieldConfigCache = IEditorFormlyField & FormlyFieldConfigCache;

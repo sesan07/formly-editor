@@ -36,7 +36,7 @@ export class FieldCategoryComponent implements OnInit, OnDestroy {
         );
         this.previewFields = cloneDeep(this.fields);
         this.previewFields.forEach(field => {
-            field.fieldId = 'preview';
+            field._info.fieldId = 'preview';
             field.key = 'preview';
         });
 
@@ -58,7 +58,7 @@ export class FieldCategoryComponent implements OnInit, OnDestroy {
     }
 
     onDropListExited(event: CdkDragExit) {
-        const currentIdx = this.fields.findIndex(f => f.fieldId === event.item.data.field.fieldId);
+        const currentIdx = this.fields.findIndex(f => f._info.fieldId === event.item.data.field.fieldId);
         this.fields.splice(currentIdx + 1, 0, {
             ...event.item.data.field,
             fieldId: 'temp',
@@ -66,6 +66,6 @@ export class FieldCategoryComponent implements OnInit, OnDestroy {
     }
 
     onDragReturned() {
-        this.fields = this.fields.filter(f => f.fieldId !== 'temp');
+        this.fields = this.fields.filter(f => f._info.fieldId !== 'temp');
     }
 }

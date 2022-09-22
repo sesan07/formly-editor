@@ -25,11 +25,12 @@ export class DroplistService {
     }
 
     private _addField(field: IEditorFormlyField, ids: string[], level: number): void {
-        if (field.canHaveChildren) {
+        const fieldInfo = field._info;
+        if (fieldInfo.canHaveChildren) {
             const children: IEditorFormlyField[] = getFieldChildren(field);
             children.forEach(child => this._addField(child, ids, level + 1));
 
-            ids.push(field.fieldId);
+            ids.push(fieldInfo.fieldId);
         }
     }
 }

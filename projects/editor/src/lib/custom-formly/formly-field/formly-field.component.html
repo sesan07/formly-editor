@@ -9,7 +9,7 @@
         *ngIf="!hideOptions"
     >
         <button
-            *ngIf="field.canHaveChildren"
+            *ngIf="fieldInfo.canHaveChildren"
             mat-icon-button
             [matMenuTriggerFor]="addCategoryMenu"
             (click)="$event.stopPropagation()"
@@ -18,7 +18,7 @@
         </button>
 
         <button
-            *ngIf="field.parentFieldId"
+            *ngIf="fieldInfo.parentFieldId"
             mat-icon-button
             (click)="onRemove(); $event.stopPropagation()"
         >

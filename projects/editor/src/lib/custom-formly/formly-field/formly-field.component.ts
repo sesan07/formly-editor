@@ -15,7 +15,7 @@ import { FormlyConfig, FormlyField, FormlyFieldTemplates } from '@ngx-formly/cor
 import { Subject, takeUntil } from 'rxjs';
 
 import { EditorService } from '../../editor.service';
-import { IEditorFormlyField } from '../../editor.types';
+import { IEditorFieldInfo, IEditorFormlyField } from '../../editor.types';
 import { FormService } from '../../form/form.service';
 import { getFieldChildren, getFormattedFieldName } from '../../form/utils';
 
@@ -38,6 +38,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     public isLastChild: boolean;
     public index: number;
     public hideOptions: boolean;
+    public fieldInfo: IEditorFieldInfo;
 
     private _isActiveField: boolean;
     private _isEditMode: boolean;
@@ -65,7 +66,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
 
     @HostListener('click', ['$event'])
     onClick(event: MouseEvent): void {
-        this._formService.selectField(this.field.fieldId);
+        this._formService.selectField(this.fieldInfo.fieldId);
         event.stopPropagation();
     }
 
@@ -83,10 +84,11 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     override ngOnInit(): void {
         super.ngOnInit();
 
-        if (this.field.parentFieldId) {
-            const parent: IEditorFormlyField = this._formService.getField(this.field.parentFieldId);
+        this.fieldInfo = this.field._info;
+        if (this.fieldInfo.parentFieldId) {
+            const parent: IEditorFormlyField = this._formService.getField(this.fieldInfo.parentFieldId);
             const siblings: IEditorFormlyField[] = getFieldChildren(parent);
-            this.index = siblings.findIndex(f => f.fieldId === this.field.fieldId);
+            this.index = siblings.findIndex(f => f._info.fieldId === this.fieldInfo.fieldId);
             this.isFirstChild = this.index === 0;
             this.isLastChild = this.index === siblings.length - 1;
         } else {
@@ -96,7 +98,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         this.hideOptions = this.field.templateOptions.hideEditorWrapperOptions;
 
         this._formService.activeField$.pipe(takeUntil(this._destroy$)).subscribe(f => {
-            this._isActiveField = f.fieldId === this.field.fieldId;
+            this._isActiveField = f._info.fieldId === this.fieldInfo.fieldId;
             this._cdRef.markForCheck();
         });
         this._formService.isEditMode$.pipe(takeUntil(this._destroy$)).subscribe(v => {
@@ -114,18 +116,18 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     getFormattedFieldName = (f: IEditorFormlyField) => getFormattedFieldName(f);
 
     onAddChildField(type: string, customType?: string): void {
-        this._formService.addField(type, customType, this.field.fieldId);
+        this._formService.addField(type, customType, this.fieldInfo.fieldId);
     }
 
     onRemove(): void {
-        this._formService.removeField(this.field.fieldId, this.field.parentFieldId);
+        this._formService.removeField(this.fieldInfo.fieldId, this.fieldInfo.parentFieldId);
     }
 
     onMoveUp(): void {
-        this._formService.moveField(this.field.fieldId, this.index, this.index - 1);
+        this._formService.moveField(this.fieldInfo.fieldId, this.index, this.index - 1);
     }
 
     onMoveDown(): void {
-        this._formService.moveField(this.field.fieldId, this.index, this.index + 1);
+        this._formService.moveField(this.fieldInfo.fieldId, this.index, this.index + 1);
     }
 }
