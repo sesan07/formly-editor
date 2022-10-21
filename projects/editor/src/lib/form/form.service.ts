@@ -60,7 +60,7 @@ export class FormService {
         return newField;
     }
 
-    public removeField(fieldId: string, parentId?: string): void {
+    public removeField(fieldId: string, parentId?: string, removeChildren: boolean = true): void {
         const siblings: IEditorFormlyField[] = this._getSiblings(parentId);
 
         const index: number = siblings.findIndex(f => f._info.fieldId === fieldId);
@@ -68,7 +68,7 @@ export class FormService {
             const field = this.getField(fieldId);
             siblings.splice(index, 1);
 
-            this._removeFromFieldMap(field);
+            this._removeFromFieldMap(field, removeChildren);
             this._fields$.next(this._fields$.value);
 
             if (parentId) {
@@ -79,7 +79,7 @@ export class FormService {
         }
     }
 
-    public updateField(modifiedField: IEditorFormlyField) {
+    public modifyField(modifiedField: IEditorFormlyField) {
         const modifiedFieldInfo = modifiedField._info;
         const siblings: IEditorFormlyField[] = this._getSiblings(modifiedFieldInfo.parentFieldId);
         const index: number = siblings.findIndex(f => f._info.fieldId === modifiedFieldInfo.fieldId);
@@ -140,7 +140,7 @@ export class FormService {
         const index: number = siblings.findIndex(f => f._info.fieldId === fieldId);
         const children = getFieldChildren(field);
 
-        this.removeField(fieldId, fieldInfo.parentFieldId);
+        this.removeField(fieldId, fieldInfo.parentFieldId, false);
         const newField: IEditorFormlyField = this.addField(
             replaceType,
             replaceCustomType,
@@ -185,14 +185,14 @@ export class FormService {
         }
     }
 
-    private _removeFromFieldMap(field: IEditorFormlyField): void {
+    private _removeFromFieldMap(field: IEditorFormlyField, removeChildren: boolean): void {
         const fieldInfo = field._info;
         this._fieldMap.delete(fieldInfo.fieldId);
 
         // Process children (e.g. 'fieldGroup')
-        if (fieldInfo.canHaveChildren) {
+        if (fieldInfo.canHaveChildren && removeChildren) {
             const children: IEditorFormlyField[] = getFieldChildren(field);
-            children.forEach(child => this._removeFromFieldMap(child));
+            children.forEach(child => this._removeFromFieldMap(child, removeChildren));
         }
     }
 }

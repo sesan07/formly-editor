@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 
 import { IEditorFormlyField } from '../../editor.types';
+import { FormService } from '../../form/form.service';
 import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
 import { PropertyType } from '../../property/property.types';
 import { StylesService } from './styles.service';
@@ -28,9 +29,10 @@ import {
 })
 export class StylesComponent implements OnChanges {
     @Input() editField: IEditorFormlyField;
-    @Input() parentField?: IEditorFormlyField;
 
     @Output() fieldChanged: EventEmitter<void> = new EventEmitter();
+
+    public parentField?: IEditorFormlyField;
 
     containerType: typeof ContainerType = ContainerType;
     containerTypes: ContainerType[] = Object.values(ContainerType);
@@ -53,7 +55,7 @@ export class StylesComponent implements OnChanges {
     private _generalChildrenProperty: IChipListProperty;
     private _breakpointChildrenProperties: Map<BreakpointType, IChipListProperty> = new Map();
 
-    constructor(private _stylesService: StylesService) {}
+    constructor(private _formService: FormService, private _stylesService: StylesService) {}
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.editField) {
@@ -165,12 +167,7 @@ export class StylesComponent implements OnChanges {
 
     private _setUp(): void {
         this._setupProperties();
-
-        if (this.parentField) {
-            this._setupParent();
-        } else {
-            this.parentContainer = null;
-        }
+        this._setupParent();
 
         if (this.editField._info.canHaveChildren) {
             this._setupChildren();
@@ -179,6 +176,12 @@ export class StylesComponent implements OnChanges {
     }
 
     private _setupParent(): void {
+        this.parentField = this._formService.getField(this.editField._info.parentFieldId);
+        if (!this.parentField) {
+            this.parentContainer = null;
+            return;
+        }
+
         const fieldGroupClassNames: string[] = this.parentField.fieldGroupClassName?.split(' ') ?? [];
 
         // TODO use regex to match without '-' prefix and suffix

@@ -9,10 +9,10 @@ import { EditorService } from '../../editor.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToolbarComponent {
-    @Input() selectedDisplay: 'form' | 'json';
+    @Input() tabIndex: 0 | 1;
     @Input() isEditMode: boolean;
 
-    @Output() selectedDisplayChange: EventEmitter<'form' | 'json'> = new EventEmitter();
+    @Output() tabIndexChange: EventEmitter<0 | 1> = new EventEmitter();
     @Output() isEditModeChange: EventEmitter<boolean> = new EventEmitter();
     @Output() duplicateForm: EventEmitter<void> = new EventEmitter();
     @Output() resetModel: EventEmitter<void> = new EventEmitter();

@@ -8,7 +8,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { EditorService } from '../editor.service';
 import { EDITOR_FIELD_SERVICE, IEditorFormlyField, IFieldService, IForm } from '../editor.types';
-import { IProperty, PropertyType } from '../property/property.types';
+import { PropertyType } from '../property/property.types';
 import { PropertyService } from '../property/property.service';
 import { ExportFormDialogComponent } from './export-form-dialog/export-form-dialog.component';
 import { ExportJSONRequest, ExportJSONResponse } from './export-form-dialog/export-json-dialog.types';
@@ -33,26 +33,23 @@ export class FormComponent implements OnInit, OnDestroy {
     @Input() form: IForm;
 
     public activeField: IEditorFormlyField;
-    public activeFieldParent: IEditorFormlyField;
-
     public activeFieldProperty: IObjectProperty;
     public activeFieldTarget: IEditorFormlyField;
+    public activeFieldTargetChange$: Subject<void> = new Subject();
+
     public modelProperty: IObjectProperty;
     public modelTarget: Record<string, any>;
-
-    public activeFieldTargetChange$: Subject<void> = new Subject();
     public modelTargetChange$: Subject<void> = new Subject();
-    public isEditMode$: Observable<boolean>;
 
     public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
     public isAdvanced = true;
     public showSidebars = true;
+    public toolbarTabIndex: 0 | 1 = 0;
 
     public formFields: IEditorFormlyField[];
     public formFieldsJSON: string;
     public formGroup: FormGroup = new FormGroup({});
     public options: FormlyFormOptions = {};
-    public selectedFormDisplay: 'form' | 'json' = 'form';
 
     private _resizeEnd$: Subject<void> = new Subject();
     private _destroy$: Subject<void> = new Subject();
@@ -62,45 +59,34 @@ export class FormComponent implements OnInit, OnDestroy {
     constructor(
         public propertyService: PropertyService,
         public editorService: EditorService,
-        private _formService: FormService,
         @Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService,
+        private _formService: FormService,
         private _dialog: MatDialog,
         private _fileService: FileService,
         private _cdRef: ChangeDetectorRef
     ) {}
 
-    public get formDisplayTabIndex(): number {
-        switch (this.selectedFormDisplay) {
-            case 'form':
-                return 0;
-            case 'json':
-                return 1;
-        }
-    }
-
     public get resizeEnd$(): Observable<void> {
         return this._resizeEnd$.asObservable();
     }
 
+    public get isEditMode$(): Observable<boolean> {
+        return this._formService.isEditMode$;
+    }
+
     public ngOnInit(): void {
         this._formService.setup(this.form);
-        this.isEditMode$ = this._formService.isEditMode$;
 
         this._updateModelProperty();
         this._updateModelTarget();
 
         this._formService.fields$.pipe(takeUntil(this._destroy$)).subscribe(fields => this._updateFormFields(fields));
+        this._formService.activeField$
+            .pipe(takeUntil(this._destroy$))
+            .subscribe(field => this._updateActiveField(field));
 
-        this._formService.activeField$.pipe(takeUntil(this._destroy$)).subscribe(field => {
-            this.activeField = field;
-            this.activeFieldParent = this._formService.getField(field._info.parentFieldId);
-            this._updateActiveFieldProperty();
-            this._updateActiveFieldTarget();
-        });
-
-        this.activeFieldTargetChange$.pipe(debounceTime(this._debounceTime)).subscribe(() => this._updateActiveField());
-
-        this.modelTargetChange$.pipe(debounceTime(this._debounceTime)).subscribe(() => this._updateFormModel());
+        this.activeFieldTargetChange$.pipe(debounceTime(this._debounceTime)).subscribe(() => this._modifyActiveField());
+        this.modelTargetChange$.pipe(debounceTime(this._debounceTime)).subscribe(() => this._modifyFormModel());
     }
 
     public ngOnDestroy(): void {
@@ -179,7 +165,7 @@ export class FormComponent implements OnInit, OnDestroy {
         this._cdRef.markForCheck();
     }
 
-    private _updateFormModel(): void {
+    private _modifyFormModel(): void {
         this.form.model = { ...this.modelTarget };
         this._cdRef.markForCheck();
     }
@@ -194,13 +180,14 @@ export class FormComponent implements OnInit, OnDestroy {
         this._cdRef.markForCheck();
     }
 
-    private _updateActiveFieldTarget(): void {
+    private _updateActiveField(field: IEditorFormlyField): void {
+        this.activeField = field;
         this.activeFieldTarget = { ...this.activeField };
-        this._cdRef.markForCheck();
+        this._updateActiveFieldProperty();
     }
 
-    private _updateActiveField(): void {
-        this._formService.updateField(this.activeFieldTarget);
+    private _modifyActiveField(): void {
+        this._formService.modifyField(this.activeFieldTarget);
         this._cdRef.markForCheck();
     }
 
