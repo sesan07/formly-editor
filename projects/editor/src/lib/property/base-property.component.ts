@@ -31,7 +31,7 @@ export abstract class BasePropertyDirective<T extends IBaseProperty> implements 
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.target || changes.property) {
+        if (changes.target) {
             this._onChanged(!!changes.target?.firstChange);
         }
     }

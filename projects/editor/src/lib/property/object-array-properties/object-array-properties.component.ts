@@ -1,31 +1,57 @@
-import { Component, Input, TrackByFunction } from '@angular/core';
+import { Component, Directive, Input, TrackByFunction } from '@angular/core';
 import { cloneDeep } from 'lodash-es';
 
 import { BasePropertyDirective } from '../base-property.component';
 import { PropertyService } from '../property.service';
-import { PropertyType, IProperty } from '../property.types';
+import { PropertyType, IProperty, IBaseProperty } from '../property.types';
 import { IArrayProperty } from './array-property.types';
 import { IObjectProperty } from './object-property.types';
 
-@Component({
-    selector: 'editor-array-property',
-    templateUrl: './array-property.component.html',
-    styleUrls: ['./array-property.component.scss'],
-})
-export class ArrayPropertyComponent extends BasePropertyDirective<IArrayProperty> {
+@Directive()
+export abstract class ObjectArrayPropertyDirective<P extends IBaseProperty, T> extends BasePropertyDirective<P> {
     @Input() isExpanded: boolean;
     @Input() isRoot: boolean;
 
     public typeofProperty: typeof PropertyType = PropertyType;
-    public childProperties: IProperty[];
-    public childrenTarget: any[] = [];
+    public childProperties: IProperty[] = [];
+    public childrenTarget: T;
 
     constructor(public propertyService: PropertyService) {
         super();
     }
 
     public get hasOptions(): boolean {
-        return this.property.isRemovable || this.property.canAdd;
+        return this.property.isRemovable || this.canAdd;
+    }
+
+    public abstract get canAdd(): boolean;
+
+    trackPropertyByKey: TrackByFunction<IProperty> = (_, property: IProperty) => property.key;
+
+    protected _onChanged(): void {
+        this.childrenTarget = this._getChildrenTarget();
+        this._populateChildren();
+    }
+
+    protected _getChildrenTarget(): T {
+        return this.isRoot ? this.target : this.target[this.property.key];
+    }
+
+    protected abstract _populateChildren(): void;
+}
+
+@Component({
+    selector: 'editor-array-property',
+    templateUrl: './array-property.component.html',
+    styleUrls: ['./array-property.component.scss'],
+})
+export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayProperty, any[]> {
+    constructor(propertyService: PropertyService) {
+        super(propertyService);
+    }
+
+    public get canAdd(): boolean {
+        return this.property.canAdd;
     }
 
     onAddChild(): void {
@@ -49,15 +75,12 @@ export class ArrayPropertyComponent extends BasePropertyDirective<IArrayProperty
         this.targetChanged.emit();
     }
 
-    trackPropertyByKey: TrackByFunction<IProperty> = (_, property: IProperty) => property.key;
-
-    protected _onChanged(): void {
-        this.childrenTarget = this._getChildrenTarget();
-        this._populateChildrenFromTarget();
-    }
-
-    private _getChildrenTarget(): any[] {
-        return this.isRoot ? this.target : this.target[this.property.key];
+    protected _populateChildren(): void {
+        this.childProperties = [];
+        this._getChildrenTarget().forEach((_, index) => {
+            const childPropertyClone: IProperty = this._getChildPropertyClone(index);
+            this.childProperties.push(childPropertyClone);
+        });
     }
 
     private _getChildPropertyClone(index: number): IProperty {
@@ -65,14 +88,6 @@ export class ArrayPropertyComponent extends BasePropertyDirective<IArrayProperty
         property.key = index;
         property.isKeyEditable = false;
         return property;
-    }
-
-    private _populateChildrenFromTarget() {
-        this.childProperties = [];
-        this._getChildrenTarget().forEach((_, index) => {
-            const childPropertyClone: IProperty = this._getChildPropertyClone(index);
-            this.childProperties.push(childPropertyClone);
-        });
     }
 
     private _updateChildrenKeys(): void {
@@ -85,23 +100,13 @@ export class ArrayPropertyComponent extends BasePropertyDirective<IArrayProperty
     templateUrl: './object-property.component.html',
     styleUrls: ['./object-property.component.scss'],
 })
-export class ObjectPropertyComponent extends BasePropertyDirective<IObjectProperty> {
-    @Input() isExpanded: boolean;
-    @Input() isRoot: boolean;
-
-    public typeofProperty: typeof PropertyType = PropertyType;
-    public childProperties: IProperty[] = [];
-    public childrenTarget: Record<string, any>;
-
-    constructor(public propertyService: PropertyService) {
-        super();
+export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjectProperty, Record<string, any>> {
+    constructor(propertyService: PropertyService) {
+        super(propertyService);
     }
 
     public get canAdd(): boolean {
         return this.property.addOptions?.length > 0;
-    }
-    public get hasOptions(): boolean {
-        return this.property.isRemovable || this.canAdd;
     }
 
     onAddChild(type: PropertyType, arrayType?: PropertyType): void {
@@ -124,18 +129,7 @@ export class ObjectPropertyComponent extends BasePropertyDirective<IObjectProper
         this.targetChanged.emit();
     }
 
-    trackPropertyByKey: TrackByFunction<IProperty> = (_, property: IProperty) => property.key;
-
-    protected _onChanged(): void {
-        this.childrenTarget = this._getChildrenTarget();
-        this._populateChildren();
-    }
-
-    private _getChildrenTarget(): Record<string, any> {
-        return this.isRoot ? this.target : this.target[this.property.key];
-    }
-
-    private _populateChildren(): void {
+    protected _populateChildren(): void {
         if (this.property.populateChildrenFromTarget) {
             this._populateChildrenFromTarget();
         } else {

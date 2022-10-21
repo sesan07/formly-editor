@@ -46,7 +46,7 @@
         </span>
 
         <button
-            *ngIf="property.canAdd"
+            *ngIf="canAdd"
             mat-icon-button
             (click)="onAddChild(); $event.stopPropagation()"
         >
@@ -59,7 +59,7 @@
     >
         <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
         <button
-            *ngIf="property.canAdd"
+            *ngIf="canAdd"
             mat-button
             (click)="onAddChild()"
         >
@@ -140,7 +140,7 @@
 
 <mat-menu #optionsMenu="matMenu">
     <button
-        *ngIf="property.canAdd"
+        *ngIf="canAdd"
         mat-menu-item
         (click)="onAddChild()"
     >
