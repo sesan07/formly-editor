@@ -15,8 +15,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { EditorService } from '../../editor.service';
-import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField, IEditorFieldInfo } from '../../editor.types';
-import { getFieldChildren, getFormattedFieldName } from '../utils';
+import { EditorTypeCategoryOption, IEditorFormlyField, IEditorFieldInfo } from '../../editor.types';
+import { getFieldChildren, getFormattedFieldName, getReplaceCategories } from '../utils';
 import { FormService } from '../form.service';
 
 @Component({
@@ -34,7 +34,7 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
     @Output() public expandParent: EventEmitter<void> = new EventEmitter();
 
     public isActiveField: boolean;
-    public childFields: IEditorFormlyField[];
+    public childFields: IEditorFormlyField[] = [];
     public replaceCategories: EditorTypeCategoryOption[];
     public fieldInfo: IEditorFieldInfo;
 
@@ -56,24 +56,11 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
         this._renderer.addClass(this._elementRef.nativeElement, 'tree-item');
 
         this.fieldInfo = this.field._info;
-        this.replaceCategories = this.editorService.fieldCategories
-            .map(category => {
-                // Filter fields that can have children and aren't this field
-                const options: EditorTypeOption[] = category.typeOptions.filter(option => {
-                    if (!option.canHaveChildren) {
-                        return false;
-                    }
-
-                    // If they're the same type, return based on customType
-                    if (option.name === this.field.type) {
-                        return option.customName !== this.field.customType;
-                    }
-                    return true;
-                });
-
-                return { ...category, typeOptions: options };
-            })
-            .filter(category => category.typeOptions.length > 0); // Remove categories with empty fields
+        this.replaceCategories = getReplaceCategories(
+            this.editorService.fieldCategories,
+            this.field.type,
+            this.field.customType
+        );
 
         if (this.fieldInfo.canHaveChildren) {
             this.childFields = getFieldChildren(this.field);

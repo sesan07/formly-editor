@@ -24,7 +24,6 @@ import { RepeatingSectionTypeComponent } from './components/types/repeating-sect
         AppRoutingModule,
         MatCardModule,
         MatButtonModule,
-        FormlyMaterialModule,
         EditorModule.forRoot({
             defaultName: FieldType.FORMLY_GROUP,
             unknownTypeName: FieldType.OTHER,

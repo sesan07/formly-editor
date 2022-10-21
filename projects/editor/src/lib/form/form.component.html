@@ -38,7 +38,7 @@
 <div class="main">
     <editor-toolbar
         class="toolbar"
-        [(selectedDisplay)]="selectedFormDisplay"
+        [(tabIndex)]="toolbarTabIndex"
         [isEditMode]="isEditMode$ | async"
         (isEditModeChange)="onEditModeChanged($event)"
         (duplicateForm)="onDuplicateForm()"
@@ -48,7 +48,7 @@
     </editor-toolbar>
     <mat-tab-group
         class="tab-group"
-        [selectedIndex]="formDisplayTabIndex"
+        [selectedIndex]="toolbarTabIndex"
     >
         <mat-tab>
             <editor-formly-form
@@ -87,7 +87,6 @@
         <editor-edit-field
             mainContent
             [field]="activeFieldTarget"
-            [parentField]="activeFieldParent"
             [property]="activeFieldProperty"
             [isSimplified]="!isAdvanced"
             [resizeTabHeader$]="resizeEnd$"

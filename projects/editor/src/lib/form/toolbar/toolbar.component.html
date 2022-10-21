@@ -1,12 +1,12 @@
 <mat-button-toggle-group
-    [value]="selectedDisplay"
-    (valueChange)="selectedDisplayChange.emit($event)"
+    [value]="tabIndex"
+    (valueChange)="tabIndexChange.emit($event)"
 >
-    <mat-button-toggle value="form">
+    <mat-button-toggle [value]="0">
         <mat-icon>dashboard</mat-icon>
         <span>Form</span>
     </mat-button-toggle>
-    <mat-button-toggle value="json">
+    <mat-button-toggle [value]="1">
         <mat-icon>code</mat-icon>
         <span>JSON</span>
     </mat-button-toggle>

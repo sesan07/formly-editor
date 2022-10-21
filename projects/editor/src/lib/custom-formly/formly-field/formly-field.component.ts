@@ -15,9 +15,9 @@ import { FormlyConfig, FormlyField, FormlyFieldTemplates } from '@ngx-formly/cor
 import { Subject, takeUntil } from 'rxjs';
 
 import { EditorService } from '../../editor.service';
-import { IEditorFieldInfo, IEditorFormlyField } from '../../editor.types';
+import { EditorTypeCategoryOption, IEditorFieldInfo, IEditorFormlyField } from '../../editor.types';
 import { FormService } from '../../form/form.service';
-import { getFieldChildren, getFormattedFieldName } from '../../form/utils';
+import { getFieldChildren, getFormattedFieldName, getReplaceCategories } from '../../form/utils';
 
 @Component({
     selector: 'editor-root-formly-field',
@@ -39,6 +39,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     public index: number;
     public hideOptions: boolean;
     public fieldInfo: IEditorFieldInfo;
+    public replaceCategories: EditorTypeCategoryOption[];
 
     private _isActiveField: boolean;
     private _isEditMode: boolean;
@@ -96,6 +97,11 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         }
 
         this.hideOptions = this.field.templateOptions.hideEditorWrapperOptions;
+        this.replaceCategories = getReplaceCategories(
+            this.editorService.fieldCategories,
+            this.field.type,
+            this.field.customType
+        );
 
         this._formService.activeField$.pipe(takeUntil(this._destroy$)).subscribe(f => {
             this._isActiveField = f._info.fieldId === this.fieldInfo.fieldId;
@@ -117,6 +123,10 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
 
     onAddChildField(type: string, customType?: string): void {
         this._formService.addField(type, customType, this.fieldInfo.fieldId);
+    }
+
+    onReplaceParentField(type: string, customType?: string): void {
+        this._formService.replaceParentField(type, this.fieldInfo.fieldId, customType);
     }
 
     onRemove(): void {

@@ -23,7 +23,6 @@ import { IObjectProperty } from '../property/object-array-properties/object-prop
 })
 export class EditFieldComponent implements OnInit, OnDestroy {
     @Input() field: IEditorFormlyField;
-    @Input() parentField?: IEditorFormlyField;
     @Input() property: IObjectProperty;
     @Input() isSimplified: boolean;
     @Input() resizeTabHeader$: Observable<void>;
