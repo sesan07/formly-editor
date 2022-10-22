@@ -1,13 +1,20 @@
 :root {
     --header-height: 48px;
-    --tree-item-header-height: 32px;
+    --tree-item-height: 32px;
 }
 
-html, body, app-root { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body,
+app-root {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
 
 formly-field {
-	display: block;
+    display: block;
 }
 
 .cdk-drag-placeholder {
@@ -16,8 +23,8 @@ formly-field {
     text-align: center;
     padding: 0 10px;
     box-sizing: border-box;
-    background-color: #EBEBEB;
-    border: dashed 2px #7A7A7A;
+    background-color: #ebebeb;
+    border: dashed 2px #7a7a7a;
     border-radius: 4px;
 }
 
@@ -35,11 +42,10 @@ formly-field {
 }
 
 .cdk-drag-preview {
-    outline: dashed 2px #7A7A7A;
+    outline: dashed 2px #7a7a7a;
     border-radius: 4px;
-    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-                0 8px 10px 1px rgba(0, 0, 0, 0.14),
-                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
 .cdk-drop-list.edit-mode {
@@ -50,14 +56,15 @@ formly-field {
     border: 2px solid transparent;
 }
 
-.cdk-drop-list-receiving.edit-mode, .cdk-drop-list-dragging.edit-mode {
-    background-color: #F7FFEB;
-    border: 2px solid #EBEBEB;
+.cdk-drop-list-receiving.edit-mode,
+.cdk-drop-list-dragging.edit-mode {
+    background-color: #f7ffeb;
+    border: 2px solid #ebebeb;
     border-radius: 4px;
 }
 
 .cdk-drop-list-dragging.edit-mode {
-    background-color: #BEFF5C;
+    background-color: #beff5c;
 }
 
 .tree-container {
@@ -67,13 +74,13 @@ formly-field {
 }
 
 .tree-item {
-	display: block;
+    display: block;
     user-select: none;
 }
 
 .property-key {
     display: inline-flex;
-    height: var(--tree-item-header-height);
+    height: var(--tree-item-height);
     align-self: flex-start;
     align-items: center;
     column-gap: 4px;
@@ -84,33 +91,33 @@ formly-field {
 }
 
 button.mat-icon-button {
-	--button-size: 28px;
-	height: var(--button-size) !important;
-	width: var(--button-size) !important;
-	line-height: var(--button-size) !important;
+    --button-size: 28px;
+    height: var(--button-size) !important;
+    width: var(--button-size) !important;
+    line-height: var(--button-size) !important;
 }
 
 .cursor-pointer {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .keyField {
-	display: inline-block;
+    display: inline-block;
 }
 
 .keyField.editable {
-	padding: 0.225em;
-	border-radius: 4px;
+    padding: 0.225em;
+    border-radius: 4px;
     cursor: text;
-	outline: 1px solid rgba(0, 0, 0, 0.15);
+    outline: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .keyField.editable:hover {
-	outline: 2px solid rgba(0, 0, 0, 1);
+    outline: 2px solid rgba(0, 0, 0, 1);
 }
 
 .keyField.editable:focus {
-	outline: 2px solid #3f51b5;
+    outline: 2px solid #3f51b5;
 }
 
 .expand-icon {
@@ -130,40 +137,41 @@ button.mat-icon-button {
 }
 
 .mat-form-field-appearance-outline {
-	.mat-form-field-wrapper {
-		margin: 0 !important;
-		padding-bottom: 0 !important;
-	}
-	
-	.mat-form-field-infix {
-		padding: 0.5em 0 !important;
-		border-top: none;
-	}
-	
-	.mat-form-field-outline {
-		top: 0 !important;
-	}
+    .mat-form-field-wrapper {
+        margin: 0 !important;
+        padding-bottom: 0 !important;
+    }
 
-	.mat-form-field-flex {
-		margin-top: 0 !important;
-	}
-	
-	.mat-form-field-label-wrapper {
-		top: -1.25em;
-		padding-top: 1.25em;
-	}
-	
-	.mat-form-field-subscript-wrapper {
-		display: none;
-	}
+    .mat-form-field-infix {
+        padding: 0.5em 0 !important;
+        border-top: none;
+    }
+
+    .mat-form-field-outline {
+        top: 0 !important;
+    }
+
+    .mat-form-field-flex {
+        margin-top: 0 !important;
+    }
+
+    .mat-form-field-label-wrapper {
+        top: -1.25em;
+        padding-top: 1.25em;
+    }
+
+    .mat-form-field-subscript-wrapper {
+        display: none;
+    }
 }
 
 .form-tab-group > .mat-tab-header {
     .mat-tab-label {
         padding: 0;
     }
-    
-    .mat-tab-label-content, .inner-tab-label-content {
+
+    .mat-tab-label-content,
+    .inner-tab-label-content {
         height: 100%;
         width: 100%;
     }

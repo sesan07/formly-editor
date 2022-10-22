@@ -16,7 +16,7 @@ import {
     ObjectPropertyComponent,
     ArrayPropertyComponent,
 } from './object-array-properties/object-array-properties.component';
-import { TreeModule } from '../tree/tree.module';
+import { TreeItemModule } from '../tree-item/tree-item.module';
 import { TextareaPropertyComponent } from './textarea-property/textarea-property.component';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -32,7 +32,7 @@ import { MatButtonModule } from '@angular/material/button';
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        TreeModule,
+        TreeItemModule,
         MatIconModule,
         MatButtonModule,
         MatMenuModule,

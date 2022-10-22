@@ -2,11 +2,11 @@ import { Component, EventEmitter, HostBinding, HostListener, Input, OnInit, Outp
 import { MatMenuPanel } from '@angular/material/menu';
 
 @Component({
-    selector: 'editor-tree-item-header',
-    templateUrl: './tree-item-header.component.html',
-    styleUrls: ['./tree-item-header.component.scss'],
+    selector: 'editor-tree-item',
+    templateUrl: './tree-item.component.html',
+    styleUrls: ['./tree-item.component.scss'],
 })
-export class TreeItemHeaderComponent implements OnInit {
+export class TreeItemComponent implements OnInit {
     @Input() treeLevel = 0;
     @Input() isExpanded: boolean;
     @Input() isExpandable: boolean;

@@ -1,24 +1,26 @@
-<editor-tree-item-header
+<editor-tree-item
     *ngIf="!isSimplified; else simplifiedView"
     [treeLevel]="treeLevel"
     [hasOptions]="hasOptions"
     [optionsMenu]="optionsMenu"
 >
-    <span class="property-key">
-        <span
-            #key
-            class="keyField"
-            [ngClass]="{ editable: !!property.isKeyEditable }"
-            [contentEditable]="!!property.isKeyEditable"
-        >
+    <ng-container headerContent>
+        <span class="property-key">
+            <span
+                #key
+                class="keyField"
+                [ngClass]="{ editable: !!property.isKeyEditable }"
+                [contentEditable]="!!property.isKeyEditable"
+            >
+            </span>
+            <span>:</span>
         </span>
-        <span>:</span>
-    </span>
-    <mat-checkbox
-        class="property-field"
-        [formControl]="formControl"
-    ></mat-checkbox>
-</editor-tree-item-header>
+        <mat-checkbox
+            class="property-field"
+            [formControl]="formControl"
+        ></mat-checkbox>
+    </ng-container>
+</editor-tree-item>
 
 <ng-template #simplifiedView>
     <mat-checkbox [formControl]="formControl">

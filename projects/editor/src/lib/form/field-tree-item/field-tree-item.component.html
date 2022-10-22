@@ -1,4 +1,4 @@
-<editor-tree-item-header
+<editor-tree-item
     class="cursor-pointer"
     [treeLevel]="treeLevel"
     [(isExpanded)]="isExpanded"
@@ -8,19 +8,19 @@
     [optionsMenu]="optionsMenu"
     (isExpandedChange)="onSelected()"
 >
-    <span>{{ getFormattedFieldName(field) }}</span>
-</editor-tree-item-header>
+    <ng-container headerContent>{{ getFormattedFieldName(field) }}</ng-container>
 
-<div [class.hidden]="!isExpanded">
-    <editor-field-tree-item
-        *ngFor="let child of childFields; trackBy: trackFieldById"
-        [field]="child"
-        [treeLevel]="treeLevel + 1"
-        (remove)="onRemoveChildField(child)"
-        (expandParent)="onExpandParent()"
-    >
-    </editor-field-tree-item>
-</div>
+    <ng-container childrenContent>
+        <editor-field-tree-item
+            *ngFor="let child of childFields; trackBy: trackFieldById"
+            [field]="child"
+            [treeLevel]="treeLevel + 1"
+            (remove)="onRemoveChildField(child)"
+            (expandParent)="onExpandParent()"
+        >
+        </editor-field-tree-item>
+    </ng-container>
+</editor-tree-item>
 
 <mat-menu #optionsMenu="matMenu">
     <button

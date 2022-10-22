@@ -1,26 +1,28 @@
-<editor-tree-item-header
+<editor-tree-item
     *ngIf="!isSimplified; else simplifiedView"
     [treeLevel]="treeLevel"
     [hasOptions]="hasOptions"
     [optionsMenu]="optionsMenu"
 >
-    <span class="property-key">
-        <span
-            #key
-            class="keyField"
-            [ngClass]="{ editable: !!property.isKeyEditable }"
-            [contentEditable]="!!property.isKeyEditable"
-        >
+    <ng-container headerContent>
+        <span class="property-key">
+            <span
+                #key
+                class="keyField"
+                [ngClass]="{ editable: !!property.isKeyEditable }"
+                [contentEditable]="!!property.isKeyEditable"
+            >
+            </span>
+            <span>:</span>
         </span>
-        <span>:</span>
-    </span>
-    <span class="property-field">
-        <ng-container
-            [ngTemplateOutlet]="formField"
-            [ngTemplateOutletContext]="{ appearance: 'outline' }"
-        ></ng-container>
-    </span>
-</editor-tree-item-header>
+        <span class="property-field">
+            <ng-container
+                [ngTemplateOutlet]="formField"
+                [ngTemplateOutletContext]="{ appearance: 'outline' }"
+            ></ng-container>
+        </span>
+    </ng-container>
+</editor-tree-item>
 
 <ng-template #simplifiedView>
     <ng-container
