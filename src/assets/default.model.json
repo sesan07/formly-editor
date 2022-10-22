@@ -3,7 +3,7 @@
     "card": {
       "input": "Hello!"
     },
-    "number": 69,
+    "number": 321,
     "radio": 1,
     "select": [1, 3],
     "textarea": "Bye!"
