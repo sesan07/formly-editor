@@ -20,7 +20,7 @@ import { ImportFormDialogComponent } from './import-form-dialog/import-form-dial
 import { PropertyModule } from '../property/property.module';
 import { CustomFormlyModule } from '../custom-formly/custom-formly.module';
 import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
-import { TreeModule } from '../tree/tree.module';
+import { TreeItemModule } from '../tree-item/tree-item.module';
 import { SidebarModule } from '../sidebar/sidebar.module';
 import { JsonFileValidatorDirective } from './json-file-validator/json-file-validator.directive';
 import { JsonValidatorDirective } from './json-validator/json-validator.directive';
@@ -43,7 +43,7 @@ import { EditFieldModule } from '../edit-field/edit-field.module';
         FormsModule,
         CustomFormlyModule,
         EditFieldModule,
-        TreeModule,
+        TreeItemModule,
         PropertyModule,
         SidebarModule,
         MatIconModule,

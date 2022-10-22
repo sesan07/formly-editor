@@ -27,6 +27,7 @@ export class EditorService {
     private _activeFormIndex$: BehaviorSubject<number> = new BehaviorSubject(null);
 
     private _fieldIdCounterMap: Map<string, number> = new Map(); // Map<fieldType, count>
+    private _fieldKeyCounterMap: Map<string, number> = new Map(); // Map<fieldType, count>
     private _fieldtypeOptions: EditorTypeOption[] = [];
 
     constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService, private _http: HttpClient) {}
@@ -165,6 +166,7 @@ export class EditorService {
         const field: IEditorFormlyField = {
             ...baseField,
             _info: fieldInfo,
+            key: baseField.key || this._getNextKey(baseField.type),
             fieldGroup: undefined,
         };
 
@@ -217,6 +219,18 @@ export class EditorService {
         }
         this._fieldIdCounterMap.set(type, id);
         return type + '__' + id;
+    }
+
+    private _getNextKey(type: string): string {
+        type = type ?? this._editorConfig.unknownTypeName ?? 'unknown';
+        let i: number;
+        if (this._fieldKeyCounterMap.has(type)) {
+            i = this._fieldKeyCounterMap.get(type) + 1;
+        } else {
+            i = 0;
+        }
+        this._fieldKeyCounterMap.set(type, i);
+        return `__${type}_${i}`;
     }
 
     private _addForm(id: string, name: string, fields: IEditorFormlyField[], model?: Record<string, unknown>) {

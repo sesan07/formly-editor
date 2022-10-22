@@ -4,11 +4,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 
-import { TreeItemHeaderComponent } from './tree-item-header/tree-item-header.component';
+import { TreeItemComponent } from './tree-item.component';
 
 @NgModule({
-    declarations: [TreeItemHeaderComponent],
+    declarations: [TreeItemComponent],
     imports: [CommonModule, MatIconModule, MatButtonModule, MatMenuModule],
-    exports: [TreeItemHeaderComponent],
+    exports: [TreeItemComponent],
 })
-export class TreeModule {}
+export class TreeItemModule {}

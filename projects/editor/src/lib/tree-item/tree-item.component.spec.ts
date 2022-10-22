@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TreeItemHeaderComponent } from './tree-item-header.component';
+import { TreeItemComponent } from './tree-item.component';
 
 describe('TreeItemHeaderComponent', () => {
-    let component: TreeItemHeaderComponent;
-    let fixture: ComponentFixture<TreeItemHeaderComponent>;
+    let component: TreeItemComponent;
+    let fixture: ComponentFixture<TreeItemComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TreeItemHeaderComponent],
+            declarations: [TreeItemComponent],
         }).compileComponents();
     });
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(TreeItemHeaderComponent);
+        fixture = TestBed.createComponent(TreeItemComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

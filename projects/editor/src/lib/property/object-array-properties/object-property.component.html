@@ -1,4 +1,4 @@
-<editor-tree-item-header
+<editor-tree-item
     class="cursor-pointer"
     *ngIf="!isSimplified; else simplifiedView"
     [treeLevel]="treeLevel"
@@ -7,7 +7,10 @@
     [hasOptions]="hasOptions"
     [optionsMenu]="optionsMenu"
 >
-    <span class="property-key">
+    <span
+        headerContent
+        class="property-key"
+    >
         <span
             #key
             class="keyField"
@@ -17,14 +20,11 @@
         </span>
         <span>{{ (property?.name ? '(' + property.name + ') ' : '') + '{ ' + childProperties.length + ' }' }}</span>
     </span>
-</editor-tree-item-header>
 
-<div
-    *ngIf="!isSimplified"
-    [class.hidden]="!isExpanded"
->
-    <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
-</div>
+    <ng-container childrenContent>
+        <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
+    </ng-container>
+</editor-tree-item>
 
 <ng-template #simplifiedView>
     <div class="simplified-container">
