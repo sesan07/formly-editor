@@ -6,6 +6,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
 
 import { FormlyModule } from '@ngx-formly/core';
+import { FormlyMaterialModule } from '@ngx-formly/ui/material';
 
 import { FieldType } from '../editor.types';
 import { FormlyGroupComponent } from './formly-group/formly-group.component';
@@ -17,6 +18,7 @@ import { PropertyModule } from '../property/property.module';
     declarations: [FormlyGroupComponent, FormlyFieldComponent, RootFormlyFieldComponent, FormlyFormComponent],
     imports: [
         CommonModule,
+        FormlyMaterialModule,
         FormlyModule.forRoot({
             types: [
                 {
