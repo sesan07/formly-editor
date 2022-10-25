@@ -11,7 +11,7 @@
             mainContent
         >
             <editor-field-tree-item
-                *ngFor="let field of form.fields"
+                *ngFor="let field of fields$ | async"
                 [field]="field"
                 [isExpanded]="true"
             >
@@ -52,16 +52,16 @@
     >
         <mat-tab>
             <editor-formly-form
+                [fields]="formFields$ | async"
+                [model]="model$ | async"
                 [form]="formGroup"
-                [fields]="formFields"
-                [model]="form.model"
                 [options]="options"
-                (modelChange)="onModelChanged()"
+                (modelChange)="onFormModelChanged($event)"
             >
             </editor-formly-form>
         </mat-tab>
         <mat-tab>
-            <pre><code>{{ formFieldsJSON }}</code></pre>
+            <pre><code>{{ formFieldsJSON$ | async }}</code></pre>
         </mat-tab>
     </mat-tab-group>
 </div>
@@ -77,7 +77,7 @@
             class="header-content"
             headerContent
         >
-            <span>Active Field - {{ getFormattedFieldName(activeField) }}</span>
+            <span>Active Field - {{ (activeField$ | async)._info.name | fieldName: (activeField$ | async).key }}</span>
             <mat-slide-toggle
                 labelPosition="before"
                 [(ngModel)]="isAdvanced"
@@ -86,11 +86,10 @@
         </div>
         <editor-edit-field
             mainContent
-            [field]="activeFieldTarget"
-            [property]="activeFieldProperty"
+            [field$]="activeField$"
             [isSimplified]="!isAdvanced"
             [resizeTabHeader$]="resizeEnd$"
-            (fieldChanged)="activeFieldTargetChange$.next()"
+            (fieldChanged)="onActiveFieldChanged($event)"
         >
         </editor-edit-field>
     </editor-sidebar-section>
@@ -114,11 +113,10 @@
             mainContent
         >
             <editor-object-property
-                [target]="modelTarget"
+                [target]="model$ | async"
                 [property]="modelProperty"
                 [isExpanded]="true"
-                [isRoot]="true"
-                (targetChanged)="modelTargetChange$.next()"
+                (targetChanged)="onModelChanged($event)"
             >
             </editor-object-property>
         </div>

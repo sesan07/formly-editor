@@ -1,10 +1,20 @@
-import { Component, EventEmitter, HostBinding, HostListener, Input, OnInit, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    HostBinding,
+    HostListener,
+    Input,
+    OnInit,
+    Output,
+} from '@angular/core';
 import { MatMenuPanel } from '@angular/material/menu';
 
 @Component({
     selector: 'editor-tree-item',
     templateUrl: './tree-item.component.html',
     styleUrls: ['./tree-item.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeItemComponent implements OnInit {
     @Input() treeLevel = 0;

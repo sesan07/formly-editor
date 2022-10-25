@@ -14,6 +14,10 @@ import {
     providedIn: 'root',
 })
 export class StylesService {
+    public allClassNames$: Observable<string[]>;
+    public containerClassNames$: Observable<string[]>;
+    public generalClassNames$: Observable<string[]>;
+
     private readonly _selectorRegexp = /\.-?[_a-zA-Z]+[\w-]*/g;
     // All classes
     private _allClassNames$: BehaviorSubject<string[]> = new BehaviorSubject([]);
@@ -25,22 +29,16 @@ export class StylesService {
     private _breakpointClassNamesMap: Map<BreakpointType, BehaviorSubject<string[]>> = new Map();
 
     constructor(private _http: HttpClient) {
+        this.allClassNames$ = this._allClassNames$.asObservable();
+        this.containerClassNames$ = this._containerClassNames$.asObservable();
+        this.generalClassNames$ = this._generalClassNames$.asObservable();
+
         // Populate breakpoint map
         Object.values(BreakpointType).forEach(breakpoint => {
             this._breakpointClassNamesMap.set(breakpoint, new BehaviorSubject([]));
         });
 
         this._setupClassNames();
-    }
-
-    public get allClassNames$(): Observable<string[]> {
-        return this._allClassNames$.asObservable();
-    }
-    public get containerClassNames$(): Observable<string[]> {
-        return this._containerClassNames$.asObservable();
-    }
-    public get generalClassNames$(): Observable<string[]> {
-        return this._generalClassNames$.asObservable();
     }
 
     public getBreakpointClassNames(breakpointType?: BreakpointType): Observable<string[]> {

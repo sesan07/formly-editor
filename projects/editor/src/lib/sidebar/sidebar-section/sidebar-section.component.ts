@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, Renderer2 } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    Input,
+    OnChanges,
+    Renderer2,
+    SimpleChanges,
+} from '@angular/core';
 
 import { SidebarComponent } from '../sidebar.component';
 
@@ -8,16 +17,18 @@ import { SidebarComponent } from '../sidebar.component';
     styleUrls: ['./sidebar-section.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SidebarSectionComponent {
+export class SidebarSectionComponent implements OnChanges {
     @Input() isCollapsible = true;
     @Input() isCollapsed: boolean;
 
     public element: HTMLElement;
     public index: number;
+    public availableHeight: number;
+    public contentHeight: number;
     public cachedContentHeight: number;
     public minContentHeight = 50;
-    public minHeight: number;
-    public maxHeight: number;
+    public minHeight = 0;
+    public maxHeight = 0;
 
     private readonly _headerHeight = 48;
     private readonly _dividerHeight = 4;
@@ -29,20 +40,22 @@ export class SidebarSectionComponent {
         this.element = elementRef.nativeElement;
     }
 
-    public get contentHeight(): number {
-        return this.height - this.minHeight;
-    }
-    public get availableHeight(): number {
-        return this.height - (this.minHeight + (this.isCollapsed ? 0 : this.minContentHeight));
-    }
-
     public get height(): number {
         return this._height;
     }
     public set height(newHeight: number) {
         this._height = newHeight;
+        this.contentHeight = this._height - this.minHeight;
+        this.availableHeight = this._height - (this.minHeight + (this.isCollapsed ? 0 : this.minContentHeight));
+
         this._renderer.setStyle(this.element, 'height', this._height + 'px');
         this._cdRef.markForCheck();
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.isCollapsed) {
+            this.availableHeight = this._height - (this.minHeight + (this.isCollapsed ? 0 : this.minContentHeight));
+        }
     }
 
     onSectionMouseDown(event: MouseEvent): void {

@@ -25,6 +25,7 @@ import { SidebarModule } from '../sidebar/sidebar.module';
 import { JsonFileValidatorDirective } from './json-file-validator/json-file-validator.directive';
 import { JsonValidatorDirective } from './json-validator/json-validator.directive';
 import { EditFieldModule } from '../edit-field/edit-field.module';
+import { FieldNameModule } from '../field-name/field-name.module';
 
 @NgModule({
     declarations: [
@@ -46,6 +47,7 @@ import { EditFieldModule } from '../edit-field/edit-field.module';
         TreeItemModule,
         PropertyModule,
         SidebarModule,
+        FieldNameModule,
         MatIconModule,
         MatButtonModule,
         MatMenuModule,

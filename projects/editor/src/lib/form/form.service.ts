@@ -1,30 +1,33 @@
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
+import { get, set } from 'lodash-es';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 import { EditorService } from '../editor.service';
 import { EditorTypeOption, IEditorFormlyField, IForm } from '../editor.types';
+import { IPropertyChange, PropertyChangeType } from '../property/property.types';
 import { getFieldChildren } from './utils';
 
 @Injectable()
 export class FormService {
+    public fields$: Observable<IEditorFormlyField[]>;
+    public activeField$: Observable<IEditorFormlyField>;
+    public model$: Observable<Record<string, any>>;
+    public isEditMode$: Observable<boolean>;
+
     private _id: string;
     private _fieldMap: Map<string, IEditorFormlyField> = new Map();
 
     private _fields$: BehaviorSubject<IEditorFormlyField[]> = new BehaviorSubject([]);
     private _activeField$: BehaviorSubject<IEditorFormlyField> = new BehaviorSubject(null);
+    private _model$: BehaviorSubject<Record<string, any>> = new BehaviorSubject({});
     private _isEditMode$: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
-    constructor(private _editorService: EditorService) {}
-
-    public get fields$(): Observable<IEditorFormlyField[]> {
-        return this._fields$.asObservable();
-    }
-    public get activeField$(): Observable<IEditorFormlyField> {
-        return this._activeField$.asObservable();
-    }
-    public get isEditMode$(): Observable<boolean> {
-        return this._isEditMode$.asObservable();
+    constructor(private _editorService: EditorService) {
+        this.fields$ = this._fields$.asObservable();
+        this.activeField$ = this._activeField$.asObservable();
+        this.model$ = this._model$.asObservable();
+        this.isEditMode$ = this._isEditMode$.asObservable();
     }
 
     public setup(form: IForm) {
@@ -33,6 +36,7 @@ export class FormService {
         form.fields.forEach(field => this._addToFieldMap(field));
         this._fields$.next(form.fields);
         this._activeField$.next(this._fields$.value[0]);
+        this._model$.next(form.model);
     }
 
     public setEditMode(isEditMode: boolean): void {
@@ -79,15 +83,20 @@ export class FormService {
         }
     }
 
-    public modifyField(modifiedField: IEditorFormlyField) {
-        const modifiedFieldInfo = modifiedField._info;
-        const siblings: IEditorFormlyField[] = this._getSiblings(modifiedFieldInfo.parentFieldId);
-        const index: number = siblings.findIndex(f => f._info.fieldId === modifiedFieldInfo.fieldId);
-        if (index >= 0) {
-            siblings[index] = modifiedField;
-            this._fieldMap.set(modifiedFieldInfo.fieldId, modifiedField);
+    public modifyField(change: IPropertyChange) {
+        if (!change.path) {
+            throw new Error('Path is missing from field change');
+        }
+
+        const activeField: IEditorFormlyField = this._activeField$.value;
+        if (change.type === PropertyChangeType.VALUE) {
+            set(activeField, change.path, change.data);
             this._fields$.next(this._fields$.value);
-            this.selectField(modifiedFieldInfo.fieldId);
+            this.selectField(activeField._info.fieldId);
+        } else if (change.type === PropertyChangeType.KEY) {
+            this._modifyKey(activeField, change.path, change.data);
+            this._fields$.next(this._fields$.value);
+            this.selectField(activeField._info.fieldId);
         }
     }
 
@@ -161,6 +170,24 @@ export class FormService {
         this._fields$.next(this._fields$.value);
     }
 
+    public setModel(model: Record<string, any>): void {
+        this._model$.next({ ...model });
+    }
+
+    public modifyModel(change: IPropertyChange): void {
+        if (change.type === PropertyChangeType.VALUE) {
+            if (change.path) {
+                set(this._model$.value, change.path, change.data);
+                this._model$.next({ ...this._model$.value });
+            } else {
+                this._model$.next({ ...change.data });
+            }
+        } else if (change.type === PropertyChangeType.KEY) {
+            this._modifyKey(this._model$.value, change.path, change.data);
+            this._model$.next({ ...this._model$.value });
+        }
+    }
+
     public getField(fieldId: string): IEditorFormlyField | undefined {
         return this._fieldMap.get(fieldId);
     }
@@ -194,5 +221,16 @@ export class FormService {
             const children: IEditorFormlyField[] = getFieldChildren(field);
             children.forEach(child => this._removeFromFieldMap(child, removeChildren));
         }
+    }
+
+    private _modifyKey(target: any, path: string, newKey: string): void {
+        const pathArr: string[] = path.split('.');
+        const currKey = pathArr.pop();
+        const parentPath: string = pathArr.join('.');
+        const parent: any = parentPath ? get(target, parentPath) : target;
+
+        const currentValue: any = get(target, path);
+        delete parent[currKey];
+        set(parent, newKey, currentValue);
     }
 }

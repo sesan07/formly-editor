@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { BasePropertyDirective } from '../base-property.component';
@@ -8,21 +8,23 @@ import { ITextareaProperty } from './textarea-property.types';
     selector: 'editor-textarea-property',
     templateUrl: './textarea-property.component.html',
     styleUrls: ['./textarea-property.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextareaPropertyComponent extends BasePropertyDirective<ITextareaProperty> {
+export class TextareaPropertyComponent extends BasePropertyDirective<ITextareaProperty, string> {
     public formControl: FormControl;
+    public hasOptions: boolean;
 
-    public get hasOptions(): boolean {
-        return this.property.isRemovable;
-    }
+    protected defaultValue = '';
 
     protected _onChanged(isFirstChange: boolean): void {
+        this.hasOptions = this.property.isRemovable;
+
         if (isFirstChange) {
-            this.formControl = new FormControl(this._getPropertyValue(''));
+            this.formControl = new FormControl(this.currentValue);
             this.formControl.valueChanges.subscribe(val => this._modifyValue(val));
         }
 
-        this.formControl.setValue(this._getPropertyValue(''), {
+        this.formControl.setValue(this.currentValue, {
             emitEvent: false,
         });
     }

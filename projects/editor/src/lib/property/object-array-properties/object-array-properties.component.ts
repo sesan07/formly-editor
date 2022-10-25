@@ -1,4 +1,4 @@
-import { Component, Directive, Input, TrackByFunction } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, Input, OnInit, TrackByFunction } from '@angular/core';
 import { cloneDeep } from 'lodash-es';
 
 import { BasePropertyDirective } from '../base-property.component';
@@ -8,33 +8,38 @@ import { IArrayProperty } from './array-property.types';
 import { IObjectProperty } from './object-property.types';
 
 @Directive()
-export abstract class ObjectArrayPropertyDirective<P extends IBaseProperty, T> extends BasePropertyDirective<P> {
+export abstract class ObjectArrayPropertyDirective<P extends IBaseProperty, V>
+    extends BasePropertyDirective<P, V>
+    implements OnInit
+{
     @Input() isExpanded: boolean;
-    @Input() isRoot: boolean;
+    public canAdd: boolean;
+    public hasOptions: boolean;
 
     public typeofProperty: typeof PropertyType = PropertyType;
     public childProperties: IProperty[] = [];
-    public childrenTarget: T;
+    public childrenTreeLevel: number;
 
     constructor(public propertyService: PropertyService) {
         super();
     }
 
-    public get hasOptions(): boolean {
-        return this.property.isRemovable || this.canAdd;
-    }
-
-    public abstract get canAdd(): boolean;
+    protected abstract get _canAdd(): boolean;
 
     trackPropertyByKey: TrackByFunction<IProperty> = (_, property: IProperty) => property.key;
 
-    protected _onChanged(): void {
-        this.childrenTarget = this._getChildrenTarget();
-        this._populateChildren();
+    ngOnInit(): void {
+        this.childrenTreeLevel = this.treeLevel + 1;
     }
 
-    protected _getChildrenTarget(): T {
-        return this.isRoot ? this.target : this.target[this.property.key];
+    getChildPath(key: string | number): string {
+        return this.path ? `${this.path}.${key}` : key + '';
+    }
+
+    protected _onChanged(): void {
+        this.canAdd = this._canAdd;
+        this.hasOptions = this.property.isRemovable || this._canAdd;
+        this._populateChildren();
     }
 
     protected abstract _populateChildren(): void;
@@ -44,40 +49,35 @@ export abstract class ObjectArrayPropertyDirective<P extends IBaseProperty, T> e
     selector: 'editor-array-property',
     templateUrl: './array-property.component.html',
     styleUrls: ['./array-property.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayProperty, any[]> {
+    protected defaultValue = [];
+
     constructor(propertyService: PropertyService) {
         super(propertyService);
     }
 
-    public get canAdd(): boolean {
+    protected get _canAdd(): boolean {
         return this.property.canAdd;
     }
 
     onAddChild(): void {
-        const childProperty: IProperty = this._getChildPropertyClone(this.childProperties.length);
-        this.childProperties.push(childProperty);
-        this.isExpanded = true;
-
         const childValue: any = this.propertyService.getDefaultPropertyValue(this.property.childProperty.type);
-        const childrenTarget: any[] = this._getChildrenTarget();
-        childrenTarget[childProperty.key] = childValue;
-        this.targetChanged.emit();
+        const newValue = [...this.currentValue, childValue];
+        this._modifyValue(newValue);
+
+        this.isExpanded = true;
     }
 
     onRemoveChild(index: number): void {
-        const childProperty: IProperty = this.childProperties[index];
-        this.childProperties.splice(index, 1);
-        this._updateChildrenKeys();
-
-        const childrenTarget: any[] = this._getChildrenTarget();
-        childrenTarget.splice(+childProperty.key, 1);
-        this.targetChanged.emit();
+        const newValue = this.currentValue.filter((_, i) => i !== index);
+        this._modifyValue(newValue);
     }
 
     protected _populateChildren(): void {
         this.childProperties = [];
-        this._getChildrenTarget().forEach((_, index) => {
+        this.currentValue.forEach((_, index) => {
             const childPropertyClone: IProperty = this._getChildPropertyClone(index);
             this.childProperties.push(childPropertyClone);
         });
@@ -89,44 +89,42 @@ export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayP
         property.isKeyEditable = false;
         return property;
     }
-
-    private _updateChildrenKeys(): void {
-        this.childProperties.forEach((child, index) => (child.key = index));
-    }
 }
 
 @Component({
     selector: 'editor-object-property',
     templateUrl: './object-property.component.html',
     styleUrls: ['./object-property.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjectProperty, Record<string, any>> {
+    protected defaultValue = {};
+
     constructor(propertyService: PropertyService) {
         super(propertyService);
     }
 
-    public get canAdd(): boolean {
+    protected get _canAdd(): boolean {
         return this.property.addOptions?.length > 0;
     }
 
     onAddChild(type: PropertyType, arrayType?: PropertyType): void {
-        const childProperty: IProperty = this.propertyService.getDefaultProperty(type, undefined, arrayType);
-        this.childProperties.push(childProperty);
-        this.isExpanded = true;
-
         const childValue: any = this.propertyService.getDefaultPropertyValue(type);
-        const childrenTarget: Record<string, any> = this._getChildrenTarget();
-        childrenTarget[childProperty.key] = childValue;
-        this.targetChanged.emit();
+        const newValue = {
+            ...this.currentValue,
+            '': childValue,
+        };
+        this._modifyValue(newValue);
+
+        this.isExpanded = true;
     }
 
     onRemoveChild(index: number): void {
         const childProperty: IProperty = this.childProperties[index];
-        this.childProperties.splice(index, 1);
 
-        const childrenTarget: Record<string, any> = this._getChildrenTarget();
-        delete childrenTarget[childProperty.key];
-        this.targetChanged.emit();
+        const newValue = { ...this.currentValue };
+        delete newValue[childProperty.key];
+        this._modifyValue(newValue);
     }
 
     protected _populateChildren(): void {
@@ -144,7 +142,7 @@ export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjec
     private _populateChildrenFromTarget() {
         this.childProperties = [];
 
-        Object.entries(this._getChildrenTarget()).forEach(([key, value]) => {
+        Object.entries(this.currentValue).forEach(([key, value]) => {
             const childProperty = this.propertyService.getDefaultPropertyFromValue(value, key);
             if (childProperty) {
                 this.childProperties.push(childProperty);

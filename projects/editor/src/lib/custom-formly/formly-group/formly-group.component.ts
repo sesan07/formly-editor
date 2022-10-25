@@ -1,5 +1,5 @@
 import { CdkDragDrop, DropListOrientation } from '@angular/cdk/drag-drop';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -14,6 +14,7 @@ import { ContainerType, FlexContainerType } from '../../edit-field/styles/styles
     selector: 'editor-formly-group',
     templateUrl: './formly-group.component.html',
     styleUrls: ['./formly-group.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implements OnInit, OnDestroy {
     public dropListClasses: string;

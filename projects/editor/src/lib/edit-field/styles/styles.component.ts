@@ -11,7 +11,7 @@ import {
 import { IEditorFormlyField } from '../../editor.types';
 import { FormService } from '../../form/form.service';
 import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
-import { PropertyType } from '../../property/property.types';
+import { IPropertyChange, PropertyChangeType, PropertyType } from '../../property/property.types';
 import { StylesService } from './styles.service';
 import {
     ContainerType,
@@ -30,7 +30,7 @@ import {
 export class StylesComponent implements OnChanges {
     @Input() editField: IEditorFormlyField;
 
-    @Output() fieldChanged: EventEmitter<void> = new EventEmitter();
+    @Output() fieldChanged: EventEmitter<IPropertyChange> = new EventEmitter();
 
     public parentField?: IEditorFormlyField;
 
@@ -79,8 +79,13 @@ export class StylesComponent implements OnChanges {
         }
         // TODO remove related group styles (flex-direction, grid-cols...) arr.split(' ').filter(!contains prevType).join(' ')
         this.childrenContainer = value as ContainerType;
-        this.editField.fieldGroupClassName = newFieldGroupClassName;
-        this.fieldChanged.emit();
+
+        const change: IPropertyChange = {
+            type: PropertyChangeType.VALUE,
+            path: 'fieldGroupClassName',
+            data: newFieldGroupClassName,
+        };
+        this.fieldChanged.emit(change);
     }
 
     onClassChanged(value: string, classNamePrefix: string, breakpoint?: BreakpointType): void {
@@ -237,8 +242,12 @@ export class StylesComponent implements OnChanges {
             newPropertyValue = newClassName;
         }
         // TODO remove related group styles (flex-direction, grid-cols...) arr.split(' ').filter(!contains prevType).join(' ')
-        this.editField[property] = newPropertyValue;
-        this.fieldChanged.emit();
+        const change: IPropertyChange = {
+            type: PropertyChangeType.VALUE,
+            path: property,
+            data: newPropertyValue,
+        };
+        this.fieldChanged.emit(change);
     }
 
     private _getClassValue(property: string, classNamePrefix: string, breakpoint?: BreakpointType): string {

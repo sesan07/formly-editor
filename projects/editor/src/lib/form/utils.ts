@@ -5,9 +5,6 @@ import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField } from '
 export const getFieldChildren = (field: IEditorFormlyField): IEditorFormlyField[] | undefined =>
     get(field, field._info.childrenPath);
 
-export const getFormattedFieldName = (field: IEditorFormlyField): string =>
-    `${field._info.name}${field.key ? `(${field.key})` : ''}`;
-
 export const cleanField = (
     field: IEditorFormlyField,
     cleanChildren: boolean = true,
