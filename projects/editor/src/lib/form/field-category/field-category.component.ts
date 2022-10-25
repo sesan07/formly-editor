@@ -58,10 +58,14 @@ export class FieldCategoryComponent implements OnInit, OnDestroy {
     }
 
     onDropListExited(event: CdkDragExit) {
-        const currentIdx = this.fields.findIndex(f => f._info.fieldId === event.item.data.field.fieldId);
-        this.fields.splice(currentIdx + 1, 0, {
-            ...event.item.data.field,
-            fieldId: 'temp',
+        const field: IEditorFormlyField = event.item.data.field;
+        const currIdx = this.fields.findIndex(f => f._info.fieldId === field._info.fieldId);
+        this.fields.splice(currIdx + 1, 0, {
+            ...field,
+            _info: {
+                ...field._info,
+                fieldId: 'temp',
+            },
         });
     }
 

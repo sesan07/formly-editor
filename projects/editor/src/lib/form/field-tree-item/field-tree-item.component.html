@@ -8,7 +8,7 @@
     [optionsMenu]="optionsMenu"
     (isExpandedChange)="onSelected()"
 >
-    <ng-container headerContent>{{ getFormattedFieldName(field) }}</ng-container>
+    <ng-container headerContent>{{ fieldInfo.name | fieldName: field.key }}</ng-container>
 
     <ng-container childrenContent>
         <editor-field-tree-item

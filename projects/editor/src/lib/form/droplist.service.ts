@@ -7,14 +7,14 @@ import { IEditorFormlyField } from '../editor.types';
 
 @Injectable()
 export class DroplistService {
+    public droplistIds$: Observable<string[]>;
+
     private _droplistIds$: BehaviorSubject<string[]> = new BehaviorSubject([]);
 
     constructor(formService: FormService) {
-        formService.fields$.subscribe(fields => this.updateIds(fields));
-    }
+        this.droplistIds$ = this._droplistIds$.asObservable();
 
-    public get droplistIds$(): Observable<string[]> {
-        return this._droplistIds$.asObservable();
+        formService.fields$.subscribe(fields => this.updateIds(fields));
     }
 
     public updateIds(fields: IEditorFormlyField[]): void {

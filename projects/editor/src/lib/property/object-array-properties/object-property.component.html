@@ -56,56 +56,61 @@
             <ng-container [ngSwitch]="child.type">
                 <editor-array-property
                     *ngSwitchCase="typeofProperty.ARRAY"
-                    [treeLevel]="treeLevel + 1"
-                    [target]="childrenTarget"
+                    [treeLevel]="childrenTreeLevel"
+                    [path]="getChildPath(child.key)"
+                    [target]="target"
                     [property]="propertyService.getAsArrayProperty(child)"
                     [isSimplified]="isSimplified"
                     (remove)="onRemoveChild(i)"
-                    (targetChanged)="targetChanged.emit()"
+                    (targetChanged)="targetChanged.emit($event)"
                 >
                 </editor-array-property>
 
                 <editor-object-property
                     *ngSwitchCase="typeofProperty.OBJECT"
-                    [treeLevel]="treeLevel + 1"
-                    [target]="childrenTarget"
+                    [treeLevel]="childrenTreeLevel"
+                    [path]="getChildPath(child.key)"
+                    [target]="target"
                     [property]="propertyService.getAsObjectProperty(child)"
                     [isSimplified]="isSimplified"
                     (remove)="onRemoveChild(i)"
-                    (targetChanged)="targetChanged.emit()"
+                    (targetChanged)="targetChanged.emit($event)"
                 >
                 </editor-object-property>
 
                 <editor-boolean-property
                     *ngSwitchCase="typeofProperty.BOOLEAN"
-                    [treeLevel]="treeLevel + 1"
+                    [treeLevel]="childrenTreeLevel"
+                    [path]="getChildPath(child.key)"
                     [property]="child"
-                    [target]="childrenTarget"
+                    [target]="target"
                     [isSimplified]="isSimplified"
                     (remove)="onRemoveChild(i)"
-                    (targetChanged)="targetChanged.emit()"
+                    (targetChanged)="targetChanged.emit($event)"
                 >
                 </editor-boolean-property>
 
                 <editor-chip-list-property
                     *ngSwitchCase="typeofProperty.CHIP_LIST"
-                    [treeLevel]="treeLevel + 1"
+                    [treeLevel]="childrenTreeLevel"
+                    [path]="getChildPath(child.key)"
                     [property]="propertyService.getAsChiplistProperty(child)"
-                    [target]="childrenTarget"
+                    [target]="target"
                     [isSimplified]="isSimplified"
                     (remove)="onRemoveChild(i)"
-                    (targetChanged)="targetChanged.emit()"
+                    (targetChanged)="targetChanged.emit($event)"
                 >
                 </editor-chip-list-property>
 
                 <editor-textarea-property
                     *ngSwitchCase="typeofProperty.TEXTAREA"
-                    [treeLevel]="treeLevel + 1"
+                    [treeLevel]="childrenTreeLevel"
+                    [path]="getChildPath(child.key)"
                     [property]="propertyService.getAsTextareaProperty(child)"
-                    [target]="childrenTarget"
+                    [target]="target"
                     [isSimplified]="isSimplified"
                     (remove)="onRemoveChild(i)"
-                    (targetChanged)="targetChanged.emit()"
+                    (targetChanged)="targetChanged.emit($event)"
                 >
                 </editor-textarea-property>
 
@@ -117,12 +122,13 @@
                 </ng-container>
                 <ng-template #inputProperty>
                     <editor-input-property
-                        [treeLevel]="treeLevel + 1"
+                        [treeLevel]="childrenTreeLevel"
+                        [path]="getChildPath(child.key)"
                         [property]="propertyService.getAsInputProperty(child)"
-                        [target]="childrenTarget"
+                        [target]="target"
                         [isSimplified]="isSimplified"
                         (remove)="onRemoveChild(i)"
-                        (targetChanged)="targetChanged.emit()"
+                        (targetChanged)="targetChanged.emit($event)"
                     >
                     </editor-input-property>
                 </ng-template>

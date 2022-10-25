@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -13,8 +13,9 @@ import { BasePropertyDirective } from '../base-property.component';
     selector: 'editor-chip-list-property',
     templateUrl: './chip-list-property.component.html',
     styleUrls: ['./chip-list-property.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChipListPropertyComponent extends BasePropertyDirective<IChipListProperty> {
+export class ChipListPropertyComponent extends BasePropertyDirective<IChipListProperty, string | string[]> {
     @ViewChild('input') inputElementRef: ElementRef<HTMLInputElement>;
 
     public formControl: FormControl = new FormControl();
@@ -23,12 +24,11 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
     public selectableOptions: string[];
     public filteredOptions$: Observable<string[]>;
     public filteredOptions: string[];
+    public hasOptions: boolean;
+
+    protected defaultValue = null;
 
     private _unSubOptions$: Subject<void> = new Subject();
-
-    public get hasOptions(): boolean {
-        return this.property.isRemovable;
-    }
 
     isSelectable(option: string): boolean {
         return this.selectableOptions.includes(option);
@@ -69,6 +69,8 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
     }
 
     protected _onChanged(isFirstChange: boolean): void {
+        this.hasOptions = this.property.isRemovable;
+
         if (isFirstChange) {
             this.formControl.valueChanges.subscribe(options => this._updateFilteredOptions(options));
         }
@@ -95,12 +97,11 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
     }
 
     private _updateSelectedOptions(): void {
-        const value: string | string[] = this._getPropertyValue();
-        if (value) {
+        if (this.currentValue) {
             // If the target already has some selection
             const existingOptions: string[] = this.property.outputString
-                ? (value as string).split(' ')
-                : (value as string[]);
+                ? (this.currentValue as string).split(' ')
+                : (this.currentValue as string[]);
 
             this.selectedOptions = [...existingOptions];
         } else {

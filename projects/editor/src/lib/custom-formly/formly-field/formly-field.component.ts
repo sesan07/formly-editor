@@ -1,4 +1,5 @@
 import {
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     ElementRef,
@@ -17,7 +18,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { EditorService } from '../../editor.service';
 import { EditorTypeCategoryOption, IEditorFieldInfo, IEditorFormlyField } from '../../editor.types';
 import { FormService } from '../../form/form.service';
-import { getFieldChildren, getFormattedFieldName, getReplaceCategories } from '../../form/utils';
+import { getFieldChildren, getReplaceCategories } from '../../form/utils';
 
 @Component({
     selector: 'editor-root-formly-field',
@@ -29,6 +30,7 @@ export class RootFormlyFieldComponent extends FormlyField {}
     selector: 'editor-formly-field',
     templateUrl: './formly-field.component.html',
     styleUrls: ['./formly-field.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestroy {
     @Input() override field: IEditorFormlyField;
@@ -118,8 +120,6 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         this._destroy$.next();
         this._destroy$.complete();
     }
-
-    getFormattedFieldName = (f: IEditorFormlyField) => getFormattedFieldName(f);
 
     onAddChildField(type: string, customType?: string): void {
         this._formService.addField(type, customType, this.fieldInfo.fieldId);

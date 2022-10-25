@@ -14,6 +14,11 @@ export enum PropertyType {
     TEXTAREA = 'Textarea',
 }
 
+export enum PropertyChangeType {
+    KEY,
+    VALUE,
+}
+
 export interface IBaseProperty {
     type: PropertyType;
     name?: string;
@@ -21,6 +26,12 @@ export interface IBaseProperty {
     isRemovable?: boolean;
     isKeyEditable?: boolean;
     isSimple?: boolean;
+}
+
+export interface IPropertyChange {
+    type: PropertyChangeType;
+    path: string;
+    data: any;
 }
 
 export type IProperty = IArrayProperty | IBooleanProperty | IChipListProperty | IObjectProperty | IInputProperty;

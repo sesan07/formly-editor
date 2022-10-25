@@ -41,9 +41,7 @@ export class PropertyService {
         return property as IObjectProperty;
     }
 
-    public getDefaultProperty(type: PropertyType, key?: string | number, arrayChildType?: PropertyType): IProperty {
-        key = !!key || key === 0 ? key : 'key' + this._currKeyId++;
-
+    public getDefaultProperty(type: PropertyType, key: string | number = '', arrayChildType?: PropertyType): IProperty {
         // Properties added by the user should have editable keys and be deletable
         const baseProperty: IBaseProperty = {
             type,

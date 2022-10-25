@@ -2,12 +2,11 @@
     <mat-tab label="General">
         <div class="tree-container">
             <editor-object-property
-                [target]="field"
-                [property]="property"
+                [target]="activeFieldTarget"
+                [property]="activeFieldProperty"
                 [isSimplified]="isSimplified"
                 [isExpanded]="true"
-                [isRoot]="true"
-                (targetChanged)="fieldChanged.emit()"
+                (targetChanged)="fieldChanged.emit($event)"
             >
             </editor-object-property>
         </div>
@@ -15,8 +14,8 @@
     <mat-tab label="Styling">
         <div class="styling-wrapper">
             <editor-styles
-                [editField]="field"
-                (fieldChanged)="fieldChanged.emit()"
+                [editField]="activeFieldTarget"
+                (fieldChanged)="fieldChanged.emit($event)"
             >
             </editor-styles>
         </div>

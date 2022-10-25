@@ -1,6 +1,6 @@
 <header *ngIf="isEditMode">
     <div class="header-title">
-        <span>{{ getFormattedFieldName(field) }}</span>
+        <span>{{ fieldInfo.name | fieldName: field.key }}</span>
         <ng-content></ng-content>
     </div>
     <div
@@ -9,19 +9,19 @@
         *ngIf="!hideOptions"
     >
         <button
-            [disabled]="isLastChild"
-            mat-icon-button
-            (click)="onMoveDown()"
-        >
-            <mat-icon>arrow_downward</mat-icon>
-        </button>
-
-        <button
             [disabled]="isFirstChild"
             mat-icon-button
             (click)="onMoveUp()"
         >
             <mat-icon>arrow_upward</mat-icon>
+        </button>
+
+        <button
+            [disabled]="isLastChild"
+            mat-icon-button
+            (click)="onMoveDown()"
+        >
+            <mat-icon>arrow_downward</mat-icon>
         </button>
 
         <button

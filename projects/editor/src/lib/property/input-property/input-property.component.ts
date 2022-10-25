@@ -1,39 +1,52 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { BasePropertyDirective } from '../base-property.component';
+import { PropertyType } from '../property.types';
 import { IInputProperty } from './input-property.types';
 
 @Component({
     selector: 'editor-input-property',
     templateUrl: './input-property.component.html',
     styleUrls: ['./input-property.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputPropertyComponent extends BasePropertyDirective<IInputProperty> {
+export class InputPropertyComponent extends BasePropertyDirective<IInputProperty, string | number | boolean> {
     public formControl: FormControl;
+    public hasOptions: boolean;
 
-    public get hasOptions(): boolean {
-        return this.property.isRemovable;
-    }
+    protected defaultValue = null;
 
     protected _onChanged(isFirstChange: boolean): void {
+        this.hasOptions = this.property.isRemovable;
+
         if (isFirstChange) {
-            this.formControl = new FormControl(this._getPropertyValue(''));
+            this.formControl = new FormControl(this.currentValue);
             this.formControl.valueChanges.subscribe(val => this._updateValue(val));
         }
 
-        this.formControl.setValue(this._getPropertyValue(''), {
+        this.formControl.setValue(this.currentValue, {
             emitEvent: false,
         });
     }
 
     private _updateValue(value: string): void {
+        if (this.property.type === PropertyType.NUMBER && isNaN(Number(value))) {
+            this.formControl.setValue(this.currentValue, {
+                emitEvent: false,
+            });
+
+            return;
+        }
+
         let newValue: string | number | boolean;
         if (value === '') {
             newValue = null;
         } else if (this.property.outputRawValue) {
+            // eslint-disable-next-line @typescript-eslint/quotes
             if (value.match("'.*'")) {
                 // enforced string (when the value is wrapped in single quotes)
+                // eslint-disable-next-line @typescript-eslint/quotes
                 newValue = value.match("(?<=').*(?=')")[0];
             } else if (!isNaN(Number(value))) {
                 // Number

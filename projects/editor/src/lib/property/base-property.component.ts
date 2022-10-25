@@ -10,21 +10,26 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
+import { get } from 'lodash-es';
 
-import { IBaseProperty } from './property.types';
+import { IBaseProperty, IPropertyChange, PropertyChangeType, PropertyType } from './property.types';
 
 @Directive()
-export abstract class BasePropertyDirective<T extends IBaseProperty> implements OnChanges, AfterViewInit {
+export abstract class BasePropertyDirective<P extends IBaseProperty, V> implements OnChanges, AfterViewInit {
     @Input() treeLevel = 0;
+    @Input() path?: string;
     @Input() target: Record<string, any> | any[];
-    @Input() property: T;
+    @Input() property: P;
     @Input() isSimplified: boolean;
 
     @Output() public remove: EventEmitter<void> = new EventEmitter();
     @Output() public keyChanged: EventEmitter<string> = new EventEmitter();
-    @Output() public targetChanged: EventEmitter<void> = new EventEmitter();
+    @Output() public targetChanged: EventEmitter<IPropertyChange> = new EventEmitter();
 
     @ViewChild('key') keyElement: ElementRef<HTMLElement>;
+
+    protected currentValue: V;
+    protected abstract defaultValue: V;
 
     @HostBinding('class.tree-item') get isTreeItem(): boolean {
         return !this.isSimplified;
@@ -32,7 +37,21 @@ export abstract class BasePropertyDirective<T extends IBaseProperty> implements 
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.target) {
-            this._onChanged(!!changes.target?.firstChange);
+            const isFirstChange = !!changes.target?.firstChange;
+            const newValue: any = this.path
+                ? get(this.target, this.path, this.defaultValue)
+                : this.target ?? this.defaultValue;
+
+            const canChange: boolean =
+                isFirstChange ||
+                this.property.type === PropertyType.OBJECT ||
+                this.property.type === PropertyType.ARRAY ||
+                newValue !== this.currentValue;
+
+            if (canChange) {
+                this.currentValue = newValue;
+                this._onChanged(isFirstChange);
+            }
         }
     }
 
@@ -49,20 +68,21 @@ export abstract class BasePropertyDirective<T extends IBaseProperty> implements 
     }
 
     protected _modifyValue(value: any): void {
-        this.target[this.property.key] = value;
-        this.targetChanged.emit();
-    }
-
-    protected _getPropertyValue(defaultValue?: any): any {
-        return this.target[this.property.key] ?? defaultValue ?? null;
+        const change: IPropertyChange = {
+            type: PropertyChangeType.VALUE,
+            path: this.path,
+            data: value,
+        };
+        this.targetChanged.emit(change);
     }
 
     private _onKeyChanged(newKey: string): void {
-        const value: any = this._getPropertyValue();
-        delete this.target[this.property.key];
-        this.target[newKey] = value;
-        this.property.key = newKey;
-        this.targetChanged.emit();
+        const change: IPropertyChange = {
+            type: PropertyChangeType.KEY,
+            path: this.path,
+            data: newKey,
+        };
+        this.targetChanged.emit(change);
     }
 
     private _onKeyClicked(event: MouseEvent): void {

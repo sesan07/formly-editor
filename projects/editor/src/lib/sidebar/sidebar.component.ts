@@ -1,5 +1,6 @@
 import {
     AfterContentInit,
+    ChangeDetectionStrategy,
     Component,
     ContentChildren,
     ElementRef,
@@ -17,6 +18,7 @@ import { SideBarPosition } from './sidebar.types';
     selector: 'editor-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent implements AfterContentInit {
     @Input() position: SideBarPosition;

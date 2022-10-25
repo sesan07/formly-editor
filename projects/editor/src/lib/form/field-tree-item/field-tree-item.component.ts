@@ -16,7 +16,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { EditorService } from '../../editor.service';
 import { EditorTypeCategoryOption, IEditorFormlyField, IEditorFieldInfo } from '../../editor.types';
-import { getFieldChildren, getFormattedFieldName, getReplaceCategories } from '../utils';
+import { getFieldChildren, getReplaceCategories } from '../utils';
 import { FormService } from '../form.service';
 
 @Component({
@@ -33,6 +33,7 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
     @Output() public remove: EventEmitter<void> = new EventEmitter();
     @Output() public expandParent: EventEmitter<void> = new EventEmitter();
 
+    public hasOptions: boolean;
     public isActiveField: boolean;
     public childFields: IEditorFormlyField[] = [];
     public replaceCategories: EditorTypeCategoryOption[];
@@ -48,14 +49,11 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
         private _cdRef: ChangeDetectorRef
     ) {}
 
-    public get hasOptions(): boolean {
-        return this.fieldInfo.canHaveChildren || this.treeLevel !== 0;
-    }
-
     ngOnInit(): void {
         this._renderer.addClass(this._elementRef.nativeElement, 'tree-item');
 
         this.fieldInfo = this.field._info;
+        this.hasOptions = this.fieldInfo.canHaveChildren || this.treeLevel !== 0;
         this.replaceCategories = getReplaceCategories(
             this.editorService.fieldCategories,
             this.field.type,
@@ -80,8 +78,6 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
         this._destroy$.next();
         this._destroy$.complete();
     }
-
-    getFormattedFieldName = (f: IEditorFormlyField) => getFormattedFieldName(f);
 
     onAddChildField(type: string, customType?: string): void {
         if (this.fieldInfo.canHaveChildren) {

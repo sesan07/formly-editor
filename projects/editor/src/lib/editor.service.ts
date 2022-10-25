@@ -21,6 +21,10 @@ import { getFieldChildren } from './form/utils';
 
 @Injectable()
 export class EditorService {
+    public forms$: Observable<IForm[]>;
+    public activeFormIndex$: Observable<number>;
+    public fieldCategories: EditorTypeCategoryOption[];
+
     private _currFormId = 0;
     private _editorConfig: EditorConfigOption;
     private _forms$: BehaviorSubject<IForm[]> = new BehaviorSubject([]);
@@ -30,21 +34,15 @@ export class EditorService {
     private _fieldKeyCounterMap: Map<string, number> = new Map(); // Map<fieldType, count>
     private _fieldtypeOptions: EditorTypeOption[] = [];
 
-    constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService, private _http: HttpClient) {}
-
-    public get forms$(): Observable<IForm[]> {
-        return this._forms$.asObservable();
-    }
-    public get activeFormIndex$(): Observable<number> {
-        return this._activeFormIndex$.asObservable();
-    }
-    public get fieldCategories(): EditorTypeCategoryOption[] {
-        return this._editorConfig.typeCategories;
+    constructor(@Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService, private _http: HttpClient) {
+        this.forms$ = this._forms$.asObservable();
+        this.activeFormIndex$ = this._activeFormIndex$.asObservable();
     }
 
     setup(editorConfig: EditorConfigOption) {
         this._editorConfig = editorConfig;
-        this._editorConfig.typeCategories.forEach(category => this._fieldtypeOptions.push(...category.typeOptions));
+        this._fieldtypeOptions = this._editorConfig.typeCategories.reduce((a, b) => [...a, ...b.typeOptions], []);
+        this.fieldCategories = this._editorConfig.typeCategories;
         this._loadDefaultForm();
     }
 

@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash-es';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
 
 import { EditorService } from '../editor.service';
 import { IEditorFormlyField, IForm } from '../editor.types';
@@ -19,20 +19,27 @@ import { ImportJSONRequest, ImportJSONResponse } from '../form/import-form-dialo
     selector: 'editor-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit, OnDestroy {
-    public tabIndex: number;
-    public forms: IForm[] = [];
+    public forms$: Observable<IForm[]>;
+    public activeFormIndex$: Observable<number>;
 
     private _destroy$: Subject<void> = new Subject();
+    private _activeFormIndex: number;
+    private _forms: IForm[];
 
     constructor(private _editorService: EditorService, private _dialog: MatDialog, private _fileService: FileService) {}
 
     ngOnInit(): void {
-        this._editorService.forms$.pipe(takeUntil(this._destroy$)).subscribe(forms => (this.forms = forms));
-        this._editorService.activeFormIndex$
-            .pipe(takeUntil(this._destroy$))
-            .subscribe(index => (this.tabIndex = index));
+        this.forms$ = this._editorService.forms$.pipe(
+            takeUntil(this._destroy$),
+            tap(forms => (this._forms = forms))
+        );
+        this.activeFormIndex$ = this._editorService.activeFormIndex$.pipe(
+            takeUntil(this._destroy$),
+            tap(i => (this._activeFormIndex = i))
+        );
     }
 
     ngOnDestroy(): void {
@@ -79,7 +86,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     onExportForm(): void {
-        const form: IForm = this.forms[this.tabIndex];
+        const form: IForm = this._forms[this._activeFormIndex];
         const fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
         fieldsClone.forEach(field => cleanField(field, true, true));
 

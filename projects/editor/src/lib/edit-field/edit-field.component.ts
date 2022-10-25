@@ -1,7 +1,9 @@
 import {
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     EventEmitter,
+    Inject,
     Input,
     OnDestroy,
     OnInit,
@@ -12,8 +14,11 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { IEditorFormlyField } from '../editor.types';
+import { EDITOR_FIELD_SERVICE, IEditorFormlyField, IFieldService } from '../editor.types';
 import { IObjectProperty } from '../property/object-array-properties/object-property.types';
+import { PropertyService } from '../property/property.service';
+import { IPropertyChange, PropertyType } from '../property/property.types';
+import { initRootProperty } from '../property/utils';
 
 @Component({
     selector: 'editor-edit-field',
@@ -22,20 +27,29 @@ import { IObjectProperty } from '../property/object-array-properties/object-prop
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditFieldComponent implements OnInit, OnDestroy {
-    @Input() field: IEditorFormlyField;
-    @Input() property: IObjectProperty;
+    @Input() field$: Observable<IEditorFormlyField>;
     @Input() isSimplified: boolean;
     @Input() resizeTabHeader$: Observable<void>;
 
-    @Output() fieldChanged: EventEmitter<void> = new EventEmitter();
+    @Output() fieldChanged: EventEmitter<IPropertyChange> = new EventEmitter();
 
     @ViewChild(MatTabGroup) matTabGroup: MatTabGroup;
 
-    private _destroy$: Subject<void> = new Subject();
+    public activeFieldProperty: IObjectProperty;
+    public activeFieldTarget: IEditorFormlyField;
 
-    constructor() {}
+    private _destroy$: Subject<void> = new Subject();
+    private _cachedFieldId: string;
+
+    constructor(
+        public propertyService: PropertyService,
+        @Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService,
+        private _cdRef: ChangeDetectorRef
+    ) {}
 
     ngOnInit(): void {
+        this.field$.pipe(takeUntil(this._destroy$)).subscribe(field => this._updateActiveField(field));
+
         this.resizeTabHeader$?.pipe(takeUntil(this._destroy$)).subscribe(() => {
             this.matTabGroup._tabHeader._alignInkBarToSelectedTab();
         });
@@ -46,5 +60,20 @@ export class EditFieldComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this._destroy$.next();
         this._destroy$.complete();
+    }
+
+    private _updateActiveFieldProperty(): void {
+        this.activeFieldProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
+        const childProperties = this._fieldService.getProperties(this.activeFieldTarget.type);
+        initRootProperty(this.activeFieldProperty, true, childProperties);
+        this._cdRef.markForCheck();
+    }
+
+    private _updateActiveField(field: IEditorFormlyField): void {
+        this.activeFieldTarget = { ...field };
+
+        if (field._info.fieldId !== this._cachedFieldId) {
+            this._updateActiveFieldProperty();
+        }
     }
 }

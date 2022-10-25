@@ -16,8 +16,9 @@
             <editor-chip-list-property
                 [target]="editField"
                 [property]="getProperty()"
+                [path]="getProperty().key + ''"
                 [isSimplified]="true"
-                (targetChanged)="fieldChanged.emit()"
+                (targetChanged)="fieldChanged.emit($event)"
             >
             </editor-chip-list-property>
         </editor-breakpoint>
@@ -36,8 +37,9 @@
             <editor-chip-list-property
                 [target]="editField"
                 [property]="getProperty(breakpointType)"
+                [path]="getProperty(breakpointType).key + ''"
                 [isSimplified]="true"
-                (targetChanged)="fieldChanged.emit()"
+                (targetChanged)="fieldChanged.emit($event)"
             >
             </editor-chip-list-property>
         </editor-breakpoint>
@@ -92,8 +94,9 @@
             <editor-chip-list-property
                 [target]="editField"
                 [property]="getChildrenProperty()"
+                [path]="getChildrenProperty().key + ''"
                 [isSimplified]="true"
-                (targetChanged)="fieldChanged.emit()"
+                (targetChanged)="fieldChanged.emit($event)"
             >
             </editor-chip-list-property>
         </editor-breakpoint>
@@ -124,8 +127,9 @@
             <editor-chip-list-property
                 [target]="editField"
                 [property]="getChildrenProperty(breakpointType)"
+                [path]="getChildrenProperty(breakpointType).key + ''"
                 [isSimplified]="true"
-                (targetChanged)="fieldChanged.emit()"
+                (targetChanged)="fieldChanged.emit($event)"
             >
             </editor-chip-list-property>
         </editor-breakpoint>
