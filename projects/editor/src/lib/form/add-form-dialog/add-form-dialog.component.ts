@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 import { AddFormResponse } from './add-form-dialog.types';
@@ -10,10 +11,10 @@ import { AddFormResponse } from './add-form-dialog.types';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddFormDialogComponent implements AfterViewInit {
+    @ViewChild('nameModel', { read: NgModel })
+    nameModel: NgModel;
     @ViewChild('nameModel', { read: ElementRef })
     nameElement: ElementRef<HTMLInputElement>;
-
-    nameValue: string;
 
     constructor(private _dialogRef: MatDialogRef<AddFormDialogComponent, AddFormResponse>) {}
 
@@ -22,8 +23,10 @@ export class AddFormDialogComponent implements AfterViewInit {
     }
 
     onAdd(): void {
-        this._dialogRef.close({
-            name: this.nameValue,
-        });
+        if (this.nameModel.valid) {
+            this._dialogRef.close({
+                name: this.nameModel.value,
+            });
+        }
     }
 }

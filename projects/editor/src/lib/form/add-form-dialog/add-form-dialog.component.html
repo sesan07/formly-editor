@@ -4,9 +4,10 @@
         <mat-label>Form name</mat-label>
         <input
             #nameModel="ngModel"
-            [(ngModel)]="nameValue"
+            ngModel
             matInput
             required
+            (keyup.enter)="onAdd()"
         />
         <mat-error *ngIf="nameModel.errors?.required">Please enter a name</mat-error>
     </mat-form-field>
