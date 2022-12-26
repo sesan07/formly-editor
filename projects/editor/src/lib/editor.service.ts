@@ -150,9 +150,6 @@ export class EditorService {
         );
         merge(baseField, sourceField);
 
-        // Properties
-        const properties: IProperty[] = this._fieldService.getProperties(baseField.type);
-
         // Editor information
         const typeOption: EditorTypeOption = this._getTypeOption(baseField.type, baseField.customType);
         const fieldInfo: IEditorFieldInfo = {

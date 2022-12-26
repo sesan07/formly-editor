@@ -27,7 +27,6 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
                     { value: 4, label: 'Option 4', disabled: true },
                 ],
             },
-            expressionProperties: {},
         };
     }
 

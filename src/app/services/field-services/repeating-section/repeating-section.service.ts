@@ -13,14 +13,12 @@ export class RepeatingSectionService extends BaseFieldService<IRepeatingSectionT
         return {
             key: 'tempKey',
             type: FieldType.REPEATING_SECTION,
-            wrappers: [],
             templateOptions: {
                 addText: 'Add Section',
             },
             fieldArray: {
                 fieldGroup: [],
             },
-            expressionProperties: {},
         };
     }
 

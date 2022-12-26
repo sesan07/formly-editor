@@ -6,7 +6,6 @@ import {
     FormlyTemplateOptions,
     TypeOption,
 } from '@ngx-formly/core';
-import { Observable } from 'rxjs';
 
 import { IProperty } from './property/property.types';
 
@@ -25,25 +24,14 @@ export interface IEditorFieldInfo {
 
 export interface IBaseFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
     type: string;
-    customType?: string;
-    templateOptions: T; // TODO make optional. property should initialize key in target of empty
-    wrappers: string[]; // TODO remove this. property should initialize key in target of empty
+    customType?: string; // TODO Can this be moved to _info?
+    templateOptions?: T;
     fieldGroup?: IBaseFormlyField[];
-    expressionProperties: {
-        // TODO remove this. property should initialize key in target of empty
-        [property: string]: string | ((model: any, formState: any, field?: FormlyFieldConfig) => any) | Observable<any>;
-    };
 }
 
 export interface IEditorFormlyField extends IBaseFormlyField {
     _info: IEditorFieldInfo;
-    // name: string;
     fieldGroup?: IEditorFormlyField[];
-    // formId: string;
-    // fieldId: string;
-    // parentFieldId?: string;
-    // canHaveChildren?: boolean;
-    // childrenPath?: string; // Lodash path
 }
 
 export type IEditorFormlyFieldConfigCache = IEditorFormlyField & FormlyFieldConfigCache;

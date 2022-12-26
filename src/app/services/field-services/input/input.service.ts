@@ -19,7 +19,6 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
                 description: 'Description',
                 required: true,
             },
-            expressionProperties: {},
         };
 
         switch (customType) {

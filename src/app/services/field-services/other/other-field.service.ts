@@ -3,18 +3,15 @@ import { FormlyTemplateOptions } from '@ngx-formly/core';
 import { IProperty } from 'editor';
 
 import { BaseFieldService } from '../base-field.service';
-import { CustomFieldType, IFormlyField, WrapperType } from '../field.types';
+import { IFormlyField, WrapperType } from '../field.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class OtherFieldService extends BaseFieldService<FormlyTemplateOptions> {
-    public getDefaultConfig(customType?: CustomFieldType): IFormlyField {
+    public getDefaultConfig(): IFormlyField {
         return {
             type: undefined,
-            wrappers: [],
-            templateOptions: {},
-            expressionProperties: {},
         };
     }
 
