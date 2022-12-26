@@ -97,6 +97,10 @@ export class EditorService {
         this._forms$.next(forms.slice());
     }
 
+    public getForm(index: number): IForm {
+        return this._forms$.value[index];
+    }
+
     public duplicateForm(formId: string): void {
         const sourceForm: IForm = this._forms$.value.find(f => f.id === formId);
 
@@ -164,7 +168,7 @@ export class EditorService {
         const field: IEditorFormlyField = {
             ...baseField,
             _info: fieldInfo,
-            key: baseField.key || this._getNextKey(baseField.type),
+            key: baseField.key || (typeOption.canHaveChildren ? undefined : this._getNextKey(baseField.type)),
             fieldGroup: undefined,
         };
 

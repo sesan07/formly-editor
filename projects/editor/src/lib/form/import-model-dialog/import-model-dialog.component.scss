@@ -1,3 +1,5 @@
+// Todo Clean styling...
+
 :host {
     display: flex;
     flex-direction: column;
@@ -10,7 +12,9 @@
     flex-grow: 1;
 }
 
-.mat-dialog-title { margin: 0; }
+.mat-dialog-title {
+    margin: 0;
+}
 
 .mat-tab-group {
     height: 100%;
@@ -23,16 +27,29 @@
 .file-select {
     display: flex;
     column-gap: 8px;
+    flex-grow: 1;
 }
 
 .file-select-field {
     flex-grow: 1;
 }
 
+.file-select-button {
+    align-self: flex-start;
+}
+
 .json-textarea {
     height: 100%;
     resize: none;
-    font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+    font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono,
+        Courier New, monospace, serif;
+}
+
+form {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
 }
 
 :host ::ng-deep {
@@ -46,11 +63,14 @@
     .json-field {
         flex-grow: 1;
 
-        .mat-form-field-wrapper, .mat-form-field-infix, .mat-form-field-flex {
+        .mat-form-field-wrapper,
+        .mat-form-field-infix,
+        .mat-form-field-flex {
             height: 100%;
         }
 
-        .mat-form-field-wrapper, .mat-form-field-infix {
+        .mat-form-field-wrapper,
+        .mat-form-field-infix {
             box-sizing: border-box;
         }
     }

@@ -9,11 +9,9 @@ import { IEditorFormlyField, IForm } from '../editor.types';
 import { FileService } from '../shared/services/file-service/file.service';
 import { cleanField } from '../form/utils';
 import { AddFormDialogComponent } from '../form/add-form-dialog/add-form-dialog.component';
-import { AddFormResponse } from '../form/add-form-dialog/add-form-dialog.types';
+import { AddFormResponse } from '../form/add-form-dialog/add-json-dialog.types';
 import { ExportFormDialogComponent } from '../form/export-form-dialog/export-form-dialog.component';
 import { ExportJSONRequest, ExportJSONResponse } from '../form/export-form-dialog/export-json-dialog.types';
-import { ImportFormDialogComponent } from '../form/import-form-dialog/import-form-dialog.component';
-import { ImportJSONRequest, ImportJSONResponse } from '../form/import-form-dialog/import-json-dialog.types';
 
 @Component({
     selector: 'editor-home',
@@ -26,19 +24,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     public activeFormIndex$: Observable<number>;
 
     private _destroy$: Subject<void> = new Subject();
-    private _activeFormIndex: number;
-    private _forms: IForm[];
+    private _activeForm: IForm;
 
     constructor(private _editorService: EditorService, private _dialog: MatDialog, private _fileService: FileService) {}
 
     ngOnInit(): void {
-        this.forms$ = this._editorService.forms$.pipe(
-            takeUntil(this._destroy$),
-            tap(forms => (this._forms = forms))
-        );
+        this.forms$ = this._editorService.forms$;
         this.activeFormIndex$ = this._editorService.activeFormIndex$.pipe(
             takeUntil(this._destroy$),
-            tap(i => (this._activeFormIndex = i))
+            tap(i => (this._activeForm = this._editorService.getForm(i)))
         );
     }
 
@@ -47,53 +41,27 @@ export class HomeComponent implements OnInit, OnDestroy {
         this._destroy$.complete();
     }
 
-    onAddForm(): void {
-        const config: MatDialogConfig = {
-            height: 'auto',
-            maxWidth: '600px',
-        };
-
-        const dialogRef: MatDialogRef<AddFormDialogComponent, AddFormResponse> = this._dialog.open(
-            AddFormDialogComponent,
-            config
-        );
+    onImportForm(): void {
+        const dialogRef: MatDialogRef<AddFormDialogComponent, AddFormResponse> =
+            this._dialog.open(AddFormDialogComponent);
 
         dialogRef.afterClosed().subscribe(res => {
-            if (res) {
+            if (res?.json) {
+                this._editorService.importForm(res.name, res.json);
+            } else if (res) {
                 this._editorService.addForm(res.name);
             }
         });
     }
 
-    onImportForm(): void {
-        const config: MatDialogConfig<ImportJSONRequest> = {
-            data: {
-                type: 'Form',
-                showName: true,
-            },
-        };
-
-        const dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse> = this._dialog.open(
-            ImportFormDialogComponent,
-            config
-        );
-
-        dialogRef.afterClosed().subscribe(res => {
-            if (res) {
-                this._editorService.importForm(res.name, res.json);
-            }
-        });
-    }
-
     onExportForm(): void {
-        const form: IForm = this._forms[this._activeFormIndex];
-        const fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
+        const fieldsClone: IEditorFormlyField[] = cloneDeep(this._activeForm.fields);
         fieldsClone.forEach(field => cleanField(field, true, true));
 
         const config: MatDialogConfig<ExportJSONRequest> = {
             data: {
                 type: 'Form',
-                name: form.name + '.json',
+                name: this._activeForm.name + '.json',
                 json: JSON.stringify(fieldsClone, null, 2),
             },
         };

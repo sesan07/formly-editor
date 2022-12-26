@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>Import Model</h2>
+<mat-dialog-content>
+    <form #form="ngForm">
+        <div class="file-select">
+            <mat-form-field class="json-field">
+                <mat-label>JSON</mat-label>
+                <textarea
+                    class="json-textarea"
+                    #jsonModel="ngModel"
+                    name="json"
+                    ngModel
+                    matInput
+                    required
+                    spellcheck="false"
+                    editorJsonValidator
+                    (keyup.enter)="onImport()"
+                ></textarea>
+                <mat-error *ngIf="jsonModel.errors?.required">This field is required</mat-error>
+                <mat-error *ngIf="jsonModel.errors?.jsonFormat">Invalid JSON</mat-error>
+            </mat-form-field>
+            <button
+                class="file-select-button"
+                mat-button
+                type="button"
+                (click)="fileSelect.click()"
+            >
+                <mat-icon>upload_file</mat-icon>
+                <span>Select File</span>
+            </button>
+            <input
+                #fileSelect
+                type="file"
+                hidden
+                required
+                [accept]="'.json, .txt'"
+                (input)="onFileChanged()"
+            />
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button
+        mat-button
+        mat-dialog-close
+    >
+        <mat-icon>close</mat-icon>
+        <span>Cancel</span>
+    </button>
+    <button
+        mat-flat-button
+        color="primary"
+        [disabled]="!isFormValid"
+        (click)="onImport()"
+    >
+        <mat-icon>file_download</mat-icon>
+        <span>Import</span>
+    </button>
+</mat-dialog-actions>

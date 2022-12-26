@@ -15,12 +15,12 @@ import { ExportJSONRequest, ExportJSONResponse } from './export-form-dialog/expo
 import { FileService } from '../shared/services/file-service/file.service';
 import { SideBarPosition } from '../sidebar/sidebar.types';
 import { IObjectProperty } from '../property/object-array-properties/object-property.types';
-import { ImportFormDialogComponent } from './import-form-dialog/import-form-dialog.component';
-import { ImportJSONRequest, ImportJSONResponse } from './import-form-dialog/import-json-dialog.types';
 import { cleanField } from './utils';
 import { FormService } from './form.service';
 import { DroplistService } from './droplist.service';
 import { initRootProperty } from '../property/utils';
+import { ImportModelDialogComponent } from './import-model-dialog/import-model-dialog.component';
+import { ImportModelResponse } from './import-model-dialog/import-model-dialog.types';
 
 @Component({
     selector: 'editor-form',
@@ -112,14 +112,8 @@ export class FormComponent implements OnInit {
     }
 
     onImportModel(): void {
-        const config: MatDialogConfig<ImportJSONRequest> = {
-            data: { type: 'Model' },
-        };
-
-        const dialogRef: MatDialogRef<ImportFormDialogComponent, ImportJSONResponse> = this._dialog.open(
-            ImportFormDialogComponent,
-            config
-        );
+        const dialogRef: MatDialogRef<ImportModelDialogComponent, ImportModelResponse> =
+            this._dialog.open(ImportModelDialogComponent);
         dialogRef.afterClosed().subscribe(res => {
             if (res) {
                 this._formService.setModel(JSON.parse(res.json));

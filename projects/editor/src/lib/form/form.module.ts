@@ -11,12 +11,11 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-import { AddFormDialogComponent } from './add-form-dialog/add-form-dialog.component';
 import { ExportFormDialogComponent } from './export-form-dialog/export-form-dialog.component';
 import { FieldCategoryComponent } from './field-category/field-category.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { FormComponent } from './form.component';
-import { ImportFormDialogComponent } from './import-form-dialog/import-form-dialog.component';
+import { AddFormDialogComponent } from './add-form-dialog/add-form-dialog.component';
 import { PropertyModule } from '../property/property.module';
 import { CustomFormlyModule } from '../custom-formly/custom-formly.module';
 import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
@@ -26,11 +25,12 @@ import { JsonFileValidatorDirective } from './json-file-validator/json-file-vali
 import { JsonValidatorDirective } from './json-validator/json-validator.directive';
 import { EditFieldModule } from '../edit-field/edit-field.module';
 import { FieldNameModule } from '../field-name/field-name.module';
+import { ImportModelDialogComponent } from './import-model-dialog/import-model-dialog.component';
 
 @NgModule({
     declarations: [
         AddFormDialogComponent,
-        ImportFormDialogComponent,
+        ImportModelDialogComponent,
         ExportFormDialogComponent,
         ToolbarComponent,
         FieldTreeItemComponent,

@@ -1,16 +1,81 @@
-<h2 mat-dialog-title>New Form</h2>
+<h2 mat-dialog-title>Add Form</h2>
 <mat-dialog-content>
-    <mat-form-field>
-        <mat-label>Form name</mat-label>
-        <input
-            #nameModel="ngModel"
-            ngModel
-            matInput
-            required
-            (keyup.enter)="onAdd()"
-        />
-        <mat-error *ngIf="nameModel.errors?.required">Please enter a name</mat-error>
-    </mat-form-field>
+    <form
+        #form="ngForm"
+        (ngSubmit)="onAdd()"
+    >
+        <mat-tab-group (selectedIndexChange)="currTabIndex = $event">
+            <mat-tab
+                ngModelGroup="new"
+                #newGroup="ngModelGroup"
+                label="New"
+            >
+                <mat-form-field>
+                    <mat-label>Form Name</mat-label>
+                    <input
+                        #nameModel="ngModel"
+                        name="formName"
+                        [(ngModel)]="formName"
+                        matInput
+                        required
+                    />
+                    <mat-error *ngIf="nameModel.errors?.required">Please enter a name</mat-error>
+                </mat-form-field>
+            </mat-tab>
+            <mat-tab
+                ngModelGroup="import"
+                #importGroup="ngModelGroup"
+                label="From JSON"
+            >
+                <mat-form-field>
+                    <mat-label>Form Name</mat-label>
+                    <input
+                        #nameModel="ngModel"
+                        name="formName"
+                        [(ngModel)]="formName"
+                        matInput
+                        required
+                    />
+                    <mat-error *ngIf="nameModel.errors?.required">Please enter a name</mat-error>
+                </mat-form-field>
+
+                <div class="file-select">
+                    <mat-form-field class="json-field">
+                        <mat-label>JSON</mat-label>
+                        <textarea
+                            class="json-textarea"
+                            #jsonModel="ngModel"
+                            name="json"
+                            ngModel
+                            matInput
+                            required
+                            spellcheck="false"
+                            editorJsonValidator
+                        ></textarea>
+                        <mat-error *ngIf="jsonModel.errors?.required">This field is required</mat-error>
+                        <mat-error *ngIf="jsonModel.errors?.jsonFormat">Invalid JSON</mat-error>
+                    </mat-form-field>
+                    <button
+                        class="file-select-button"
+                        mat-button
+                        type="button"
+                        (click)="fileSelect.click()"
+                    >
+                        <mat-icon>upload_file</mat-icon>
+                        <span>Select File</span>
+                    </button>
+                    <input
+                        #fileSelect
+                        type="file"
+                        hidden
+                        required
+                        [accept]="'.json, .txt'"
+                        (input)="onFileChanged()"
+                    />
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button
@@ -23,7 +88,7 @@
     <button
         mat-flat-button
         color="primary"
-        [disabled]="!nameModel?.valid"
+        [disabled]="!isFormValid"
         (click)="onAdd()"
     >
         <mat-icon>add</mat-icon>
