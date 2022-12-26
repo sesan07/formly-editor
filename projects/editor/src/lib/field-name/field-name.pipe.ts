@@ -6,6 +6,6 @@ import { IEditorFormlyField } from '../editor.types';
 })
 export class FieldNamePipe implements PipeTransform {
     transform(name: string, key?: string | number | (string | number)[]): string {
-        return `${name}${key ? `(${key})` : ''}`;
+        return `${name}${key ? ` (${key})` : ''}`;
     }
 }
