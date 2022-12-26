@@ -21,6 +21,13 @@
     >
     <button
         mat-icon-button
+        matTooltip="Reset Form"
+        (click)="resetModel.emit()"
+    >
+        <mat-icon>restart_alt</mat-icon>
+    </button>
+    <button
+        mat-icon-button
         matTooltip="Duplicate Form"
         (click)="duplicateForm.emit()"
     >
@@ -28,10 +35,10 @@
     </button>
     <button
         mat-icon-button
-        matTooltip="Reset Form"
-        (click)="resetModel.emit()"
+        matTooltip="Export Form"
+        (click)="exportForm.emit()"
     >
-        <mat-icon>restart_alt</mat-icon>
+        <mat-icon>file_upload</mat-icon>
     </button>
     <button
         mat-icon-button

@@ -99,6 +99,30 @@ export class FormComponent implements OnInit {
         this.editorService.duplicateForm(this.form.id);
     }
 
+    onExportForm(): void {
+        const fieldsClone: IEditorFormlyField[] = cloneDeep(this._formService.getFields());
+        fieldsClone.forEach(field => cleanField(field, true, true));
+
+        const config: MatDialogConfig<ExportJSONRequest> = {
+            data: {
+                type: 'Form',
+                name: this.form.name + '.json',
+                json: JSON.stringify(fieldsClone, null, 2),
+            },
+        };
+
+        const dialogRef: MatDialogRef<ExportFormDialogComponent, ExportJSONResponse> = this._dialog.open(
+            ExportFormDialogComponent,
+            config
+        );
+
+        dialogRef.afterClosed().subscribe(res => {
+            if (res) {
+                this._fileService.saveFile(res.name, res.json);
+            }
+        });
+    }
+
     onActiveFieldChanged(change: IPropertyChange): void {
         this._formService.modifyField(change);
     }
