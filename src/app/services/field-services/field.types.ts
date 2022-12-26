@@ -22,8 +22,7 @@ export enum WrapperType {
     CARD = 'card',
 }
 
-export interface IFormlyField<T = FormlyTemplateOptions> extends IBaseFormlyField {
-    templateOptions: T;
+export interface IFormlyField<T = FormlyTemplateOptions> extends IBaseFormlyField<T> {
     fieldGroup?: IFormlyField[];
 }
 

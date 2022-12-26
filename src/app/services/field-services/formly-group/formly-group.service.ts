@@ -12,17 +12,14 @@ export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> 
     public getDefaultConfig(customType?: CustomFieldType): IFormlyField {
         const config: IFormlyField = {
             type: FieldType.FORMLY_GROUP,
-            wrappers: [],
-            templateOptions: {},
             fieldGroup: [],
-            expressionProperties: {},
         };
 
         switch (customType) {
             case CustomFieldType.CARD:
                 config.name = 'Card';
                 config.customType = customType;
-                config.wrappers.push(WrapperType.CARD);
+                config.wrappers = [WrapperType.CARD];
         }
 
         return config;

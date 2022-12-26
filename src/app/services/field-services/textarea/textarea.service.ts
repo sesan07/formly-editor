@@ -19,7 +19,6 @@ export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> 
                 description: 'Description',
                 required: true,
             },
-            expressionProperties: {},
         };
     }
 

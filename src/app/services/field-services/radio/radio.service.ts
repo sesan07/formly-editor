@@ -27,7 +27,6 @@ export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
                     { value: 4, label: 'Option 4', disabled: true },
                 ],
             },
-            expressionProperties: {},
         };
     }
 
