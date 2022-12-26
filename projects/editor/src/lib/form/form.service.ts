@@ -192,6 +192,10 @@ export class FormService {
         return this._fieldMap.get(fieldId);
     }
 
+    public getFields(): IEditorFormlyField[] {
+        return this._fields$.value;
+    }
+
     private _getSiblings(parentFieldId?: string): IEditorFormlyField[] {
         if (parentFieldId) {
             const parentField: IEditorFormlyField = this.getField(parentFieldId);

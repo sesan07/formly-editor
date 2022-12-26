@@ -1,21 +1,3 @@
-<span class="header">
-    <span class="header-title">Formly Editor</span>
-    <span class="header-buttons">
-        <button
-            mat-button
-            (click)="onImportForm()"
-        >
-            <mat-icon>add</mat-icon>Add Form
-        </button>
-        <button
-            mat-button
-            (click)="onExportForm()"
-            [disabled]="(forms$ | async).length === 0"
-        >
-            <mat-icon>file_upload</mat-icon>Export Form
-        </button>
-    </span>
-</span>
 <mat-tab-group
     class="form-tab-group"
     *ngIf="(forms$ | async).length > 0; else emptyView"
@@ -42,8 +24,22 @@
     </mat-tab>
 </mat-tab-group>
 
+<div
+    class="action-buttons"
+    *ngIf="(forms$ | async).length > 0"
+>
+    <button
+        mat-flat-button
+        color="primary"
+        (click)="onImportForm()"
+    >
+        <mat-icon>add</mat-icon>Add Form
+    </button>
+</div>
+
 <ng-template #emptyView>
     <div class="empty-view">
+        <h1>Formly Editor</h1>
         <div>[ Cool Logo Here ]</div>
         <button
             mat-flat-button

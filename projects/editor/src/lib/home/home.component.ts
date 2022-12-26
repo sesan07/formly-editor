@@ -1,17 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { cloneDeep } from 'lodash-es';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
 import { EditorService } from '../editor.service';
-import { IEditorFormlyField, IForm } from '../editor.types';
+import { IForm } from '../editor.types';
 import { FileService } from '../shared/services/file-service/file.service';
-import { cleanField } from '../form/utils';
 import { AddFormDialogComponent } from '../form/add-form-dialog/add-form-dialog.component';
 import { AddFormResponse } from '../form/add-form-dialog/add-json-dialog.types';
-import { ExportFormDialogComponent } from '../form/export-form-dialog/export-form-dialog.component';
-import { ExportJSONRequest, ExportJSONResponse } from '../form/export-form-dialog/export-json-dialog.types';
 
 @Component({
     selector: 'editor-home',
@@ -50,30 +46,6 @@ export class HomeComponent implements OnInit, OnDestroy {
                 this._editorService.importForm(res.name, res.json);
             } else if (res) {
                 this._editorService.addForm(res.name);
-            }
-        });
-    }
-
-    onExportForm(): void {
-        const fieldsClone: IEditorFormlyField[] = cloneDeep(this._activeForm.fields);
-        fieldsClone.forEach(field => cleanField(field, true, true));
-
-        const config: MatDialogConfig<ExportJSONRequest> = {
-            data: {
-                type: 'Form',
-                name: this._activeForm.name + '.json',
-                json: JSON.stringify(fieldsClone, null, 2),
-            },
-        };
-
-        const dialogRef: MatDialogRef<ExportFormDialogComponent, ExportJSONResponse> = this._dialog.open(
-            ExportFormDialogComponent,
-            config
-        );
-
-        dialogRef.afterClosed().subscribe(res => {
-            if (res) {
-                this._fileService.saveFile(res.name, res.json);
             }
         });
     }

@@ -1,6 +1,7 @@
 :root {
     --header-height: 48px;
     --tree-item-height: 32px;
+    --add-form-width: 140px;
 }
 
 html,
@@ -166,6 +167,8 @@ button.mat-icon-button {
 }
 
 .form-tab-group > .mat-tab-header {
+    margin-right: var(--add-form-width);
+
     .mat-tab-label {
         padding: 0;
     }
