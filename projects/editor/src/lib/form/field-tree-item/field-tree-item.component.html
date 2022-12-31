@@ -4,18 +4,17 @@
     [(isExpanded)]="isExpanded"
     [isExpandable]="fieldInfo.canHaveChildren"
     [isActive]="isActiveField"
-    [hasOptions]="hasOptions"
+    [hasOptions]="true"
     [optionsMenu]="optionsMenu"
     (isExpandedChange)="onSelected()"
 >
-    <ng-container headerContent>{{ fieldInfo.name | fieldName: field.key }}</ng-container>
+    <ng-container headerContent>{{ fieldInfo.name | fieldName : field.key }}</ng-container>
 
     <ng-container childrenContent>
         <editor-field-tree-item
             *ngFor="let child of childFields; trackBy: trackFieldById"
             [field]="child"
             [treeLevel]="treeLevel + 1"
-            (remove)="onRemoveChildField(child)"
             (expandParent)="onExpandParent()"
         >
         </editor-field-tree-item>
@@ -40,9 +39,8 @@
         <span>Replace</span>
     </button>
     <button
-        *ngIf="treeLevel !== 0"
         mat-menu-item
-        (click)="remove.emit()"
+        (click)="onRemove()"
     >
         <mat-icon>remove</mat-icon>
         <span>Remove</span>

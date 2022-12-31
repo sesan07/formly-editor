@@ -48,13 +48,8 @@ export class EditorService {
 
     public addForm(name: string): void {
         const formId: string = this._getNextFormId(this._currFormId++);
-        const field: IEditorFormlyField = this.getDefaultField(
-            formId,
-            this._editorConfig.defaultName,
-            this._editorConfig.defaultCustomName
-        );
 
-        this._addForm(formId, name, [field], {});
+        this._addForm(formId, name, [], {});
     }
 
     public importForm(

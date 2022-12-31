@@ -69,7 +69,11 @@ export class EditFieldComponent implements OnInit, OnDestroy {
         this._cdRef.markForCheck();
     }
 
-    private _updateActiveField(field: IEditorFormlyField): void {
+    private _updateActiveField(field: IEditorFormlyField | null): void {
+        if (!field) {
+            return;
+        }
+
         this.activeFieldTarget = { ...field };
 
         if (field._info.fieldId !== this._cachedFieldId) {

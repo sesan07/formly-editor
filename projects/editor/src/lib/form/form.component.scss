@@ -11,7 +11,7 @@
             padding: 8px;
             box-sizing: border-box;
         }
-        
+
         .active-field-section .sidebar-section-content {
             padding: 0;
         }
@@ -38,7 +38,7 @@
     box-sizing: border-box;
 }
 
-editor-sidebar-section .header-content {
+.model-header-content {
     flex-grow: 1;
     display: flex;
     justify-content: space-between;
@@ -46,8 +46,8 @@ editor-sidebar-section .header-content {
 }
 
 editor-sidebar {
-	min-width: 200px;
-	max-width: 40%;
+    min-width: 200px;
+    max-width: 40%;
 
     &.left {
         width: 20%;
@@ -56,4 +56,10 @@ editor-sidebar {
     &.right {
         width: 30%;
     }
+}
+
+.no-fields-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
 }
