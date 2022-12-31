@@ -106,6 +106,10 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         );
 
         this._formService.activeField$.pipe(takeUntil(this._destroy$)).subscribe(f => {
+            if (!f) {
+                return;
+            }
+
             this._isActiveField = f._info.fieldId === this.fieldInfo.fieldId;
             this._cdRef.markForCheck();
         });

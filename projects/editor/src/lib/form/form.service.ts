@@ -19,7 +19,7 @@ export class FormService {
     private _fieldMap: Map<string, IEditorFormlyField> = new Map();
 
     private _fields$: BehaviorSubject<IEditorFormlyField[]> = new BehaviorSubject([]);
-    private _activeField$: BehaviorSubject<IEditorFormlyField> = new BehaviorSubject(null);
+    private _activeField$: BehaviorSubject<IEditorFormlyField | null> = new BehaviorSubject(null);
     private _model$: BehaviorSubject<Record<string, any>> = new BehaviorSubject({});
     private _isEditMode$: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
@@ -75,11 +75,7 @@ export class FormService {
             this._removeFromFieldMap(field, removeChildren);
             this._fields$.next(this._fields$.value);
 
-            if (parentId) {
-                this.selectField(parentId);
-            } else if (this._fields$[0]?.fieldId) {
-                this.selectField(this._fields$[0].fieldId);
-            }
+            this.selectField(parentId);
         }
     }
 
@@ -100,8 +96,8 @@ export class FormService {
         }
     }
 
-    public selectField(fieldId: string): void {
-        const field = this._fieldMap.get(fieldId);
+    public selectField(fieldId: string | null): void {
+        const field = this._fieldMap.get(fieldId) ?? null;
         this._activeField$.next(field);
     }
 

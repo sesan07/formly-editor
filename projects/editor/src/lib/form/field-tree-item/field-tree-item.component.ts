@@ -30,10 +30,8 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
     @Input() public isExpanded = false;
     @Input() public treeLevel = 0;
 
-    @Output() public remove: EventEmitter<void> = new EventEmitter();
     @Output() public expandParent: EventEmitter<void> = new EventEmitter();
 
-    public hasOptions: boolean;
     public isActiveField: boolean;
     public childFields: IEditorFormlyField[] = [];
     public replaceCategories: EditorTypeCategoryOption[];
@@ -53,7 +51,6 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
         this._renderer.addClass(this._elementRef.nativeElement, 'tree-item');
 
         this.fieldInfo = this.field._info;
-        this.hasOptions = this.fieldInfo.canHaveChildren || this.treeLevel !== 0;
         this.replaceCategories = getReplaceCategories(
             this.editorService.fieldCategories,
             this.field.type,
@@ -64,7 +61,11 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
             this.childFields = getFieldChildren(this.field);
         }
 
-        this._formService.activeField$.pipe(takeUntil(this._destroy$)).subscribe((f: IEditorFormlyField) => {
+        this._formService.activeField$.pipe(takeUntil(this._destroy$)).subscribe((f: IEditorFormlyField | null) => {
+            if (!f) {
+                return;
+            }
+
             this.isActiveField = f._info.formId === this.fieldInfo.formId && f._info.fieldId === this.fieldInfo.fieldId;
             if (this.isActiveField) {
                 this.expandParent.emit();
@@ -87,8 +88,8 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
         this._formService.addField(type, customType, this.fieldInfo.fieldId);
     }
 
-    onRemoveChildField(childField: IEditorFormlyField): void {
-        this._formService.removeField(childField._info.fieldId, this.fieldInfo.fieldId);
+    onRemove(): void {
+        this._formService.removeField(this.fieldInfo.fieldId, this.fieldInfo.parentFieldId);
     }
 
     onReplaceParentField(type: string, customType?: string): void {

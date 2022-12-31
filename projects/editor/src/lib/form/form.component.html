@@ -10,27 +10,14 @@
             class="tree-container"
             mainContent
         >
-            <editor-field-tree-item
-                *ngFor="let field of fields$ | async"
-                [field]="field"
-                [isExpanded]="true"
-            >
-            </editor-field-tree-item>
-        </div>
-    </editor-sidebar-section>
-    <editor-sidebar-section>
-        <span headerContent>Add Field</span>
-        <div
-            class="categories-wrapper"
-            mainContent
-        >
-            <editor-field-category
-                *ngFor="let category of editorService.fieldCategories; let first = first"
-                [category]="category"
-                [formId]="form.id"
-                [isExpanded]="first"
-            >
-            </editor-field-category>
+            <ng-container *ngIf="(formFields$ | async)?.length; else addFieldText">
+                <editor-field-tree-item
+                    *ngFor="let field of fields$ | async"
+                    [field]="field"
+                    [isExpanded]="true"
+                >
+                </editor-field-tree-item>
+            </ng-container>
         </div>
     </editor-sidebar-section>
 </editor-sidebar>
@@ -49,6 +36,7 @@
     </editor-toolbar>
     <mat-tab-group
         class="tab-group"
+        *ngIf="(formFields$ | async)?.length; else addFieldButton"
         [selectedIndex]="toolbarTabIndex"
     >
         <mat-tab>
@@ -74,18 +62,14 @@
     (resizeEnd)="onResizeEnd()"
 >
     <editor-sidebar-section class="active-field-section">
-        <div
-            class="header-content"
-            headerContent
-        >
-            <span>Active Field - {{ (activeField$ | async)._info.name | fieldName : (activeField$ | async).key }}</span>
-            <mat-slide-toggle
-                labelPosition="before"
-                [(ngModel)]="isAdvanced"
-                >Advanced</mat-slide-toggle
-            >
-        </div>
+        <span headerContent>
+            Active Field
+            <span *ngIf="activeField$ | async as activeField">
+                - {{ activeField._info.name | fieldName : activeField.key }}
+            </span>
+        </span>
         <editor-edit-field
+            *ngIf="activeField$ | async; else addFieldText"
             mainContent
             [field$]="activeField$"
             [isSimplified]="!isAdvanced"
@@ -97,7 +81,7 @@
 
     <editor-sidebar-section>
         <div
-            class="header-content"
+            class="model-header-content"
             headerContent
         >
             <span>Model</span>
@@ -123,6 +107,44 @@
         </div>
     </editor-sidebar-section>
 </editor-sidebar>
+
+<ng-template #addFieldText>
+    <div class="no-fields-wrapper">No Field</div>
+</ng-template>
+
+<ng-template #addFieldButton>
+    <div class="no-fields-wrapper">
+        <button
+            mat-flat-button
+            color="primary"
+            [matMenuTriggerFor]="addCategoryMenu"
+        >
+            <mat-icon>add</mat-icon>
+            Add Field
+        </button>
+    </div>
+</ng-template>
+
+<mat-menu #addCategoryMenu="matMenu">
+    <ng-container *ngFor="let category of editorService.fieldCategories">
+        <button
+            mat-menu-item
+            [matMenuTriggerFor]="addFieldMenu"
+        >
+            {{ category.name }}
+        </button>
+
+        <mat-menu #addFieldMenu="matMenu">
+            <button
+                mat-menu-item
+                *ngFor="let option of category.typeOptions"
+                (click)="onAddInitialField(option.name, option.customName)"
+            >
+                {{ option.displayName }}
+            </button>
+        </mat-menu>
+    </ng-container>
+</mat-menu>
 
 <mat-menu #modelOptionsMenu="matMenu">
     <button

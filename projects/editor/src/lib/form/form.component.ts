@@ -123,6 +123,10 @@ export class FormComponent implements OnInit {
         });
     }
 
+    onAddInitialField(type: string, customType?: string): void {
+        this._formService.addField(type, customType);
+    }
+
     onActiveFieldChanged(change: IPropertyChange): void {
         this._formService.modifyField(change);
     }

@@ -1,6 +1,6 @@
 <header *ngIf="isEditMode">
     <div class="header-title">
-        <span>{{ fieldInfo.name | fieldName: field.key }}</span>
+        <span>{{ fieldInfo.name | fieldName : field.key }}</span>
         <ng-content></ng-content>
     </div>
     <div
@@ -55,7 +55,6 @@
     </button>
 
     <button
-        *ngIf="fieldInfo.parentFieldId"
         mat-menu-item
         (click)="onRemove()"
     >
