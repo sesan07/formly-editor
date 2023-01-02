@@ -28,7 +28,7 @@ export class TreeItemComponent implements OnInit {
 
     public treeLevelPadding: number;
     public sideLinePositions: number[];
-    public stickyOptions: boolean;
+    public isMouseInside: boolean;
 
     private readonly _treeIndentation = 18;
 
@@ -36,14 +36,15 @@ export class TreeItemComponent implements OnInit {
         return this.isActive;
     }
 
-    @HostListener('mouseenter')
-    onMouseEnter(): void {
-        this.stickyOptions = true;
+    @HostListener('mouseover', ['$event'])
+    onMouseOver(event: MouseEvent): void {
+        this.isMouseInside = true;
+        event.stopPropagation();
     }
 
-    @HostListener('mouseleave')
-    onMouseLeave(): void {
-        this.stickyOptions = false;
+    @HostListener('mouseout')
+    onMouseOut(): void {
+        this.isMouseInside = false;
     }
 
     @HostListener('click', ['$event'])
