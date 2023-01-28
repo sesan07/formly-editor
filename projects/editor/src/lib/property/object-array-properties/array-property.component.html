@@ -22,7 +22,7 @@
     </span>
 
     <ng-container childrenContent>
-        <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
+        <ng-container *ngTemplateOutlet="childPropertiesContainer"></ng-container>
     </ng-container>
 </editor-tree-item>
 
@@ -32,6 +32,11 @@
         (click)="isExpanded = !isExpanded"
     >
         <span class="simplified-header-left">
+            <span
+                *ngIf="isOverrideMode"
+                class="override-indicator"
+                [class.overriden]="isOverridden"
+            ></span>
             <button
                 mat-icon-button
                 (click)="isExpanded = !isExpanded; $event.stopPropagation()"
@@ -45,101 +50,147 @@
             <span>{{ property.name ? property.name : property.key + ' [ ' + childProperties.length + ' ]' }}</span>
         </span>
 
-        <button
-            *ngIf="canAdd"
-            mat-icon-button
-            (click)="onAddChild(); $event.stopPropagation()"
-        >
-            <mat-icon>add</mat-icon>
-        </button>
+        <span class="simplified-header-right">
+            <button
+                *ngIf="canAdd"
+                mat-icon-button
+                (click)="onAddChild(); $event.stopPropagation()"
+            >
+                <mat-icon>add</mat-icon>
+            </button>
+            <button
+                *ngIf="isOverrideMode && isOverridden"
+                class="override-clear-btn"
+                mat-icon-button
+                (click)="onClearOverride(); $event.stopPropagation()"
+            >
+                <mat-icon>clear</mat-icon>
+            </button>
+        </span>
     </div>
     <div
-        class="simplified-properties"
+        class="simplified-wrapper"
         *ngIf="isExpanded"
     >
-        <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
-        <button
-            *ngIf="canAdd"
-            mat-button
-            (click)="onAddChild()"
-        >
-            <mat-icon>add</mat-icon>
-            <span>Add</span>
-        </button>
+        <div
+            class="line"
+            [class.override-mode]="isOverrideMode"
+        ></div>
+        <mat-accordion>
+            <ng-container *ngFor="let child of childProperties; let index = index; trackBy: trackPropertyByKey">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>Item {{ index + 1 }}</mat-panel-title>
+                        <button
+                            *ngIf="child.isRemovable"
+                            class="simple-remove-btn"
+                            mat-icon-button
+                            color="warn"
+                            (click)="onRemoveChild(index)"
+                        >
+                            <mat-icon>remove</mat-icon>
+                        </button>
+                    </mat-expansion-panel-header>
+                    <ng-container
+                        [ngTemplateOutlet]="childProperty"
+                        [ngTemplateOutletContext]="{ child, index }"
+                    >
+                    </ng-container>
+                </mat-expansion-panel>
+            </ng-container>
+        </mat-accordion>
     </div>
 </ng-template>
 
-<ng-template #childPropertiesView>
-    <ng-container *ngFor="let child of childProperties; let i = index; let last = last; trackBy: trackPropertyByKey">
-        <ng-container [ngSwitch]="child.type">
-            <editor-object-property
-                *ngSwitchCase="typeofProperty.OBJECT"
-                [treeLevel]="childrenTreeLevel"
-                [path]="getChildPath(child.key)"
-                [target]="target"
-                [property]="propertyService.getAsObjectProperty(child)"
-                [isSimplified]="isSimplified"
-                (remove)="onRemoveChild(i)"
-                (targetChanged)="targetChanged.emit($event)"
-            >
-            </editor-object-property>
-
-            <editor-boolean-property
-                *ngSwitchCase="typeofProperty.BOOLEAN"
-                [treeLevel]="childrenTreeLevel"
-                [path]="getChildPath(child.key)"
-                [property]="child"
-                [target]="target"
-                [isSimplified]="isSimplified"
-                (remove)="onRemoveChild(i)"
-                (targetChanged)="targetChanged.emit($event)"
-            >
-            </editor-boolean-property>
-
-            <editor-chip-list-property
-                *ngSwitchCase="typeofProperty.CHIP_LIST"
-                [treeLevel]="childrenTreeLevel"
-                [path]="getChildPath(child.key)"
-                [property]="propertyService.getAsChiplistProperty(child)"
-                [target]="target"
-                [isSimplified]="isSimplified"
-                (remove)="onRemoveChild(i)"
-                (targetChanged)="targetChanged.emit($event)"
-            >
-            </editor-chip-list-property>
-
-            <editor-textarea-property
-                *ngSwitchCase="typeofProperty.TEXTAREA"
-                [treeLevel]="childrenTreeLevel"
-                [path]="getChildPath(child.key)"
-                [property]="propertyService.getAsTextareaProperty(child)"
-                [target]="target"
-                [isSimplified]="isSimplified"
-                (remove)="onRemoveChild(i)"
-                (targetChanged)="targetChanged.emit($event)"
-            >
-            </editor-textarea-property>
-
-            <ng-container *ngSwitchCase="typeofProperty.NUMBER">
-                <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
-            </ng-container>
-            <ng-container *ngSwitchCase="typeofProperty.TEXT">
-                <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
-            </ng-container>
-            <ng-template #inputProperty>
-                <editor-input-property
-                    [treeLevel]="childrenTreeLevel"
-                    [path]="getChildPath(child.key)"
-                    [property]="propertyService.getAsInputProperty(child)"
-                    [target]="target"
-                    [isSimplified]="isSimplified"
-                    (remove)="onRemoveChild(i)"
-                    (targetChanged)="targetChanged.emit($event)"
-                >
-                </editor-input-property>
-            </ng-template>
+<ng-template #childPropertiesContainer>
+    <ng-container *ngFor="let child of childProperties; let index = index; trackBy: trackPropertyByKey">
+        <ng-container
+            [ngTemplateOutlet]="childProperty"
+            [ngTemplateOutletContext]="{ child, index }"
+        >
         </ng-container>
-        <mat-divider *ngIf="isSimplified && !last"></mat-divider>
+    </ng-container>
+</ng-template>
+
+<ng-template #simpleChildPropertiesContainer> </ng-template>
+
+<ng-template
+    #childProperty
+    let-child="child"
+    let-index="index"
+>
+    <ng-container [ngSwitch]="child.type">
+        <editor-object-property
+            *ngSwitchCase="typeofProperty.OBJECT"
+            [treeLevel]="childrenTreeLevel"
+            [path]="getChildPath(child.key)"
+            [target]="target"
+            [property]="propertyService.getAsObjectProperty(child)"
+            [isSimplified]="isSimplified"
+            [isOverrideMode]="isOverrideMode"
+            (remove)="onRemoveChild(index)"
+            (targetChanged)="targetChanged.emit($event)"
+        >
+        </editor-object-property>
+
+        <editor-boolean-property
+            *ngSwitchCase="typeofProperty.BOOLEAN"
+            [treeLevel]="childrenTreeLevel"
+            [path]="getChildPath(child.key)"
+            [property]="child"
+            [target]="target"
+            [isSimplified]="isSimplified"
+            [isOverrideMode]="isOverrideMode"
+            (remove)="onRemoveChild(index)"
+            (targetChanged)="targetChanged.emit($event)"
+        >
+        </editor-boolean-property>
+
+        <editor-chip-list-property
+            *ngSwitchCase="typeofProperty.CHIP_LIST"
+            [treeLevel]="childrenTreeLevel"
+            [path]="getChildPath(child.key)"
+            [property]="propertyService.getAsChiplistProperty(child)"
+            [target]="target"
+            [isSimplified]="isSimplified"
+            [isOverrideMode]="isOverrideMode"
+            (remove)="onRemoveChild(index)"
+            (targetChanged)="targetChanged.emit($event)"
+        >
+        </editor-chip-list-property>
+
+        <editor-textarea-property
+            *ngSwitchCase="typeofProperty.TEXTAREA"
+            [treeLevel]="childrenTreeLevel"
+            [path]="getChildPath(child.key)"
+            [property]="propertyService.getAsTextareaProperty(child)"
+            [target]="target"
+            [isSimplified]="isSimplified"
+            [isOverrideMode]="isOverrideMode"
+            (remove)="onRemoveChild(index)"
+            (targetChanged)="targetChanged.emit($event)"
+        >
+        </editor-textarea-property>
+
+        <ng-container *ngSwitchCase="typeofProperty.NUMBER">
+            <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="typeofProperty.TEXT">
+            <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
+        </ng-container>
+        <ng-template #inputProperty>
+            <editor-input-property
+                [treeLevel]="childrenTreeLevel"
+                [path]="getChildPath(child.key)"
+                [property]="propertyService.getAsInputProperty(child)"
+                [target]="target"
+                [isSimplified]="isSimplified"
+                [isOverrideMode]="isOverrideMode"
+                (remove)="onRemoveChild(index)"
+                (targetChanged)="targetChanged.emit($event)"
+            >
+            </editor-input-property>
+        </ng-template>
     </ng-container>
 </ng-template>
 

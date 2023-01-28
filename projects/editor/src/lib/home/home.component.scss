@@ -9,6 +9,7 @@
     height: 100%;
 }
 
+.logo,
 .action-buttons {
     position: absolute;
     display: flex;
@@ -16,8 +17,18 @@
     justify-content: center;
     column-gap: 16px;
     height: var(--header-height);
-    width: var(--add-form-width);
     top: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.logo {
+    width: var(--add-form-width);
+    left: 0;
+    font-weight: bold;
+}
+
+.action-buttons {
+    width: var(--add-form-width);
     right: 0;
 }
 

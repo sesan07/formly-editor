@@ -10,7 +10,8 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
-import { get } from 'lodash-es';
+import { get, isNil } from 'lodash-es';
+import { IEditorFormlyField } from '../editor.types';
 
 import { IBaseProperty, IPropertyChange, PropertyChangeType, PropertyType } from './property.types';
 
@@ -21,12 +22,15 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
     @Input() target: Record<string, any> | any[];
     @Input() property: P;
     @Input() isSimplified: boolean;
+    @Input() isOverrideMode: boolean;
 
     @Output() public remove: EventEmitter<void> = new EventEmitter();
     @Output() public keyChanged: EventEmitter<string> = new EventEmitter();
     @Output() public targetChanged: EventEmitter<IPropertyChange> = new EventEmitter();
 
     @ViewChild('key') keyElement: ElementRef<HTMLElement>;
+
+    public isOverridden: boolean;
 
     protected currentValue: V;
     protected abstract defaultValue: V;
@@ -50,6 +54,7 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
 
             if (canChange) {
                 this.currentValue = newValue;
+                this._updateOverrideState();
                 this._onChanged(isFirstChange);
             }
         }
@@ -67,6 +72,15 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
         }
     }
 
+    onClearOverride(): void {
+        const change: IPropertyChange = {
+            type: PropertyChangeType.CLEAR_OVERRIDE,
+            path: this.path,
+            data: null,
+        };
+        this.targetChanged.emit(change);
+    }
+
     protected _modifyValue(value: any): void {
         const change: IPropertyChange = {
             type: PropertyChangeType.VALUE,
@@ -74,6 +88,15 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
             data: value,
         };
         this.targetChanged.emit(change);
+    }
+
+    protected _updateOverrideState(): void {
+        const fieldOverride = (this.target as IEditorFormlyField)._info?.fieldOverride;
+        if (fieldOverride) {
+            this.isOverridden = !isNil(get(fieldOverride, this.path));
+        } else {
+            this.isOverridden = false;
+        }
     }
 
     private _onKeyChanged(newKey: string): void {

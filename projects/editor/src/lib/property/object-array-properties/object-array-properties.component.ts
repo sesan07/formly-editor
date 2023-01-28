@@ -54,10 +54,6 @@ export abstract class ObjectArrayPropertyDirective<P extends IBaseProperty, V>
 export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayProperty, any[]> {
     protected defaultValue = [];
 
-    constructor(propertyService: PropertyService) {
-        super(propertyService);
-    }
-
     protected get _canAdd(): boolean {
         return this.property.canAdd;
     }
@@ -99,10 +95,6 @@ export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayP
 })
 export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjectProperty, Record<string, any>> {
     protected defaultValue = {};
-
-    constructor(propertyService: PropertyService) {
-        super(propertyService);
-    }
 
     protected get _canAdd(): boolean {
         return this.property.addOptions?.length > 0;

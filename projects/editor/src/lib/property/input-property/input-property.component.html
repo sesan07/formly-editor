@@ -29,14 +29,29 @@
 </editor-tree-item>
 
 <ng-template #simplifiedView>
-    <mat-form-field class="simplified">
-        <mat-label>{{ property.name ? property.name : property.key }}</mat-label>
-        <input
-            matInput
-            [formControl]="formControl"
-            [type]="property.type | lowercase"
-        />
-    </mat-form-field>
+    <div class="simplified-wrapper">
+        <span
+            *ngIf="isOverrideMode && isOverridden"
+            class="override-indicator"
+            [class.overriden]="isOverridden"
+        ></span>
+        <mat-form-field class="simplified">
+            <mat-label>{{ property.name ? property.name : property.key }}</mat-label>
+            <input
+                matInput
+                [formControl]="formControl"
+                [type]="property.type | lowercase"
+            />
+        </mat-form-field>
+        <button
+            *ngIf="isOverrideMode && isOverridden"
+            class="override-clear-btn"
+            mat-icon-button
+            (click)="onClearOverride()"
+        >
+            <mat-icon>clear</mat-icon>
+        </button>
+    </div>
 </ng-template>
 
 <mat-menu #optionsMenu="matMenu">

@@ -1,3 +1,7 @@
+:host {
+    display: block;
+}
+
 .simplified-header {
     display: flex;
     justify-content: space-between;
@@ -10,14 +14,42 @@
     display: inline-flex;
     align-items: center;
     column-gap: 8px;
+    min-height: 32px;
+}
+.simplified-header-right {
+    display: inline-flex;
+    column-gap: 8px;
 }
 
-.simplified-properties {
+.simplified-wrapper {
+    display: flex;
+}
+
+.line {
+    width: 1px;
+    background-color: rgba(0, 0, 0, 0.12);
+    margin: 0 14px;
+}
+
+.line.override-mode {
+    margin-left: 28px;
+    margin-right: 14px;
+}
+
+.mat-accordion {
     flex-grow: 1;
-    padding: 16px 32px;
-    box-sizing: border-box;
+    display: block;
 }
 
-mat-divider {
-    margin: 16px 0;
+.mat-expansion-panel {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: none !important;
+}
+
+.simple-remove-btn {
+    margin-right: 16px;
+}
+
+.override-indicator {
+    height: 32px;
 }

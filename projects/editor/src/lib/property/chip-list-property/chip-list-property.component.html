@@ -25,10 +25,25 @@
 </editor-tree-item>
 
 <ng-template #simplifiedView>
-    <ng-container
-        [ngTemplateOutlet]="formField"
-        [ngTemplateOutletContext]="{ showLabel: true }"
-    ></ng-container>
+    <div class="simplified-wrapper">
+        <span
+            *ngIf="isOverrideMode"
+            class="override-indicator"
+            [class.overriden]="isOverridden"
+        ></span>
+        <ng-container
+            [ngTemplateOutlet]="formField"
+            [ngTemplateOutletContext]="{ showLabel: true }"
+        ></ng-container>
+        <button
+            *ngIf="isOverrideMode && isOverridden"
+            class="override-clear-btn"
+            mat-icon-button
+            (click)="onClearOverride()"
+        >
+            <mat-icon>clear</mat-icon>
+        </button>
+    </div>
 </ng-template>
 
 <ng-template
@@ -36,7 +51,10 @@
     let-appearance="appearance"
     let-showLabel="showLabel"
 >
-    <mat-form-field [appearance]="appearance">
+    <mat-form-field
+        [appearance]="appearance"
+        [class.simplified]="isSimplified"
+    >
         <mat-label *ngIf="showLabel">{{ property.name ? property.name : property.key }}</mat-label>
         <mat-chip-list #chipList>
             <ng-container *ngFor="let option of selectedOptions">

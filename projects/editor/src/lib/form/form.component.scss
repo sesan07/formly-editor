@@ -38,7 +38,7 @@
     box-sizing: border-box;
 }
 
-.model-header-content {
+.section-header-content {
     flex-grow: 1;
     display: flex;
     justify-content: space-between;
@@ -61,5 +61,5 @@ editor-sidebar {
 .no-fields-wrapper {
     display: flex;
     justify-content: center;
-    margin-top: 16px;
+    margin-top: 8px;
 }

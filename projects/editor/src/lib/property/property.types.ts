@@ -17,6 +17,7 @@ export enum PropertyType {
 export enum PropertyChangeType {
     KEY,
     VALUE,
+    CLEAR_OVERRIDE,
 }
 
 export interface IBaseProperty {

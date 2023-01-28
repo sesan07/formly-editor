@@ -1,7 +1,21 @@
+:host {
+    display: block;
+}
+
+.simplified-wrapper {
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
+}
+
+.override-indicator {
+    height: 32px;
+}
+
 .mat-chip-list {
     display: inline-block;
 }
 
 mat-form-field {
-    display: block;
+    width: 100%;
 }

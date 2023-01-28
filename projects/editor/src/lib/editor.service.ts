@@ -15,9 +15,10 @@ import {
     EditorTypeCategoryOption,
     EditorTypeOption,
     IEditorFieldInfo,
+    IFormOverride,
 } from './editor.types';
 import { IProperty } from './property/property.types';
-import { getFieldChildren } from './form/utils';
+import { getFieldChildren } from './form/form.utils';
 
 @Injectable()
 export class EditorService {
@@ -55,7 +56,8 @@ export class EditorService {
     public importForm(
         name: string,
         source: string | IBaseFormlyField | IBaseFormlyField[],
-        model?: Record<string, unknown>
+        model?: Record<string, unknown>,
+        override?: IFormOverride
     ): void {
         let loadedForm: IBaseFormlyField | IBaseFormlyField[];
         if (typeof source === 'string') {
@@ -83,7 +85,7 @@ export class EditorService {
             fields.push(editorField);
         }
 
-        this._addForm(formId, name, fields, model);
+        this._addForm(formId, name, fields, model, override);
     }
 
     public removeForm(index: number): void {
@@ -178,24 +180,26 @@ export class EditorService {
 
     private _loadDefaultForm(): void {
         forkJoin([
-            this._http.get<IBaseFormlyField>('assets/default.form.json').pipe(
+            this._http.get<IBaseFormlyField | IBaseFormlyField[]>('assets/default.fields.json').pipe(
                 catchError(() => {
-                    console.warn('Unable to load default form, using default field');
-                    const defaultField: IBaseFormlyField = this._fieldService.getDefaultConfig(
-                        this._editorConfig.defaultName,
-                        this._editorConfig.defaultCustomName
-                    );
-                    return of(defaultField);
+                    console.warn('Unable to load default form');
+                    return of([]);
                 })
             ),
             this._http.get<Record<string, unknown>>('assets/default.model.json').pipe(
                 catchError(() => {
-                    console.warn('Unable to load default model, using {}');
+                    console.warn('Unable to load default model');
                     return of({});
                 })
             ),
-        ]).subscribe(([form, model]) => {
-            this.importForm('Form Zero', form, model);
+            this._http.get<IFormOverride>('assets/default.override.json').pipe(
+                catchError(() => {
+                    console.warn('Unable to load default form override');
+                    return of({ override: {} });
+                })
+            ),
+        ]).subscribe(([form, model, override]) => {
+            this.importForm('Form Zero', form, model, override);
         });
     }
 
@@ -227,7 +231,13 @@ export class EditorService {
         return `__${type}_${i}`;
     }
 
-    private _addForm(id: string, name: string, fields: IEditorFormlyField[], model?: Record<string, unknown>) {
+    private _addForm(
+        id: string,
+        name: string,
+        fields: IEditorFormlyField[],
+        model?: Record<string, unknown>,
+        override?: IFormOverride
+    ) {
         this._forms$.next([
             ...this._forms$.value,
             {
@@ -235,6 +245,7 @@ export class EditorService {
                 name,
                 fields,
                 model: model ?? {},
+                override: override ?? { override: {} },
             },
         ]);
         this._activeFormIndex$.next(this._forms$.value.length - 1);

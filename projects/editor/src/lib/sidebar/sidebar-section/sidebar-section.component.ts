@@ -53,8 +53,8 @@ export class SidebarSectionComponent implements OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.isCollapsed) {
-            this.availableHeight = this._height - (this.minHeight + (this.isCollapsed ? 0 : this.minContentHeight));
+        if (changes.isCollapsed && !changes.isCollapsed.firstChange) {
+            this._sideBar.toggleSection(this);
         }
     }
 
@@ -71,5 +71,6 @@ export class SidebarSectionComponent implements OnChanges {
         this.index = index;
         this.minHeight = this._headerHeight + (this.index === 0 ? 0 : this._dividerHeight);
         this.height = height;
+        this._sideBar.toggleSection(this);
     }
 }

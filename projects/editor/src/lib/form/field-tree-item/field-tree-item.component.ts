@@ -11,13 +11,14 @@ import {
     Renderer2,
     TrackByFunction,
 } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { EditorService } from '../../editor.service';
 import { EditorTypeCategoryOption, IEditorFormlyField, IEditorFieldInfo } from '../../editor.types';
-import { getFieldChildren, getReplaceCategories } from '../utils';
+import { getFieldChildren, getReplaceCategories, trackByFieldId } from '../form.utils';
 import { FormService } from '../form.service';
+import { isEmpty } from 'lodash-es';
 
 @Component({
     selector: 'editor-field-tree-item',
@@ -36,6 +37,10 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
     public childFields: IEditorFormlyField[] = [];
     public replaceCategories: EditorTypeCategoryOption[];
     public fieldInfo: IEditorFieldInfo;
+    public isOverridden: boolean;
+    public isOverrideMode$: Observable<boolean>;
+
+    trackByFieldId = trackByFieldId;
 
     private _destroy$: Subject<void> = new Subject();
 
@@ -49,6 +54,7 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this._renderer.addClass(this._elementRef.nativeElement, 'tree-item');
+        this.isOverrideMode$ = this._formService.isOverrideMode$;
 
         this.fieldInfo = this.field._info;
         this.replaceCategories = getReplaceCategories(
@@ -66,6 +72,7 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
                 return;
             }
 
+            this.isOverridden = !isEmpty(this.fieldInfo.fieldOverride);
             this.isActiveField = f._info.formId === this.fieldInfo.formId && f._info.fieldId === this.fieldInfo.fieldId;
             if (this.isActiveField) {
                 this.expandParent.emit();
@@ -104,6 +111,4 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
         this.isExpanded = true;
         this.expandParent.emit();
     }
-
-    trackFieldById: TrackByFunction<IEditorFormlyField> = (_, field: IEditorFormlyField) => field._info.fieldId;
 }

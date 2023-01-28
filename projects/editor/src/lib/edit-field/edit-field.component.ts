@@ -28,8 +28,8 @@ import { initRootProperty } from '../property/utils';
 })
 export class EditFieldComponent implements OnInit, OnDestroy {
     @Input() field$: Observable<IEditorFormlyField>;
-    @Input() isSimplified: boolean;
     @Input() resizeTabHeader$: Observable<void>;
+    @Input() isOverrideMode: boolean;
 
     @Output() fieldChanged: EventEmitter<IPropertyChange> = new EventEmitter();
 

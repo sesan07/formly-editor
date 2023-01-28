@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { getFieldChildren } from './utils';
+import { getFieldChildren } from './form.utils';
 import { FormService } from '../form/form.service';
 import { IEditorFormlyField } from '../editor.types';
 

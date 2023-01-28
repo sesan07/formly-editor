@@ -8,6 +8,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { BooleanPropertyComponent } from './boolean-property/boolean-property.component';
 import { ChipListPropertyComponent } from './chip-list-property/chip-list-property.component';
@@ -41,6 +42,7 @@ import { MatButtonModule } from '@angular/material/button';
         MatChipsModule,
         MatAutocompleteModule,
         MatDividerModule,
+        MatExpansionModule,
     ],
     exports: [
         ObjectPropertyComponent,

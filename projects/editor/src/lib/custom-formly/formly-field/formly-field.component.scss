@@ -12,11 +12,11 @@
 }
 
 :host.edit-mode:hover {
-    border: 1px solid #E0E0E0;
+    border: 1px solid #e0e0e0;
 }
 
 :host.edit-mode.active {
-    border: 2px solid #A3A3A3;
+    border: 2px solid #a3a3a3;
 }
 
 header {
@@ -24,9 +24,12 @@ header {
     user-select: none;
 }
 
-.header-title{
+.header-title {
     flex-grow: 1;
     position: relative;
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
 }
 
 .options {

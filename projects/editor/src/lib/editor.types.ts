@@ -20,6 +20,7 @@ export interface IEditorFieldInfo {
     parentFieldId?: string;
     canHaveChildren?: boolean;
     childrenPath?: string; // Lodash path
+    fieldOverride?: Record<string, any>;
 }
 
 export interface IBaseFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
@@ -34,19 +35,24 @@ export interface IEditorFormlyField extends IBaseFormlyField {
     fieldGroup?: IEditorFormlyField[];
 }
 
-export type IEditorFormlyFieldConfigCache = IEditorFormlyField & FormlyFieldConfigCache;
+export interface IFormOverride {
+    override: Record<string, any>;
+}
 
 export interface IForm {
     id: string;
     name: string;
     fields: IEditorFormlyField[];
     model: Record<string, unknown>;
+    override: IFormOverride;
 }
 
 export interface IFieldService {
     getDefaultConfig(type: string, customType?: string): IBaseFormlyField;
     getProperties(type: string): IProperty[];
 }
+
+export type IEditorFormlyFieldConfigCache = IEditorFormlyField & FormlyFieldConfigCache;
 
 export interface EditorTypeOption extends TypeOption {
     displayName: string;

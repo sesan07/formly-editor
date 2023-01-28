@@ -25,6 +25,13 @@
 </mat-tab-group>
 
 <div
+    class="logo"
+    *ngIf="(forms$ | async).length > 0"
+>
+    Formly Editor
+</div>
+
+<div
     class="action-buttons"
     *ngIf="(forms$ | async).length > 0"
 >

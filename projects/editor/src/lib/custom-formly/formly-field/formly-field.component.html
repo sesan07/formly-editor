@@ -1,5 +1,10 @@
 <header *ngIf="isEditMode">
     <div class="header-title">
+        <span
+            *ngIf="isOverrideMode$ | async"
+            class="override-indicator"
+            [class.overriden]="isOverridden"
+        ></span>
         <span>{{ fieldInfo.name | fieldName : field.key }}</span>
         <ng-content></ng-content>
     </div>
@@ -31,76 +36,77 @@
             <mat-icon>more_vert</mat-icon>
         </button>
     </div>
+
+    <mat-menu #optionsMenu="matMenu">
+        <button
+            *ngIf="fieldInfo.canHaveChildren"
+            mat-menu-item
+            [matMenuTriggerFor]="addCategoryMenu"
+        >
+            <mat-icon>add</mat-icon>
+            <span>Add</span>
+        </button>
+
+        <button
+            *ngIf="fieldInfo.canHaveChildren && replaceCategories.length > 0"
+            mat-menu-item
+            [matMenuTriggerFor]="replaceCategoryMenu"
+        >
+            <mat-icon>sync</mat-icon>
+            <span>Replace</span>
+        </button>
+
+        <button
+            *ngIf="fieldInfo.parentFieldId"
+            mat-menu-item
+            (click)="onRemove()"
+        >
+            <mat-icon>remove</mat-icon>
+            <span>Remove</span>
+        </button>
+    </mat-menu>
+
+    <mat-menu #addCategoryMenu="matMenu">
+        <ng-container *ngFor="let category of editorService.fieldCategories">
+            <button
+                mat-menu-item
+                [matMenuTriggerFor]="addFieldMenu"
+            >
+                {{ category.name }}
+            </button>
+
+            <mat-menu #addFieldMenu="matMenu">
+                <button
+                    mat-menu-item
+                    *ngFor="let option of category.typeOptions"
+                    (click)="onAddChildField(option.name, option.customName)"
+                >
+                    {{ option.displayName }}
+                </button>
+            </mat-menu>
+        </ng-container>
+    </mat-menu>
+
+    <mat-menu #replaceCategoryMenu="matMenu">
+        <ng-container *ngFor="let category of replaceCategories">
+            <button
+                mat-menu-item
+                [matMenuTriggerFor]="replaceFieldMenu"
+            >
+                {{ category.name }}
+            </button>
+
+            <mat-menu #replaceFieldMenu="matMenu">
+                <button
+                    mat-menu-item
+                    *ngFor="let option of category.typeOptions"
+                    (click)="onReplaceParentField(option.name, option.customName)"
+                >
+                    {{ option.displayName }}
+                </button>
+            </mat-menu>
+        </ng-container>
+    </mat-menu>
 </header>
 
 <ng-template #container></ng-template>
-
-<mat-menu #optionsMenu="matMenu">
-    <button
-        *ngIf="fieldInfo.canHaveChildren"
-        mat-menu-item
-        [matMenuTriggerFor]="addCategoryMenu"
-    >
-        <mat-icon>add</mat-icon>
-        <span>Add</span>
-    </button>
-
-    <button
-        *ngIf="fieldInfo.canHaveChildren && replaceCategories.length > 0"
-        mat-menu-item
-        [matMenuTriggerFor]="replaceCategoryMenu"
-    >
-        <mat-icon>sync</mat-icon>
-        <span>Replace</span>
-    </button>
-
-    <button
-        mat-menu-item
-        (click)="onRemove()"
-    >
-        <mat-icon>remove</mat-icon>
-        <span>Remove</span>
-    </button>
-</mat-menu>
-
-<mat-menu #addCategoryMenu="matMenu">
-    <ng-container *ngFor="let category of editorService.fieldCategories">
-        <button
-            mat-menu-item
-            [matMenuTriggerFor]="addFieldMenu"
-        >
-            {{ category.name }}
-        </button>
-
-        <mat-menu #addFieldMenu="matMenu">
-            <button
-                mat-menu-item
-                *ngFor="let option of category.typeOptions"
-                (click)="onAddChildField(option.name, option.customName)"
-            >
-                {{ option.displayName }}
-            </button>
-        </mat-menu>
-    </ng-container>
-</mat-menu>
-
-<mat-menu #replaceCategoryMenu="matMenu">
-    <ng-container *ngFor="let category of replaceCategories">
-        <button
-            mat-menu-item
-            [matMenuTriggerFor]="replaceFieldMenu"
-        >
-            {{ category.name }}
-        </button>
-
-        <mat-menu #replaceFieldMenu="matMenu">
-            <button
-                mat-menu-item
-                *ngFor="let option of category.typeOptions"
-                (click)="onReplaceParentField(option.name, option.customName)"
-            >
-                {{ option.displayName }}
-            </button>
-        </mat-menu>
-    </ng-container>
-</mat-menu>

@@ -2,6 +2,7 @@
     --header-height: 48px;
     --tree-item-height: 32px;
     --add-form-width: 140px;
+    --logo-width: 140px;
 }
 
 html,
@@ -167,6 +168,7 @@ button.mat-icon-button {
 }
 
 .form-tab-group > .mat-tab-header {
+    margin-left: var(--logo-width);
     margin-right: var(--add-form-width);
 
     .mat-tab-label {
@@ -204,4 +206,20 @@ button.mat-icon-button {
 
 editor-sidebar .resizing {
     transition: none !important;
+}
+
+.override-indicator {
+    display: block;
+    height: 14px;
+    width: 6px;
+    background-color: #67cd13;
+    border-radius: 2px;
+}
+
+.overriden {
+    background-color: orange;
+}
+
+.override-clear-btn {
+    color: orange;
 }
