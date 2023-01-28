@@ -18,12 +18,20 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 
     public getProperties(): IProperty[] {
         return [
-            ...this._getSharedProperties(),
-            this._getTOProperty(this._getTOChildProperties(), this._getWrapperTypes()),
             {
+                name: 'Key',
+                key: 'key',
+                type: PropertyType.TEXT,
+                isSimple: true,
+            },
+            ...this._getTOProperty(this._getTOChildProperties(), this._getWrapperTypes()),
+            ...this._getSharedProperties(),
+            {
+                name: 'Wrappers',
                 key: 'wrappers',
                 type: PropertyType.CHIP_LIST,
                 options: this._getWrapperTypes(),
+                isSimple: true,
             },
         ];
     }
@@ -31,28 +39,33 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
     private _getSharedProperties(): IProperty[] {
         return [
             {
-                name: 'Key',
-                key: 'key',
-                type: PropertyType.TEXT,
-                isSimple: true,
-            },
-            {
                 name: 'Default Value',
                 key: 'defaultValue',
                 type: PropertyType.TEXT,
                 outputRawValue: true,
+                isSimple: true,
             } as IInputProperty,
             {
+                name: 'Hide',
+                key: 'hide',
+                type: PropertyType.BOOLEAN,
+                isSimple: true,
+            },
+            {
+                name: 'Classes',
                 key: 'className',
                 type: PropertyType.CHIP_LIST,
                 options: this._stylesService.allClassNames$,
                 outputString: true,
+                isSimple: true,
             } as IChipListProperty,
             {
+                name: 'Field Group Classes',
                 key: 'fieldGroupClassName',
                 type: PropertyType.CHIP_LIST,
                 options: this._stylesService.allClassNames$,
                 outputString: true,
+                isSimple: true,
             } as IChipListProperty,
             {
                 key: 'expressionProperties',
@@ -64,19 +77,20 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
         ];
     }
 
-    private _getTOProperty(childProperties: IProperty[], wrappers: WrapperType[]): IObjectProperty {
+    private _getTOProperty(childProperties: IProperty[], wrappers: WrapperType[]): IProperty[] {
         wrappers.forEach(wrapper => childProperties.push(...this._getWrapperTOProperties(wrapper)));
 
         // Remove duplicates with same key
         const propertyMap: Map<string, IProperty> = new Map();
         childProperties.forEach(property => propertyMap.set(property.key + '', property));
 
-        return {
-            key: 'templateOptions',
-            type: PropertyType.OBJECT,
-            childProperties: Array.from(propertyMap.values()),
-            isSimple: true,
-        };
+        return Array.from(propertyMap.values());
+        // return {
+        //     key: 'templateOptions',
+        //     type: PropertyType.OBJECT,
+        //     childProperties: Array.from(propertyMap.values()),
+        //     isSimple: true,
+        // };
     }
 
     // Wrapper template option properties

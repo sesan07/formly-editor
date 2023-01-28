@@ -24,7 +24,6 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
                     pattern: 'Please accept the terms',
                 },
             },
-            expressionProperties: {},
         };
     }
 
@@ -32,24 +31,26 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
         return [
             {
                 name: 'Label',
-                key: 'label',
+                key: 'templateOptions.label',
                 type: PropertyType.TEXT,
                 isSimple: true,
             },
             {
                 name: 'Description',
-                key: 'description',
+                key: 'templateOptions.description',
                 type: PropertyType.TEXT,
                 isSimple: true,
             },
             {
-                key: 'pattern',
-                type: PropertyType.TEXT,
+                name: 'Required',
+                key: 'templateOptions.required',
+                type: PropertyType.BOOLEAN,
+                isSimple: true,
             },
             {
-                name: 'Required',
-                key: 'required',
-                type: PropertyType.BOOLEAN,
+                name: 'Pattern',
+                key: 'templateOptions.pattern',
+                type: PropertyType.TEXT,
                 isSimple: true,
             },
         ];
