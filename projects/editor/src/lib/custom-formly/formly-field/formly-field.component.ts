@@ -13,12 +13,13 @@ import {
     ViewContainerRef,
 } from '@angular/core';
 import { FormlyConfig, FormlyField, FormlyFieldTemplates } from '@ngx-formly/core';
-import { Subject, takeUntil } from 'rxjs';
+import { isEmpty } from 'lodash-es';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
 import { EditorService } from '../../editor.service';
 import { EditorTypeCategoryOption, IEditorFieldInfo, IEditorFormlyField } from '../../editor.types';
 import { FormService } from '../../form/form.service';
-import { getFieldChildren, getReplaceCategories } from '../../form/utils';
+import { getFieldChildren, getReplaceCategories } from '../../form/form.utils';
 
 @Component({
     selector: 'editor-root-formly-field',
@@ -42,6 +43,8 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     public hideOptions: boolean;
     public fieldInfo: IEditorFieldInfo;
     public replaceCategories: EditorTypeCategoryOption[];
+    public isOverridden: boolean;
+    public isOverrideMode$: Observable<boolean>;
 
     private _isActiveField: boolean;
     private _isEditMode: boolean;
@@ -86,8 +89,11 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
 
     override ngOnInit(): void {
         super.ngOnInit();
+        this.isOverrideMode$ = this._formService.isOverrideMode$;
 
         this.fieldInfo = this.field._info;
+        this.isOverridden = !isEmpty(this.fieldInfo.fieldOverride);
+
         if (this.fieldInfo.parentFieldId) {
             const parent: IEditorFormlyField = this._formService.getField(this.fieldInfo.parentFieldId);
             const siblings: IEditorFormlyField[] = getFieldChildren(parent);

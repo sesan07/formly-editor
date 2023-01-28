@@ -69,12 +69,11 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
     }
 
     protected _onChanged(isFirstChange: boolean): void {
-        this.hasOptions = this.property.isRemovable;
-
         if (isFirstChange) {
             this.formControl.valueChanges.subscribe(options => this._updateFilteredOptions(options));
         }
 
+        this.hasOptions = this.property.isRemovable;
         this._setupSelectableOptions();
         this._updateSelectedOptions();
         this._updateFilteredOptions();

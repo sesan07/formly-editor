@@ -5,14 +5,25 @@
     (resizeEnd)="onResizeEnd()"
 >
     <editor-sidebar-section>
-        <span headerContent>Fields</span>
+        <div
+            class="section-header-content"
+            headerContent
+        >
+            <span>Fields</span>
+            <button
+                mat-icon-button
+                [matMenuTriggerFor]="addCategoryMenu"
+            >
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
         <div
             class="tree-container"
             mainContent
         >
             <ng-container *ngIf="(formFields$ | async)?.length; else addFieldText">
                 <editor-field-tree-item
-                    *ngFor="let field of fields$ | async"
+                    *ngFor="let field of fields$ | async; trackBy: trackByFieldId"
                     [field]="field"
                     [isExpanded]="true"
                 >
@@ -27,7 +38,9 @@
         class="toolbar"
         [(tabIndex)]="toolbarTabIndex"
         [isEditMode]="isEditMode$ | async"
+        [isOverrideMode]="isOverrideMode$ | async"
         (isEditModeChange)="onEditModeChanged($event)"
+        (isOverrideModeChange)="onOverrideModeChanged($event)"
         (resetModel)="onResetModel()"
         (duplicateForm)="onDuplicateForm()"
         (exportForm)="onExportForm()"
@@ -72,16 +85,16 @@
             *ngIf="activeField$ | async; else addFieldText"
             mainContent
             [field$]="activeField$"
-            [isSimplified]="!isAdvanced"
+            [isOverrideMode]="isOverrideMode$ | async"
             [resizeTabHeader$]="resizeEnd$"
             (fieldChanged)="onActiveFieldChanged($event)"
         >
         </editor-edit-field>
     </editor-sidebar-section>
 
-    <editor-sidebar-section>
+    <editor-sidebar-section [isCollapsed]="false">
         <div
-            class="model-header-content"
+            class="section-header-content"
             headerContent
         >
             <span>Model</span>

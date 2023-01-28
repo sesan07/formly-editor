@@ -8,11 +8,20 @@
     [optionsMenu]="optionsMenu"
     (isExpandedChange)="onSelected()"
 >
-    <ng-container headerContent>{{ fieldInfo.name | fieldName : field.key }}</ng-container>
+    <ng-container headerContent>
+        <span class="header">
+            <span
+                *ngIf="isOverrideMode$ | async"
+                class="override-indicator"
+                [class.overriden]="isOverridden"
+            ></span>
+            {{ fieldInfo.name | fieldName : field.key }}
+        </span>
+    </ng-container>
 
     <ng-container childrenContent>
         <editor-field-tree-item
-            *ngFor="let child of childFields; trackBy: trackFieldById"
+            *ngFor="let child of childFields; trackBy: trackByFieldId"
             [field]="child"
             [treeLevel]="treeLevel + 1"
             (expandParent)="onExpandParent()"

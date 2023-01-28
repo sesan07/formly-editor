@@ -15,7 +15,7 @@ import { ExportJSONRequest, ExportJSONResponse } from './export-form-dialog/expo
 import { FileService } from '../shared/services/file-service/file.service';
 import { SideBarPosition } from '../sidebar/sidebar.types';
 import { IObjectProperty } from '../property/object-array-properties/object-property.types';
-import { cleanField } from './utils';
+import { cleanField, trackByFieldId } from './form.utils';
 import { FormService } from './form.service';
 import { DroplistService } from './droplist.service';
 import { initRootProperty } from '../property/utils';
@@ -38,9 +38,9 @@ export class FormComponent implements OnInit {
     public activeField$: Observable<IEditorFormlyField>;
     public resizeEnd$: Observable<void>;
     public isEditMode$: Observable<boolean>;
+    public isOverrideMode$: Observable<boolean>;
 
     public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
-    public isAdvanced = true;
     public showSidebars = true;
     public toolbarTabIndex: 0 | 1 = 0;
 
@@ -49,6 +49,8 @@ export class FormComponent implements OnInit {
     public model$: Observable<Record<string, any>>;
     public formGroup: FormGroup = new FormGroup({});
     public options: FormlyFormOptions = {};
+
+    trackByFieldId = trackByFieldId;
 
     private _resizeEnd$: Subject<void> = new Subject();
 
@@ -70,6 +72,7 @@ export class FormComponent implements OnInit {
         this.activeField$ = this._formService.activeField$;
         this.model$ = this._formService.model$;
         this.isEditMode$ = this._formService.isEditMode$;
+        this.isOverrideMode$ = this._formService.isOverrideMode$;
 
         this._setupModelProperty();
 
@@ -84,15 +87,23 @@ export class FormComponent implements OnInit {
 
         this.formFieldsJSON$ = this._formService.fields$.pipe(
             map(fields => {
-                const fieldsClone: IEditorFormlyField[] = cloneDeep(fields);
-                fieldsClone.forEach(field => cleanField(field, true, true));
-                return JSON.stringify(fieldsClone, null, 2);
+                if (this._formService.isOverrideMode) {
+                    return JSON.stringify(this.form.override, null, 2);
+                } else {
+                    const fieldsClone: IEditorFormlyField[] = cloneDeep(fields);
+                    fieldsClone.forEach(field => cleanField(field, true, true));
+                    return JSON.stringify(fieldsClone, null, 2);
+                }
             })
         );
     }
 
     onEditModeChanged(isEditMode: boolean): void {
         this._formService.setEditMode(isEditMode);
+    }
+
+    onOverrideModeChanged(isOverrideMode: boolean): void {
+        this._formService.setOverrideMode(isOverrideMode);
     }
 
     onDuplicateForm(): void {

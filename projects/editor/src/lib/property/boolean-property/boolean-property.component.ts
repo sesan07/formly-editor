@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { get, isNil } from 'lodash-es';
+import { IEditorFormlyField } from '../../editor.types';
 
 import { BasePropertyDirective } from '../base-property.component';
 import { IBooleanProperty } from './boolean-property.types';
@@ -17,15 +19,24 @@ export class BooleanPropertyComponent extends BasePropertyDirective<IBooleanProp
     protected defaultValue = false;
 
     protected _onChanged(isFirstChange: boolean): void {
-        this.hasOptions = this.property.isRemovable;
-
         if (isFirstChange) {
             this.formControl = new FormControl(this.currentValue);
             this.formControl.valueChanges.subscribe(val => this._modifyValue(val));
         }
 
+        this.hasOptions = this.property.isRemovable;
         this.formControl.setValue(this.currentValue, {
             emitEvent: false,
         });
+    }
+
+    protected override _updateOverrideState(): void {
+        const isInArray: boolean = this.path.split('.').some(k => !isNaN(Number(k)));
+        const fieldOverride = (this.target as IEditorFormlyField)._info?.fieldOverride;
+        if (fieldOverride) {
+            this.isOverridden = !isInArray && !isNil(get(fieldOverride, this.path));
+        } else {
+            this.isOverridden = false;
+        }
     }
 }

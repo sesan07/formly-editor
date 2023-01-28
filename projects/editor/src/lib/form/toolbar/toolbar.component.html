@@ -19,32 +19,47 @@
         (ngModelChange)="isEditModeChange.emit($event)"
         >Edit Mode</mat-slide-toggle
     >
+    <mat-slide-toggle
+        labelPosition="before"
+        [ngModel]="isOverrideMode"
+        (ngModelChange)="isOverrideModeChange.emit($event)"
+        >Override Mode</mat-slide-toggle
+    >
     <button
         mat-icon-button
-        matTooltip="Reset Form"
+        [matMenuTriggerFor]="optionsMenu"
+    >
+        <mat-icon>more_vert</mat-icon>
+    </button>
+</div>
+
+<mat-menu #optionsMenu="matMenu">
+    <button
+        mat-menu-item
         (click)="resetModel.emit()"
     >
         <mat-icon>restart_alt</mat-icon>
+        Reset Form
     </button>
     <button
-        mat-icon-button
-        matTooltip="Duplicate Form"
+        mat-menu-item
         (click)="duplicateForm.emit()"
     >
         <mat-icon>content_copy</mat-icon>
+        Duplicate Form
     </button>
     <button
-        mat-icon-button
-        matTooltip="Export Form"
+        mat-menu-item
         (click)="exportForm.emit()"
     >
         <mat-icon>file_upload</mat-icon>
+        Export Form
     </button>
     <button
-        mat-icon-button
-        matTooltip="Toggle sidebars"
+        mat-menu-item
         (click)="isExpanded = !isExpanded; toggleSidebars.emit(isExpanded)"
     >
         <mat-icon class="toggle-sidebars-icon">{{ isExpanded ? 'unfold_more' : 'unfold_less' }}</mat-icon>
+        Toggle sidebars
     </button>
-</div>
+</mat-menu>

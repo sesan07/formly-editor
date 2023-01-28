@@ -1,12 +1,13 @@
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
-import { get, set } from 'lodash-es';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { cloneDeep, get, isEmpty, set, unset } from 'lodash-es';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { EditorService } from '../editor.service';
-import { EditorTypeOption, IEditorFormlyField, IForm } from '../editor.types';
+import { IEditorFormlyField, IForm } from '../editor.types';
 import { IPropertyChange, PropertyChangeType } from '../property/property.types';
-import { getFieldChildren } from './utils';
+import { getFieldChildren } from './form.utils';
+import { overrideFields } from './override.utils';
 
 @Injectable()
 export class FormService {
@@ -14,38 +15,55 @@ export class FormService {
     public activeField$: Observable<IEditorFormlyField>;
     public model$: Observable<Record<string, any>>;
     public isEditMode$: Observable<boolean>;
+    public isOverrideMode$: Observable<boolean>;
 
-    private _id: string;
     private _fieldMap: Map<string, IEditorFormlyField> = new Map();
 
     private _fields$: BehaviorSubject<IEditorFormlyField[]> = new BehaviorSubject([]);
     private _activeField$: BehaviorSubject<IEditorFormlyField | null> = new BehaviorSubject(null);
     private _model$: BehaviorSubject<Record<string, any>> = new BehaviorSubject({});
     private _isEditMode$: BehaviorSubject<boolean> = new BehaviorSubject(true);
+    private _isOverrideMode$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+    private _form: IForm;
+    private _baseFields: IEditorFormlyField[];
+    private _overridenFields: IEditorFormlyField[];
 
     constructor(private _editorService: EditorService) {
         this.fields$ = this._fields$.asObservable();
         this.activeField$ = this._activeField$.asObservable();
         this.model$ = this._model$.asObservable();
         this.isEditMode$ = this._isEditMode$.asObservable();
+        this.isOverrideMode$ = this._isOverrideMode$.asObservable();
+    }
+
+    public get isOverrideMode(): boolean {
+        return this._isOverrideMode$.value;
     }
 
     public setup(form: IForm) {
-        this._id = form.id;
-
-        form.fields.forEach(field => this._addToFieldMap(field));
-        this._fields$.next(form.fields);
+        this._form = form;
+        this._baseFields = this._form.fields;
+        this._resetFields();
         this._activeField$.next(this._fields$.value[0]);
         this._model$.next(form.model);
+
+        this.isOverrideMode$.subscribe(() => {
+            this._resetFields();
+        });
     }
 
     public setEditMode(isEditMode: boolean): void {
         this._isEditMode$.next(isEditMode);
     }
 
+    public setOverrideMode(isOverrideMode: boolean): void {
+        this._isOverrideMode$.next(isOverrideMode);
+    }
+
     public addField(type: string, customType?: string, parentFieldId?: string, index?: number): IEditorFormlyField {
         const newField: IEditorFormlyField = this._editorService.getDefaultField(
-            this._id,
+            this._form.id,
             type,
             customType,
             parentFieldId
@@ -80,20 +98,33 @@ export class FormService {
     }
 
     public modifyField(change: IPropertyChange) {
+        const activeField: IEditorFormlyField = this._activeField$.value;
+
         if (!change.path) {
             throw new Error('Path is missing from field change');
         }
 
-        const activeField: IEditorFormlyField = this._activeField$.value;
+        if (this.isOverrideMode && !activeField.key) {
+            throw new Error(`Field without key can't be overridden`);
+        }
+
+        // TODO disable field to prevent this
+        if (this.isOverrideMode && change.path === 'key') {
+            throw new Error(`Field key can't be overridden`);
+        }
+
         if (change.type === PropertyChangeType.VALUE) {
             set(activeField, change.path, change.data);
-            this._fields$.next(this._fields$.value);
-            this.selectField(activeField._info.fieldId);
         } else if (change.type === PropertyChangeType.KEY) {
             this._modifyKey(activeField, change.path, change.data);
-            this._fields$.next(this._fields$.value);
-            this.selectField(activeField._info.fieldId);
         }
+
+        if (this.isOverrideMode) {
+            this._modifyOverriddenField(change);
+        }
+
+        this._fields$.next(this._fields$.value);
+        this.selectField(activeField._info.fieldId);
     }
 
     public selectField(fieldId: string | null): void {
@@ -192,6 +223,21 @@ export class FormService {
         return this._fields$.value;
     }
 
+    private _resetFields(): void {
+        this._fieldMap.clear();
+
+        if (this.isOverrideMode) {
+            this._overridenFields = overrideFields(cloneDeep(this._baseFields), this._form.override);
+            this._overridenFields.forEach(field => this._addToFieldMap(field));
+            this._fields$.next(this._overridenFields);
+        } else {
+            this._baseFields.forEach(field => this._addToFieldMap(field));
+            this._fields$.next(this._baseFields);
+        }
+
+        this.selectField(this._activeField$.value?._info.fieldId);
+    }
+
     private _getSiblings(parentFieldId?: string): IEditorFormlyField[] {
         if (parentFieldId) {
             const parentField: IEditorFormlyField = this.getField(parentFieldId);
@@ -232,5 +278,62 @@ export class FormService {
         const currentValue: any = get(target, path);
         delete parent[currKey];
         set(parent, newKey, currentValue);
+    }
+
+    private _modifyOverriddenField(change: IPropertyChange): void {
+        const activeField: IEditorFormlyField = this._activeField$.value;
+        const keyPath: string = this._getKeyPath(activeField);
+        const override: Record<string, any> = this._form.override.override;
+
+        if (change.type === PropertyChangeType.VALUE) {
+            const fieldOverride = override[keyPath] ?? {};
+
+            const pathArr = change.path.split('.');
+            const arrItemKeyIndex = pathArr.findIndex(k => !isNaN(Number(k)));
+            if (arrItemKeyIndex >= 1) {
+                const arrPath = pathArr.slice(0, arrItemKeyIndex);
+                set(fieldOverride, arrPath, get(activeField, arrPath));
+            } else {
+                set(fieldOverride, change.path, change.data);
+            }
+            override[keyPath] = fieldOverride;
+
+            activeField._info.fieldOverride = fieldOverride;
+        } else if (change.type === PropertyChangeType.CLEAR_OVERRIDE) {
+            const fieldOverride = override[keyPath];
+            unset(fieldOverride, change.path);
+
+            // Remove empty field property override
+            const pathArr = change.path.split('.');
+            for (let i = pathArr.length - 1; i >= 1; i--) {
+                const currPath = pathArr.slice(0, i);
+                if (isEmpty(get(fieldOverride, currPath))) {
+                    unset(fieldOverride, currPath);
+                }
+            }
+
+            // Remove empty field override
+            if (isEmpty(fieldOverride)) {
+                unset(override, keyPath);
+            }
+
+            this._resetFields();
+        }
+    }
+
+    private _getKeyPath(field: IEditorFormlyField, path: string = ''): string {
+        // Process children (e.g. 'fieldGroup')
+        const fieldInfo = field._info;
+        if (fieldInfo.parentFieldId) {
+            const parent: IEditorFormlyField = this.getField(fieldInfo.parentFieldId);
+            path += this._getKeyPath(parent, path);
+        }
+
+        const key: string = field.key?.toString();
+        if (key) {
+            path = path ? `${path}.${key}` : key;
+        }
+
+        return path;
     }
 }

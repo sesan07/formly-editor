@@ -17,13 +17,12 @@ export class TextareaPropertyComponent extends BasePropertyDirective<ITextareaPr
     protected defaultValue = '';
 
     protected _onChanged(isFirstChange: boolean): void {
-        this.hasOptions = this.property.isRemovable;
-
         if (isFirstChange) {
             this.formControl = new FormControl(this.currentValue);
             this.formControl.valueChanges.subscribe(val => this._modifyValue(val));
         }
 
+        this.hasOptions = this.property.isRemovable;
         this.formControl.setValue(this.currentValue, {
             emitEvent: false,
         });

@@ -1,0 +1,10 @@
+{
+  "override": {
+    "group.card.input": {
+      "templateOptions": {
+        "label": "Overriden Label!",
+        "placeholder": "Overriden PH!"
+      }
+    }
+  }
+}

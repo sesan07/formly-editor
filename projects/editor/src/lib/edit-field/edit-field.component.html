@@ -4,7 +4,8 @@
             <editor-object-property
                 [target]="activeFieldTarget"
                 [property]="activeFieldProperty"
-                [isSimplified]="isSimplified"
+                [isSimplified]="true"
+                [isOverrideMode]="isOverrideMode"
                 [isExpanded]="true"
                 (targetChanged)="fieldChanged.emit($event)"
             >

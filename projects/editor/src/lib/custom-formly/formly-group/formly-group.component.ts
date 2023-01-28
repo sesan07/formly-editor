@@ -9,6 +9,7 @@ import { FormService } from '../../form/form.service';
 import { EditorService } from '../../editor.service';
 import { IEditorFormlyField } from '../../editor.types';
 import { ContainerType, FlexContainerType } from '../../edit-field/styles/styles.types';
+import { trackByFieldId } from '../../form/form.utils';
 
 @Component({
     selector: 'editor-formly-group',
@@ -23,6 +24,8 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
     public isGridContainer: boolean;
     public isEditMode: boolean;
 
+    trackByFieldId = trackByFieldId;
+
     private _destroy$: Subject<void> = new Subject();
 
     constructor(
@@ -34,7 +37,11 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
     }
 
     ngOnInit(): void {
-        this.dropListClasses = this.field.fieldGroupClassName ? this.field.fieldGroupClassName : '';
+        if (!this.field._info) {
+            return;
+        }
+
+        this.dropListClasses = this.field.fieldGroupClassName ?? '';
 
         const hasGrid: boolean = this._hasFieldGroupClassName(ContainerType.GRID);
         const hasFlex: boolean = this._hasFieldGroupClassName(ContainerType.FLEX);
