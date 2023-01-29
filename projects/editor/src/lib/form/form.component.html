@@ -63,7 +63,14 @@
             </editor-formly-form>
         </mat-tab>
         <mat-tab>
-            <pre><code>{{ formFieldsJSON$ | async }}</code></pre>
+            <ng-template matTabContent>
+                <editor-text-editor
+                    class="text-editor"
+                    [value]="formFieldsJSON$ | async"
+                    [mode]="'application/json'"
+                    [readOnly]="true"
+                ></editor-text-editor>
+            </ng-template>
         </mat-tab>
     </mat-tab-group>
 </div>
