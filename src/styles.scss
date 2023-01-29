@@ -1,3 +1,6 @@
+@import 'codemirror/lib/codemirror';
+@import 'codemirror/theme/material';
+
 :root {
     --header-height: 48px;
     --tree-item-height: 32px;
@@ -222,4 +225,11 @@ editor-sidebar .resizing {
 
 .override-clear-btn {
     color: orange;
+}
+
+.CodeMirror {
+    // border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+    padding: 4px;
+    box-sizing: border-box;
 }
