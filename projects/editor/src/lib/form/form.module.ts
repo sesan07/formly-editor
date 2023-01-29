@@ -26,6 +26,7 @@ import { JsonValidatorDirective } from './json-validator/json-validator.directiv
 import { EditFieldModule } from '../edit-field/edit-field.module';
 import { FieldNameModule } from '../field-name/field-name.module';
 import { ImportModelDialogComponent } from './import-model-dialog/import-model-dialog.component';
+import { TextEditorModule } from '../text-editor/text-editor.module';
 
 @NgModule({
     declarations: [
@@ -48,6 +49,7 @@ import { ImportModelDialogComponent } from './import-model-dialog/import-model-d
         PropertyModule,
         SidebarModule,
         FieldNameModule,
+        TextEditorModule,
         MatIconModule,
         MatButtonModule,
         MatMenuModule,
