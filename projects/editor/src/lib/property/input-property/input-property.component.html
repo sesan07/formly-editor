@@ -31,7 +31,7 @@
 <ng-template #simplifiedView>
     <div class="simplified-wrapper">
         <span
-            *ngIf="isOverrideMode && isOverridden"
+            *ngIf="isOverrideMode && !isInArray"
             class="override-indicator"
             [class.overriden]="isOverridden"
         ></span>
