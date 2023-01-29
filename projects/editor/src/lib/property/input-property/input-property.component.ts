@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { get, isNil } from 'lodash-es';
+import { Observable } from 'rxjs';
 import { IEditorFormlyField } from '../../editor.types';
+import { FormService } from '../../form/form.service';
 
 import { BasePropertyDirective } from '../base-property.component';
 import { PropertyType } from '../property.types';
@@ -16,6 +18,7 @@ import { IInputProperty } from './input-property.types';
 export class InputPropertyComponent extends BasePropertyDirective<IInputProperty, string | number | boolean> {
     public formControl: FormControl;
     public hasOptions: boolean;
+    public isInArray: boolean;
 
     protected defaultValue = null;
 
@@ -32,10 +35,10 @@ export class InputPropertyComponent extends BasePropertyDirective<IInputProperty
     }
 
     protected override _updateOverrideState(): void {
-        const isInArray: boolean = this.path.split('.').some(k => !isNaN(Number(k)));
+        this.isInArray = this.path.split('.').some(k => !isNaN(Number(k)));
         const fieldOverride = (this.target as IEditorFormlyField)._info?.fieldOverride;
         if (fieldOverride) {
-            this.isOverridden = !isInArray && !isNil(get(fieldOverride, this.path));
+            this.isOverridden = !this.isInArray && !isNil(get(fieldOverride, this.path));
         } else {
             this.isOverridden = false;
         }
