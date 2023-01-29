@@ -17,6 +17,8 @@ import { FormModule } from './form/form.module';
 import { FileService } from './shared/services/file-service/file.service';
 import { installPatch } from './dnd-patch';
 
+import 'codemirror/mode/javascript/javascript';
+
 const defaultConfig: EditorConfigOption = {
     defaultName: 'formly-group',
     typeCategories: [],
