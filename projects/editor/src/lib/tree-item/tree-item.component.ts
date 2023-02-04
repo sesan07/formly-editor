@@ -8,12 +8,14 @@ import {
     OnInit,
     Output,
 } from '@angular/core';
+import { matExpansionAnimations, MatExpansionPanelState } from '@angular/material/expansion';
 import { MatMenuPanel } from '@angular/material/menu';
 
 @Component({
     selector: 'editor-tree-item',
     templateUrl: './tree-item.component.html',
     styleUrls: ['./tree-item.component.scss'],
+    animations: [matExpansionAnimations.bodyExpansion],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeItemComponent implements OnInit {
@@ -34,6 +36,11 @@ export class TreeItemComponent implements OnInit {
 
     @HostBinding('class.active') get isHeaderActive(): boolean {
         return this.isActive;
+    }
+
+    /** Gets the expanded state string. */
+    get expansionState(): MatExpansionPanelState {
+        return this.isExpanded ? 'expanded' : 'collapsed';
     }
 
     @HostListener('mouseover', ['$event'])
