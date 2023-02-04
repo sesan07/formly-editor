@@ -15,12 +15,13 @@ import { ExportJSONRequest, ExportJSONResponse } from './export-form-dialog/expo
 import { FileService } from '../shared/services/file-service/file.service';
 import { SideBarPosition } from '../sidebar/sidebar.types';
 import { IObjectProperty } from '../property/object-array-properties/object-property.types';
-import { cleanField, trackByFieldId } from './form.utils';
+import { cleanField } from './form.utils';
 import { FormService } from './form.service';
 import { DroplistService } from './droplist.service';
 import { initRootProperty } from '../property/utils';
 import { ImportModelDialogComponent } from './import-model-dialog/import-model-dialog.component';
 import { ImportModelResponse } from './import-model-dialog/import-model-dialog.types';
+import { trackByFieldId } from '../editor.utils';
 
 @Component({
     selector: 'editor-form',

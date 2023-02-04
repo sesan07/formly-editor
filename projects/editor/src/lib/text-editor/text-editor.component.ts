@@ -9,8 +9,7 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
-import { EditorConfiguration, EditorFromTextArea, fromTextArea } from 'codemirror';
-import { TextEditorMode } from './text-editor.types';
+import { Editor, EditorConfiguration, EditorFromTextArea, fromTextArea } from 'codemirror';
 
 @Component({
     selector: 'editor-text-editor',
@@ -19,7 +18,8 @@ import { TextEditorMode } from './text-editor.types';
 })
 export class TextEditorComponent implements OnChanges, AfterViewInit {
     @Input() value = '';
-    @Input() mode: TextEditorMode;
+    @Input() mode: 'application/javascript' | 'application/json';
+    @Input() updateOn: 'blur' | 'change' = 'change';
     @Input() readOnly: boolean;
 
     @Output() valueChange: EventEmitter<string> = new EventEmitter();
@@ -30,7 +30,7 @@ export class TextEditorComponent implements OnChanges, AfterViewInit {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.value && this.editorInstance) {
-            this.editorInstance.setValue(this.value);
+            this.editorInstance.setValue(this.value || '');
         }
     }
 
@@ -41,14 +41,14 @@ export class TextEditorComponent implements OnChanges, AfterViewInit {
             theme: 'material',
         };
         this.editorInstance = fromTextArea(this.ref.nativeElement, options);
-        this.editorInstance.setValue(this.value);
+        this.editorInstance.setValue(this.value || '');
         this.editorInstance.setSize('100%', '100%');
 
-        this.editorInstance.on('change', editor => {
+        this.editorInstance.on(this.updateOn, (editor: Editor) => {
             const newValue = editor.getDoc().getValue();
             if (newValue !== this.value) {
                 this.value = newValue;
-                this.valueChange.emit();
+                this.valueChange.emit(newValue);
             }
         });
     }

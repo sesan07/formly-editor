@@ -1,6 +1,6 @@
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
-import { cloneDeep, get, isEmpty, set, unset } from 'lodash-es';
+import { cloneDeep, get, isEmpty, isNil, set, unset } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { EditorService } from '../editor.service';
@@ -98,9 +98,10 @@ export class FormService {
     }
 
     public modifyField(change: IPropertyChange) {
+        const { type, path, childPath, deleteChildPath, data } = change;
         const activeField: IEditorFormlyField = this._activeField$.value;
 
-        if (!change.path) {
+        if (!path) {
             throw new Error('Path is missing from field change');
         }
 
@@ -109,14 +110,23 @@ export class FormService {
         }
 
         // TODO disable field to prevent this
-        if (this.isOverrideMode && change.path === 'key') {
+        if (this.isOverrideMode && path === 'key') {
             throw new Error(`Field key can't be overridden`);
         }
 
-        if (change.type === PropertyChangeType.VALUE) {
-            set(activeField, change.path, change.data);
-        } else if (change.type === PropertyChangeType.KEY) {
-            this._modifyKey(activeField, change.path, change.data);
+        if (type === PropertyChangeType.VALUE) {
+            if (!isNil(childPath) || !isNil(deleteChildPath)) {
+                const parent = get(activeField, path) ?? {};
+                delete parent[deleteChildPath];
+                if (!isNil(childPath)) {
+                    parent[childPath] = data;
+                }
+                set(activeField, path, parent);
+            } else {
+                set(activeField, path, data);
+            }
+        } else if (type === PropertyChangeType.KEY) {
+            this._modifyKey(activeField, path, data);
         }
 
         if (this.isOverrideMode) {
@@ -280,31 +290,42 @@ export class FormService {
         set(parent, newKey, currentValue);
     }
 
-    private _modifyOverriddenField(change: IPropertyChange): void {
+    private _modifyOverriddenField({ type, path, childPath, deleteChildPath, data }: IPropertyChange): void {
         const activeField: IEditorFormlyField = this._activeField$.value;
         const keyPath: string = this._getKeyPath(activeField);
         const override: Record<string, any> = this._form.override.override;
 
-        if (change.type === PropertyChangeType.VALUE) {
+        if (type === PropertyChangeType.VALUE) {
             const fieldOverride = override[keyPath] ?? {};
 
-            const pathArr = change.path.split('.');
-            const arrItemKeyIndex = pathArr.findIndex(k => !isNaN(Number(k)));
-            if (arrItemKeyIndex >= 1) {
-                const arrPath = pathArr.slice(0, arrItemKeyIndex);
-                set(fieldOverride, arrPath, get(activeField, arrPath));
+            if (!isNil(childPath) || !isNil(deleteChildPath)) {
+                const parent = get(fieldOverride, path) ?? {};
+                delete parent[deleteChildPath];
+                if (!isNil(childPath)) {
+                    parent[childPath] = data;
+                }
+                set(fieldOverride, path, parent);
             } else {
-                set(fieldOverride, change.path, change.data);
+                let finalPath: string[] | string = path;
+                let finalData: unknown = data;
+                const pathArr = path.split('.');
+                const arrItemKeyIndex = pathArr.findIndex(k => !isNaN(Number(k)));
+                if (arrItemKeyIndex > 0) {
+                    finalPath = pathArr.slice(0, arrItemKeyIndex);
+                    finalData = get(activeField, finalPath);
+                }
+                set(fieldOverride, finalPath, finalData);
             }
+
             override[keyPath] = fieldOverride;
 
             activeField._info.fieldOverride = fieldOverride;
-        } else if (change.type === PropertyChangeType.CLEAR_OVERRIDE) {
+        } else if (type === PropertyChangeType.CLEAR_OVERRIDE) {
             const fieldOverride = override[keyPath];
-            unset(fieldOverride, change.path);
+            unset(fieldOverride, path);
 
             // Remove empty field property override
-            const pathArr = change.path.split('.');
+            const pathArr = path.split('.');
             for (let i = pathArr.length - 1; i >= 1; i--) {
                 const currPath = pathArr.slice(0, i);
                 if (isEmpty(get(fieldOverride, currPath))) {

@@ -7,19 +7,14 @@
     [hasOptions]="hasOptions"
     [optionsMenu]="optionsMenu"
 >
-    <span
+    <editor-property-key
         headerContent
-        class="property-key"
+        [key]="property.key"
+        [isEditable]="property.isKeyEditable"
+        (keyChange)="onKeyChanged($event)"
     >
-        <span
-            #key
-            class="keyField"
-            [ngClass]="{ editable: !!property.isKeyEditable }"
-            [contentEditable]="!!property.isKeyEditable"
-        >
-        </span>
         <span>{{ (property?.name ? '(' + property.name + ') ' : '') + '{ ' + childProperties.length + ' }' }}</span>
-    </span>
+    </editor-property-key>
 
     <ng-container childrenContent>
         <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
@@ -44,7 +39,7 @@
 
 <ng-template #childPropertiesView>
     <div>
-        <ng-container *ngFor="let child of childProperties; let i = index; trackBy: trackPropertyByKey">
+        <ng-container *ngFor="let child of childProperties; let i = index; trackBy: trackByPropertyKey">
             <ng-container *ngIf="isSimplified ? child.isSimple : true">
                 <ng-container [ngSwitch]="child.type">
                     <editor-array-property
@@ -111,6 +106,19 @@
                         (targetChanged)="targetChanged.emit($event)"
                     >
                     </editor-textarea-property>
+
+                    <editor-expression-properties-property
+                        *ngSwitchCase="typeofProperty.EXPRESSION_PROPERTIES"
+                        [treeLevel]="childrenTreeLevel"
+                        [path]="getChildPath(child.key)"
+                        [property]="propertyService.getAsExpressionPropertiesProperty(child)"
+                        [target]="target"
+                        [isSimplified]="isSimplified"
+                        [isOverrideMode]="isOverrideMode"
+                        (remove)="onRemoveChild(i)"
+                        (targetChanged)="targetChanged.emit($event)"
+                    >
+                    </editor-expression-properties-property>
 
                     <ng-container *ngSwitchCase="typeofProperty.NUMBER">
                         <ng-container *ngTemplateOutlet="inputProperty"></ng-container>

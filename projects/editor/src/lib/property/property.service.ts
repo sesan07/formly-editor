@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { isMoment } from 'moment';
 import { IChipListProperty } from './chip-list-property/chip-list-property.types';
+import { IExpressionPropertiesProperty } from './expression-properties-property/expression-properties-property.types';
 import { IInputProperty } from './input-property/input-property.types';
 import { IArrayProperty } from './object-array-properties/array-property.types';
 import { IObjectProperty } from './object-array-properties/object-property.types';
@@ -18,8 +19,6 @@ export class PropertyService {
         PropertyType.TEXT,
         PropertyType.TEXTAREA,
     ];
-
-    private _currKeyId = 0;
 
     public getAsArrayProperty(property: IProperty): IArrayProperty {
         return property as IArrayProperty;
@@ -39,6 +38,10 @@ export class PropertyService {
 
     public getAsObjectProperty(property: IProperty): IObjectProperty {
         return property as IObjectProperty;
+    }
+
+    public getAsExpressionPropertiesProperty(property: IProperty): IExpressionPropertiesProperty {
+        return property as IExpressionPropertiesProperty;
     }
 
     public getDefaultProperty(type: PropertyType, key: string | number = '', arrayChildType?: PropertyType): IProperty {

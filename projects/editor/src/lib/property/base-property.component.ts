@@ -13,10 +13,11 @@ import {
 import { get, isNil } from 'lodash-es';
 import { IEditorFormlyField } from '../editor.types';
 
-import { IBaseProperty, IPropertyChange, PropertyChangeType, PropertyType } from './property.types';
+import { IBaseProperty, IPropertyChange, PropertyChangeType } from './property.types';
+import { isParentProperty } from './utils';
 
 @Directive()
-export abstract class BasePropertyDirective<P extends IBaseProperty, V> implements OnChanges, AfterViewInit {
+export abstract class BasePropertyDirective<P extends IBaseProperty, V> implements OnChanges {
     @Input() treeLevel = 0;
     @Input() path?: string;
     @Input() target: Record<string, any> | any[];
@@ -27,8 +28,6 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
     @Output() public remove: EventEmitter<void> = new EventEmitter();
     @Output() public keyChanged: EventEmitter<string> = new EventEmitter();
     @Output() public targetChanged: EventEmitter<IPropertyChange> = new EventEmitter();
-
-    @ViewChild('key') keyElement: ElementRef<HTMLElement>;
 
     public isOverridden: boolean;
 
@@ -47,10 +46,7 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
                 : this.target ?? this.defaultValue;
 
             const canChange: boolean =
-                isFirstChange ||
-                this.property.type === PropertyType.OBJECT ||
-                this.property.type === PropertyType.ARRAY ||
-                newValue !== this.currentValue;
+                isFirstChange || isParentProperty(this.property) || newValue !== this.currentValue;
 
             if (canChange) {
                 this.currentValue = newValue;
@@ -60,16 +56,13 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
         }
     }
 
-    ngAfterViewInit(): void {
-        // TODO emit targetChanged on blur for input-like properties
-        if (this.keyElement) {
-            this.keyElement.nativeElement.innerText =
-                !!this.property.key || this.property.key === 0 ? (this.property.key as string) : '';
-            this.keyElement.nativeElement.addEventListener('blur', () =>
-                this._onKeyChanged(this.keyElement.nativeElement.innerText)
-            );
-            this.keyElement.nativeElement.addEventListener('click', e => this._onKeyClicked(e));
-        }
+    public onKeyChanged(newKey: string): void {
+        const change: IPropertyChange = {
+            type: PropertyChangeType.KEY,
+            path: this.path,
+            data: newKey,
+        };
+        this.targetChanged.emit(change);
     }
 
     onClearOverride(): void {
@@ -81,10 +74,12 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
         this.targetChanged.emit(change);
     }
 
-    protected _modifyValue(value: any): void {
+    protected _modifyValue(value: any, childPath?: string, deleteChildPath?: string): void {
         const change: IPropertyChange = {
             type: PropertyChangeType.VALUE,
             path: this.path,
+            childPath,
+            deleteChildPath,
             data: value,
         };
         this.targetChanged.emit(change);
@@ -97,15 +92,6 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
         } else {
             this.isOverridden = false;
         }
-    }
-
-    private _onKeyChanged(newKey: string): void {
-        const change: IPropertyChange = {
-            type: PropertyChangeType.KEY,
-            path: this.path,
-            data: newKey,
-        };
-        this.targetChanged.emit(change);
     }
 
     private _onKeyClicked(event: MouseEvent): void {

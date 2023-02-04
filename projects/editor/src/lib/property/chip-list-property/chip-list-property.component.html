@@ -5,16 +5,13 @@
     [optionsMenu]="optionsMenu"
 >
     <ng-container headerContent>
-        <span class="property-key">
-            <span
-                #key
-                class="keyField"
-                [ngClass]="{ editable: !!property.isKeyEditable }"
-                [contentEditable]="!!property.isKeyEditable"
-            >
-            </span>
+        <editor-property-key
+            [key]="property.key"
+            [isEditable]="property.isKeyEditable"
+            (keyChange)="onKeyChanged($event)"
+        >
             <span>:</span>
-        </span>
+        </editor-property-key>
         <span class="property-field">
             <ng-container
                 [ngTemplateOutlet]="formField"

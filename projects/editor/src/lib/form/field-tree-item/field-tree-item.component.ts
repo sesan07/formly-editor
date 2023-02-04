@@ -16,9 +16,10 @@ import { takeUntil } from 'rxjs/operators';
 
 import { EditorService } from '../../editor.service';
 import { EditorTypeCategoryOption, IEditorFormlyField, IEditorFieldInfo } from '../../editor.types';
-import { getFieldChildren, getReplaceCategories, trackByFieldId } from '../form.utils';
+import { getFieldChildren, getReplaceCategories } from '../form.utils';
 import { FormService } from '../form.service';
 import { isEmpty } from 'lodash-es';
+import { trackByFieldId } from '../../editor.utils';
 
 @Component({
     selector: 'editor-field-tree-item',

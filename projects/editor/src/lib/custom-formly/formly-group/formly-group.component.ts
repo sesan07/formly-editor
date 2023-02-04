@@ -9,7 +9,7 @@ import { FormService } from '../../form/form.service';
 import { EditorService } from '../../editor.service';
 import { IEditorFormlyField } from '../../editor.types';
 import { ContainerType, FlexContainerType } from '../../edit-field/styles/styles.types';
-import { trackByFieldId } from '../../form/form.utils';
+import { trackByFieldId } from '../../editor.utils';
 
 @Component({
     selector: 'editor-formly-group',

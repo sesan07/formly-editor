@@ -3,9 +3,6 @@ import { get, isEmpty } from 'lodash-es';
 
 import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField } from '../editor.types';
 
-export const trackByFieldId: TrackByFunction<IEditorFormlyField> = (_, field: IEditorFormlyField) =>
-    field._info.fieldId;
-
 export const getFieldChildren = (field: IEditorFormlyField): IEditorFormlyField[] | undefined =>
     get(field, field._info.childrenPath);
 

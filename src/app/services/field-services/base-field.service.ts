@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import {
     IBaseFormlyField,
     IChipListProperty,
+    IExpressionPropertiesProperty,
     IInputProperty,
-    IObjectProperty,
     IProperty,
     PropertyType,
     StylesService,
@@ -26,13 +26,6 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
             },
             ...this._getTOProperty(this._getTOChildProperties(), this._getWrapperTypes()),
             ...this._getSharedProperties(),
-            {
-                name: 'Wrappers',
-                key: 'wrappers',
-                type: PropertyType.CHIP_LIST,
-                options: this._getWrapperTypes(),
-                isSimple: true,
-            },
         ];
     }
 
@@ -68,12 +61,18 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
                 isSimple: true,
             } as IChipListProperty,
             {
+                name: 'Wrappers',
+                key: 'wrappers',
+                type: PropertyType.CHIP_LIST,
+                options: this._getWrapperTypes(),
+                isSimple: true,
+            },
+            {
+                name: 'Expression Properties',
                 key: 'expressionProperties',
-                type: PropertyType.OBJECT,
-                addOptions: [PropertyType.TEXT],
-                childProperties: [],
-                populateChildrenFromTarget: true,
-            } as IObjectProperty,
+                type: PropertyType.EXPRESSION_PROPERTIES,
+                isSimple: true,
+            } as IExpressionPropertiesProperty,
         ];
     }
 
@@ -85,12 +84,6 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
         childProperties.forEach(property => propertyMap.set(property.key + '', property));
 
         return Array.from(propertyMap.values());
-        // return {
-        //     key: 'templateOptions',
-        //     type: PropertyType.OBJECT,
-        //     childProperties: Array.from(propertyMap.values()),
-        //     isSimple: true,
-        // };
     }
 
     // Wrapper template option properties

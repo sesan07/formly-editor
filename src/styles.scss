@@ -83,14 +83,6 @@ formly-field {
     user-select: none;
 }
 
-.property-key {
-    display: inline-flex;
-    height: var(--tree-item-height);
-    align-self: flex-start;
-    align-items: center;
-    column-gap: 4px;
-}
-
 .property-field {
     flex-grow: 1;
 }
@@ -104,25 +96,6 @@ button.mat-icon-button {
 
 .cursor-pointer {
     cursor: pointer;
-}
-
-.keyField {
-    display: inline-block;
-}
-
-.keyField.editable {
-    padding: 0.225em;
-    border-radius: 4px;
-    cursor: text;
-    outline: 1px solid rgba(0, 0, 0, 0.15);
-}
-
-.keyField.editable:hover {
-    outline: 2px solid rgba(0, 0, 0, 1);
-}
-
-.keyField.editable:focus {
-    outline: 2px solid #3f51b5;
 }
 
 .expand-icon {
