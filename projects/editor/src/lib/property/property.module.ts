@@ -20,6 +20,9 @@ import {
 import { TreeItemModule } from '../tree-item/tree-item.module';
 import { TextareaPropertyComponent } from './textarea-property/textarea-property.component';
 import { MatButtonModule } from '@angular/material/button';
+import { ExpressionPropertiesPropertyComponent } from './expression-properties-property/expression-properties-property.component';
+import { TextEditorModule } from '../text-editor/text-editor.module';
+import { PropertyKeyComponent } from './property-key/property-key.component';
 
 @NgModule({
     declarations: [
@@ -29,11 +32,14 @@ import { MatButtonModule } from '@angular/material/button';
         BooleanPropertyComponent,
         ChipListPropertyComponent,
         TextareaPropertyComponent,
+        ExpressionPropertiesPropertyComponent,
+        PropertyKeyComponent,
     ],
     imports: [
         CommonModule,
         ReactiveFormsModule,
         TreeItemModule,
+        TextEditorModule,
         MatIconModule,
         MatButtonModule,
         MatMenuModule,

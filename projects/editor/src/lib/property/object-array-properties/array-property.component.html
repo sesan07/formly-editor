@@ -7,19 +7,14 @@
     [hasOptions]="hasOptions"
     [optionsMenu]="optionsMenu"
 >
-    <span
+    <editor-property-key
         headerContent
-        class="property-key"
+        [key]="property.key"
+        [isEditable]="property.isKeyEditable"
+        (keyChange)="onKeyChanged($event)"
     >
-        <span
-            #key
-            class="keyField"
-            [ngClass]="{ editable: !!property.isKeyEditable }"
-            [contentEditable]="!!property.isKeyEditable"
-        >
-        </span>
         <span>{{ '[ ' + childProperties.length + ' ]' }}</span>
-    </span>
+    </editor-property-key>
 
     <ng-container childrenContent>
         <ng-container *ngTemplateOutlet="childPropertiesContainer"></ng-container>
@@ -47,7 +42,7 @@
                     >chevron_right</mat-icon
                 >
             </button>
-            <span>{{ property.name ? property.name : property.key + ' [ ' + childProperties.length + ' ]' }}</span>
+            <span>{{ (property.name || property.key) + ' [ ' + childProperties.length + ' ]' }}</span>
         </span>
 
         <span class="simplified-header-right">
@@ -77,7 +72,7 @@
             [class.override-mode]="isOverrideMode"
         ></div>
         <mat-accordion>
-            <ng-container *ngFor="let child of childProperties; let index = index; trackBy: trackPropertyByKey">
+            <ng-container *ngFor="let child of childProperties; let index = index; trackBy: trackByPropertyKey">
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
                         <mat-panel-title>Item {{ index + 1 }}</mat-panel-title>
@@ -103,7 +98,7 @@
 </ng-template>
 
 <ng-template #childPropertiesContainer>
-    <ng-container *ngFor="let child of childProperties; let index = index; trackBy: trackPropertyByKey">
+    <ng-container *ngFor="let child of childProperties; let index = index; trackBy: trackByPropertyKey">
         <ng-container
             [ngTemplateOutlet]="childProperty"
             [ngTemplateOutletContext]="{ child, index }"
@@ -111,8 +106,6 @@
         </ng-container>
     </ng-container>
 </ng-template>
-
-<ng-template #simpleChildPropertiesContainer> </ng-template>
 
 <ng-template
     #childProperty

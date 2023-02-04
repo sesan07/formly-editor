@@ -1,0 +1,59 @@
+:host {
+    display: block;
+}
+
+.simplified-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    cursor: pointer;
+}
+
+.simplified-header-left {
+    display: inline-flex;
+    align-items: center;
+    column-gap: 8px;
+    min-height: 32px;
+}
+.simplified-header-right {
+    display: inline-flex;
+    column-gap: 8px;
+}
+
+.simplified-wrapper {
+    display: flex;
+}
+
+.line {
+    width: 1px;
+    background-color: rgba(0, 0, 0, 0.12);
+    margin: 0 14px;
+}
+
+.line.override-mode {
+    margin-left: 28px;
+    margin-right: 14px;
+}
+
+.mat-accordion {
+    flex-grow: 1;
+    display: block;
+}
+
+.mat-expansion-panel {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: none !important;
+}
+
+.mat-expansion-panel-header-title {
+    padding: 0 2px;
+}
+
+.simple-remove-btn {
+    margin-right: 16px;
+}
+
+.override-indicator {
+    height: 32px;
+}

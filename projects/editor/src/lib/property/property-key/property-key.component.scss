@@ -1,0 +1,27 @@
+:host {
+    display: inline-flex;
+    height: var(--tree-item-height);
+    align-self: flex-start;
+    align-items: center;
+    column-gap: 4px;
+}
+
+.key-field {
+    display: inline-block;
+}
+
+.key-field.editable {
+    min-width: 32px;
+    padding: 0.225em;
+    border-radius: 4px;
+    cursor: text;
+    outline: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.key-field.editable:hover {
+    outline: 2px solid rgba(0, 0, 0, 1);
+}
+
+.key-field.editable:focus {
+    outline: 2px solid #3f51b5;
+}

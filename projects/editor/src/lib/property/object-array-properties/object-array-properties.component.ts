@@ -26,7 +26,7 @@ export abstract class ObjectArrayPropertyDirective<P extends IBaseProperty, V>
 
     protected abstract get _canAdd(): boolean;
 
-    trackPropertyByKey: TrackByFunction<IProperty> = (_, property: IProperty) => property.key;
+    trackByPropertyKey: TrackByFunction<IProperty> = (_, property: IProperty) => property.key;
 
     ngOnInit(): void {
         this.childrenTreeLevel = this.treeLevel + 1;
@@ -51,7 +51,7 @@ export abstract class ObjectArrayPropertyDirective<P extends IBaseProperty, V>
     styleUrls: ['./array-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayProperty, any[]> {
+export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayProperty, unknown[]> {
     protected defaultValue = [];
 
     protected get _canAdd(): boolean {
@@ -93,7 +93,7 @@ export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayP
     styleUrls: ['./object-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjectProperty, Record<string, any>> {
+export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjectProperty, Record<string, unknown>> {
     protected defaultValue = {};
 
     protected get _canAdd(): boolean {
