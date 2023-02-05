@@ -6,7 +6,7 @@
 
 .title {
     padding: 8px 0;
-    border-bottom: 1px solid rgba(0,0,0,.12);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .breakpoints {
@@ -15,8 +15,8 @@
     row-gap: 4px;
 }
 
-.container-sub-options {
+.classname-options {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
 }
