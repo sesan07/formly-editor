@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import 'codemirror/lib/codemirror';
 @import 'codemirror/theme/material';
 
@@ -99,6 +103,7 @@ button.mat-icon-button {
 }
 
 .expand-icon {
+    color: rgba(0, 0, 0, 0.54);
     transition: transform 0.2s ease-out;
 }
 
@@ -205,4 +210,19 @@ editor-sidebar .resizing {
     border-radius: 4px;
     padding: 4px;
     box-sizing: border-box;
+}
+
+editor-edit-field {
+    .mat-expansion-panel {
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        box-shadow: none !important;
+    }
+
+    .mat-form-field-wrapper {
+        margin-bottom: -1.25em;
+    }
+
+    .mat-form-field-infix {
+        width: unset;
+    }
 }

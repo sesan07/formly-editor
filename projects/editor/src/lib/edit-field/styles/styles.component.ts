@@ -6,16 +6,14 @@ import {
     OnChanges,
     Output,
     SimpleChanges,
+    TrackByFunction,
 } from '@angular/core';
 
 import { IEditorFormlyField } from '../../editor.types';
-import { FormService } from '../../form/form.service';
 import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
 import { IPropertyChange, PropertyType } from '../../property/property.types';
-import { IStyleOption } from './style-option/style-option.types';
-import { defaultConfig } from './styles.config';
 import { StylesService } from './styles.service';
-import { ContainerType, BreakpointType, IStylingConfig } from './styles.types';
+import { IStylesConfig, ClassProperty, IBreakpoint, IStyleOptionCategory, IStyleOption } from './styles.types';
 
 @Component({
     selector: 'editor-styles',
@@ -25,132 +23,125 @@ import { ContainerType, BreakpointType, IStylingConfig } from './styles.types';
 })
 export class StylesComponent implements OnChanges {
     @Input() editField: IEditorFormlyField;
+    @Input() parentField: IEditorFormlyField;
 
     @Output() fieldChanged: EventEmitter<IPropertyChange> = new EventEmitter();
 
-    stylingConfig: IStylingConfig = defaultConfig;
+    tabIndex = 0;
 
-    parentContainer: ContainerType;
-    parentField?: IEditorFormlyField;
+    stylesConfig: IStylesConfig = this._stylesService.stylesConfig;
 
-    typeOfContainer: typeof ContainerType = ContainerType;
-    containerTypes: ContainerType[] = Object.values(ContainerType);
+    typeOfClassProperty: typeof ClassProperty = ClassProperty;
+    classNameProperties: Record<string, IChipListProperty>; // <breakpoint, property>
+    fieldGroupClassNameProperties: Record<string, IChipListProperty>;
 
-    typeOfBreakpoint: typeof BreakpointType = BreakpointType;
-    breakpointTypes: BreakpointType[] = Object.values(BreakpointType);
+    newClassNameCategories: Record<string, IStyleOptionCategory[]>; // <breakpoint, category>
+    newFieldGroupClassNameCategories: Record<string, IStyleOptionCategory[]>;
 
-    private _breakpointProperties: Map<BreakpointType, IChipListProperty> = new Map();
-    private _breakpointChildrenProperties: Map<BreakpointType, IChipListProperty> = new Map();
+    constructor(private _stylesService: StylesService) {}
 
-    constructor(private _formService: FormService, private _stylesService: StylesService) {}
+    trackByName: TrackByFunction<IStyleOptionCategory> = (_, category) => category.name;
+    trackByOptionName: TrackByFunction<IStyleOption> = (_, option) => option.name;
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.editField) {
-            this._setUp();
+            this._setup();
+
+            if (changes.editField.firstChange) {
+                this._setupFirstChange();
+            }
         }
     }
 
-    canShowOption(config: IStyleOption): boolean {
-        if (config.dependsOnParent) {
-            const propertyValue = this.parentField?.[config.dependsOnParent.property] ?? '';
-            return propertyValue.split(' ').includes(config.dependsOnParent.value);
+    getCategories(
+        property: ClassProperty,
+        breakpoint: IBreakpoint = this.stylesConfig.breakpoints[0]
+    ): IStyleOptionCategory[] {
+        if (property === ClassProperty.CLASS_NAME) {
+            return this.newClassNameCategories[breakpoint.value];
+        } else if (property === ClassProperty.FIELD_GROUP_CLASS_NAME) {
+            return this.newFieldGroupClassNameCategories[breakpoint.value];
         }
+    }
+
+    getChipListProperty(property: ClassProperty, breakpoint: IBreakpoint): IChipListProperty {
+        if (property === ClassProperty.CLASS_NAME) {
+            return this.classNameProperties[breakpoint.value];
+        } else if (property === ClassProperty.FIELD_GROUP_CLASS_NAME) {
+            return this.fieldGroupClassNameProperties[breakpoint.value];
+        }
+    }
+
+    private _setup(): void {
+        this.newClassNameCategories = this._getCategoryMap(ClassProperty.CLASS_NAME);
+        if (this.editField._info.canHaveChildren) {
+            this.newFieldGroupClassNameCategories = this._getCategoryMap(ClassProperty.FIELD_GROUP_CLASS_NAME);
+        } else {
+            this.tabIndex = 0;
+        }
+    }
+
+    private _setupFirstChange(): void {
+        this.classNameProperties = this._getPropertyMap(ClassProperty.CLASS_NAME);
+        if (this.editField._info.canHaveChildren) {
+            this.fieldGroupClassNameProperties = this._getPropertyMap(ClassProperty.FIELD_GROUP_CLASS_NAME);
+        }
+    }
+
+    private _canShowOption(option: IStyleOption, breakpoint: IBreakpoint): boolean {
+        if (breakpoint.value && !option.hasBreakpoints) {
+            return false;
+        }
+
+        const regexp = (val: string) => new RegExp(`(?<=(\\s|^))${val}(?=(\\s|$))`);
+        if (option.dependsOnParent) {
+            const { property, value } = option.dependsOnParent;
+            const match = (this.parentField?.[property] ?? '').match(regexp(value));
+            if (!match) {
+                return false;
+            }
+        }
+        if (option.dependsOn) {
+            const { property, value } = option.dependsOn;
+            const match = (this.editField[property] ?? '').match(regexp(value));
+            if (!match) {
+                return false;
+            }
+        }
+
         return true;
     }
 
-    getBreakpointTitle(breakpointType: BreakpointType): string {
-        switch (breakpointType) {
-            case BreakpointType.ALL:
-                return 'All devices';
-            case BreakpointType.SMALL:
-                return 'Small devices';
-            case BreakpointType.MEDIUM:
-                return 'Medium devices';
-            case BreakpointType.LARGE:
-                return 'Large devices';
-            case BreakpointType.EXTRA_LARGE:
-                return 'Extra large devices';
-            default:
-                throw new Error('Unknown breakpoint');
-        }
+    private _getCategoryMap(classProperty: ClassProperty): Record<string, IStyleOptionCategory[]> {
+        return this.stylesConfig.breakpoints.reduce(
+            (a, breakpoint) => ({
+                ...a,
+                [breakpoint.value]: this.stylesConfig[classProperty].map(category => ({
+                    ...category,
+                    options: category.options.filter(option => this._canShowOption(option, breakpoint)),
+                })),
+            }),
+            {}
+        );
     }
 
-    getBreakpointTooltip(breakpointType: BreakpointType): string {
-        switch (breakpointType) {
-            case BreakpointType.ALL:
-                return 'All devices';
-            case BreakpointType.SMALL:
-                return 'Portrait tablets and large phones, 600px and up';
-            case BreakpointType.MEDIUM:
-                return 'Landscape tablets, 768px and up';
-            case BreakpointType.LARGE:
-                return 'Laptops/desktops, 992px and up';
-            case BreakpointType.EXTRA_LARGE:
-                return 'Large laptops and desktops, 1200px and up';
-            default:
-                throw new Error('Unknown breakpoint');
-        }
+    private _getPropertyMap(classProperty: ClassProperty): Record<string, IChipListProperty> {
+        return this.stylesConfig.breakpoints.reduce((a, breakpoint) => {
+            const classes = this._stylesService.getClasses(this.stylesConfig[classProperty], breakpoint);
+            const p = this._getChipListProperty(classProperty, classes);
+            return {
+                ...a,
+                [breakpoint.value]: p,
+            };
+        }, {});
     }
 
-    getContainerName(groupStyle: ContainerType): string {
-        switch (groupStyle) {
-            case ContainerType.FLEX:
-                return 'Flex';
-            case ContainerType.GRID:
-                return 'Grid';
-        }
-    }
-
-    getProperty(breakpoint: BreakpointType): IChipListProperty {
-        return this._breakpointProperties.get(breakpoint);
-    }
-
-    getChildrenProperty(breakpoint: BreakpointType): IChipListProperty {
-        return this._breakpointChildrenProperties.get(breakpoint);
-    }
-
-    private _setUp(): void {
-        this._setupProperties();
-        this._setupParent();
-
-        if (this.editField._info.canHaveChildren) {
-            this._setupChildrenProperties();
-        }
-    }
-
-    private _setupParent(): void {
-        this.parentField = this._formService.getField(this.editField._info.parentFieldId);
-        if (!this.parentField) {
-            this.parentContainer = null;
-            return;
-        }
-
-        const fieldGroupClassNames: string[] = this.parentField.fieldGroupClassName?.split(' ') ?? [];
-
-        // TODO use regex to match without '-' prefix and suffix
-        this.parentContainer = fieldGroupClassNames.find(className =>
-            (this.containerTypes as string[]).includes(className)
-        ) as ContainerType;
-    }
-
-    private _setupProperties(): void {
-        this.breakpointTypes.forEach(breakpoint => {
-            this._breakpointProperties.set(breakpoint, this._getProperty('className', breakpoint));
-        });
-    }
-
-    private _setupChildrenProperties(): void {
-        this.breakpointTypes.forEach(breakpoint => {
-            this._breakpointChildrenProperties.set(breakpoint, this._getProperty('fieldGroupClassName', breakpoint));
-        });
-    }
-
-    private _getProperty(key: string, breakpoint?: BreakpointType): IChipListProperty {
+    private _getChipListProperty(key: string, options: string[]): IChipListProperty {
         return {
             key,
+            options,
             name: 'Custom classes',
             type: PropertyType.CHIP_LIST,
-            options: this._stylesService.getBreakpointClassNames(breakpoint),
             outputString: true,
             isSimple: true,
         };
