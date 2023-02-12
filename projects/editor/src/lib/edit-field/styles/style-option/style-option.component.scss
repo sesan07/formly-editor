@@ -1,13 +1,9 @@
 :host {
-    display: block;
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
 }
 
 .mat-form-field {
     width: 100%;
-}
-
-.variant-options {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
 }

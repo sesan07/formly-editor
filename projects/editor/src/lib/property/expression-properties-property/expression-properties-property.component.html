@@ -1,77 +1,65 @@
-<div
-    class="simplified-header"
-    (click)="isExpanded = !isExpanded"
+<span
+    *ngIf="isOverrideMode"
+    class="override-indicator"
+    [class.overriden]="isOverridden"
+></span>
+<mat-expansion-panel
+    class="simplified-panel"
+    [(expanded)]="isExpanded"
 >
-    <span class="simplified-header-left">
-        <span
-            *ngIf="isOverrideMode"
-            class="override-indicator"
-            [class.overriden]="isOverridden"
-        ></span>
-        <button
-            mat-icon-button
-            (click)="isExpanded = !isExpanded; $event.stopPropagation()"
-        >
-            <mat-icon
-                class="expand-icon"
-                [class.expanded-90]="isExpanded"
-                >chevron_right</mat-icon
-            >
-        </button>
-        <span>{{ (property.name || property.key) + ' { ' + childProperties.length + ' }' }}</span>
-    </span>
+    <mat-expansion-panel-header>
+        <span class="simplified-header">
+            <span class="simplified-header-left">
+                <span>{{ (property.name || property.key) + ' { ' + childProperties.length + ' }' }}</span>
+            </span>
 
-    <span class="simplified-header-right">
-        <button
-            mat-icon-button
-            (click)="onAddChild(); $event.stopPropagation()"
-        >
-            <mat-icon>add</mat-icon>
-        </button>
-        <button
-            *ngIf="isOverrideMode && isOverridden"
-            class="override-clear-btn"
-            mat-icon-button
-            (click)="onClearOverride(); $event.stopPropagation()"
-        >
-            <mat-icon>clear</mat-icon>
-        </button>
-    </span>
-</div>
-<div
-    class="simplified-wrapper"
-    *ngIf="isExpanded"
->
-    <div
-        class="line"
-        [class.override-mode]="isOverrideMode"
-    ></div>
-    <mat-accordion>
-        <mat-expansion-panel *ngFor="let child of childProperties; let index = index; trackBy: trackByKey">
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    <editor-property-key
-                        [key]="child.key"
-                        [isEditable]="true"
-                        (keyChange)="onChildKeyChanged(child.key, $event)"
-                    >
-                    </editor-property-key>
-                </mat-panel-title>
+            <span class="simplified-header-right">
                 <button
-                    class="simple-remove-btn"
                     mat-icon-button
-                    color="warn"
-                    (click)="onRemoveChild(child.key)"
+                    (click)="onAddChild(); $event.stopPropagation()"
                 >
-                    <mat-icon>remove</mat-icon>
+                    <mat-icon>add</mat-icon>
                 </button>
-            </mat-expansion-panel-header>
-            <editor-text-editor
-                [value]="child.value"
-                [mode]="'application/javascript'"
-                [updateOn]="'blur'"
-                (valueChange)="onChildValueChanged(child.key, $event)"
-            ></editor-text-editor>
-        </mat-expansion-panel>
-    </mat-accordion>
-</div>
+                <button
+                    *ngIf="isOverrideMode && isOverridden"
+                    class="override-clear-btn"
+                    mat-icon-button
+                    (click)="onClearOverride(); $event.stopPropagation()"
+                >
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </span>
+        </span>
+    </mat-expansion-panel-header>
+
+    <div class="simplified-wrapper">
+        <mat-accordion>
+            <mat-expansion-panel *ngFor="let child of childProperties; let index = index; trackBy: trackByKey">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <editor-property-key
+                            [key]="child.key"
+                            [isEditable]="true"
+                            (keyChange)="onChildKeyChanged(child.key, $event)"
+                        >
+                        </editor-property-key>
+                    </mat-panel-title>
+                    <button
+                        class="simple-remove-btn"
+                        mat-icon-button
+                        color="warn"
+                        (click)="onRemoveChild(child.key)"
+                    >
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                </mat-expansion-panel-header>
+                <editor-text-editor
+                    [value]="child.value"
+                    [mode]="'application/javascript'"
+                    [updateOn]="'blur'"
+                    (valueChange)="onChildValueChanged(child.key, $event)"
+                ></editor-text-editor>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</mat-expansion-panel>
