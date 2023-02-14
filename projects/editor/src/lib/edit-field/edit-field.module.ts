@@ -15,10 +15,9 @@ import { CustomFormlyModule } from '../custom-formly/custom-formly.module';
 import { BreakpointComponent } from './breakpoint/breakpoint.component';
 import { ContainerOptionComponent } from './container-option/container-option.component';
 import { PropertyModule } from '../property/property.module';
-import { StyleOptionComponent } from './styles/style-option/style-option.component';
 
 @NgModule({
-    declarations: [BreakpointComponent, ContainerOptionComponent, StylesComponent, EditFieldComponent, StyleOptionComponent],
+    declarations: [BreakpointComponent, ContainerOptionComponent, StylesComponent, EditFieldComponent],
     imports: [
         CommonModule,
         FormsModule,
