@@ -1,42 +1,42 @@
-import { IStyleOption } from './style-option/style-option.types';
-
-export enum ContainerType {
-    FLEX = 'flex',
-    GRID = 'grid',
+export enum ClassProperty {
+    CLASS_NAME = 'className',
+    FIELD_GROUP_CLASS_NAME = 'fieldGroupClassName',
 }
 
-export enum BreakpointType {
-    ALL = '',
-    SMALL = 'sm',
-    MEDIUM = 'md',
-    LARGE = 'lg',
-    EXTRA_LARGE = 'xl',
+export enum BreakpointAffix {
+    PREFIX = 'prefix',
+    SUFFIX = 'suffix',
 }
 
-export enum GridContainerPrefix {
-    COLUMNS = 'grid-cols',
-    ROWS = 'grid-rows',
+interface IStyleDependency {
+    property: ClassProperty;
+    value: string;
 }
 
-export enum GridChildPrefix {
-    COLUMN_START = 'col-start',
-    COLUMN_SPAN = 'col-span',
-    ROW_START = 'row-start',
-    ROW_SPAN = 'row-span',
+export interface IStyleOption {
+    name: string;
+    value?: string;
+    variants: string[];
+    hasBreakpoints?: boolean;
+    spanWidth?: boolean;
+    dependsOn?: IStyleDependency;
+    dependsOnParent?: IStyleDependency;
 }
 
-export enum FlexContainerPrefix {
-    FLEX_DIRECTION = 'flex',
+export interface IStylesConfig {
+    breakpointAffix: BreakpointAffix;
+    breakpoints: IBreakpoint[];
+    className: IStyleOptionCategory[];
+    fieldGroupClassName: IStyleOptionCategory[];
 }
 
-export enum FlexContainerType {
-    COMLUMN = 'flex-column',
-    COMLUMN_REVERSE = 'flex-column-reverse',
-    ROW = 'flex-row',
-    ROW_REVERSE = 'flex-row-reverse',
+export interface IStyleOptionCategory {
+    name: string;
+    options: IStyleOption[];
 }
 
-export interface IStylingConfig {
-    className: IStyleOption[];
-    fieldGroupClassName: IStyleOption[];
+export interface IBreakpoint {
+    name: string;
+    description: string;
+    value: string;
 }

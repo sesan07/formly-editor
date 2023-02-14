@@ -16,9 +16,17 @@ import { BreakpointComponent } from './breakpoint/breakpoint.component';
 import { ContainerOptionComponent } from './container-option/container-option.component';
 import { PropertyModule } from '../property/property.module';
 import { StyleOptionComponent } from './styles/style-option/style-option.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
-    declarations: [BreakpointComponent, ContainerOptionComponent, StylesComponent, EditFieldComponent, StyleOptionComponent],
+    declarations: [
+        BreakpointComponent,
+        ContainerOptionComponent,
+        StylesComponent,
+        EditFieldComponent,
+        StyleOptionComponent,
+    ],
     imports: [
         CommonModule,
         FormsModule,
@@ -31,6 +39,8 @@ import { StyleOptionComponent } from './styles/style-option/style-option.compone
         MatSelectModule,
         MatTooltipModule,
         MatTabsModule,
+        MatExpansionModule,
+        MatButtonToggleModule,
     ],
     exports: [EditFieldComponent],
 })

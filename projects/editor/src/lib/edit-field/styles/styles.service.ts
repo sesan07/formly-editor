@@ -1,119 +1,59 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { defaultConfig } from './styles.config';
 
 import {
-    BreakpointType,
-    ContainerType,
-    FlexContainerPrefix,
-    GridChildPrefix,
-    GridContainerPrefix,
+    BreakpointAffix,
+    ClassProperty,
+    IBreakpoint,
+    IStyleOption,
+    IStyleOptionCategory,
+    IStylesConfig,
 } from './styles.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class StylesService {
-    public allClassNames$: Observable<string[]>;
-    public containerClassNames$: Observable<string[]>;
-    public generalClassNames$: Observable<string[]>;
+    stylesConfig: IStylesConfig = defaultConfig;
+    classNames: string[];
+    fieldGroupClassNames: string[];
 
-    private readonly _selectorRegexp = /\.-?[_a-zA-Z]+[\w-]*/g;
-    // All classes
-    private _allClassNames$: BehaviorSubject<string[]> = new BehaviorSubject([]);
-    // Classes that start with a container prefix. And the containers ('flex' and 'grid')
-    private _containerClassNames$: BehaviorSubject<string[]> = new BehaviorSubject([]);
-    // Classes that aren't container or breakpoint classes
-    private _generalClassNames$: BehaviorSubject<string[]> = new BehaviorSubject([]);
-    // Non container classes for each breakpoint
-    private _breakpointClassNamesMap: Map<BreakpointType, BehaviorSubject<string[]>> = new Map();
-
-    constructor(private _http: HttpClient) {
-        this.allClassNames$ = this._allClassNames$.asObservable();
-        this.containerClassNames$ = this._containerClassNames$.asObservable();
-        this.generalClassNames$ = this._generalClassNames$.asObservable();
-
-        // Populate breakpoint map
-        Object.values(BreakpointType).forEach(breakpoint => {
-            this._breakpointClassNamesMap.set(breakpoint, new BehaviorSubject([]));
-        });
-
-        this._setupClassNames();
+    constructor() {
+        this.classNames = this._getPropertyClasses(ClassProperty.CLASS_NAME);
+        this.fieldGroupClassNames = this._getPropertyClasses(ClassProperty.FIELD_GROUP_CLASS_NAME);
     }
 
-    public getBreakpointClassNames(breakpointType?: BreakpointType): Observable<string[]> {
-        return breakpointType ? this._breakpointClassNamesMap.get(breakpointType) : this._generalClassNames$;
+    getClasses(categories: IStyleOptionCategory[], breakpoint: IBreakpoint): string[] {
+        return categories.reduce(
+            (a, category) => [
+                ...a,
+                ...category.options.reduce(
+                    (b, option) => [...b, ...this._getOptionClasses(option, breakpoint.value)],
+                    []
+                ),
+            ],
+            []
+        );
     }
 
-    private _setupClassNames(): void {
-        this._http.get('assets/custom-styles.css', { responseType: 'text' }).subscribe(response => {
-            const containers: string[] = Object.values(ContainerType);
-            // Prefixes for container related classes
-            const containerPrefixes: string[] = [
-                ...Object.values(GridContainerPrefix),
-                ...Object.values(GridChildPrefix),
-                ...Object.values(FlexContainerPrefix),
-            ];
-            const breakpoints: string[] = Object.values(BreakpointType);
+    private _getOptionClasses(option: IStyleOption, breakpoint: string): string[] {
+        const classes =
+            !breakpoint || option.hasBreakpoints
+                ? option.variants.map(
+                      variant =>
+                          `${this.stylesConfig.breakpointAffix === BreakpointAffix.PREFIX ? breakpoint : ''}${
+                              option.value ? `${option.value}-` : ''
+                          }${variant}${this.stylesConfig.breakpointAffix === BreakpointAffix.SUFFIX ? breakpoint : ''}`
+                  )
+                : [];
 
-            const allClasses: string[] = this._parseClassNames(response);
-
-            // Classes that start with a container prefix. And the containers ('flex' and 'grid')
-            const containerClasses: string[] = [...containers];
-            const nonContainerClasses: string[] = [];
-            allClasses.forEach(className => {
-                // If className starts with a container prefix
-                if (containerPrefixes.some(prefix => className.startsWith(prefix))) {
-                    containerClasses.push(className);
-                } else if (!containers.includes(className)) {
-                    nonContainerClasses.push(className);
-                }
-            });
-
-            // Non container classes for each breakpoint
-            breakpoints.forEach(breakpoint => {
-                const breakpointClasses: string[] = nonContainerClasses.filter(className =>
-                    className.endsWith(breakpoint)
-                );
-
-                this._breakpointClassNamesMap.get(breakpoint as BreakpointType).next(breakpointClasses);
-            });
-
-            // Classes that aren't container or breakpoint classes
-            const generalClasses = nonContainerClasses.filter(
-                className => !breakpoints.some(breakpoint => className.endsWith(breakpoint))
-            );
-
-            this._allClassNames$.next(allClasses);
-            this._containerClassNames$.next(containerClasses);
-            this._generalClassNames$.next(generalClasses);
-        });
+        return classes;
     }
 
-    private _parseClassNames(text: string): string[] {
-        const doc: Document = document.implementation.createHTMLDocument('');
-        const styleElement: HTMLStyleElement = document.createElement('style');
-        styleElement.textContent = text;
-        doc.body.appendChild(styleElement);
-
-        const classNameSet: Set<string> = new Set();
-        const cssRules: CSSRuleList = styleElement.sheet.cssRules;
-        Array.from(cssRules).forEach((rule: CSSRule) => {
-            if (rule instanceof CSSStyleRule) {
-                this._getStyleRuleClassNames(rule).forEach(className => classNameSet.add(className));
-            } else if (rule instanceof CSSMediaRule) {
-                Array.from(rule.cssRules).forEach(styleRule =>
-                    this._getStyleRuleClassNames(styleRule as CSSStyleRule).forEach(className =>
-                        classNameSet.add(className)
-                    )
-                );
-            }
-        });
-
-        return Array.from(classNameSet).sort();
-    }
-
-    private _getStyleRuleClassNames(rule: CSSStyleRule): string[] {
-        return rule.selectorText.match(this._selectorRegexp).map(selector => selector.replace(/^\./, '')); // remove '.' prefix
+    private _getPropertyClasses(classProperty: ClassProperty): string[] {
+        return this.stylesConfig.breakpoints.reduce(
+            (a, breakpoint) => [...a, ...this.getClasses(this.stylesConfig[classProperty], breakpoint)],
+            []
+        );
     }
 }
