@@ -15,7 +15,6 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { EDITOR_FIELD_SERVICE, IEditorFormlyField, IFieldService } from '../editor.types';
-import { FormService } from '../form/form.service';
 import { IObjectProperty } from '../property/object-array-properties/object-property.types';
 import { PropertyService } from '../property/property.service';
 import { IPropertyChange, PropertyType } from '../property/property.types';
@@ -38,7 +37,6 @@ export class EditFieldComponent implements OnInit, OnDestroy {
 
     public activeFieldProperty: IObjectProperty;
     public activeFieldTarget: IEditorFormlyField;
-    public parentField: IEditorFormlyField;
 
     private _destroy$: Subject<void> = new Subject();
     private _cachedFieldId: string;
@@ -46,7 +44,6 @@ export class EditFieldComponent implements OnInit, OnDestroy {
     constructor(
         public propertyService: PropertyService,
         @Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService,
-        private _formService: FormService,
         private _cdRef: ChangeDetectorRef
     ) {}
 
@@ -74,12 +71,10 @@ export class EditFieldComponent implements OnInit, OnDestroy {
 
     private _updateActiveField(field: IEditorFormlyField | null): void {
         if (!field) {
-            this.parentField = null;
             return;
         }
 
         this.activeFieldTarget = { ...field };
-        this.parentField = this._formService.getField(field._info.parentFieldId);
 
         if (field._info.fieldId !== this._cachedFieldId) {
             this._updateActiveFieldProperty();

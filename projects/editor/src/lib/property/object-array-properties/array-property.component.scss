@@ -1,27 +1,20 @@
 :host {
     display: block;
 }
-.simplified-view {
-    display: flex;
-    column-gap: 8px;
-}
-
-.simplified-panel {
-    flex-grow: 1;
-}
 
 .simplified-header {
-    display: inline-flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
-    margin-right: 16px;
     padding: 8px 0;
     cursor: pointer;
 }
 
 .simplified-header-left {
-    flex-grow: 1;
+    display: inline-flex;
+    align-items: center;
+    column-gap: 8px;
+    min-height: 32px;
 }
 .simplified-header-right {
     display: inline-flex;
@@ -48,11 +41,15 @@
     display: block;
 }
 
+.mat-expansion-panel {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: none !important;
+}
+
 .simple-remove-btn {
     margin-right: 16px;
 }
 
 .override-indicator {
-    margin-top: 8px;
     height: 32px;
 }

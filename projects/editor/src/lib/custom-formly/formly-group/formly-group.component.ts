@@ -8,6 +8,7 @@ import { IItemDragData, DragAction } from '../../form/droplist.types';
 import { FormService } from '../../form/form.service';
 import { EditorService } from '../../editor.service';
 import { IEditorFormlyField } from '../../editor.types';
+import { ContainerType, FlexContainerType } from '../../edit-field/styles/styles.types';
 import { trackByFieldId } from '../../editor.utils';
 
 @Component({
@@ -42,18 +43,18 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
 
         this.dropListClasses = this.field.fieldGroupClassName ?? '';
 
-        // const hasGrid: boolean = this._hasFieldGroupClassName(ContainerType.GRID);
-        // const hasFlex: boolean = this._hasFieldGroupClassName(ContainerType.FLEX);
+        const hasGrid: boolean = this._hasFieldGroupClassName(ContainerType.GRID);
+        const hasFlex: boolean = this._hasFieldGroupClassName(ContainerType.FLEX);
 
-        // const isHorizontal: boolean =
-        //     hasFlex &&
-        //     !(
-        //         this._hasFieldGroupClassName(FlexContainerType.COMLUMN) ||
-        //         this._hasFieldGroupClassName(FlexContainerType.COMLUMN_REVERSE)
-        //     );
+        const isHorizontal: boolean =
+            hasFlex &&
+            !(
+                this._hasFieldGroupClassName(FlexContainerType.COMLUMN) ||
+                this._hasFieldGroupClassName(FlexContainerType.COMLUMN_REVERSE)
+            );
 
-        // this.isGridContainer = hasGrid;
-        // this.dropListOrientation = !hasGrid && isHorizontal ? 'horizontal' : 'vertical';
+        this.isGridContainer = hasGrid;
+        this.dropListOrientation = !hasGrid && isHorizontal ? 'horizontal' : 'vertical';
 
         if (this.field._info.formId && this.field._info.fieldId !== 'preview') {
             this._droplistService.droplistIds$
