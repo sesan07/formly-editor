@@ -5,35 +5,24 @@
 
     <div class="breakpoints">
         <editor-breakpoint
-            titleText="All devices"
-            [isExpanded]="true"
-        >
-            <ng-container
-                *ngIf="parentContainer === containerType.GRID"
-                [ngTemplateOutlet]="gridOptions"
-            >
-            </ng-container>
-            <editor-chip-list-property
-                [target]="editField"
-                [property]="getProperty()"
-                [path]="getProperty().key + ''"
-                [isSimplified]="true"
-                (targetChanged)="fieldChanged.emit($event)"
-            >
-            </editor-chip-list-property>
-        </editor-breakpoint>
-
-        <editor-breakpoint
             *ngFor="let breakpointType of breakpointTypes"
+            [isExpanded]="breakpointType === typeOfBreakpoint.ALL"
             [titleText]="getBreakpointTitle(breakpointType)"
             [tooltipText]="getBreakpointTooltip(breakpointType)"
         >
-            <ng-container
-                *ngIf="parentContainer === containerType.GRID"
-                [ngTemplateOutlet]="gridOptions"
-                [ngTemplateOutletContext]="{ breakpointType: breakpointType }"
-            >
-            </ng-container>
+            <div class="classname-options">
+                <ng-container *ngFor="let option of stylingConfig.className">
+                    <editor-style-option
+                        *ngIf="canShowOption(option)"
+                        [field]="editField"
+                        [config]="option"
+                        [propertyPath]="'className'"
+                        [breakpoint]="breakpointType"
+                        (optionChanged)="fieldChanged.emit($event)"
+                    ></editor-style-option>
+                </ng-container>
+            </div>
+
             <editor-chip-list-property
                 [target]="editField"
                 [property]="getProperty(breakpointType)"
@@ -44,86 +33,29 @@
             </editor-chip-list-property>
         </editor-breakpoint>
     </div>
-
-    <ng-template
-        #gridOptions
-        let-breakpointType="breakpointType"
-    >
-        <div class="container-sub-options">
-            <editor-container-option
-                *ngFor="let prefix of gridChildPrefixes"
-                [label]="getNameFromPrefix(prefix)"
-                [value]="getClassValue(prefix, breakpointType)"
-                [options]="gridNumberOptions"
-                (selectionChanged)="onClassChanged($event, prefix, breakpointType)"
-            >
-            </editor-container-option>
-        </div>
-    </ng-template>
 </section>
 
 <section *ngIf="editField._info.canHaveChildren">
     <h4 class="title">Style Children</h4>
 
-    <editor-container-option
-        [label]="'Container Type'"
-        [value]="childrenContainer"
-        [options]="containerTypes"
-        [optionDisplayFn]="getContainerName"
-        (selectionChanged)="onChildrenContainerChanged($event)"
-    >
-    </editor-container-option>
-
     <div class="breakpoints">
         <editor-breakpoint
-            titleText="All devices"
-            [isExpanded]="true"
-        >
-            <ng-container [ngSwitch]="childrenContainer">
-                <ng-container
-                    *ngSwitchCase="containerType.FLEX"
-                    [ngTemplateOutlet]="childrenFlexOptions"
-                >
-                </ng-container>
-                <ng-container
-                    *ngSwitchCase="containerType.GRID"
-                    [ngTemplateOutlet]="childrenGridOptions"
-                >
-                </ng-container>
-            </ng-container>
-            <editor-chip-list-property
-                [target]="editField"
-                [property]="getChildrenProperty()"
-                [path]="getChildrenProperty().key + ''"
-                [isSimplified]="true"
-                (targetChanged)="fieldChanged.emit($event)"
-            >
-            </editor-chip-list-property>
-        </editor-breakpoint>
-
-        <editor-breakpoint
             *ngFor="let breakpointType of breakpointTypes"
+            [isExpanded]="breakpointType === typeOfBreakpoint.ALL"
             [titleText]="getBreakpointTitle(breakpointType)"
             [tooltipText]="getBreakpointTooltip(breakpointType)"
         >
-            <ng-container [ngSwitch]="childrenContainer">
-                <ng-container
-                    *ngSwitchCase="containerType.FLEX"
-                    [ngTemplateOutlet]="childrenFlexOptions"
-                    [ngTemplateOutletContext]="{
-                        breakpointType: breakpointType
-                    }"
-                >
-                </ng-container>
-                <ng-container
-                    *ngSwitchCase="containerType.GRID"
-                    [ngTemplateOutlet]="childrenGridOptions"
-                    [ngTemplateOutletContext]="{
-                        breakpointType: breakpointType
-                    }"
-                >
-                </ng-container>
+            <ng-container *ngFor="let option of stylingConfig.fieldGroupClassName">
+                <editor-style-option
+                    *ngIf="canShowOption(option)"
+                    [field]="editField"
+                    [config]="option"
+                    [propertyPath]="'fieldGroupClassName'"
+                    [breakpoint]="breakpointType"
+                    (optionChanged)="fieldChanged.emit($event)"
+                ></editor-style-option>
             </ng-container>
+
             <editor-chip-list-property
                 [target]="editField"
                 [property]="getChildrenProperty(breakpointType)"
@@ -134,36 +66,4 @@
             </editor-chip-list-property>
         </editor-breakpoint>
     </div>
-
-    <ng-template
-        #childrenFlexOptions
-        let-breakpointType="breakpointType"
-    >
-        <div class="container-sub-options">
-            <editor-container-option
-                *ngFor="let prefix of flexContainerPrefixes"
-                [label]="getNameFromPrefix(prefix)"
-                [value]="getChildrenClassValue(prefix, breakpointType)"
-                [options]="flexOptions"
-                (selectionChanged)="onChildrenClassChanged($event, prefix, breakpointType)"
-            >
-            </editor-container-option>
-        </div>
-    </ng-template>
-
-    <ng-template
-        #childrenGridOptions
-        let-breakpointType="breakpointType"
-    >
-        <div class="container-sub-options">
-            <editor-container-option
-                *ngFor="let prefix of gridContainerPrefixes"
-                [label]="getNameFromPrefix(prefix)"
-                [value]="getChildrenClassValue(prefix, breakpointType)"
-                [options]="gridNumberOptions"
-                (selectionChanged)="onChildrenClassChanged($event, prefix, breakpointType)"
-            >
-            </editor-container-option>
-        </div>
-    </ng-template>
 </section>
