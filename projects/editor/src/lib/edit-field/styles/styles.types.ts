@@ -1,9 +1,12 @@
+import { IStyleOption } from './style-option/style-option.types';
+
 export enum ContainerType {
     FLEX = 'flex',
     GRID = 'grid',
 }
 
 export enum BreakpointType {
+    ALL = '',
     SMALL = 'sm',
     MEDIUM = 'md',
     LARGE = 'lg',
@@ -11,24 +14,29 @@ export enum BreakpointType {
 }
 
 export enum GridContainerPrefix {
-    COLUMNS = 'grid-cols-',
-    ROWS = 'grid-rows-',
+    COLUMNS = 'grid-cols',
+    ROWS = 'grid-rows',
 }
 
 export enum GridChildPrefix {
-    COLUMN_START = 'col-start-',
-    COLUMN_SPAN = 'col-span-',
-    ROW_START = 'row-start-',
-    ROW_SPAN = 'row-span-',
+    COLUMN_START = 'col-start',
+    COLUMN_SPAN = 'col-span',
+    ROW_START = 'row-start',
+    ROW_SPAN = 'row-span',
 }
 
 export enum FlexContainerPrefix {
-    FLEX_DIRECTION = 'flex-dir-',
+    FLEX_DIRECTION = 'flex',
 }
 
 export enum FlexContainerType {
-    COMLUMN = 'flex-dir-column',
-    COMLUMN_REVERSE = 'flex-dir-column-reverse',
-    ROW = 'flex-dir-row',
-    ROW_REVERSE = 'flex-dir-row-reverse',
+    COMLUMN = 'flex-column',
+    COMLUMN_REVERSE = 'flex-column-reverse',
+    ROW = 'flex-row',
+    ROW_REVERSE = 'flex-row-reverse',
+}
+
+export interface IStylingConfig {
+    className: IStyleOption[];
+    fieldGroupClassName: IStyleOption[];
 }

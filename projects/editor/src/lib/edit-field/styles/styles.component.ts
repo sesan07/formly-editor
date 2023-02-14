@@ -11,15 +11,11 @@ import {
 import { IEditorFormlyField } from '../../editor.types';
 import { FormService } from '../../form/form.service';
 import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
-import { IPropertyChange, PropertyChangeType, PropertyType } from '../../property/property.types';
+import { IPropertyChange, PropertyType } from '../../property/property.types';
+import { IStyleOption } from './style-option/style-option.types';
+import { defaultConfig } from './styles.config';
 import { StylesService } from './styles.service';
-import {
-    ContainerType,
-    FlexContainerPrefix,
-    GridContainerPrefix,
-    GridChildPrefix,
-    BreakpointType,
-} from './styles.types';
+import { ContainerType, BreakpointType, IStylingConfig } from './styles.types';
 
 @Component({
     selector: 'editor-styles',
@@ -32,27 +28,18 @@ export class StylesComponent implements OnChanges {
 
     @Output() fieldChanged: EventEmitter<IPropertyChange> = new EventEmitter();
 
-    public parentField?: IEditorFormlyField;
-
-    containerType: typeof ContainerType = ContainerType;
-    containerTypes: ContainerType[] = Object.values(ContainerType);
-
-    flexContainerPrefixes: FlexContainerPrefix[] = Object.values(FlexContainerPrefix);
-    gridContainerPrefixes: GridContainerPrefix[] = Object.values(GridContainerPrefix);
-    gridChildPrefixes: GridChildPrefix[] = Object.values(GridChildPrefix);
-
-    breakpointTypes: BreakpointType[] = Object.values(BreakpointType);
+    stylingConfig: IStylingConfig = defaultConfig;
 
     parentContainer: ContainerType;
-    childrenContainer: ContainerType;
+    parentField?: IEditorFormlyField;
 
-    public flexOptions: string[] = ['column', 'column-reverse', 'row', 'row-reverse'];
-    public gridNumberOptions: string[] = [...Array(3).keys()].map(i => i + 1 + '');
+    typeOfContainer: typeof ContainerType = ContainerType;
+    containerTypes: ContainerType[] = Object.values(ContainerType);
 
-    private _generalProperty: IChipListProperty;
+    typeOfBreakpoint: typeof BreakpointType = BreakpointType;
+    breakpointTypes: BreakpointType[] = Object.values(BreakpointType);
+
     private _breakpointProperties: Map<BreakpointType, IChipListProperty> = new Map();
-
-    private _generalChildrenProperty: IChipListProperty;
     private _breakpointChildrenProperties: Map<BreakpointType, IChipListProperty> = new Map();
 
     constructor(private _formService: FormService, private _stylesService: StylesService) {}
@@ -63,41 +50,18 @@ export class StylesComponent implements OnChanges {
         }
     }
 
-    onChildrenContainerChanged(value: string): void {
-        let newFieldGroupClassName: string;
-        if (this.editField.fieldGroupClassName) {
-            if (this.childrenContainer) {
-                newFieldGroupClassName = this.editField.fieldGroupClassName.replace(
-                    new RegExp(`(?<!-)${this.childrenContainer}(?!-)`),
-                    value
-                );
-            } else {
-                newFieldGroupClassName = value + ' ' + this.editField.fieldGroupClassName;
-            }
-        } else {
-            newFieldGroupClassName = value;
+    canShowOption(config: IStyleOption): boolean {
+        if (config.dependsOnParent) {
+            const propertyValue = this.parentField?.[config.dependsOnParent.property] ?? '';
+            return propertyValue.split(' ').includes(config.dependsOnParent.value);
         }
-        // TODO remove related group styles (flex-direction, grid-cols...) arr.split(' ').filter(!contains prevType).join(' ')
-        this.childrenContainer = value as ContainerType;
-
-        const change: IPropertyChange = {
-            type: PropertyChangeType.VALUE,
-            path: 'fieldGroupClassName',
-            data: newFieldGroupClassName,
-        };
-        this.fieldChanged.emit(change);
-    }
-
-    onClassChanged(value: string, classNamePrefix: string, breakpoint?: BreakpointType): void {
-        this._setClassValue('className', value, classNamePrefix, breakpoint);
-    }
-
-    onChildrenClassChanged(value: string, classNamePrefix: string, breakpoint?: BreakpointType): void {
-        this._setClassValue('fieldGroupClassName', value, classNamePrefix, breakpoint);
+        return true;
     }
 
     getBreakpointTitle(breakpointType: BreakpointType): string {
         switch (breakpointType) {
+            case BreakpointType.ALL:
+                return 'All devices';
             case BreakpointType.SMALL:
                 return 'Small devices';
             case BreakpointType.MEDIUM:
@@ -113,6 +77,8 @@ export class StylesComponent implements OnChanges {
 
     getBreakpointTooltip(breakpointType: BreakpointType): string {
         switch (breakpointType) {
+            case BreakpointType.ALL:
+                return 'All devices';
             case BreakpointType.SMALL:
                 return 'Portrait tablets and large phones, 600px and up';
             case BreakpointType.MEDIUM:
@@ -135,39 +101,12 @@ export class StylesComponent implements OnChanges {
         }
     }
 
-    getNameFromPrefix(prefix: string): string {
-        switch (prefix) {
-            case GridContainerPrefix.COLUMNS:
-                return 'Number of Columns';
-            case GridContainerPrefix.ROWS:
-                return 'Number of Rows';
-            case GridChildPrefix.COLUMN_SPAN:
-                return 'Column Span';
-            case GridChildPrefix.COLUMN_START:
-                return 'Column Start';
-            case GridChildPrefix.ROW_SPAN:
-                return 'Row Span';
-            case GridChildPrefix.ROW_START:
-                return 'Row Start';
-            case FlexContainerPrefix.FLEX_DIRECTION:
-                return 'Flex Direction';
-        }
+    getProperty(breakpoint: BreakpointType): IChipListProperty {
+        return this._breakpointProperties.get(breakpoint);
     }
 
-    getClassValue(classNamePrefix: string, breakpoint?: BreakpointType): string {
-        return this._getClassValue('className', classNamePrefix, breakpoint);
-    }
-
-    getChildrenClassValue(classNamePrefix: string, breakpoint?: BreakpointType): string {
-        return this._getClassValue('fieldGroupClassName', classNamePrefix, breakpoint);
-    }
-
-    getProperty(breakpoint?: BreakpointType): IChipListProperty {
-        return breakpoint ? this._breakpointProperties.get(breakpoint) : this._generalProperty;
-    }
-
-    getChildrenProperty(breakpoint?: BreakpointType): IChipListProperty {
-        return breakpoint ? this._breakpointChildrenProperties.get(breakpoint) : this._generalChildrenProperty;
+    getChildrenProperty(breakpoint: BreakpointType): IChipListProperty {
+        return this._breakpointChildrenProperties.get(breakpoint);
     }
 
     private _setUp(): void {
@@ -175,7 +114,6 @@ export class StylesComponent implements OnChanges {
         this._setupParent();
 
         if (this.editField._info.canHaveChildren) {
-            this._setupChildren();
             this._setupChildrenProperties();
         }
     }
@@ -195,67 +133,16 @@ export class StylesComponent implements OnChanges {
         ) as ContainerType;
     }
 
-    private _setupChildren(): void {
-        const fieldGroupClassNames: string[] = this.editField.fieldGroupClassName?.split(' ') ?? [];
-
-        // TODO use regex to match without '-' prefix and suffix
-        this.childrenContainer = fieldGroupClassNames.find(className =>
-            (this.containerTypes as string[]).includes(className)
-        ) as ContainerType;
-    }
-
     private _setupProperties(): void {
-        this._generalProperty = this._getProperty('className');
-
         this.breakpointTypes.forEach(breakpoint => {
             this._breakpointProperties.set(breakpoint, this._getProperty('className', breakpoint));
         });
     }
 
     private _setupChildrenProperties(): void {
-        this._generalChildrenProperty = this._getProperty('fieldGroupClassName');
-
         this.breakpointTypes.forEach(breakpoint => {
             this._breakpointChildrenProperties.set(breakpoint, this._getProperty('fieldGroupClassName', breakpoint));
         });
-    }
-
-    private _setClassValue(
-        property: string,
-        value: string,
-        classNamePrefix: string,
-        breakpoint?: BreakpointType
-    ): void {
-        const newClassName: string = classNamePrefix + value + (breakpoint ? '-' + breakpoint : '');
-        let newPropertyValue: string;
-
-        if (this.editField[property]) {
-            const regex = new RegExp(`${classNamePrefix}[a-zA-Z\\d-]+${breakpoint ? '-' + breakpoint : ''}(?![-\\w])`);
-
-            // Check if class name pattern already exists.
-            if (this.editField[property].search(regex) >= 0) {
-                newPropertyValue = (this.editField[property] as string).replace(regex, newClassName);
-            } else {
-                newPropertyValue = this.editField[property] + ' ' + newClassName;
-            }
-        } else {
-            newPropertyValue = newClassName;
-        }
-        // TODO remove related group styles (flex-direction, grid-cols...) arr.split(' ').filter(!contains prevType).join(' ')
-        const change: IPropertyChange = {
-            type: PropertyChangeType.VALUE,
-            path: property,
-            data: newPropertyValue,
-        };
-        this.fieldChanged.emit(change);
-    }
-
-    private _getClassValue(property: string, classNamePrefix: string, breakpoint?: BreakpointType): string {
-        const regex = new RegExp(
-            `(?<=${classNamePrefix})[a-zA-Z\\d]+(-reverse){0,1}(?=${breakpoint ? `-${breakpoint}` : '(\\s|$)'})`
-        );
-        const matches: string[] | null = this.editField[property]?.match(regex);
-        return matches ? matches[0] : null;
     }
 
     private _getProperty(key: string, breakpoint?: BreakpointType): IChipListProperty {
