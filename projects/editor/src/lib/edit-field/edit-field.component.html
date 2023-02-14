@@ -1,5 +1,5 @@
 <mat-tab-group mat-stretch-tabs>
-    <mat-tab label="General">
+    <mat-tab label="Properties">
         <div class="tree-container">
             <editor-object-property
                 [target]="activeFieldTarget"
@@ -16,6 +16,7 @@
         <div class="styling-wrapper">
             <editor-styles
                 [editField]="activeFieldTarget"
+                [parentField]="parentField"
                 (fieldChanged)="fieldChanged.emit($event)"
             >
             </editor-styles>
