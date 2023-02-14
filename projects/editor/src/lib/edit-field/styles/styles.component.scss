@@ -1,38 +1,22 @@
 :host {
     display: flex;
     flex-direction: column;
-    row-gap: 8px;
+    row-gap: 16px;
 }
 
-:host::ng-deep {
-    .styles-tab-group mat-tab-header {
-        display: none;
-    }
-
-    .mat-button-toggle-label-content {
-        line-height: 32px;
-        width: 150px;
-
-        .mat-icon {
-            margin-right: 4px;
-        }
-    }
+.title {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-.mat-button-toggle-group {
-    margin-right: auto;
+.breakpoints {
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
 }
 
-.style-options {
+.classname-options {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
-
-    .col-span-2 {
-        grid-column-end: span 2;
-    }
-}
-
-editor-chip-list-property {
-    margin-top: 8px;
 }

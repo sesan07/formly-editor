@@ -22,67 +22,78 @@
 </editor-tree-item>
 
 <ng-template #simplifiedView>
-    <div class="simplified-view">
-        <span
-            *ngIf="isOverrideMode"
-            class="override-indicator"
-            [class.overriden]="isOverridden"
-        ></span>
-        <mat-expansion-panel
-            class="simplified-panel"
-            [(expanded)]="isExpanded"
-        >
-            <mat-expansion-panel-header>
-                <span class="simplified-header">
-                    <span class="simplified-header-left">
-                        {{ (property.name || property.key) + ' [ ' + childProperties.length + ' ]' }}
-                    </span>
+    <div
+        class="simplified-header"
+        (click)="isExpanded = !isExpanded"
+    >
+        <span class="simplified-header-left">
+            <span
+                *ngIf="isOverrideMode"
+                class="override-indicator"
+                [class.overriden]="isOverridden"
+            ></span>
+            <button
+                mat-icon-button
+                (click)="isExpanded = !isExpanded; $event.stopPropagation()"
+            >
+                <mat-icon
+                    class="expand-icon"
+                    [class.expanded-90]="isExpanded"
+                    >chevron_right</mat-icon
+                >
+            </button>
+            <span>{{ (property.name || property.key) + ' [ ' + childProperties.length + ' ]' }}</span>
+        </span>
 
-                    <span class="simplified-header-right">
+        <span class="simplified-header-right">
+            <button
+                *ngIf="canAdd"
+                mat-icon-button
+                (click)="onAddChild(); $event.stopPropagation()"
+            >
+                <mat-icon>add</mat-icon>
+            </button>
+            <button
+                *ngIf="isOverrideMode && isOverridden"
+                class="override-clear-btn"
+                mat-icon-button
+                (click)="onClearOverride(); $event.stopPropagation()"
+            >
+                <mat-icon>clear</mat-icon>
+            </button>
+        </span>
+    </div>
+    <div
+        class="simplified-wrapper"
+        *ngIf="isExpanded"
+    >
+        <div
+            class="line"
+            [class.override-mode]="isOverrideMode"
+        ></div>
+        <mat-accordion>
+            <ng-container *ngFor="let child of childProperties; let index = index; trackBy: trackByPropertyKey">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>Item {{ index + 1 }}</mat-panel-title>
                         <button
-                            *ngIf="canAdd"
+                            *ngIf="child.isRemovable"
+                            class="simple-remove-btn"
                             mat-icon-button
-                            (click)="onAddChild(); $event.stopPropagation()"
+                            color="warn"
+                            (click)="onRemoveChild(index)"
                         >
-                            <mat-icon>add</mat-icon>
+                            <mat-icon>remove</mat-icon>
                         </button>
-                        <button
-                            *ngIf="isOverrideMode && isOverridden"
-                            class="override-clear-btn"
-                            mat-icon-button
-                            (click)="onClearOverride(); $event.stopPropagation()"
-                        >
-                            <mat-icon>clear</mat-icon>
-                        </button>
-                    </span>
-                </span>
-            </mat-expansion-panel-header>
-            <div class="simplified-wrapper">
-                <mat-accordion>
-                    <mat-expansion-panel
-                        *ngFor="let child of childProperties; let index = index; trackBy: trackByPropertyKey"
+                    </mat-expansion-panel-header>
+                    <ng-container
+                        [ngTemplateOutlet]="childProperty"
+                        [ngTemplateOutletContext]="{ child, index }"
                     >
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>Item {{ index + 1 }}</mat-panel-title>
-                            <button
-                                *ngIf="child.isRemovable"
-                                class="simple-remove-btn"
-                                mat-icon-button
-                                color="warn"
-                                (click)="onRemoveChild(index)"
-                            >
-                                <mat-icon>remove</mat-icon>
-                            </button>
-                        </mat-expansion-panel-header>
-                        <ng-container
-                            [ngTemplateOutlet]="childProperty"
-                            [ngTemplateOutletContext]="{ child, index }"
-                        >
-                        </ng-container>
-                    </mat-expansion-panel>
-                </mat-accordion>
-            </div>
-        </mat-expansion-panel>
+                    </ng-container>
+                </mat-expansion-panel>
+            </ng-container>
+        </mat-accordion>
     </div>
 </ng-template>
 

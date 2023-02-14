@@ -1,21 +1,28 @@
-<mat-form-field *ngIf="!breakpoint.value || option.hasBreakpoints">
-    <mat-label>{{ option.name }}</mat-label>
+<mat-form-field *ngIf="!breakpoint || config.hasBreakpoints">
+    <mat-label>{{ config.name }}</mat-label>
     <mat-select
         [value]="selectedVariant"
         (selectionChange)="onVariantSelected($event.value)"
     >
         <mat-option
-            *ngFor="let variant of option.variants"
+            *ngFor="let variant of config.variants"
             [value]="variant"
         >
             {{ variant }}
         </mat-option>
     </mat-select>
 </mat-form-field>
-<button
-    *ngIf="selectedVariant"
-    mat-icon-button
-    (click)="onRemoveSelection()"
+
+<div
+    *ngIf="selectedVariant && config.variantConfig?.[selectedVariant]"
+    class="variant-options"
 >
-    <mat-icon color="warn">remove</mat-icon>
-</button>
+    <editor-style-option
+        *ngFor="let option of config.variantConfig[selectedVariant]"
+        [field]="field"
+        [config]="option"
+        [propertyPath]="propertyPath"
+        [breakpoint]="breakpoint"
+        (optionChanged)="optionChanged.emit($event)"
+    ></editor-style-option>
+</div>

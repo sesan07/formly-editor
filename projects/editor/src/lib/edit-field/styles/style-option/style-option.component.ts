@@ -9,7 +9,8 @@ import {
 } from '@angular/core';
 import { IEditorFormlyField } from '../../../editor.types';
 import { IPropertyChange, PropertyChangeType } from '../../../property/property.types';
-import { BreakpointAffix, ClassProperty, IBreakpoint, IStyleOption, IStyleOptionCategory } from '../styles.types';
+import { BreakpointType } from '../styles.types';
+import { IStyleOption } from './style-option.types';
 
 @Component({
     selector: 'editor-style-option',
@@ -19,25 +20,21 @@ import { BreakpointAffix, ClassProperty, IBreakpoint, IStyleOption, IStyleOption
 })
 export class StyleOptionComponent implements OnChanges {
     @Input() field: IEditorFormlyField;
-    @Input() parentField: IEditorFormlyField;
     @Input() propertyPath: string;
-    @Input() option: IStyleOption;
-    @Input() breakpointAffix: BreakpointAffix;
-    @Input() breakpoint: IBreakpoint;
-    @Input() allBreakpoints: IBreakpoint[];
-    @Input() classNameCategories: IStyleOptionCategory[];
-    @Input() fieldGroupClassNameCategories: IStyleOptionCategory[];
+    @Input() config: IStyleOption;
+    @Input() breakpoint: BreakpointType;
 
     @Output() optionChanged: EventEmitter<IPropertyChange> = new EventEmitter();
 
     selectedVariant: string;
+    selectedVariantOptions: IStyleOption[];
 
     get propertyValue(): string {
         return this.field[this.propertyPath] ?? '';
     }
 
-    get classPrefix(): string {
-        return this.option.value ? `${this.option.value}-` : '';
+    get classNamePrefix(): string {
+        return this.config.value ? `${this.config.value}-` : '';
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -46,114 +43,79 @@ export class StyleOptionComponent implements OnChanges {
         }
     }
 
-    onRemoveSelection(): void {
-        this._emitChange(this._removeSelection());
-    }
-
     onVariantSelected(variant: string): void {
-        let newPropertyValue: string = this._removeSelection();
-        const newClassName = this._addBreakpoint(this.option, `${this.classPrefix}${variant}`, '', '');
-        if (newPropertyValue) {
-            newPropertyValue = `${newPropertyValue} ${newClassName}`;
+        let newPropertyValue: string = this._removeVariant(this.config, this.selectedVariant, this.propertyValue);
+        if (!this.config.value) {
+            newPropertyValue = newPropertyValue ? `${newPropertyValue} ${variant}` : variant;
         } else {
-            newPropertyValue = newClassName;
+            const newClassName = `${this.classNamePrefix}${variant}${this.breakpoint ? '-' + this.breakpoint : ''}`;
+            if (this.propertyValue) {
+                const regex = new RegExp(
+                    `${this.classNamePrefix}[a-z\\d-]+${this.breakpoint ? '-' + this.breakpoint : ''}(?![-\\w])`
+                );
+
+                // Check if class name pattern already exists.
+                if (this.propertyValue.search(regex) >= 0) {
+                    newPropertyValue = this.propertyValue.replace(regex, newClassName);
+                } else {
+                    newPropertyValue = `${this.propertyValue} ${newClassName}`;
+                }
+            } else {
+                newPropertyValue = newClassName;
+            }
         }
 
-        this._emitChange(newPropertyValue);
+        const change: IPropertyChange = {
+            type: PropertyChangeType.VALUE,
+            path: this.propertyPath,
+            data: newPropertyValue,
+        };
+        this.optionChanged.emit(change);
     }
 
-    private _removeSelection(): string {
-        let newPropertyValue: string = this._removeOption(this.option, this.propertyValue, this.breakpoint);
-        newPropertyValue = this._removeDependencies(ClassProperty.CLASS_NAME, newPropertyValue);
-        newPropertyValue = this._removeDependencies(ClassProperty.FIELD_GROUP_CLASS_NAME, newPropertyValue);
-
-        return newPropertyValue;
-    }
-
-    private _removeDependencies(property: ClassProperty, propertyValue: string): string {
-        let categories: IStyleOptionCategory[] = [];
-        if (property === ClassProperty.CLASS_NAME) {
-            categories = this.classNameCategories;
-        } else if (property === ClassProperty.FIELD_GROUP_CLASS_NAME) {
-            categories = this.fieldGroupClassNameCategories;
+    private _removeVariant(currConfig: IStyleOption, variant: string, propertyValue: string): string {
+        let cleanedPropertyValue: string;
+        if (!currConfig.value) {
+            cleanedPropertyValue = propertyValue
+                .split(' ')
+                .filter(c => c !== variant)
+                .join(' ');
+        } else {
+            const cc = `${currConfig.value}-`;
+            const regex = new RegExp(
+                `${cc}${variant}[a-z\\d-]*${this.breakpoint ? '-' + this.breakpoint : ''}(?![-\\w])`
+            );
+            const stuff = this.propertyValue.search(regex) >= 0;
+            cleanedPropertyValue = propertyValue
+                .replace(regex, '*')
+                .split(' ')
+                .filter(c => c !== '*')
+                .join(' ');
         }
 
-        return this.allBreakpoints.reduce(
-            (a, breakpoint) =>
-                categories.reduce(
-                    (b, category) =>
-                        category.options.reduce(
-                            (c, option) => (this._isADependent(option) ? this._removeOption(option, c, breakpoint) : c),
-                            b
-                        ),
-                    a
-                ),
-            propertyValue
-        );
-    }
+        const variantOptions = currConfig.variantConfig?.[variant];
+        cleanedPropertyValue = variantOptions?.length
+            ? variantOptions.reduce(
+                  (a, option) =>
+                      option.variants.reduce((c, optionVariant) => this._removeVariant(option, optionVariant, c), a),
+                  cleanedPropertyValue
+              )
+            : cleanedPropertyValue;
 
-    private _isADependent(option: IStyleOption): boolean {
-        const { property, value } = option.dependsOn ?? {};
-        return property === this.propertyPath && value === this.selectedVariant;
-    }
-
-    private _removeOption(
-        option: IStyleOption,
-        propertyValue: string,
-        currBreakpoint: IBreakpoint = this.breakpoint
-    ): string {
-        const classPrefix: string = option.value ? `${option.value}-` : '';
-        const variantsStr = `(${option.variants.join('|')})`;
-        const regex = new RegExp(
-            `(?<=(\\s|^))${this._addBreakpoint(
-                option,
-                `${classPrefix}${variantsStr}`,
-                '',
-                '',
-                currBreakpoint
-            )}(?=(\\s|$))`
-        );
-        const cleaned = propertyValue
-            .replace(regex, '*')
-            .split(' ')
-            .filter(c => c !== '*')
-            .join(' ');
-
-        return cleaned;
+        return cleanedPropertyValue;
     }
 
     private _updateSelection(): void {
-        const variantsStr = `(${this.option.variants.join('|')})`;
-        const regex = new RegExp(
-            `(?<=${this._addBreakpoint(this.option, `${this.classPrefix})${variantsStr}(?=`, '(\\s|^)', '(\\s|$)')})`
-        );
-        const matches: string[] | null = this.propertyValue?.match(regex);
-        this.selectedVariant = matches ? matches[0] : null;
-    }
+        if (!this.config.value) {
+            this.selectedVariant = this.propertyValue.split(' ').find(curr => this.config.variants.includes(curr));
+        } else {
+            const regex = new RegExp(
+                `(?<=${this.classNamePrefix})[a-z\\d-]+(?=${this.breakpoint ? `-${this.breakpoint}` : '(\\s|$)'})`
+            );
+            const matches: string[] | null = this.propertyValue?.match(regex);
+            this.selectedVariant = matches ? matches[0] : null;
+        }
 
-    private _addBreakpoint(
-        option: IStyleOption,
-        text: string,
-        prefixDefault: string,
-        suffixDefault: string,
-        breakpoint: IBreakpoint = this.breakpoint
-    ): string {
-        return `${
-            this.breakpointAffix === BreakpointAffix.PREFIX && breakpoint.value && option.hasBreakpoints
-                ? breakpoint.value
-                : prefixDefault
-        }${text}${
-            this.breakpointAffix === BreakpointAffix.SUFFIX && breakpoint.value && option.hasBreakpoints
-                ? breakpoint.value
-                : suffixDefault
-        }`;
-    }
-
-    private _emitChange(newValue: string): void {
-        this.optionChanged.emit({
-            type: PropertyChangeType.VALUE,
-            path: this.propertyPath,
-            data: newValue,
-        });
+        this.selectedVariantOptions = this.config.variantConfig?.[this.selectedVariant] ?? [];
     }
 }

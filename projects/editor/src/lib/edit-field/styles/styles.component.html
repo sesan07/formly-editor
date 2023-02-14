@@ -1,88 +1,69 @@
-<mat-button-toggle-group [(value)]="tabIndex">
-    <mat-button-toggle [value]="0">
-        <mat-icon>person</mat-icon>
-        <span>Style Self</span>
-    </mat-button-toggle>
-    <mat-button-toggle
-        [disabled]="!editField._info.canHaveChildren"
-        [value]="1"
-    >
-        <mat-icon>groups</mat-icon>
-        <span>Style Content</span>
-    </mat-button-toggle>
-</mat-button-toggle-group>
-<mat-tab-group
-    class="styles-tab-group"
-    [selectedIndex]="tabIndex"
->
-    <mat-tab>
-        <ng-container
-            [ngTemplateOutlet]="breakpoints"
-            [ngTemplateOutletContext]="{
-                classProperty: typeOfClassProperty.CLASS_NAME
-            }"
-        >
-        </ng-container>
-    </mat-tab>
-    <mat-tab>
-        <ng-container
-            [ngTemplateOutlet]="breakpoints"
-            [ngTemplateOutletContext]="{
-                classProperty: typeOfClassProperty.FIELD_GROUP_CLASS_NAME
-            }"
-        >
-        </ng-container>
-    </mat-tab>
-</mat-tab-group>
+<section>
+    <h4 class="title">
+        Style Self<span *ngIf="parentContainer"> (Parent is a {{ getContainerName(parentContainer) }})</span>
+    </h4>
 
-<ng-template
-    #breakpoints
-    let-classProperty="classProperty"
->
-    <mat-accordion>
-        <mat-expansion-panel
-            *ngFor="let breakpoint of stylesConfig.breakpoints"
-            [expanded]="!breakpoint.value"
+    <div class="breakpoints">
+        <editor-breakpoint
+            *ngFor="let breakpointType of breakpointTypes"
+            [isExpanded]="breakpointType === typeOfBreakpoint.ALL"
+            [titleText]="getBreakpointTitle(breakpointType)"
+            [tooltipText]="getBreakpointTooltip(breakpointType)"
         >
-            <mat-expansion-panel-header>
-                <mat-panel-title [title]="breakpoint.description">{{ breakpoint.name }}</mat-panel-title>
-            </mat-expansion-panel-header>
-            <mat-accordion>
-                <ng-container *ngFor="let category of getCategories(classProperty, breakpoint); trackBy: trackByName">
-                    <mat-expansion-panel *ngIf="category.options.length">
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>{{ category.name }}</mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <div class="style-options">
-                            <ng-container *ngFor="let option of category.options; trackBy: trackByOptionName">
-                                <editor-style-option
-                                    [class.col-span-2]="option.spanWidth"
-                                    [field]="editField"
-                                    [option]="option"
-                                    [propertyPath]="classProperty"
-                                    [breakpointAffix]="stylesConfig.breakpointAffix"
-                                    [breakpoint]="breakpoint"
-                                    [allBreakpoints]="stylesConfig.breakpoints"
-                                    [classNameCategories]="getCategories(typeOfClassProperty.CLASS_NAME)"
-                                    [fieldGroupClassNameCategories]="
-                                        getCategories(typeOfClassProperty.FIELD_GROUP_CLASS_NAME)
-                                    "
-                                    (optionChanged)="fieldChanged.emit($event)"
-                                ></editor-style-option>
-                            </ng-container>
-                        </div>
-                    </mat-expansion-panel>
+            <div class="classname-options">
+                <ng-container *ngFor="let option of stylingConfig.className">
+                    <editor-style-option
+                        *ngIf="canShowOption(option)"
+                        [field]="editField"
+                        [config]="option"
+                        [propertyPath]="'className'"
+                        [breakpoint]="breakpointType"
+                        (optionChanged)="fieldChanged.emit($event)"
+                    ></editor-style-option>
                 </ng-container>
-            </mat-accordion>
+            </div>
 
             <editor-chip-list-property
                 [target]="editField"
-                [property]="getChipListProperty(classProperty, breakpoint)"
-                [path]="classProperty"
+                [property]="getProperty(breakpointType)"
+                [path]="getProperty(breakpointType).key + ''"
                 [isSimplified]="true"
                 (targetChanged)="fieldChanged.emit($event)"
             >
             </editor-chip-list-property>
-        </mat-expansion-panel>
-    </mat-accordion>
-</ng-template>
+        </editor-breakpoint>
+    </div>
+</section>
+
+<section *ngIf="editField._info.canHaveChildren">
+    <h4 class="title">Style Children</h4>
+
+    <div class="breakpoints">
+        <editor-breakpoint
+            *ngFor="let breakpointType of breakpointTypes"
+            [isExpanded]="breakpointType === typeOfBreakpoint.ALL"
+            [titleText]="getBreakpointTitle(breakpointType)"
+            [tooltipText]="getBreakpointTooltip(breakpointType)"
+        >
+            <ng-container *ngFor="let option of stylingConfig.fieldGroupClassName">
+                <editor-style-option
+                    *ngIf="canShowOption(option)"
+                    [field]="editField"
+                    [config]="option"
+                    [propertyPath]="'fieldGroupClassName'"
+                    [breakpoint]="breakpointType"
+                    (optionChanged)="fieldChanged.emit($event)"
+                ></editor-style-option>
+            </ng-container>
+
+            <editor-chip-list-property
+                [target]="editField"
+                [property]="getChildrenProperty(breakpointType)"
+                [path]="getChildrenProperty(breakpointType).key + ''"
+                [isSimplified]="true"
+                (targetChanged)="fieldChanged.emit($event)"
+            >
+            </editor-chip-list-property>
+        </editor-breakpoint>
+    </div>
+</section>
