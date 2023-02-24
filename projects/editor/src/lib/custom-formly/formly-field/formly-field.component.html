@@ -1,7 +1,7 @@
 <header *ngIf="isEditMode">
     <div class="header-title">
         <span
-            *ngIf="isOverrideMode$ | async"
+            *ngIf="isOverrideMode"
             class="override-indicator"
             [class.overriden]="isOverridden"
         ></span>
@@ -48,7 +48,7 @@
         </button>
 
         <button
-            *ngIf="fieldInfo.canHaveChildren && replaceCategories.length > 0"
+            *ngIf="fieldCategories.length"
             mat-menu-item
             [matMenuTriggerFor]="replaceCategoryMenu"
         >
@@ -57,7 +57,6 @@
         </button>
 
         <button
-            *ngIf="fieldInfo.parentFieldId"
             mat-menu-item
             (click)="onRemove()"
         >
@@ -67,7 +66,7 @@
     </mat-menu>
 
     <mat-menu #addCategoryMenu="matMenu">
-        <ng-container *ngFor="let category of editorService.fieldCategories">
+        <ng-container *ngFor="let category of fieldCategories">
             <button
                 mat-menu-item
                 [matMenuTriggerFor]="addFieldMenu"
@@ -88,7 +87,7 @@
     </mat-menu>
 
     <mat-menu #replaceCategoryMenu="matMenu">
-        <ng-container *ngFor="let category of replaceCategories">
+        <ng-container *ngFor="let category of fieldCategories">
             <button
                 mat-menu-item
                 [matMenuTriggerFor]="replaceFieldMenu"
@@ -100,7 +99,7 @@
                 <button
                     mat-menu-item
                     *ngFor="let option of category.typeOptions"
-                    (click)="onReplaceParentField(option.name, option.customName)"
+                    (click)="onReplaceField(option.name, option.customName)"
                 >
                     {{ option.displayName }}
                 </button>

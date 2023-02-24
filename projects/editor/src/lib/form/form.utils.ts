@@ -1,10 +1,12 @@
-import { TrackByFunction } from '@angular/core';
-import { get, isEmpty } from 'lodash-es';
+import { get, isEmpty, set } from 'lodash-es';
 
-import { EditorTypeCategoryOption, EditorTypeOption, IEditorFormlyField } from '../editor.types';
+import { IEditorFormlyField } from '../editor.types';
 
 export const getFieldChildren = (field: IEditorFormlyField): IEditorFormlyField[] | undefined =>
     get(field, field._info.childrenPath);
+
+export const setFieldChildren = (field: IEditorFormlyField, children: IEditorFormlyField[]): IEditorFormlyField =>
+    set(field, field._info.childrenPath, children);
 
 export const cleanField = (
     field: IEditorFormlyField,
@@ -22,30 +24,6 @@ export const cleanField = (
         _removeEmptyProperties(field);
     }
 };
-
-export const getReplaceCategories = (
-    categories: EditorTypeCategoryOption[],
-    type: string,
-    customType?: string
-): EditorTypeCategoryOption[] =>
-    categories
-        .map(category => {
-            // Filter fields that can have children and aren't this field
-            const options: EditorTypeOption[] = category.typeOptions.filter(option => {
-                if (!option.canHaveChildren) {
-                    return false;
-                }
-
-                // If they're the same type, return based on customType
-                if (option.name === type) {
-                    return option.customName !== customType;
-                }
-                return true;
-            });
-
-            return { ...category, typeOptions: options };
-        })
-        .filter(category => category.typeOptions.length > 0); // Remove categories with empty fields
 
 const _removeEmptyProperties = (field: IEditorFormlyField): void => {
     if (isEmpty(field.wrappers)) {

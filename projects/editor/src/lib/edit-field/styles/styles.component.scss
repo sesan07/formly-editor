@@ -9,27 +9,14 @@
         display: none;
     }
 
-    .mat-button-toggle-label-content {
-        line-height: 32px;
-        width: 150px;
+    .category-panel .mat-expansion-panel-body {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
 
-        .mat-icon {
-            margin-right: 4px;
+        .col-span-2 {
+            grid-column-end: span 2;
         }
-    }
-}
-
-.mat-button-toggle-group {
-    margin-right: auto;
-}
-
-.style-options {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-
-    .col-span-2 {
-        grid-column-end: span 2;
     }
 }
 

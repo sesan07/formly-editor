@@ -2,18 +2,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 16px;
+    height: var(--header-height);
+    padding: 0 8px;
     box-sizing: border-box;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-:host::ng-deep .mat-button-toggle-label-content {
-    line-height: 32px;
-    width: 100px;
-
-    .mat-icon {
-        margin-right: 4px;
-    }
 }
 
 .action-buttons {

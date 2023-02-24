@@ -1,0 +1,39 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.loading-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    row-gap: 16px;
+}
+
+.lds-dual-ring {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+}
+
+.lds-dual-ring:after {
+    content: ' ';
+    display: block;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 10px solid;
+    border-color: #3f51b5 transparent #3f51b580 transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

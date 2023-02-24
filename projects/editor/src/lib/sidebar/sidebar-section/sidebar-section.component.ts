@@ -22,7 +22,7 @@ export class SidebarSectionComponent implements OnChanges {
     @Input() isCollapsed: boolean;
 
     public element: HTMLElement;
-    public index: number;
+    public index = 0;
     public availableHeight: number;
     public contentHeight: number;
     public cachedContentHeight: number;

@@ -1,24 +1,32 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "noImplicitOverride": true,
-    "target": "es2015",
-    "module": "es2020",
-    "lib": ["es2018", "dom"],
-    "paths": {
-      "@ngx-formly/*": ["projects/ngx-formly/src/*/src/public_api", "projects/ngx-formly/src/ui/*/src/public_api"],
-      "editor": ["projects/editor/src/public-api"]
+    "compileOnSave": false,
+    "compilerOptions": {
+        "baseUrl": "./",
+        "outDir": "./dist/out-tsc",
+        "sourceMap": true,
+        "declaration": false,
+        "downlevelIteration": true,
+        "experimentalDecorators": true,
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "noImplicitOverride": true,
+        "target": "es2017",
+        "module": "es2020",
+        "lib": [
+            "es2020",
+            "dom"
+        ],
+        "paths": {
+            "@ngx-formly/*": [
+                "projects/ngx-formly/src/*/src/public_api",
+                "projects/ngx-formly/src/ui/*/src/public_api"
+            ],
+            "editor": [
+                "projects/editor/src/public-api"
+            ]
+        }
+    },
+    "angularCompilerOptions": {
+        "strictTemplates": true
     }
-  },
-  "angularCompilerOptions": {
-    "strictTemplates": true
-  }
 }

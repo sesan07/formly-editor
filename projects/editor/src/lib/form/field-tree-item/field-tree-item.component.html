@@ -11,7 +11,7 @@
     <ng-container headerContent>
         <span class="header">
             <span
-                *ngIf="isOverrideMode$ | async"
+                *ngIf="isOverrideMode"
                 class="override-indicator"
                 [class.overriden]="isOverridden"
             ></span>
@@ -23,6 +23,7 @@
         <editor-field-tree-item
             *ngFor="let child of childFields; trackBy: trackByFieldId"
             [field]="child"
+            [fieldCategories]="fieldCategories"
             [treeLevel]="treeLevel + 1"
             (expandParent)="onExpandParent()"
         >
@@ -40,7 +41,7 @@
         <span>Add</span>
     </button>
     <button
-        *ngIf="fieldInfo.canHaveChildren && replaceCategories.length > 0"
+        *ngIf="fieldCategories.length"
         mat-menu-item
         [matMenuTriggerFor]="replaceCategoryMenu"
     >
@@ -57,7 +58,7 @@
 </mat-menu>
 
 <mat-menu #addCategoryMenu="matMenu">
-    <ng-container *ngFor="let category of editorService.fieldCategories">
+    <ng-container *ngFor="let category of fieldCategories">
         <button
             mat-menu-item
             [matMenuTriggerFor]="addFieldMenu"
@@ -78,7 +79,7 @@
 </mat-menu>
 
 <mat-menu #replaceCategoryMenu="matMenu">
-    <ng-container *ngFor="let category of replaceCategories">
+    <ng-container *ngFor="let category of fieldCategories">
         <button
             mat-menu-item
             [matMenuTriggerFor]="replaceFieldMenu"

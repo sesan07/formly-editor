@@ -97,7 +97,7 @@ export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjec
     protected defaultValue = {};
 
     protected get _canAdd(): boolean {
-        return this.property.addOptions?.length > 0;
+        return !!this.property.addOptions?.length;
     }
 
     onAddChild(type: PropertyType, arrayType?: PropertyType): void {

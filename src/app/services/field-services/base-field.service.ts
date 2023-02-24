@@ -105,7 +105,7 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
         }
     }
 
-    public abstract getDefaultConfig(customType?: CustomFieldType): IBaseFormlyField<T>;
+    public abstract getDefaultConfig(customType?: CustomFieldType, sourceField?: IBaseFormlyField): IBaseFormlyField<T>;
     protected abstract _getTOChildProperties(): IProperty[];
     protected abstract _getWrapperTypes(): WrapperType[];
 }

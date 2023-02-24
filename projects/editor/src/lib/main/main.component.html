@@ -1,0 +1,189 @@
+<editor-sidebar
+    class="left"
+    [class.hidden]="!showSidebars"
+    [position]="typeOfSideBarPosition.LEFT"
+    (resizeEnd)="onResizeEnd()"
+>
+    <editor-sidebar-section>
+        <div
+            class="section-header-content"
+            headerContent
+        >
+            <span>Fields</span>
+            <button
+                mat-icon-button
+                [matMenuTriggerFor]="addCategoryMenu"
+            >
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+        <div
+            class="tree-container"
+            mainContent
+        >
+            <ng-container *ngIf="(activeForm$ | async)?.fields.length; else addFieldText">
+                <editor-field-tree-item
+                    *ngFor="let field of (activeForm$ | async).fields; trackBy: trackByFieldId"
+                    [field]="field"
+                    [fieldCategories]="fieldCategories"
+                    [isExpanded]="true"
+                >
+                </editor-field-tree-item>
+            </ng-container>
+
+            <ng-template #addFieldText>
+                <div class="no-fields-wrapper">No Field</div>
+            </ng-template>
+        </div>
+    </editor-sidebar-section>
+</editor-sidebar>
+
+<div class="form-view">
+    <ng-container *ngIf="forms$ | async as forms">
+        <mat-tab-group
+            class="form-tab-group"
+            *ngIf="forms.length; else emptyView"
+            [selectedIndex]="activeFormIndex$ | async"
+            (selectedIndexChange)="onTabChange($event)"
+        >
+            <mat-tab *ngFor="let form of forms; let i = index; trackBy: trackFormById">
+                <ng-template mat-tab-label>
+                    <div
+                        class="inner-tab-label-content"
+                        (mousedown)="onTabLabelMouseDown($event, i)"
+                    >
+                        <span>{{ form.name }}</span>
+                        <button
+                            class="close-btn"
+                            mat-icon-button
+                            (click)="onRemoveForm(i)"
+                        >
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                </ng-template>
+                <editor-form
+                    [form]="form"
+                    (duplicateForm)="onDuplicateForm()"
+                    (exportForm)="onExportForm()"
+                    (toggleSidebars)="showSidebars = !showSidebars"
+                ></editor-form>
+            </mat-tab>
+        </mat-tab-group>
+        <div
+            class="add-form-btn-wrapper"
+            *ngIf="forms.length"
+        >
+            <button
+                mat-flat-button
+                color="primary"
+                (click)="onAddForm()"
+            >
+                <mat-icon>add</mat-icon>Add Form
+            </button>
+        </div>
+    </ng-container>
+</div>
+
+<editor-sidebar
+    class="right"
+    [class.hidden]="!showSidebars"
+    [position]="typeOfSideBarPosition.RIGHT"
+    (resizeEnd)="onResizeEnd()"
+>
+    <editor-sidebar-section class="active-field-section">
+        <span headerContent>
+            Active Field
+            <span *ngIf="activeField$ | async as activeField">
+                - {{ activeField._info.name | fieldName : activeField.key }}
+            </span>
+        </span>
+        <editor-edit-field
+            mainContent
+            [resizeTabHeader$]="resizeEnd$"
+            (fieldChanged)="onActiveFieldChanged($event)"
+        >
+        </editor-edit-field>
+    </editor-sidebar-section>
+
+    <!-- TODO fix isCollapsed... -->
+    <editor-sidebar-section [isCollapsed]="false">
+        <div
+            class="section-header-content"
+            headerContent
+        >
+            <span>Model</span>
+            <button
+                mat-icon-button
+                [matMenuTriggerFor]="modelOptionsMenu"
+            >
+                <mat-icon>more_vert</mat-icon>
+            </button>
+        </div>
+
+        <div
+            class="tree-container"
+            mainContent
+        >
+            <editor-object-property
+                [target]="activeModel$ | async"
+                [property]="modelProperty"
+                [isExpanded]="true"
+                (targetChanged)="onActiveModelChanged($event)"
+            >
+            </editor-object-property>
+        </div>
+    </editor-sidebar-section>
+</editor-sidebar>
+
+<ng-template #emptyView>
+    <div class="empty-view">
+        <h1>Formly Editor</h1>
+        <div>[ Cool Logo Here ]</div>
+        <button
+            mat-flat-button
+            color="primary"
+            (click)="onAddForm()"
+        >
+            <mat-icon>add</mat-icon>Add Form
+        </button>
+    </div>
+</ng-template>
+
+<mat-menu #addCategoryMenu="matMenu">
+    <ng-container *ngFor="let category of fieldCategories">
+        <button
+            mat-menu-item
+            [matMenuTriggerFor]="addFieldMenu"
+        >
+            {{ category.name }}
+        </button>
+
+        <mat-menu #addFieldMenu="matMenu">
+            <button
+                mat-menu-item
+                *ngFor="let option of category.typeOptions"
+                (click)="onAddField(option.name, option.customName)"
+            >
+                {{ option.displayName }}
+            </button>
+        </mat-menu>
+    </ng-container>
+</mat-menu>
+
+<mat-menu #modelOptionsMenu="matMenu">
+    <button
+        mat-menu-item
+        (click)="onImportModel()"
+    >
+        <mat-icon>file_download</mat-icon>
+        <span>Import</span>
+    </button>
+    <button
+        mat-menu-item
+        (click)="onExportModel()"
+    >
+        <mat-icon>file_upload</mat-icon>
+        <span>Export</span>
+    </button>
+</mat-menu>

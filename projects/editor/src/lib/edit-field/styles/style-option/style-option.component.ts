@@ -41,7 +41,7 @@ export class StyleOptionComponent implements OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.field) {
+        if (changes.field && this.field) {
             this._updateSelection();
         }
     }

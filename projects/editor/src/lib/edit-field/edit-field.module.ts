@@ -12,21 +12,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { StylesComponent } from './styles/styles.component';
 import { EditFieldComponent } from './edit-field.component';
 import { CustomFormlyModule } from '../custom-formly/custom-formly.module';
-import { BreakpointComponent } from './breakpoint/breakpoint.component';
-import { ContainerOptionComponent } from './container-option/container-option.component';
 import { PropertyModule } from '../property/property.module';
 import { StyleOptionComponent } from './styles/style-option/style-option.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
-    declarations: [
-        BreakpointComponent,
-        ContainerOptionComponent,
-        StylesComponent,
-        EditFieldComponent,
-        StyleOptionComponent,
-    ],
+    declarations: [StylesComponent, EditFieldComponent, StyleOptionComponent],
     imports: [
         CommonModule,
         FormsModule,

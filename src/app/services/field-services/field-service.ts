@@ -27,12 +27,12 @@ export class FieldService implements IFieldService {
         private _textareaFieldService: TextareaService
     ) {}
 
-    getDefaultConfig(type: FieldType, customType?: CustomFieldType): IBaseFormlyField {
+    getDefaultField(type: FieldType, customType?: CustomFieldType, sourceField?: IBaseFormlyField): IBaseFormlyField {
         const fieldService: BaseFieldService<any> = this._getFieldService(type);
-        return fieldService.getDefaultConfig(customType);
+        return fieldService.getDefaultConfig(customType, sourceField);
     }
 
-    getProperties(type: FieldType): IProperty[] {
+    getFieldProperties(type: FieldType): IProperty[] {
         const fieldService: BaseFieldService<any> = this._getFieldService(type);
         return fieldService.getProperties();
     }

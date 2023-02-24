@@ -1,50 +1,49 @@
 :host {
-	display: block;
+    display: block;
     transition: height 0.2s ease-out;
     overflow: hidden;
 }
 
 .sidebar-divider {
-	position: relative;
+    position: relative;
     height: 100%;
     height: 4px;
     flex-shrink: 0;
-    background-color: rgba(0,0,0,0.12);
-	cursor: ns-resize;
+    background-color: rgba(0, 0, 0, 0.12);
+    cursor: ns-resize;
 }
 
 .sidebar-divider::after {
-	position: absolute;
-	content: '';
-	height: 4px;
-	width: 100%;
-	left: 0;
+    position: absolute;
+    content: '';
+    height: 4px;
+    width: 100%;
+    left: 0;
 }
 
 .sidebar-divider:hover::after {
-	height: 16px;
-	top: -6px;
-    background-color: rgba(0,0,0,0.2);
+    height: 16px;
+    top: -6px;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .sidebar-header {
     height: var(--header-height);
     display: flex;
     align-items: center;
-	column-gap: 8px;
+    column-gap: 8px;
     padding: 0 12px;
-    box-sizing: border-box;
-    border-bottom: 1px solid rgba(0,0,0,.12);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     user-select: none;
 }
 
 .sidebar-header-left {
-	display: inline-flex;
-	column-gap: 8px;
-	align-items: center;
+    display: inline-flex;
+    column-gap: 8px;
+    align-items: center;
 }
 
 .sidebar-section-content {
-	display: block;
+    display: block;
     overflow: auto;
 }

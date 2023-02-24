@@ -1,10 +1,13 @@
-<mat-button-toggle-group [(value)]="tabIndex">
+<mat-button-toggle-group
+    class="editor-button-toggle-group"
+    [(value)]="tabIndex"
+>
     <mat-button-toggle [value]="0">
         <mat-icon>person</mat-icon>
         <span>Style Self</span>
     </mat-button-toggle>
     <mat-button-toggle
-        [disabled]="!editField._info.canHaveChildren"
+        [disabled]="!editField?._info.canHaveChildren"
         [value]="1"
     >
         <mat-icon>groups</mat-icon>
@@ -19,7 +22,8 @@
         <ng-container
             [ngTemplateOutlet]="breakpoints"
             [ngTemplateOutletContext]="{
-                classProperty: typeOfClassProperty.CLASS_NAME
+                classProperty: typeOfClassProperty.CLASS_NAME,
+                categories: this.classNameCategories
             }"
         >
         </ng-container>
@@ -28,7 +32,8 @@
         <ng-container
             [ngTemplateOutlet]="breakpoints"
             [ngTemplateOutletContext]="{
-                classProperty: typeOfClassProperty.FIELD_GROUP_CLASS_NAME
+                classProperty: typeOfClassProperty.FIELD_GROUP_CLASS_NAME,
+                categories: this.fieldGroupClassNameCategories
             }"
         >
         </ng-container>
@@ -38,8 +43,9 @@
 <ng-template
     #breakpoints
     let-classProperty="classProperty"
+    let-categories="categories"
 >
-    <mat-accordion>
+    <mat-accordion *ngIf="categories">
         <mat-expansion-panel
             *ngFor="let breakpoint of stylesConfig.breakpoints"
             [expanded]="!breakpoint.value"
@@ -48,29 +54,28 @@
                 <mat-panel-title [title]="breakpoint.description">{{ breakpoint.name }}</mat-panel-title>
             </mat-expansion-panel-header>
             <mat-accordion>
-                <ng-container *ngFor="let category of getCategories(classProperty, breakpoint); trackBy: trackByName">
-                    <mat-expansion-panel *ngIf="category.options.length">
+                <ng-container *ngFor="let category of categories[breakpoint.value]; trackBy: trackByName">
+                    <mat-expansion-panel
+                        class="category-panel"
+                        *ngIf="category.options.length"
+                    >
                         <mat-expansion-panel-header>
                             <mat-panel-title>{{ category.name }}</mat-panel-title>
                         </mat-expansion-panel-header>
-                        <div class="style-options">
-                            <ng-container *ngFor="let option of category.options; trackBy: trackByOptionName">
-                                <editor-style-option
-                                    [class.col-span-2]="option.spanWidth"
-                                    [field]="editField"
-                                    [option]="option"
-                                    [propertyPath]="classProperty"
-                                    [breakpointAffix]="stylesConfig.breakpointAffix"
-                                    [breakpoint]="breakpoint"
-                                    [allBreakpoints]="stylesConfig.breakpoints"
-                                    [classNameCategories]="getCategories(typeOfClassProperty.CLASS_NAME)"
-                                    [fieldGroupClassNameCategories]="
-                                        getCategories(typeOfClassProperty.FIELD_GROUP_CLASS_NAME)
-                                    "
-                                    (optionChanged)="fieldChanged.emit($event)"
-                                ></editor-style-option>
-                            </ng-container>
-                        </div>
+                        <ng-container *ngFor="let option of category.options; trackBy: trackByOptionName">
+                            <editor-style-option
+                                [class.col-span-2]="option.spanWidth"
+                                [field]="editField"
+                                [option]="option"
+                                [propertyPath]="classProperty"
+                                [breakpointAffix]="stylesConfig.breakpointAffix"
+                                [breakpoint]="breakpoint"
+                                [allBreakpoints]="stylesConfig.breakpoints"
+                                [classNameCategories]="allClassNameCategories"
+                                [fieldGroupClassNameCategories]="allFieldGroupClassNameCategories"
+                                (optionChanged)="fieldChanged.emit($event)"
+                            ></editor-style-option>
+                        </ng-container>
                     </mat-expansion-panel>
                 </ng-container>
             </mat-accordion>

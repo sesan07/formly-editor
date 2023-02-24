@@ -8,8 +8,6 @@
 :root {
     --header-height: 48px;
     --tree-item-height: 32px;
-    --add-form-width: 140px;
-    --logo-width: 140px;
 }
 
 html,
@@ -148,34 +146,6 @@ button.mat-icon-button {
     }
 }
 
-.form-tab-group > .mat-tab-header {
-    margin-left: var(--logo-width);
-    margin-right: var(--add-form-width);
-
-    .mat-tab-label {
-        padding: 0;
-    }
-
-    .mat-tab-label-content,
-    .inner-tab-label-content {
-        height: 100%;
-        width: 100%;
-    }
-
-    .inner-tab-label-content {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        column-gap: 8px;
-        padding: 0 16px;
-        box-sizing: border-box;
-    }
-}
-
-.mat-tab-body-wrapper {
-    flex-grow: 1;
-}
-
 .dialogBackdrop {
     background-color: white;
     opacity: 0.6 !important;
@@ -224,5 +194,25 @@ editor-edit-field {
 
     .mat-form-field-infix {
         width: unset;
+    }
+}
+
+.editor-mat-option {
+    line-height: 40px;
+    height: 40px;
+}
+
+.editor-button-toggle-group {
+    .mat-button-toggle {
+        flex-basis: 50%;
+        min-width: 120px;
+    }
+
+    .mat-button-toggle-label-content {
+        line-height: 32px;
+    }
+
+    .mat-icon {
+        margin-right: 4px;
     }
 }
