@@ -1,196 +1,118 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
 import { cloneDeep } from 'lodash-es';
 import { Observable, Subject } from 'rxjs';
-import { debounceTime, map, tap } from 'rxjs/operators';
+import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
 
 import { EditorService } from '../editor.service';
-import { IEditorFormlyField, IForm } from '../editor.types';
-import { IPropertyChange, PropertyType } from '../property/property.types';
-import { PropertyService } from '../property/property.service';
-import { ExportFormDialogComponent } from './export-form-dialog/export-form-dialog.component';
-import { ExportJSONRequest, ExportJSONResponse } from './export-form-dialog/export-json-dialog.types';
-import { FileService } from '../shared/services/file-service/file.service';
-import { SideBarPosition } from '../sidebar/sidebar.types';
-import { IObjectProperty } from '../property/object-array-properties/object-property.types';
+import { EditorTypeCategoryOption, IEditorFormlyField, IForm } from '../editor.types';
 import { cleanField } from './form.utils';
-import { FormService } from './form.service';
 import { DroplistService } from './droplist.service';
-import { initRootProperty } from '../property/utils';
-import { ImportModelDialogComponent } from './import-model-dialog/import-model-dialog.component';
-import { ImportModelResponse } from './import-model-dialog/import-model-dialog.types';
 import { trackByFieldId } from '../editor.utils';
+import { selectActiveForm } from '../state/state.selectors';
+import { Store } from '@ngrx/store';
+import { IEditorState } from '../state/state.types';
 
 @Component({
     selector: 'editor-form',
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss'],
-    providers: [FormService, DroplistService],
+    providers: [DroplistService],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormComponent implements OnInit {
+export class FormComponent implements OnInit, OnDestroy {
     @Input() form: IForm;
 
-    public modelProperty: IObjectProperty;
+    @Output() duplicateForm: EventEmitter<void> = new EventEmitter();
+    @Output() exportForm: EventEmitter<void> = new EventEmitter();
+    @Output() toggleSidebars: EventEmitter<void> = new EventEmitter();
 
-    public fields$: Observable<IEditorFormlyField[]>;
-    public activeField$: Observable<IEditorFormlyField>;
-    public resizeEnd$: Observable<void>;
-    public isEditMode$: Observable<boolean>;
-    public isOverrideMode$: Observable<boolean>;
-
-    public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
-    public showSidebars = true;
     public toolbarTabIndex: 0 | 1 = 0;
+    public fieldCategories: EditorTypeCategoryOption[];
 
     public formFields$: Observable<IEditorFormlyField[]>;
-    public formFieldsJSON$: Observable<string>;
     public model$: Observable<Record<string, any>>;
+    public formFieldsJSON: string;
     public formGroup: FormGroup = new FormGroup({});
     public options: FormlyFormOptions = {};
 
     trackByFieldId = trackByFieldId;
 
-    private _resizeEnd$: Subject<void> = new Subject();
+    private _destroy$: Subject<void> = new Subject();
+    private _cachedFields: IEditorFormlyField[] = [];
 
-    private readonly _debounceTime: number = 500;
+    private readonly _debounceTime: number = 100;
 
     constructor(
-        public propertyService: PropertyService,
-        public editorService: EditorService,
-        private _formService: FormService,
-        private _dialog: MatDialog,
-        private _fileService: FileService
+        private _editorService: EditorService,
+        private _cdRef: ChangeDetectorRef,
+        private _store: Store<IEditorState>
     ) {}
 
     public ngOnInit(): void {
-        this._formService.setup(this.form);
+        this.fieldCategories = this._editorService.fieldCategories;
 
-        this.resizeEnd$ = this._resizeEnd$.asObservable();
-        this.fields$ = this._formService.fields$;
-        this.activeField$ = this._formService.activeField$;
-        this.model$ = this._formService.model$;
-        this.isEditMode$ = this._formService.isEditMode$;
-        this.isOverrideMode$ = this._formService.isOverrideMode$;
-
-        this._setupModelProperty();
-
-        this.formFields$ = this._formService.fields$.pipe(
+        this.formFields$ = this._store.select(selectActiveForm).pipe(
+            takeUntil(this._destroy$),
+            filter(form => form && form.id === this.form.id && form.fields !== this._cachedFields),
             debounceTime(this._debounceTime),
-            map(fields => cloneDeep(fields)),
-            tap(() => {
+            tap(form => {
+                this._cachedFields = form.fields;
                 this.formGroup = new FormGroup({});
                 this.options = {};
-            })
+
+                if (form.isOverrideMode) {
+                    this.formFieldsJSON = JSON.stringify(form.override, null, 2);
+                } else {
+                    const fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
+                    fieldsClone.forEach(field => cleanField(field, true, true));
+                    this.formFieldsJSON = JSON.stringify(fieldsClone, null, 2);
+                }
+
+                this._cdRef.markForCheck();
+            }),
+            map(form => cloneDeep(form.fields))
         );
 
-        this.formFieldsJSON$ = this._formService.fields$.pipe(
-            map(fields => {
-                if (this._formService.isOverrideMode) {
-                    return JSON.stringify(this.form.override, null, 2);
-                } else {
-                    const fieldsClone: IEditorFormlyField[] = cloneDeep(fields);
-                    fieldsClone.forEach(field => cleanField(field, true, true));
-                    return JSON.stringify(fieldsClone, null, 2);
-                }
-            })
+        this.model$ = this._store.select(selectActiveForm).pipe(
+            takeUntil(this._destroy$),
+            filter(form => form && form.id === this.form.id),
+            map(form => cloneDeep(form.model))
         );
+    }
+
+    public ngOnDestroy(): void {
+        this._destroy$.next();
+        this._destroy$.complete();
     }
 
     onEditModeChanged(isEditMode: boolean): void {
-        this._formService.setEditMode(isEditMode);
+        this._editorService.setEditMode(this.form.id, isEditMode);
     }
 
     onOverrideModeChanged(isOverrideMode: boolean): void {
-        this._formService.setOverrideMode(isOverrideMode);
+        this._editorService.setOverrideMode(this.form.id, isOverrideMode);
     }
 
-    onDuplicateForm(): void {
-        this.editorService.duplicateForm(this.form.id);
-    }
-
-    onExportForm(): void {
-        const fieldsClone: IEditorFormlyField[] = cloneDeep(this._formService.getFields());
-        fieldsClone.forEach(field => cleanField(field, true, true));
-
-        const config: MatDialogConfig<ExportJSONRequest> = {
-            data: {
-                type: 'Form',
-                name: this.form.name + '.json',
-                json: JSON.stringify(fieldsClone, null, 2),
-            },
-        };
-
-        const dialogRef: MatDialogRef<ExportFormDialogComponent, ExportJSONResponse> = this._dialog.open(
-            ExportFormDialogComponent,
-            config
-        );
-
-        dialogRef.afterClosed().subscribe(res => {
-            if (res) {
-                this._fileService.saveFile(res.name, res.json);
-            }
-        });
-    }
-
-    onAddInitialField(type: string, customType?: string): void {
-        this._formService.addField(type, customType);
-    }
-
-    onActiveFieldChanged(change: IPropertyChange): void {
-        this._formService.modifyField(change);
-    }
-
-    onModelChanged(change: IPropertyChange): void {
-        this._formService.modifyModel(change);
+    onAddField(type: string, customType?: string): void {
+        this._editorService.addField(type, customType);
     }
 
     onFormModelChanged(model: Record<string, any>): void {
-        this._formService.setModel(model);
-    }
-
-    onImportModel(): void {
-        const dialogRef: MatDialogRef<ImportModelDialogComponent, ImportModelResponse> =
-            this._dialog.open(ImportModelDialogComponent);
-        dialogRef.afterClosed().subscribe(res => {
-            if (res) {
-                this._formService.setModel(JSON.parse(res.json));
-            }
-        });
-    }
-
-    onExportModel(): void {
-        const config: MatDialogConfig<ExportJSONRequest> = {
-            data: {
-                type: 'Model',
-                name: this.form.name + '.model.json',
-                json: JSON.stringify(this.form.model, null, 2),
-            },
-        };
-
-        const dialogRef: MatDialogRef<ExportFormDialogComponent, ExportJSONResponse> = this._dialog.open(
-            ExportFormDialogComponent,
-            config
-        );
-        dialogRef.afterClosed().subscribe(res => {
-            if (res) {
-                this._fileService.saveFile(res.name, res.json);
-            }
-        });
+        this._editorService.setActiveModel(model);
     }
 
     onResetModel(): void {
         this.options.resetModel({});
-    }
-
-    onResizeEnd(): void {
-        this._resizeEnd$.next();
-    }
-
-    private _setupModelProperty(): void {
-        this.modelProperty = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
-        initRootProperty(this.modelProperty);
     }
 }

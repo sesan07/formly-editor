@@ -2,24 +2,25 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
-    ElementRef,
     EventEmitter,
     Input,
+    OnChanges,
     OnDestroy,
     OnInit,
     Output,
-    Renderer2,
-    TrackByFunction,
+    SimpleChanges,
 } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { EditorService } from '../../editor.service';
 import { EditorTypeCategoryOption, IEditorFormlyField, IEditorFieldInfo } from '../../editor.types';
-import { getFieldChildren, getReplaceCategories } from '../form.utils';
-import { FormService } from '../form.service';
+import { getFieldChildren } from '../form.utils';
 import { isEmpty } from 'lodash-es';
 import { trackByFieldId } from '../../editor.utils';
+import { Store } from '@ngrx/store';
+import { IEditorState } from '../../state/state.types';
+import { selectActiveField, selectActiveForm } from '../../state/state.selectors';
 
 @Component({
     selector: 'editor-field-tree-item',
@@ -27,8 +28,9 @@ import { trackByFieldId } from '../../editor.utils';
     styleUrls: ['./field-tree-item.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FieldTreeItemComponent implements OnInit, OnDestroy {
+export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public field: IEditorFormlyField;
+    @Input() public fieldCategories: EditorTypeCategoryOption[];
     @Input() public isExpanded = false;
     @Input() public treeLevel = 0;
 
@@ -36,51 +38,49 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
 
     public isActiveField: boolean;
     public childFields: IEditorFormlyField[] = [];
-    public replaceCategories: EditorTypeCategoryOption[];
     public fieldInfo: IEditorFieldInfo;
     public isOverridden: boolean;
-    public isOverrideMode$: Observable<boolean>;
+    public isOverrideMode: boolean;
 
     trackByFieldId = trackByFieldId;
 
     private _destroy$: Subject<void> = new Subject();
 
     constructor(
-        public editorService: EditorService,
-        private _formService: FormService,
-        private _renderer: Renderer2,
-        private _elementRef: ElementRef,
+        private _editorService: EditorService,
+        private _store: Store<IEditorState>,
         private _cdRef: ChangeDetectorRef
     ) {}
 
-    ngOnInit(): void {
-        this._renderer.addClass(this._elementRef.nativeElement, 'tree-item');
-        this.isOverrideMode$ = this._formService.isOverrideMode$;
-
-        this.fieldInfo = this.field._info;
-        this.replaceCategories = getReplaceCategories(
-            this.editorService.fieldCategories,
-            this.field.type,
-            this.field.customType
-        );
-
-        if (this.fieldInfo.canHaveChildren) {
-            this.childFields = getFieldChildren(this.field);
-        }
-
-        this._formService.activeField$.pipe(takeUntil(this._destroy$)).subscribe((f: IEditorFormlyField | null) => {
-            if (!f) {
-                return;
-            }
-
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.field) {
+            this.fieldInfo = this.field._info;
             this.isOverridden = !isEmpty(this.fieldInfo.fieldOverride);
-            this.isActiveField = f._info.formId === this.fieldInfo.formId && f._info.fieldId === this.fieldInfo.fieldId;
-            if (this.isActiveField) {
-                this.expandParent.emit();
-            }
 
-            this._cdRef.markForCheck();
-        });
+            if (this.fieldInfo.canHaveChildren) {
+                this.childFields = getFieldChildren(this.field);
+            }
+        }
+    }
+
+    ngOnInit(): void {
+        this._store
+            .select(selectActiveForm)
+            .pipe(takeUntil(this._destroy$))
+            .subscribe(form => {
+                this.isOverrideMode = form?.isOverrideMode;
+                this._cdRef.markForCheck();
+            });
+        this._store
+            .select(selectActiveField)
+            .pipe(takeUntil(this._destroy$))
+            .subscribe(field => {
+                this.isActiveField = this.fieldInfo.fieldId === field?._info.fieldId;
+                if (this.isActiveField) {
+                    this.expandParent.emit();
+                    setTimeout(() => this._cdRef.markForCheck());
+                }
+            });
     }
 
     ngOnDestroy(): void {
@@ -93,23 +93,24 @@ export class FieldTreeItemComponent implements OnInit, OnDestroy {
             this.isExpanded = true;
         }
 
-        this._formService.addField(type, customType, this.fieldInfo.fieldId);
+        this._editorService.addField(type, customType, this.fieldInfo.fieldId);
     }
 
     onRemove(): void {
-        this._formService.removeField(this.fieldInfo.fieldId, this.fieldInfo.parentFieldId);
+        this._editorService.removeField(this.fieldInfo.fieldId, this.fieldInfo.parentFieldId);
     }
 
     onReplaceParentField(type: string, customType?: string): void {
-        this._formService.replaceParentField(type, this.fieldInfo.fieldId, customType);
+        this._editorService.replaceField(type, this.fieldInfo.fieldId, customType);
     }
 
     onSelected(): void {
-        this._formService.selectField(this.fieldInfo.fieldId);
+        this._editorService.setActiveField(this.fieldInfo.fieldId);
     }
 
     onExpandParent(): void {
         this.isExpanded = true;
+        // this._cdRef.detectChanges();
         this.expandParent.emit();
     }
 }

@@ -13,11 +13,15 @@ export enum FieldType {
     FORMLY_GROUP = 'formly-group',
 }
 
+export type GetDefaultField = (type: string, customType?: string, sourceField?: IBaseFormlyField) => IBaseFormlyField;
+export type GetTypeOption = (type: string, customType?: string) => EditorTypeOption;
+
 export interface IEditorFieldInfo {
     name: string;
     formId: string;
     fieldId: string;
     parentFieldId?: string;
+    fieldPath: string[];
     canHaveChildren?: boolean;
     childrenPath?: string; // Lodash path
     fieldOverride?: Record<string, any>;
@@ -43,13 +47,18 @@ export interface IForm {
     id: string;
     name: string;
     fields: IEditorFormlyField[];
-    model: Record<string, unknown>;
+    baseFields: IEditorFormlyField[];
     override: IFormOverride;
+    model: Record<string, unknown>;
+    activeFieldId?: string;
+    isOverrideMode: boolean;
+    isEditMode: boolean;
+    fieldIdCounter: number;
 }
 
 export interface IFieldService {
-    getDefaultConfig(type: string, customType?: string): IBaseFormlyField;
-    getProperties(type: string): IProperty[];
+    getDefaultField: GetDefaultField;
+    getFieldProperties(type: string): IProperty[];
 }
 
 export type IEditorFormlyFieldConfigCache = IEditorFormlyField & FormlyFieldConfigCache;

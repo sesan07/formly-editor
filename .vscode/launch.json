@@ -1,29 +1,37 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "firefox",
-      "request": "launch",
-      "reAttach": true,
-      "name": "Launch Firefox",
-      "url": "http://localhost:4200",
-      "webRoot": "${workspaceFolder}",
-      "pathMappings": [
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
         {
-          "url": "webpack:///projects",
-          "path": "${workspaceFolder}/projects"
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "name": "Launch Firefox",
+            "url": "http://localhost:4200",
+            "webRoot": "${workspaceFolder}",
+            "pathMappings": [
+                {
+                    "url": "webpack:///node_modules",
+                    "path": "${workspaceFolder}/node_modules"
+                },
+                {
+                    "url": "webpack:///projects",
+                    "path": "${workspaceFolder}/projects"
+                },
+                {
+                    "url": "webpack:///src",
+                    "path": "${workspaceFolder}/src"
+                }
+            ]
+        },
+        {
+            "type": "msedge",
+            "request": "launch",
+            "name": "Launch Edge",
+            "url": "http://localhost:4200",
+            "webRoot": "${workspaceFolder}"
         }
-      ]
-    },
-    {
-      "type": "msedge",
-      "request": "launch",
-      "name": "Launch Edge",
-      "url": "http://localhost:4200",
-      "webRoot": "${workspaceFolder}"
-    }
-  ]
+    ]
 }

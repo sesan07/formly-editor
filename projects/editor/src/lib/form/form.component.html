@@ -1,60 +1,25 @@
-<editor-sidebar
-    class="left"
-    [class.hidden]="!showSidebars"
-    [position]="typeOfSideBarPosition.LEFT"
-    (resizeEnd)="onResizeEnd()"
+<editor-toolbar
+    class="toolbar"
+    [(tabIndex)]="toolbarTabIndex"
+    [isEditMode]="form.isEditMode"
+    [isOverrideMode]="form.isOverrideMode"
+    (isEditModeChange)="onEditModeChanged($event)"
+    (isOverrideModeChange)="onOverrideModeChanged($event)"
+    (resetModel)="onResetModel()"
+    (duplicateForm)="duplicateForm.emit()"
+    (exportForm)="exportForm.emit()"
+    (toggleSidebars)="toggleSidebars.emit()"
 >
-    <editor-sidebar-section>
-        <div
-            class="section-header-content"
-            headerContent
-        >
-            <span>Fields</span>
-            <button
-                mat-icon-button
-                [matMenuTriggerFor]="addCategoryMenu"
-            >
-                <mat-icon>add</mat-icon>
-            </button>
-        </div>
-        <div
-            class="tree-container"
-            mainContent
-        >
-            <ng-container *ngIf="(formFields$ | async)?.length; else addFieldText">
-                <editor-field-tree-item
-                    *ngFor="let field of fields$ | async; trackBy: trackByFieldId"
-                    [field]="field"
-                    [isExpanded]="true"
-                >
-                </editor-field-tree-item>
-            </ng-container>
-        </div>
-    </editor-sidebar-section>
-</editor-sidebar>
-
-<div class="main">
-    <editor-toolbar
-        class="toolbar"
-        [(tabIndex)]="toolbarTabIndex"
-        [isEditMode]="isEditMode$ | async"
-        [isOverrideMode]="isOverrideMode$ | async"
-        (isEditModeChange)="onEditModeChanged($event)"
-        (isOverrideModeChange)="onOverrideModeChanged($event)"
-        (resetModel)="onResetModel()"
-        (duplicateForm)="onDuplicateForm()"
-        (exportForm)="onExportForm()"
-        (toggleSidebars)="showSidebars = $event"
-    >
-    </editor-toolbar>
+</editor-toolbar>
+<ng-container *ngIf="formFields$ | async as fields">
     <mat-tab-group
         class="tab-group"
-        *ngIf="(formFields$ | async)?.length; else addFieldButton"
+        *ngIf="fields?.length; else addFieldButton"
         [selectedIndex]="toolbarTabIndex"
     >
         <mat-tab>
             <editor-formly-form
-                [fields]="formFields$ | async"
+                [fields]="fields"
                 [model]="model$ | async"
                 [form]="formGroup"
                 [options]="options"
@@ -66,71 +31,14 @@
             <ng-template matTabContent>
                 <editor-text-editor
                     class="text-editor"
-                    [value]="formFieldsJSON$ | async"
+                    [value]="formFieldsJSON"
                     [mode]="'application/json'"
                     [readOnly]="true"
                 ></editor-text-editor>
             </ng-template>
         </mat-tab>
     </mat-tab-group>
-</div>
-
-<editor-sidebar
-    class="right"
-    [class.hidden]="!showSidebars"
-    [position]="typeOfSideBarPosition.RIGHT"
-    (resizeEnd)="onResizeEnd()"
->
-    <editor-sidebar-section class="active-field-section">
-        <span headerContent>
-            Active Field
-            <span *ngIf="activeField$ | async as activeField">
-                - {{ activeField._info.name | fieldName : activeField.key }}
-            </span>
-        </span>
-        <editor-edit-field
-            *ngIf="activeField$ | async; else addFieldText"
-            mainContent
-            [field$]="activeField$"
-            [isOverrideMode]="isOverrideMode$ | async"
-            [resizeTabHeader$]="resizeEnd$"
-            (fieldChanged)="onActiveFieldChanged($event)"
-        >
-        </editor-edit-field>
-    </editor-sidebar-section>
-
-    <editor-sidebar-section [isCollapsed]="false">
-        <div
-            class="section-header-content"
-            headerContent
-        >
-            <span>Model</span>
-            <button
-                mat-icon-button
-                [matMenuTriggerFor]="modelOptionsMenu"
-            >
-                <mat-icon>more_vert</mat-icon>
-            </button>
-        </div>
-
-        <div
-            class="tree-container"
-            mainContent
-        >
-            <editor-object-property
-                [target]="model$ | async"
-                [property]="modelProperty"
-                [isExpanded]="true"
-                (targetChanged)="onModelChanged($event)"
-            >
-            </editor-object-property>
-        </div>
-    </editor-sidebar-section>
-</editor-sidebar>
-
-<ng-template #addFieldText>
-    <div class="no-fields-wrapper">No Field</div>
-</ng-template>
+</ng-container>
 
 <ng-template #addFieldButton>
     <div class="no-fields-wrapper">
@@ -146,7 +54,7 @@
 </ng-template>
 
 <mat-menu #addCategoryMenu="matMenu">
-    <ng-container *ngFor="let category of editorService.fieldCategories">
+    <ng-container *ngFor="let category of fieldCategories">
         <button
             mat-menu-item
             [matMenuTriggerFor]="addFieldMenu"
@@ -158,27 +66,10 @@
             <button
                 mat-menu-item
                 *ngFor="let option of category.typeOptions"
-                (click)="onAddInitialField(option.name, option.customName)"
+                (click)="onAddField(option.name, option.customName)"
             >
                 {{ option.displayName }}
             </button>
         </mat-menu>
     </ng-container>
-</mat-menu>
-
-<mat-menu #modelOptionsMenu="matMenu">
-    <button
-        mat-menu-item
-        (click)="onImportModel()"
-    >
-        <mat-icon>file_download</mat-icon>
-        <span>Import</span>
-    </button>
-    <button
-        mat-menu-item
-        (click)="onExportModel()"
-    >
-        <mat-icon>file_upload</mat-icon>
-        <span>Export</span>
-    </button>
 </mat-menu>

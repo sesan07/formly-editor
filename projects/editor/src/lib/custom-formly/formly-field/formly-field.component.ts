@@ -12,14 +12,15 @@ import {
     Renderer2,
     ViewContainerRef,
 } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { FormlyConfig, FormlyField, FormlyFieldTemplates } from '@ngx-formly/core';
 import { isEmpty } from 'lodash-es';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 
 import { EditorService } from '../../editor.service';
 import { EditorTypeCategoryOption, IEditorFieldInfo, IEditorFormlyField } from '../../editor.types';
-import { FormService } from '../../form/form.service';
-import { getFieldChildren, getReplaceCategories } from '../../form/form.utils';
+import { selectActiveField, selectActiveForm } from '../../state/state.selectors';
+import { IEditorState } from '../../state/state.types';
 
 @Component({
     selector: 'editor-root-formly-field',
@@ -35,25 +36,26 @@ export class RootFormlyFieldComponent extends FormlyField {}
 })
 export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestroy {
     @Input() override field: IEditorFormlyField;
+    @Input() public index: number;
+    @Input() public isFirstChild: boolean;
+    @Input() public isLastChild: boolean;
+
+    @HostBinding('class.edit-mode') isEditMode: boolean;
+    @HostBinding('class.active') isActiveField: boolean;
 
     public isMouseInside: boolean;
-    public isFirstChild: boolean;
-    public isLastChild: boolean;
-    public index: number;
     public hideOptions: boolean;
     public fieldInfo: IEditorFieldInfo;
-    public replaceCategories: EditorTypeCategoryOption[];
+    public fieldCategories: EditorTypeCategoryOption[];
     public isOverridden: boolean;
-    public isOverrideMode$: Observable<boolean>;
+    public isOverrideMode: boolean;
 
-    private _isActiveField: boolean;
-    private _isEditMode: boolean;
     private _destroy$: Subject<void> = new Subject();
 
     constructor(
-        public editorService: EditorService,
-        private _formService: FormService,
+        private _editorService: EditorService,
         private _cdRef: ChangeDetectorRef,
+        private _store: Store<IEditorState>,
         config: FormlyConfig,
         renderer: Renderer2,
         elementRef: ElementRef,
@@ -63,16 +65,9 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         super(config, renderer, elementRef, hostContainerRef, form);
     }
 
-    @HostBinding('class.edit-mode') get isEditMode(): boolean {
-        return this._isEditMode;
-    }
-    @HostBinding('class.active') get isActiveField(): boolean {
-        return this._isActiveField;
-    }
-
     @HostListener('click', ['$event'])
     onClick(event: MouseEvent): void {
-        this._formService.selectField(this.fieldInfo.fieldId);
+        this._editorService.setActiveField(this.fieldInfo.fieldId);
         event.stopPropagation();
     }
 
@@ -89,40 +84,34 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
 
     override ngOnInit(): void {
         super.ngOnInit();
-        this.isOverrideMode$ = this._formService.isOverrideMode$;
-
         this.fieldInfo = this.field._info;
         this.isOverridden = !isEmpty(this.fieldInfo.fieldOverride);
 
-        if (this.fieldInfo.parentFieldId) {
-            const parent: IEditorFormlyField = this._formService.getField(this.fieldInfo.parentFieldId);
-            const siblings: IEditorFormlyField[] = getFieldChildren(parent);
-            this.index = siblings.findIndex(f => f._info.fieldId === this.fieldInfo.fieldId);
-            this.isFirstChild = this.index === 0;
-            this.isLastChild = this.index === siblings.length - 1;
-        } else {
-            this.isFirstChild = this.isLastChild = true;
-        }
-
         this.hideOptions = this.field.templateOptions.hideEditorWrapperOptions;
-        this.replaceCategories = getReplaceCategories(
-            this.editorService.fieldCategories,
-            this.field.type,
-            this.field.customType
-        );
+        this.fieldCategories = this._editorService.fieldCategories;
 
-        this._formService.activeField$.pipe(takeUntil(this._destroy$)).subscribe(f => {
-            if (!f) {
-                return;
-            }
+        this._store
+            .select(selectActiveForm)
+            .pipe(
+                takeUntil(this._destroy$),
+                filter(form => form && form.id === this.fieldInfo.formId)
+            )
+            .subscribe(form => {
+                this.isEditMode = form.isEditMode;
+                this.isOverrideMode = form.isOverrideMode;
+                this._cdRef.markForCheck();
+            });
 
-            this._isActiveField = f._info.fieldId === this.fieldInfo.fieldId;
-            this._cdRef.markForCheck();
-        });
-        this._formService.isEditMode$.pipe(takeUntil(this._destroy$)).subscribe(v => {
-            this._isEditMode = v;
-            this._cdRef.markForCheck();
-        });
+        this._store
+            .select(selectActiveField)
+            .pipe(
+                takeUntil(this._destroy$),
+                filter(field => field && field._info.formId === this.fieldInfo.formId)
+            )
+            .subscribe(field => {
+                this.isActiveField = field?._info.fieldId === this.fieldInfo.fieldId;
+                this._cdRef.markForCheck();
+            });
     }
 
     override ngOnDestroy(): void {
@@ -132,22 +121,22 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     }
 
     onAddChildField(type: string, customType?: string): void {
-        this._formService.addField(type, customType, this.fieldInfo.fieldId);
+        this._editorService.addField(type, customType, this.fieldInfo.fieldId);
     }
 
-    onReplaceParentField(type: string, customType?: string): void {
-        this._formService.replaceParentField(type, this.fieldInfo.fieldId, customType);
+    onReplaceField(type: string, customType?: string): void {
+        this._editorService.replaceField(type, this.fieldInfo.fieldId, customType);
     }
 
     onRemove(): void {
-        this._formService.removeField(this.fieldInfo.fieldId, this.fieldInfo.parentFieldId);
+        this._editorService.removeField(this.fieldInfo.fieldId, this.fieldInfo.parentFieldId);
     }
 
     onMoveUp(): void {
-        this._formService.moveField(this.fieldInfo.fieldId, this.index, this.index - 1);
+        this._editorService.moveField(this.fieldInfo.fieldId, this.index, this.index - 1);
     }
 
     onMoveDown(): void {
-        this._formService.moveField(this.fieldInfo.fieldId, this.index, this.index + 1);
+        this._editorService.moveField(this.fieldInfo.fieldId, this.index, this.index + 1);
     }
 }

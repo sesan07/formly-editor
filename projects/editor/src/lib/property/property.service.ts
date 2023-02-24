@@ -20,6 +20,7 @@ export class PropertyService {
         PropertyType.TEXTAREA,
     ];
 
+    // TODO Switch to type guards
     public getAsArrayProperty(property: IProperty): IArrayProperty {
         return property as IArrayProperty;
     }
@@ -101,7 +102,7 @@ export class PropertyService {
 
         switch (propertyType) {
             case PropertyType.ARRAY:
-                if ((value as []).length > 0) {
+                if ((value as []).length) {
                     const childPropertyType: PropertyType | undefined = this.getPropertyType(value[0]);
                     if (!childPropertyType) {
                         return undefined;

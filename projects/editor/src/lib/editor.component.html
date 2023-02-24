@@ -1,0 +1,10 @@
+<div
+    class="loading-view"
+    *ngIf="!canShowMain"
+>
+    <h1>Formly Editor</h1>
+    <div>[ Cool Logo Here ]</div>
+    <div class="lds-dual-ring"></div>
+</div>
+
+<editor-main *ngIf="canShowMain"></editor-main>

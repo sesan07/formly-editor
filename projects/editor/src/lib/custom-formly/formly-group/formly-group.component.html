@@ -11,8 +11,11 @@
     (cdkDropListDropped)="onDroplistDropped($event)"
 >
     <editor-formly-field
-        *ngFor="let f of field.fieldGroup"
+        *ngFor="let f of field.fieldGroup; let index = index; let first = first; let last = last"
         [field]="f"
+        [index]="index"
+        [isFirstChild]="first"
+        [isLastChild]="last"
         cdkDrag
         [cdkDragData]="getItemDragData(f)"
     >

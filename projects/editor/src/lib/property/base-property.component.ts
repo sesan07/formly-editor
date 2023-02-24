@@ -20,8 +20,8 @@ import { isParentProperty } from './utils';
 export abstract class BasePropertyDirective<P extends IBaseProperty, V> implements OnChanges {
     @Input() treeLevel = 0;
     @Input() path?: string;
-    @Input() target: Record<string, any> | any[];
-    @Input() property: P;
+    @Input() target?: Record<string, any> | any[];
+    @Input() property?: P;
     @Input() isSimplified: boolean;
     @Input() isOverrideMode: boolean;
 
@@ -39,7 +39,7 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.target) {
+        if (changes.target || changes.property) {
             const isFirstChange = !!changes.target?.firstChange;
             const newValue: any = this.path
                 ? get(this.target, this.path, this.defaultValue)
@@ -57,12 +57,7 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
     }
 
     public onKeyChanged(newKey: string): void {
-        const change: IPropertyChange = {
-            type: PropertyChangeType.KEY,
-            path: this.path,
-            data: newKey,
-        };
-        this.targetChanged.emit(change);
+        this._modifyKey(newKey);
     }
 
     onClearOverride(): void {
@@ -70,6 +65,17 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
             type: PropertyChangeType.CLEAR_OVERRIDE,
             path: this.path,
             data: null,
+        };
+        this.targetChanged.emit(change);
+    }
+
+    protected _modifyKey(newKey: string, childPath?: string, deleteChildPath?: string): void {
+        const change: IPropertyChange = {
+            type: PropertyChangeType.KEY,
+            path: this.path,
+            childPath,
+            deleteChildPath,
+            data: newKey,
         };
         this.targetChanged.emit(change);
     }
@@ -86,17 +92,11 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
     }
 
     protected _updateOverrideState(): void {
-        const fieldOverride = (this.target as IEditorFormlyField)._info?.fieldOverride;
+        const fieldOverride = (this.target as IEditorFormlyField)?._info?.fieldOverride;
         if (fieldOverride) {
             this.isOverridden = !isNil(get(fieldOverride, this.path));
         } else {
             this.isOverridden = false;
-        }
-    }
-
-    private _onKeyClicked(event: MouseEvent): void {
-        if (this.property.isKeyEditable) {
-            event.stopPropagation();
         }
     }
 

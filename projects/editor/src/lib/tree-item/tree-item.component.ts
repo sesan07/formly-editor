@@ -22,9 +22,9 @@ export class TreeItemComponent implements OnInit {
     @Input() treeLevel = 0;
     @Input() isExpanded: boolean;
     @Input() isExpandable: boolean;
-    @Input() isActive: boolean;
     @Input() hasOptions: boolean;
     @Input() optionsMenu: MatMenuPanel;
+    @Input() @HostBinding('class.active') isActive: boolean;
 
     @Output() isExpandedChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -34,11 +34,6 @@ export class TreeItemComponent implements OnInit {
 
     private readonly _treeIndentation = 18;
 
-    @HostBinding('class.active') get isHeaderActive(): boolean {
-        return this.isActive;
-    }
-
-    /** Gets the expanded state string. */
     get expansionState(): MatExpansionPanelState {
         return this.isExpanded ? 'expanded' : 'collapsed';
     }

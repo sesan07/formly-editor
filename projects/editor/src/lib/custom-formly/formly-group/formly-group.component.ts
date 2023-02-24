@@ -1,14 +1,16 @@
 import { CdkDragDrop, DropListOrientation } from '@angular/cdk/drag-drop';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FieldType } from '@ngx-formly/core';
-import { Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 
 import { DroplistService } from '../../form/droplist.service';
 import { IItemDragData, DragAction } from '../../form/droplist.types';
-import { FormService } from '../../form/form.service';
 import { EditorService } from '../../editor.service';
 import { IEditorFormlyField } from '../../editor.types';
 import { trackByFieldId } from '../../editor.utils';
+import { Store } from '@ngrx/store';
+import { IEditorState } from '../../state/state.types';
+import { selectActiveForm } from '../../state/state.selectors';
 
 @Component({
     selector: 'editor-formly-group',
@@ -28,9 +30,10 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
     private _destroy$: Subject<void> = new Subject();
 
     constructor(
-        public editorService: EditorService,
-        private _formService: FormService,
-        private _droplistService: DroplistService
+        private _editorService: EditorService,
+        private _droplistService: DroplistService,
+        private _cdRef: ChangeDetectorRef,
+        private _store: Store<IEditorState>
     ) {
         super();
     }
@@ -61,7 +64,16 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
                 .subscribe(ids => (this.connectedTo = ids));
         }
 
-        this._formService.isEditMode$.pipe(takeUntil(this._destroy$)).subscribe(v => (this.isEditMode = v));
+        this._store
+            .select(selectActiveForm)
+            .pipe(
+                takeUntil(this._destroy$),
+                filter(form => form && form.id === this.field._info.formId)
+            )
+            .subscribe(form => {
+                this.isEditMode = form.isEditMode;
+                this._cdRef.markForCheck();
+            });
     }
 
     ngOnDestroy(): void {
@@ -85,16 +97,16 @@ export class FormlyGroupComponent extends FieldType<IEditorFormlyField> implemen
 
         switch (itemData.action) {
             case DragAction.COPY:
-                this._formService.addField(field.type, field.customType, targetParent._info.fieldId, dropIndex);
+                this._editorService.addField(field.type, field.customType, targetParent._info.fieldId, dropIndex);
                 break;
             case DragAction.MOVE:
                 if (currentParent._info.fieldId === targetParent._info.fieldId) {
                     if (dragDrop.previousIndex === dragDrop.currentIndex) {
                         return;
                     }
-                    this._formService.moveField(field._info.fieldId, dragDrop.previousIndex, dropIndex);
+                    this._editorService.moveField(field._info.fieldId, dragDrop.previousIndex, dropIndex);
                 } else {
-                    this._formService.transferField(
+                    this._editorService.transferField(
                         field._info.fieldId,
                         targetParent._info.fieldId,
                         dragDrop.previousIndex,

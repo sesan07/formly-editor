@@ -18,7 +18,6 @@ import { FormComponent } from './form.component';
 import { AddFormDialogComponent } from './add-form-dialog/add-form-dialog.component';
 import { PropertyModule } from '../property/property.module';
 import { CustomFormlyModule } from '../custom-formly/custom-formly.module';
-import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
 import { TreeItemModule } from '../tree-item/tree-item.module';
 import { SidebarModule } from '../sidebar/sidebar.module';
 import { JsonFileValidatorDirective } from './json-file-validator/json-file-validator.directive';
@@ -34,7 +33,6 @@ import { TextEditorModule } from '../text-editor/text-editor.module';
         ImportModelDialogComponent,
         ExportFormDialogComponent,
         ToolbarComponent,
-        FieldTreeItemComponent,
         FieldCategoryComponent,
         JsonValidatorDirective,
         JsonFileValidatorDirective,

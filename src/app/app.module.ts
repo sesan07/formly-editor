@@ -14,6 +14,7 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
 import { HttpClientModule } from '@angular/common/http';
 import { EditorModule, EDITOR_FIELD_SERVICE } from 'editor';
 import { RepeatingSectionTypeComponent } from './components/types/repeating-section-type/repeating-section-type.component';
+import { ActionReducer, StoreModule } from '@ngrx/store';
 
 @NgModule({
     declarations: [AppComponent, CardWrapperComponent, RepeatingSectionTypeComponent],
@@ -96,6 +97,20 @@ import { RepeatingSectionTypeComponent } from './components/types/repeating-sect
             wrappers: [{ name: WrapperType.CARD, component: CardWrapperComponent }],
             validationMessages: [{ name: 'required', message: 'This field is required' }],
         }),
+        StoreModule.forRoot(
+            {},
+            {
+                metaReducers: [
+                    (reducer: ActionReducer<any>): ActionReducer<any> =>
+                        (state, action) => {
+                            //   console.log('state', state);
+                            console.log('Action:', action.type);
+
+                            return reducer(state, action);
+                        },
+                ],
+            }
+        ),
     ],
     providers: [{ provide: EDITOR_FIELD_SERVICE, useClass: FieldService }],
     bootstrap: [AppComponent],

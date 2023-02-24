@@ -9,8 +9,8 @@
 >
     <editor-property-key
         headerContent
-        [key]="property.key"
-        [isEditable]="property.isKeyEditable"
+        [key]="property?.key"
+        [isEditable]="property?.isKeyEditable"
         (keyChange)="onKeyChanged($event)"
     >
         <span>{{ (property?.name ? '(' + property.name + ') ' : '') + '{ ' + childProperties.length + ' }' }}</span>
@@ -153,7 +153,7 @@
         <span>Add</span>
     </button>
     <button
-        *ngIf="property.isRemovable"
+        *ngIf="property?.isRemovable"
         mat-menu-item
         color="warn"
         (click)="remove.emit()"
@@ -166,7 +166,7 @@
 <mat-menu #addMenu="matMenu">
     <button
         mat-menu-item
-        *ngIf="property.addOptions?.includes(typeofProperty.ARRAY)"
+        *ngIf="property?.addOptions?.includes(typeofProperty.ARRAY)"
         [matMenuTriggerFor]="addArrayMenu"
     >
         {{ typeofProperty.ARRAY }}
@@ -174,7 +174,7 @@
     <ng-container *ngFor="let type of propertyService.possibleArrayAddTypes">
         <button
             mat-menu-item
-            *ngIf="property.addOptions?.includes(type)"
+            *ngIf="property?.addOptions?.includes(type)"
             (click)="onAddChild(type)"
         >
             {{ type }}

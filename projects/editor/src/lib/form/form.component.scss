@@ -1,35 +1,22 @@
 :host {
-    display: flex;
+    display: block;
     height: 100%;
 
     ::ng-deep {
-        .main mat-tab-header {
-            display: none;
-        }
-
-        .main .mat-tab-body-content {
-            padding: 8px;
-            box-sizing: border-box;
-        }
-
-        .active-field-section .sidebar-section-content {
-            padding: 0;
+        .tab-group {
+            & > .mat-tab-header {
+                display: none;
+            }
+            & > .mat-tab-body-wrapper > .mat-tab-body > .mat-tab-body-content {
+                padding: 8px;
+                box-sizing: border-box;
+            }
         }
     }
 }
 
-.main {
-    flex-grow: 1;
-    height: 100%;
-    overflow-x: auto;
-}
-
-.main .tab-group {
+.tab-group {
     height: calc(100% - var(--header-height));
-}
-
-.main .toolbar {
-    height: var(--header-height);
 }
 
 .categories-wrapper {

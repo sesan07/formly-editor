@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { getFieldChildren } from './form.utils';
-import { FormService } from '../form/form.service';
 import { IEditorFormlyField } from '../editor.types';
 
 @Injectable()
@@ -11,10 +10,10 @@ export class DroplistService {
 
     private _droplistIds$: BehaviorSubject<string[]> = new BehaviorSubject([]);
 
-    constructor(formService: FormService) {
+    constructor() {
         this.droplistIds$ = this._droplistIds$.asObservable();
 
-        formService.fields$.subscribe(fields => this.updateIds(fields));
+        // formService.fields$.subscribe(fields => this.updateIds(fields));
     }
 
     public updateIds(fields: IEditorFormlyField[]): void {
