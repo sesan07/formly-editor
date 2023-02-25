@@ -1,6 +1,6 @@
 <editor-sidebar
-    class="left"
-    [class.hidden]="!showSidebars"
+    class="left editor-mat"
+    [class.hidden]="!showSidebars || !activeForm"
     [position]="typeOfSideBarPosition.LEFT"
     (resizeEnd)="onResizeEnd()"
 >
@@ -21,19 +21,15 @@
             class="tree-container"
             mainContent
         >
-            <ng-container *ngIf="(activeForm$ | async)?.fields.length; else addFieldText">
+            <ng-container *ngIf="activeForm?.fields.length">
                 <editor-field-tree-item
-                    *ngFor="let field of (activeForm$ | async).fields; trackBy: trackByFieldId"
+                    *ngFor="let field of activeForm.fields; trackBy: trackByFieldId"
                     [field]="field"
                     [fieldCategories]="fieldCategories"
                     [isExpanded]="true"
                 >
                 </editor-field-tree-item>
             </ng-container>
-
-            <ng-template #addFieldText>
-                <div class="no-fields-wrapper">No Field</div>
-            </ng-template>
         </div>
     </editor-sidebar-section>
 </editor-sidebar>
@@ -86,8 +82,8 @@
 </div>
 
 <editor-sidebar
-    class="right"
-    [class.hidden]="!showSidebars"
+    class="right editor-mat"
+    [class.hidden]="!showSidebars || !activeForm"
     [position]="typeOfSideBarPosition.RIGHT"
     (resizeEnd)="onResizeEnd()"
 >
@@ -98,8 +94,10 @@
                 - {{ activeField._info.name | fieldName : activeField.key }}
             </span>
         </span>
+
         <editor-edit-field
             mainContent
+            [class.hidden]="!activeForm?.fields.length"
             [resizeTabHeader$]="resizeEnd$"
             (fieldChanged)="onActiveFieldChanged($event)"
         >
@@ -123,10 +121,11 @@
 
         <div
             class="tree-container"
+            [class.hidden]="!activeForm?.fields.length"
             mainContent
         >
             <editor-object-property
-                [target]="activeModel$ | async"
+                [target]="activeModel"
                 [property]="modelProperty"
                 [isExpanded]="true"
                 (targetChanged)="onActiveModelChanged($event)"
@@ -153,6 +152,7 @@
 <mat-menu #addCategoryMenu="matMenu">
     <ng-container *ngFor="let category of fieldCategories">
         <button
+            class="editor-mat-menu-item"
             mat-menu-item
             [matMenuTriggerFor]="addFieldMenu"
         >
@@ -161,6 +161,7 @@
 
         <mat-menu #addFieldMenu="matMenu">
             <button
+                class="editor-mat-menu-item"
                 mat-menu-item
                 *ngFor="let option of category.typeOptions"
                 (click)="onAddField(option.name, option.customName)"
@@ -173,6 +174,7 @@
 
 <mat-menu #modelOptionsMenu="matMenu">
     <button
+        class="editor-mat-menu-item"
         mat-menu-item
         (click)="onImportModel()"
     >
@@ -180,6 +182,7 @@
         <span>Import</span>
     </button>
     <button
+        class="editor-mat-menu-item"
         mat-menu-item
         (click)="onExportModel()"
     >

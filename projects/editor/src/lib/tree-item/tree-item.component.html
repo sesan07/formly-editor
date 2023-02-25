@@ -39,7 +39,6 @@
 </div>
 <div
     *ngIf="isExpandable"
-    class="children-container"
     [@bodyExpansion]="expansionState"
 >
     <ng-content select="[childrenContent]"></ng-content>

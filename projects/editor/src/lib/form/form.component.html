@@ -1,5 +1,5 @@
 <editor-toolbar
-    class="toolbar"
+    class="toolbar editor-mat"
     [(tabIndex)]="toolbarTabIndex"
     [isEditMode]="form.isEditMode"
     [isOverrideMode]="form.isOverrideMode"
@@ -56,6 +56,7 @@
 <mat-menu #addCategoryMenu="matMenu">
     <ng-container *ngFor="let category of fieldCategories">
         <button
+            class="editor-mat-menu-item"
             mat-menu-item
             [matMenuTriggerFor]="addFieldMenu"
         >
@@ -64,6 +65,7 @@
 
         <mat-menu #addFieldMenu="matMenu">
             <button
+                class="editor-mat-menu-item"
                 mat-menu-item
                 *ngFor="let option of category.typeOptions"
                 (click)="onAddField(option.name, option.customName)"

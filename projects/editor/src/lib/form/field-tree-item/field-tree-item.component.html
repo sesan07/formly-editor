@@ -34,6 +34,7 @@
 <mat-menu #optionsMenu="matMenu">
     <button
         *ngIf="fieldInfo.canHaveChildren"
+        class="editor-mat-menu-item"
         mat-menu-item
         [matMenuTriggerFor]="addCategoryMenu"
     >
@@ -42,6 +43,7 @@
     </button>
     <button
         *ngIf="fieldCategories.length"
+        class="editor-mat-menu-item"
         mat-menu-item
         [matMenuTriggerFor]="replaceCategoryMenu"
     >
@@ -49,6 +51,7 @@
         <span>Replace</span>
     </button>
     <button
+        class="editor-mat-menu-item"
         mat-menu-item
         (click)="onRemove()"
     >
@@ -60,6 +63,7 @@
 <mat-menu #addCategoryMenu="matMenu">
     <ng-container *ngFor="let category of fieldCategories">
         <button
+            class="editor-mat-menu-item"
             mat-menu-item
             [matMenuTriggerFor]="addFieldMenu"
         >
@@ -68,6 +72,7 @@
 
         <mat-menu #addFieldMenu="matMenu">
             <button
+                class="editor-mat-menu-item"
                 mat-menu-item
                 *ngFor="let option of category.typeOptions"
                 (click)="onAddChildField(option.name, option.customName)"
@@ -81,6 +86,7 @@
 <mat-menu #replaceCategoryMenu="matMenu">
     <ng-container *ngFor="let category of fieldCategories">
         <button
+            class="editor-mat-menu-item"
             mat-menu-item
             [matMenuTriggerFor]="replaceFieldMenu"
         >
@@ -89,6 +95,7 @@
 
         <mat-menu #replaceFieldMenu="matMenu">
             <button
+                class="editor-mat-menu-item"
                 mat-menu-item
                 *ngFor="let option of category.typeOptions"
                 (click)="onReplaceParentField(option.name, option.customName)"

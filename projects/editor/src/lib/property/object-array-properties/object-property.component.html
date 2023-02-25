@@ -146,6 +146,7 @@
 <mat-menu #optionsMenu="matMenu">
     <button
         *ngIf="canAdd"
+        class="editor-mat-menu-item"
         mat-menu-item
         [matMenuTriggerFor]="addMenu"
     >
@@ -154,6 +155,7 @@
     </button>
     <button
         *ngIf="property?.isRemovable"
+        class="editor-mat-menu-item"
         mat-menu-item
         color="warn"
         (click)="remove.emit()"
@@ -165,6 +167,7 @@
 
 <mat-menu #addMenu="matMenu">
     <button
+        class="editor-mat-menu-item"
         mat-menu-item
         *ngIf="property?.addOptions?.includes(typeofProperty.ARRAY)"
         [matMenuTriggerFor]="addArrayMenu"
@@ -173,6 +176,7 @@
     </button>
     <ng-container *ngFor="let type of propertyService.possibleArrayAddTypes">
         <button
+            class="editor-mat-menu-item"
             mat-menu-item
             *ngIf="property?.addOptions?.includes(type)"
             (click)="onAddChild(type)"
@@ -185,6 +189,7 @@
 <mat-menu #addArrayMenu="matMenu">
     <button
         *ngFor="let type of propertyService.possibleArrayAddTypes"
+        class="editor-mat-menu-item"
         mat-menu-item
         (click)="onAddChild(typeofProperty.ARRAY, type)"
     >
