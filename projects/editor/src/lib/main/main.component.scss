@@ -39,7 +39,7 @@ editor-sidebar {
     }
 
     &.right {
-        width: 30%;
+        width: 20%;
     }
 }
 
@@ -72,7 +72,7 @@ editor-sidebar {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: var(--header-height);
+    height: var(--editor-header-height);
     width: var(--add-form-width);
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }

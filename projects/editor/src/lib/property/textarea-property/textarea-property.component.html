@@ -60,6 +60,7 @@
 <mat-menu #optionsMenu="matMenu">
     <button
         *ngIf="property.isRemovable"
+        class="editor-mat-menu-item"
         mat-menu-item
         color="warn"
         (click)="remove.emit()"

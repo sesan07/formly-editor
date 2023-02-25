@@ -79,6 +79,7 @@
             (optionSelected)="onSelected($event)"
         >
             <mat-option
+                class="editor-mat-option"
                 *ngFor="let option of filteredOptions"
                 [value]="option"
             >
@@ -91,6 +92,7 @@
 <mat-menu #optionsMenu="matMenu">
     <button
         *ngIf="property.isRemovable"
+        class="editor-mat-menu-item"
         mat-menu-item
         color="warn"
         (click)="remove.emit()"

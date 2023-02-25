@@ -35,23 +35,21 @@ import { IEditorState } from '../state/state.types';
 })
 export class MainComponent implements OnInit {
     public forms$: Observable<ReadonlyArray<IForm>>;
-    public activeForm$: Observable<IForm>;
     public activeFormIndex$: Observable<number>;
     public activeField$: Observable<IEditorFormlyField>;
-    public activeModel$: Observable<Record<string, unknown>>;
     public resizeEnd$: Observable<void>;
 
     public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
     public showSidebars = true;
     public toolbarTabIndex: 0 | 1 = 0;
 
+    public activeForm: IForm;
+    public activeModel: Record<string, unknown>;
     public modelProperty: IObjectProperty;
     public fieldCategories: EditorTypeCategoryOption[];
 
     trackByFieldId = trackByFieldId;
 
-    private _activeForm: IForm;
-    private _activeModel: Record<string, unknown>;
     private _destroy$: Subject<void> = new Subject();
     private _resizeEnd$: Subject<void> = new Subject();
 
@@ -67,16 +65,16 @@ export class MainComponent implements OnInit {
 
     ngOnInit(): void {
         this.forms$ = this._store.select(selectForms).pipe(takeUntil(this._destroy$));
-        this.activeForm$ = this._store.select(selectActiveForm).pipe(
-            takeUntil(this._destroy$),
-            tap(form => (this._activeForm = form))
-        );
         this.activeFormIndex$ = this._store.select(selectActiveFormIndex).pipe(takeUntil(this._destroy$));
         this.activeField$ = this._store.select(selectActiveField).pipe(takeUntil(this._destroy$));
-        this.activeModel$ = this._store.select(selectActiveModel).pipe(
-            takeUntil(this._destroy$),
-            tap(model => (this._activeModel = model))
-        );
+        this._store
+            .select(selectActiveForm)
+            .pipe(takeUntil(this._destroy$))
+            .subscribe(form => (this.activeForm = form));
+        this._store
+            .select(selectActiveModel)
+            .pipe(takeUntil(this._destroy$))
+            .subscribe(model => (this.activeModel = model));
         this.modelProperty = this._getModelProperty();
         this.fieldCategories = this._editorService.fieldCategories;
     }
@@ -110,17 +108,17 @@ export class MainComponent implements OnInit {
     }
 
     onDuplicateForm(): void {
-        this._editorService.duplicateForm(this._activeForm.id);
+        this._editorService.duplicateForm(this.activeForm.id);
     }
 
     onExportForm(): void {
-        const fieldsClone: IEditorFormlyField[] = cloneDeep(this._activeForm.fields);
+        const fieldsClone: IEditorFormlyField[] = cloneDeep(this.activeForm.fields);
         fieldsClone.forEach(field => cleanField(field, true, true));
 
         const config: MatDialogConfig<ExportJSONRequest> = {
             data: {
                 type: 'Form',
-                name: this._activeForm.name + '.json',
+                name: this.activeForm.name + '.json',
                 json: JSON.stringify(fieldsClone, null, 2),
             },
         };
@@ -162,8 +160,8 @@ export class MainComponent implements OnInit {
         const config: MatDialogConfig<ExportJSONRequest> = {
             data: {
                 type: 'Model',
-                name: this._activeForm.name + '.model.json',
-                json: JSON.stringify(this._activeModel, null, 2),
+                name: this.activeForm.name + '.model.json',
+                json: JSON.stringify(this.activeModel, null, 2),
             },
         };
 

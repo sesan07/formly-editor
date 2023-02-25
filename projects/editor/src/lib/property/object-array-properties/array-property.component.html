@@ -179,6 +179,7 @@
 <mat-menu #optionsMenu="matMenu">
     <button
         *ngIf="canAdd"
+        class="editor-mat-menu-item"
         mat-menu-item
         (click)="onAddChild()"
     >
@@ -187,6 +188,7 @@
     </button>
     <button
         *ngIf="property.isRemovable"
+        class="editor-mat-menu-item"
         mat-menu-item
         (click)="remove.emit()"
     >

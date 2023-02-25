@@ -5,6 +5,7 @@
         (selectionChange)="onVariantSelected($event.value)"
     >
         <mat-option
+            class="editor-mat-option"
             *ngFor="let variant of option.variants"
             [value]="variant"
         >

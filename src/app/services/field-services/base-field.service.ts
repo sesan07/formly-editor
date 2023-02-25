@@ -93,7 +93,7 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
                 return [
                     {
                         name: 'Card Title (for cards)',
-                        key: 'cardTitle',
+                        key: 'templateOptions.cardTitle',
                         type: PropertyType.TEXT,
                         isSimple: true,
                     },
