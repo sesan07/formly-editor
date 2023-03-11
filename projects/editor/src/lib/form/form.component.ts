@@ -17,7 +17,6 @@ import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { EditorService } from '../editor.service';
 import { EditorTypeCategoryOption, IEditorFormlyField, IForm } from '../editor.types';
 import { cleanField } from './form.utils';
-import { DroplistService } from './droplist.service';
 import { trackByFieldId } from '../editor.utils';
 import { selectActiveForm } from '../state/state.selectors';
 import { Store } from '@ngrx/store';
@@ -27,7 +26,6 @@ import { IEditorState } from '../state/state.types';
     selector: 'editor-form',
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss'],
-    providers: [DroplistService],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormComponent implements OnInit, OnDestroy {

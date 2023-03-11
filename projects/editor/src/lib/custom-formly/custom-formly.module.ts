@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
 
 import { FormlyModule } from '@ngx-formly/core';
@@ -32,7 +31,6 @@ import { FieldNameModule } from '../field-name/field-name.module';
         MatMenuModule,
         MatIconModule,
         MatButtonModule,
-        DragDropModule,
         PropertyModule,
     ],
     exports: [FormlyFormComponent, FormlyModule],

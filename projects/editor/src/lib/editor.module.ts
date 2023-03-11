@@ -13,7 +13,6 @@ import { EditorService } from './editor.service';
 import { CustomFormlyModule } from './custom-formly/custom-formly.module';
 import { FormModule } from './form/form.module';
 import { FileService } from './shared/services/file-service/file.service';
-import { installPatch } from './dnd-patch';
 
 import 'codemirror/mode/javascript/javascript';
 import { EditorComponent } from './editor.component';
@@ -83,9 +82,6 @@ const defaultConfig: EditorConfigOption = {
 export class EditorModule {
     constructor(editorService: EditorService, @Optional() @Inject(EDITOR_CONFIG) config: EditorConfigOption) {
         editorService.setup(config ?? defaultConfig);
-
-        // Patch drag/drop to improve nesting support
-        installPatch();
     }
 
     static forRoot(config: EditorConfigOption): ModuleWithProviders<EditorModule> {

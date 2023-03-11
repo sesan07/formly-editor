@@ -7,12 +7,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { ExportFormDialogComponent } from './export-form-dialog/export-form-dialog.component';
-import { FieldCategoryComponent } from './field-category/field-category.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { FormComponent } from './form.component';
 import { AddFormDialogComponent } from './add-form-dialog/add-form-dialog.component';
@@ -33,7 +31,6 @@ import { TextEditorModule } from '../text-editor/text-editor.module';
         ImportModelDialogComponent,
         ExportFormDialogComponent,
         ToolbarComponent,
-        FieldCategoryComponent,
         JsonValidatorDirective,
         JsonFileValidatorDirective,
         FormComponent,
@@ -56,7 +53,6 @@ import { TextEditorModule } from '../text-editor/text-editor.module';
         MatButtonToggleModule,
         MatDialogModule,
         MatTabsModule,
-        DragDropModule,
     ],
     exports: [FormComponent],
 })

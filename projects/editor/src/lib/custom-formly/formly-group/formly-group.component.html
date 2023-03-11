@@ -1,14 +1,7 @@
 <!-- TODO disable sorting always -->
 <div
     [id]="field._info.fieldId"
-    [class]="dropListClasses"
-    [class.edit-mode]="isEditMode"
-    cdkDropList
-    [cdkDropListOrientation]="dropListOrientation"
-    [cdkDropListSortingDisabled]="isGridContainer"
-    [cdkDropListConnectedTo]="connectedTo"
-    [cdkDropListData]="field"
-    (cdkDropListDropped)="onDroplistDropped($event)"
+    [class]="this.field.fieldGroupClassName || ''"
 >
     <editor-formly-field
         *ngFor="let f of field.fieldGroup; let index = index; let first = first; let last = last"
@@ -16,10 +9,6 @@
         [index]="index"
         [isFirstChild]="first"
         [isLastChild]="last"
-        cdkDrag
-        [cdkDragData]="getItemDragData(f)"
     >
-        <div *cdkDragPlaceholder>Drop Here</div>
-        <div cdkDragHandle></div>
     </editor-formly-field>
 </div>
