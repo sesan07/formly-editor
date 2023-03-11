@@ -4,7 +4,6 @@ import { cloneDeep } from 'lodash-es';
 import { IEditorFormlyField, IForm } from '../editor.types';
 import { convertToEditorField, getFormId } from '../editor.utils';
 import { getFieldChildren, setFieldChildren } from '../form/form.utils';
-import { overrideFields } from '../form/override.utils';
 import { PropertyChangeType } from '../property/property.types';
 import {
     addForm,
@@ -13,13 +12,11 @@ import {
     setActiveField,
     setActiveFormId,
     addField,
-    setOverrideMode,
     setActiveModel,
     modifyActiveModel,
     AddForm,
     AddField,
     SetEditMode,
-    SetOverrideMode,
     ModifyActiveField,
     SetActiveField,
     ModifyActiveModel,
@@ -37,16 +34,7 @@ import {
     replaceField,
 } from './state.actions';
 import { IEditorState } from './state.types';
-import {
-    duplicateFields,
-    getFieldMap,
-    getKeyPath,
-    modifyFields,
-    modifyKey,
-    modifyOverrideKey,
-    modifyOverrideValue,
-    modifyValue,
-} from './state.utils';
+import { duplicateFields, modifyFields, modifyKey, modifyValue } from './state.utils';
 
 export const initialState: IEditorState = {
     formMap: {},
@@ -56,7 +44,7 @@ export const initialState: IEditorState = {
 
 const processAddForm = (
     state: IEditorState,
-    { name, sourceFields, model, override, getDefaultField, typeOptions, unknownTypeName }: AddForm
+    { name, sourceFields, model, getDefaultField, typeOptions, unknownTypeName }: AddForm
 ): IEditorState => {
     const id = getFormId(state.formIdCounter + 1);
     const counter = { count: 0 };
@@ -73,10 +61,8 @@ const processAddForm = (
                 fields: baseFields,
                 baseFields,
                 model: model ?? {},
-                override: override ?? { override: {} },
                 activeFieldId: baseFields[0]?._info.fieldId,
                 isEditMode: true,
-                isOverrideMode: false,
                 fieldIdCounter: counter.count,
             },
         },
@@ -112,7 +98,6 @@ const processDuplicateForm = (state: IEditorState, { formId }: DuplicateForm): I
                 baseFields,
                 activeFieldId: baseFields[0]?._info.fieldId,
                 isEditMode: true,
-                isOverrideMode: false,
             },
         },
         activeFormId: id,
@@ -203,61 +188,27 @@ const processSetEditMode = (state: IEditorState, { formId, isEditMode }: SetEdit
     },
 });
 
-const processSetOverrideMode = (state: IEditorState, { formId, isOverrideMode }: SetOverrideMode): IEditorState => {
-    const activeForm: IForm = state.formMap[state.activeFormId];
-    const fields = isOverrideMode
-        ? overrideFields(cloneDeep(activeForm.baseFields), activeForm.override)
-        : [...activeForm.baseFields];
-    return {
-        ...state,
-        formMap: {
-            ...state.formMap,
-            [activeForm.id]: {
-                ...activeForm,
-                fields,
-                isOverrideMode,
-            },
-        },
-    };
-};
-
 const processModifyActiveField = (state: IEditorState, { activeField, change }: ModifyActiveField): IEditorState => {
     const activeForm = state.formMap[state.activeFormId];
-    const isOverrideMode = activeForm.isOverrideMode;
-    let override = activeForm.override;
-    let fieldMap: Record<string, IEditorFormlyField>;
 
     switch (change.type) {
         case PropertyChangeType.KEY:
-            if (isOverrideMode) {
-                fieldMap = activeForm.fields.reduce((a, f) => ({ ...a, ...getFieldMap(f) }), {});
-                override = modifyOverrideKey(override, activeField, fieldMap, change);
-            } else {
-                activeField = modifyKey(activeField, change);
-            }
-
+            activeField = modifyKey(activeField, change);
             break;
         case PropertyChangeType.VALUE:
-            if (isOverrideMode) {
-                fieldMap = activeForm.fields.reduce((a, f) => ({ ...a, ...getFieldMap(f) }), {});
-                override = modifyOverrideValue(override, activeField, fieldMap, change);
-            } else {
-                activeField = modifyValue(activeField, change);
-            }
+            activeField = modifyValue(activeField, change);
             break;
     }
 
-    const baseFields = isOverrideMode ? activeForm.baseFields : modifyFields(activeForm.baseFields, activeField);
-    const fields = isOverrideMode ? overrideFields(cloneDeep(baseFields), override) : baseFields;
+    const baseFields = modifyFields(activeForm.baseFields, activeField);
     return {
         ...state,
         formMap: {
             ...state.formMap,
             [activeForm.id]: {
                 ...activeForm,
-                fields,
+                fields: baseFields,
                 baseFields,
-                override,
             },
         },
     };
@@ -407,7 +358,6 @@ const newReducer = createReducer(
     on(addField, processAddField),
     on(removeField, processRemoveField),
     on(setEditMode, processSetEditMode),
-    on(setOverrideMode, processSetOverrideMode),
     on(modifyActiveField, processModifyActiveField),
     on(setActiveField, processSetActiveField),
     on(replaceField, processReplaceField),

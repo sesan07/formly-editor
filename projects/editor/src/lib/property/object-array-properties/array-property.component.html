@@ -22,68 +22,46 @@
 </editor-tree-item>
 
 <ng-template #simplifiedView>
-    <div class="simplified-view">
-        <span
-            *ngIf="isOverrideMode"
-            class="override-indicator"
-            [class.overriden]="isOverridden"
-        ></span>
-        <mat-expansion-panel
-            class="simplified-panel"
-            [(expanded)]="isExpanded"
-        >
-            <mat-expansion-panel-header>
-                <span class="simplified-header">
-                    <span class="simplified-header-left">
-                        {{ (property.name || property.key) + ' [ ' + childProperties.length + ' ]' }}
-                    </span>
-
-                    <span class="simplified-header-right">
-                        <button
-                            *ngIf="canAdd"
-                            mat-icon-button
-                            (click)="onAddChild(); $event.stopPropagation()"
-                        >
-                            <mat-icon>add</mat-icon>
-                        </button>
-                        <button
-                            *ngIf="isOverrideMode && isOverridden"
-                            class="override-clear-btn"
-                            mat-icon-button
-                            (click)="onClearOverride(); $event.stopPropagation()"
-                        >
-                            <mat-icon>clear</mat-icon>
-                        </button>
-                    </span>
+    <mat-expansion-panel
+        class="simplified-panel"
+        [(expanded)]="isExpanded"
+    >
+        <mat-expansion-panel-header>
+            <span class="simplified-header">
+                <span class="simplified-header-left">
+                    {{ (property.name || property.key) + ' [ ' + childProperties.length + ' ]' }}
                 </span>
-            </mat-expansion-panel-header>
-            <div class="simplified-wrapper">
-                <mat-accordion>
-                    <mat-expansion-panel
-                        *ngFor="let child of childProperties; let index = index; trackBy: trackByPropertyKey"
+                <button
+                    *ngIf="canAdd"
+                    mat-icon-button
+                    (click)="onAddChild(); $event.stopPropagation()"
+                >
+                    <mat-icon>add</mat-icon>
+                </button>
+            </span>
+        </mat-expansion-panel-header>
+        <mat-accordion>
+            <mat-expansion-panel *ngFor="let child of childProperties; let index = index; trackBy: trackByPropertyKey">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Item {{ index + 1 }}</mat-panel-title>
+                    <button
+                        *ngIf="child.isRemovable"
+                        class="simple-remove-btn"
+                        mat-icon-button
+                        color="warn"
+                        (click)="onRemoveChild(index)"
                     >
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>Item {{ index + 1 }}</mat-panel-title>
-                            <button
-                                *ngIf="child.isRemovable"
-                                class="simple-remove-btn"
-                                mat-icon-button
-                                color="warn"
-                                (click)="onRemoveChild(index)"
-                            >
-                                <mat-icon>remove</mat-icon>
-                            </button>
-                        </mat-expansion-panel-header>
-                        <ng-container
-                            [ngTemplateOutlet]="childProperty"
-                            [ngTemplateOutletContext]="{ child, index }"
-                        >
-                        </ng-container>
-                    </mat-expansion-panel>
-                </mat-accordion>
-            </div>
-        </mat-expansion-panel>
-    </div>
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                </mat-expansion-panel-header>
+                <ng-container
+                    [ngTemplateOutlet]="childProperty"
+                    [ngTemplateOutletContext]="{ child, index }"
+                >
+                </ng-container>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-expansion-panel>
 </ng-template>
 
 <ng-template #childPropertiesContainer>
@@ -109,7 +87,6 @@
             [target]="target"
             [property]="propertyService.getAsObjectProperty(child)"
             [isSimplified]="isSimplified"
-            [isOverrideMode]="isOverrideMode"
             (remove)="onRemoveChild(index)"
             (targetChanged)="targetChanged.emit($event)"
         >
@@ -122,7 +99,6 @@
             [property]="child"
             [target]="target"
             [isSimplified]="isSimplified"
-            [isOverrideMode]="isOverrideMode"
             (remove)="onRemoveChild(index)"
             (targetChanged)="targetChanged.emit($event)"
         >
@@ -135,7 +111,6 @@
             [property]="propertyService.getAsChiplistProperty(child)"
             [target]="target"
             [isSimplified]="isSimplified"
-            [isOverrideMode]="isOverrideMode"
             (remove)="onRemoveChild(index)"
             (targetChanged)="targetChanged.emit($event)"
         >
@@ -148,7 +123,6 @@
             [property]="propertyService.getAsTextareaProperty(child)"
             [target]="target"
             [isSimplified]="isSimplified"
-            [isOverrideMode]="isOverrideMode"
             (remove)="onRemoveChild(index)"
             (targetChanged)="targetChanged.emit($event)"
         >
@@ -167,7 +141,6 @@
                 [property]="propertyService.getAsInputProperty(child)"
                 [target]="target"
                 [isSimplified]="isSimplified"
-                [isOverrideMode]="isOverrideMode"
                 (remove)="onRemoveChild(index)"
                 (targetChanged)="targetChanged.emit($event)"
             >

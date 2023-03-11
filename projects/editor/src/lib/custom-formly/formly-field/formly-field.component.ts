@@ -47,8 +47,6 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     public hideOptions: boolean;
     public fieldInfo: IEditorFieldInfo;
     public fieldCategories: EditorTypeCategoryOption[];
-    public isOverridden: boolean;
-    public isOverrideMode: boolean;
 
     private _destroy$: Subject<void> = new Subject();
 
@@ -85,7 +83,6 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     override ngOnInit(): void {
         super.ngOnInit();
         this.fieldInfo = this.field._info;
-        this.isOverridden = !isEmpty(this.fieldInfo.fieldOverride);
 
         this.hideOptions = this.field.templateOptions.hideEditorWrapperOptions;
         this.fieldCategories = this._editorService.fieldCategories;
@@ -98,7 +95,6 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
             )
             .subscribe(form => {
                 this.isEditMode = form.isEditMode;
-                this.isOverrideMode = form.isOverrideMode;
                 this._cdRef.markForCheck();
             });
 

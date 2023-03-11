@@ -9,14 +9,7 @@
     (isExpandedChange)="onSelected()"
 >
     <ng-container headerContent>
-        <span class="header">
-            <span
-                *ngIf="isOverrideMode"
-                class="override-indicator"
-                [class.overriden]="isOverridden"
-            ></span>
-            {{ fieldInfo.name | fieldName : field.key }}
-        </span>
+        {{ fieldInfo.name | fieldName : field.key }}
     </ng-container>
 
     <ng-container childrenContent>

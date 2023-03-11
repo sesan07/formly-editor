@@ -32,16 +32,6 @@ export class InputPropertyComponent extends BasePropertyDirective<IInputProperty
         });
     }
 
-    protected override _updateOverrideState(): void {
-        this.isInArray = this.path.split('.').some(k => !isNaN(Number(k)));
-        const fieldOverride = (this.target as IEditorFormlyField)?._info?.fieldOverride;
-        if (fieldOverride) {
-            this.isOverridden = !this.isInArray && !isNil(get(fieldOverride, this.path));
-        } else {
-            this.isOverridden = false;
-        }
-    }
-
     private _updateValue(value: string): void {
         if (this.property.type === PropertyType.NUMBER && isNaN(Number(value))) {
             this.formControl.setValue(this.currentValue, {

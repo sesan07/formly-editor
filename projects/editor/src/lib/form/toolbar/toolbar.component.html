@@ -19,12 +19,6 @@
         (ngModelChange)="isEditModeChange.emit($event)"
         >Edit Mode</mat-slide-toggle
     >
-    <mat-slide-toggle
-        labelPosition="before"
-        [ngModel]="isOverrideMode"
-        (ngModelChange)="isOverrideModeChange.emit($event)"
-        >Override Mode</mat-slide-toggle
-    >
     <button
         mat-icon-button
         [matMenuTriggerFor]="optionsMenu"

@@ -29,32 +29,17 @@
 </editor-tree-item>
 
 <ng-template #simplifiedView>
-    <div class="simplified-wrapper">
-        <span
-            *ngIf="isOverrideMode"
-            class="override-indicator"
-            [class.overriden]="isOverridden"
-        ></span>
-        <mat-form-field>
-            <mat-label>{{ property.name ? property.name : property.key }}</mat-label>
-            <textarea
-                matInput
-                cdkTextareaAutosize
-                [cdkAutosizeMaxRows]="property.maxRows"
-                [cdkAutosizeMinRows]="property.minRows"
-                [formControl]="formControl"
-            >
-            </textarea>
-        </mat-form-field>
-        <button
-            *ngIf="isOverrideMode && isOverridden"
-            class="override-clear-btn"
-            mat-icon-button
-            (click)="onClearOverride()"
+    <mat-form-field>
+        <mat-label>{{ property.name ? property.name : property.key }}</mat-label>
+        <textarea
+            matInput
+            cdkTextareaAutosize
+            [cdkAutosizeMaxRows]="property.maxRows"
+            [cdkAutosizeMinRows]="property.minRows"
+            [formControl]="formControl"
         >
-            <mat-icon>clear</mat-icon>
-        </button>
-    </div>
+        </textarea>
+    </mat-form-field>
 </ng-template>
 
 <mat-menu #optionsMenu="matMenu">

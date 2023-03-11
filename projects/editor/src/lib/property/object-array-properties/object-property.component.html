@@ -22,18 +22,16 @@
 </editor-tree-item>
 
 <ng-template #simplifiedView>
-    <div class="simplified-container">
-        <div class="simplified-properties">
-            <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
-            <button
-                *ngIf="canAdd"
-                mat-button
-                [matMenuTriggerFor]="addMenu"
-            >
-                <mat-icon>add</mat-icon>
-                <span>Add</span>
-            </button>
-        </div>
+    <div class="simplified-properties">
+        <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
+        <button
+            *ngIf="canAdd"
+            mat-button
+            [matMenuTriggerFor]="addMenu"
+        >
+            <mat-icon>add</mat-icon>
+            <span>Add</span>
+        </button>
     </div>
 </ng-template>
 
@@ -48,7 +46,6 @@
                     [target]="target"
                     [property]="propertyService.getAsArrayProperty(child)"
                     [isSimplified]="isSimplified"
-                    [isOverrideMode]="isOverrideMode"
                     (remove)="onRemoveChild(i)"
                     (targetChanged)="targetChanged.emit($event)"
                 >
@@ -61,7 +58,6 @@
                     [target]="target"
                     [property]="propertyService.getAsObjectProperty(child)"
                     [isSimplified]="isSimplified"
-                    [isOverrideMode]="isOverrideMode"
                     (remove)="onRemoveChild(i)"
                     (targetChanged)="targetChanged.emit($event)"
                 >
@@ -74,7 +70,6 @@
                     [property]="child"
                     [target]="target"
                     [isSimplified]="isSimplified"
-                    [isOverrideMode]="isOverrideMode"
                     (remove)="onRemoveChild(i)"
                     (targetChanged)="targetChanged.emit($event)"
                 >
@@ -87,7 +82,6 @@
                     [property]="propertyService.getAsChiplistProperty(child)"
                     [target]="target"
                     [isSimplified]="isSimplified"
-                    [isOverrideMode]="isOverrideMode"
                     (remove)="onRemoveChild(i)"
                     (targetChanged)="targetChanged.emit($event)"
                 >
@@ -100,7 +94,6 @@
                     [property]="propertyService.getAsTextareaProperty(child)"
                     [target]="target"
                     [isSimplified]="isSimplified"
-                    [isOverrideMode]="isOverrideMode"
                     (remove)="onRemoveChild(i)"
                     (targetChanged)="targetChanged.emit($event)"
                 >
@@ -113,7 +106,6 @@
                     [property]="propertyService.getAsExpressionPropertiesProperty(child)"
                     [target]="target"
                     [isSimplified]="isSimplified"
-                    [isOverrideMode]="isOverrideMode"
                     (remove)="onRemoveChild(i)"
                     (targetChanged)="targetChanged.emit($event)"
                 >
@@ -132,7 +124,6 @@
                         [property]="propertyService.getAsInputProperty(child)"
                         [target]="target"
                         [isSimplified]="isSimplified"
-                        [isOverrideMode]="isOverrideMode"
                         (remove)="onRemoveChild(i)"
                         (targetChanged)="targetChanged.emit($event)"
                     >

@@ -23,13 +23,10 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
     @Input() target?: Record<string, any> | any[];
     @Input() property?: P;
     @Input() isSimplified: boolean;
-    @Input() isOverrideMode: boolean;
 
     @Output() public remove: EventEmitter<void> = new EventEmitter();
     @Output() public keyChanged: EventEmitter<string> = new EventEmitter();
     @Output() public targetChanged: EventEmitter<IPropertyChange> = new EventEmitter();
-
-    public isOverridden: boolean;
 
     protected currentValue: V;
     protected abstract defaultValue: V;
@@ -50,7 +47,6 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
 
             if (canChange) {
                 this.currentValue = newValue;
-                this._updateOverrideState();
                 this._onChanged(isFirstChange);
             }
         }
@@ -58,15 +54,6 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
 
     public onKeyChanged(newKey: string): void {
         this._modifyKey(newKey);
-    }
-
-    onClearOverride(): void {
-        const change: IPropertyChange = {
-            type: PropertyChangeType.CLEAR_OVERRIDE,
-            path: this.path,
-            data: null,
-        };
-        this.targetChanged.emit(change);
     }
 
     protected _modifyKey(newKey: string, childPath?: string, deleteChildPath?: string): void {
@@ -89,15 +76,6 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
             data: value,
         };
         this.targetChanged.emit(change);
-    }
-
-    protected _updateOverrideState(): void {
-        const fieldOverride = (this.target as IEditorFormlyField)?._info?.fieldOverride;
-        if (fieldOverride) {
-            this.isOverridden = !isNil(get(fieldOverride, this.path));
-        } else {
-            this.isOverridden = false;
-        }
     }
 
     protected abstract _onChanged(isFirstChange: boolean): void;

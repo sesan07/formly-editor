@@ -39,8 +39,6 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     public isActiveField: boolean;
     public childFields: IEditorFormlyField[] = [];
     public fieldInfo: IEditorFieldInfo;
-    public isOverridden: boolean;
-    public isOverrideMode: boolean;
 
     trackByFieldId = trackByFieldId;
 
@@ -55,7 +53,6 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.field) {
             this.fieldInfo = this.field._info;
-            this.isOverridden = !isEmpty(this.fieldInfo.fieldOverride);
 
             if (this.fieldInfo.canHaveChildren) {
                 this.childFields = getFieldChildren(this.field);
@@ -64,13 +61,6 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnInit(): void {
-        this._store
-            .select(selectActiveForm)
-            .pipe(takeUntil(this._destroy$))
-            .subscribe(form => {
-                this.isOverrideMode = form?.isOverrideMode;
-                this._cdRef.markForCheck();
-            });
         this._store
             .select(selectActiveField)
             .pipe(takeUntil(this._destroy$))

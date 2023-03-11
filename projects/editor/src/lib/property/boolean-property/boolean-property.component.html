@@ -20,27 +20,12 @@
 </editor-tree-item>
 
 <ng-template #simplifiedView>
-    <div class="simplified-wrapper">
-        <span
-            *ngIf="isOverrideMode && !isInArray"
-            class="override-indicator"
-            [class.overriden]="isOverridden"
-        ></span>
-        <mat-checkbox
-            class="simple-checkbox"
-            [formControl]="formControl"
-        >
-            {{ property.name ? property.name : property.key }}
-        </mat-checkbox>
-        <button
-            *ngIf="isOverrideMode && isOverridden"
-            class="override-clear-btn"
-            mat-icon-button
-            (click)="onClearOverride()"
-        >
-            <mat-icon>clear</mat-icon>
-        </button>
-    </div>
+    <mat-checkbox
+        class="simple-checkbox"
+        [formControl]="formControl"
+    >
+        {{ property.name ? property.name : property.key }}
+    </mat-checkbox>
 </ng-template>
 
 <mat-menu #optionsMenu="matMenu">

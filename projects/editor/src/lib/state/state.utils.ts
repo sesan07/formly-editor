@@ -1,5 +1,5 @@
 import { get, isNil, set } from 'lodash-es';
-import { IEditorFormlyField, IFormOverride } from '../editor.types';
+import { IEditorFormlyField } from '../editor.types';
 import { setFieldChildren, getFieldChildren } from '../form/form.utils';
 import produce from 'immer';
 import { getFieldId } from '../editor.utils';
@@ -107,75 +107,4 @@ export const updateParentFieldId = (field: IEditorFormlyField, parentFieldId: st
             parentFieldId,
         },
     };
-};
-
-export const modifyOverrideKey = (
-    formOverride: IFormOverride,
-    field: IEditorFormlyField,
-    fieldMap: Record<string, IEditorFormlyField>,
-    { path, data: newKey, childPath, deleteChildPath }: IPropertyChange
-): IFormOverride =>
-    produce(formOverride, draft => {
-        const keyPath = getKeyPath(field, fieldMap);
-        const fieldOverride = draft.override[keyPath] ?? {};
-
-        const isModifyingChild = !isNil(childPath) || !isNil(deleteChildPath);
-        if (isModifyingChild) {
-            const parent = get(fieldOverride, path) ?? {};
-            delete parent[deleteChildPath];
-
-            if (!isNil(childPath)) {
-                parent[childPath] = newKey;
-            }
-
-            set(fieldOverride, path, parent);
-        }
-        draft.override[keyPath] = fieldOverride;
-    });
-
-export const modifyOverrideValue = (
-    formOverride: IFormOverride,
-    field: IEditorFormlyField,
-    fieldMap: Record<string, IEditorFormlyField>,
-    { path, data: newValue, childPath }: IPropertyChange
-): IFormOverride =>
-    produce(formOverride, draft => {
-        const keyPath = getKeyPath(field, fieldMap);
-        const fieldOverride = draft.override[keyPath] ?? {};
-        if (!isNil(childPath)) {
-            const parent = get(fieldOverride, path) ?? {};
-            parent[childPath] = newValue;
-            set(fieldOverride, path, parent);
-        } else {
-            const pathArr = path.split('.');
-            const numberKeyIndex = pathArr.findIndex(k => !isNaN(Number(k)));
-            if (numberKeyIndex > 0) {
-                path = pathArr.slice(0, numberKeyIndex).join('.');
-                newValue = immerSet(get(field, path), pathArr.slice(numberKeyIndex), newValue);
-            }
-            set(fieldOverride, path, newValue);
-        }
-        draft.override[keyPath] = fieldOverride;
-    });
-
-export const immerSet = <T extends Record<string, unknown>>(target: T, path: string | string[], value: unknown): T =>
-    produce(target, draft => set(draft, path, value));
-
-export const getKeyPath = (
-    field: IEditorFormlyField,
-    fieldMap: Record<string, IEditorFormlyField>,
-    path: string = ''
-): string => {
-    const fieldInfo = field._info;
-    if (fieldInfo.parentFieldId) {
-        const parent: IEditorFormlyField = fieldMap[fieldInfo.parentFieldId];
-        path += getKeyPath(parent, fieldMap, path);
-    }
-
-    const key: string = field.key?.toString();
-    if (key) {
-        path = path ? `${path}.${key}` : key;
-    }
-
-    return path;
 };

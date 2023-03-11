@@ -11,7 +11,6 @@ import {
     EditorConfigOption,
     EditorTypeCategoryOption,
     EditorTypeOption,
-    IFormOverride,
     IEditorFormlyField,
 } from './editor.types';
 import { Store } from '@ngrx/store';
@@ -30,7 +29,6 @@ import {
     setActiveFormId,
     setActiveModel,
     setEditMode,
-    setOverrideMode,
 } from './state/state.actions';
 import { selectActiveField, selectActiveFieldMap, selectActiveForm, selectForms } from './state/state.selectors';
 import { IProperty, IPropertyChange } from './property/property.types';
@@ -69,18 +67,12 @@ export class EditorService {
         this._loadDefaultForm();
     }
 
-    public addForm(
-        name: string,
-        sourceFields?: IBaseFormlyField[],
-        model?: Record<string, unknown>,
-        override?: IFormOverride
-    ): void {
+    public addForm(name: string, sourceFields?: IBaseFormlyField[], model?: Record<string, unknown>): void {
         this._store.dispatch(
             addForm({
                 name,
                 sourceFields,
                 model,
-                override,
                 typeOptions: this.typeOptions,
                 unknownTypeName: this.unknownTypeName,
                 getDefaultField: (type: string, customType?: string, sourceField?: IBaseFormlyField) =>
@@ -103,10 +95,6 @@ export class EditorService {
 
     public setEditMode(formId: string, isEditMode: boolean): void {
         this._store.dispatch(setEditMode({ formId, isEditMode }));
-    }
-
-    public setOverrideMode(formId: string, isOverrideMode: boolean): void {
-        this._store.dispatch(setOverrideMode({ formId, isOverrideMode }));
     }
 
     public addField(fieldType: string, customType?: string, parentId?: string, index?: number): void {
@@ -134,15 +122,6 @@ export class EditorService {
             throw new Error('Path is missing from field change');
         }
 
-        // TODO disable field to prevent this
-        if (this._activeForm.isOverrideMode && change.path === 'key') {
-            throw new Error(`Field key can't be overridden`);
-        }
-
-        if (this._activeForm.isOverrideMode && !this._activeField.key) {
-            throw new Error(`Field without key can't be overridden`);
-        }
-
         this._store.dispatch(modifyActiveField({ activeField: this._activeField, change }));
     }
 
@@ -155,22 +134,6 @@ export class EditorService {
         const field: IEditorFormlyField = this.getField(fieldId);
         const parent: IEditorFormlyField = this.getField(field._info.parentFieldId);
         this._store.dispatch(moveField({ parent, from, to }));
-    }
-
-    // TODO ??
-    // Transfer field between parent fields in the same form
-    public transferField(fieldId: string, targetParentId: string, fromIndex: number, toIndex?: number): void {
-        // const field: IEditorFormlyField = this.getField(fieldId);
-        // const fieldInfo = field._info;
-        // const currentParent: IEditorFormlyField = this.getField(fieldInfo.parentFieldId);
-        // const targetParent: IEditorFormlyField = this.getField(targetParentId);
-        // const currentSiblings: IEditorFormlyField[] = getFieldChildren(currentParent);
-        // const targetSiblings: IEditorFormlyField[] = getFieldChildren(targetParent);
-        // toIndex = typeof toIndex === 'number' ? toIndex : targetSiblings.length;
-        // transferArrayItem(currentSiblings, targetSiblings, fromIndex, toIndex);
-        // fieldInfo.formId = targetParent._info.formId;
-        // fieldInfo.parentFieldId = targetParent._info.fieldId;
-        // // this._fields$.next(this._fields$.value);
     }
 
     public replaceField(fieldType: string, fieldId: string, customType?: string): void {
@@ -225,15 +188,9 @@ export class EditorService {
                     return of({});
                 })
             ),
-            this._http.get<IFormOverride>('assets/default.override.json').pipe(
-                catchError(() => {
-                    console.warn('Unable to load default form override');
-                    return of({ override: {} });
-                })
-            ),
-        ]).subscribe(([fields, model, override]) => {
+        ]).subscribe(([fields, model]) => {
             // TODO handle with effects
-            this.addForm('Form Zero', fields, model, override);
+            this.addForm('Form Zero', fields, model);
         });
     }
 }

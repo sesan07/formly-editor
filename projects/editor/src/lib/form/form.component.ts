@@ -69,13 +69,9 @@ export class FormComponent implements OnInit, OnDestroy {
                 this.formGroup = new FormGroup({});
                 this.options = {};
 
-                if (form.isOverrideMode) {
-                    this.formFieldsJSON = JSON.stringify(form.override, null, 2);
-                } else {
-                    const fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
-                    fieldsClone.forEach(field => cleanField(field, true, true));
-                    this.formFieldsJSON = JSON.stringify(fieldsClone, null, 2);
-                }
+                const fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
+                fieldsClone.forEach(field => cleanField(field, true, true));
+                this.formFieldsJSON = JSON.stringify(fieldsClone, null, 2);
 
                 this._cdRef.markForCheck();
             }),
@@ -96,10 +92,6 @@ export class FormComponent implements OnInit, OnDestroy {
 
     onEditModeChanged(isEditMode: boolean): void {
         this._editorService.setEditMode(this.form.id, isEditMode);
-    }
-
-    onOverrideModeChanged(isOverrideMode: boolean): void {
-        this._editorService.setOverrideMode(this.form.id, isOverrideMode);
     }
 
     onAddField(type: string, customType?: string): void {

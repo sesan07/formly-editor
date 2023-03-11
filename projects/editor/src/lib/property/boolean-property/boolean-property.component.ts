@@ -30,14 +30,4 @@ export class BooleanPropertyComponent extends BasePropertyDirective<IBooleanProp
             emitEvent: false,
         });
     }
-
-    protected override _updateOverrideState(): void {
-        this.isInArray = this.path.split('.').some(k => !isNaN(Number(k)));
-        const fieldOverride = (this.target as IEditorFormlyField)?._info?.fieldOverride;
-        if (fieldOverride) {
-            this.isOverridden = !this.isInArray && !isNil(get(fieldOverride, this.path));
-        } else {
-            this.isOverridden = false;
-        }
-    }
 }

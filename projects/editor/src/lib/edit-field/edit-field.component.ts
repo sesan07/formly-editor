@@ -38,7 +38,6 @@ export class EditFieldComponent implements OnInit, OnDestroy {
     public field$: Observable<IEditorFormlyField | null>;
     public parentField$: Observable<IEditorFormlyField | null>;
     public property$: Observable<IObjectProperty>;
-    public isOverrideMode$: Observable<boolean>;
 
     private _destroy$: Subject<void> = new Subject();
     private _cachedField: IEditorFormlyField;
@@ -70,10 +69,6 @@ export class EditFieldComponent implements OnInit, OnDestroy {
                 this._cachedField = field;
                 return this._cachedProperty;
             })
-        );
-        this.isOverrideMode$ = this._store.select(selectActiveForm).pipe(
-            takeUntil(this._destroy$),
-            map(form => form?.isOverrideMode)
         );
 
         this.resizeTabHeader$?.pipe(takeUntil(this._destroy$)).subscribe(() => {

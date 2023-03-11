@@ -22,25 +22,10 @@
 </editor-tree-item>
 
 <ng-template #simplifiedView>
-    <div class="simplified-wrapper">
-        <span
-            *ngIf="isOverrideMode"
-            class="override-indicator"
-            [class.overriden]="isOverridden"
-        ></span>
-        <ng-container
-            [ngTemplateOutlet]="formField"
-            [ngTemplateOutletContext]="{ showLabel: true }"
-        ></ng-container>
-        <button
-            *ngIf="isOverrideMode && isOverridden"
-            class="override-clear-btn"
-            mat-icon-button
-            (click)="onClearOverride()"
-        >
-            <mat-icon>clear</mat-icon>
-        </button>
-    </div>
+    <ng-container
+        [ngTemplateOutlet]="formField"
+        [ngTemplateOutletContext]="{ showLabel: true }"
+    ></ng-container>
 </ng-template>
 
 <ng-template

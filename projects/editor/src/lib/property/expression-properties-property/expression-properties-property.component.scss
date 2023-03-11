@@ -1,6 +1,5 @@
 :host {
-    display: flex;
-    column-gap: 8px;
+    display: block;
 }
 
 .simplified-panel {
@@ -20,10 +19,6 @@
 .simplified-header-left {
     flex-grow: 1;
 }
-.simplified-header-right {
-    display: inline-flex;
-    column-gap: 8px;
-}
 
 .simplified-wrapper {
     display: flex;
@@ -33,11 +28,6 @@
     width: 1px;
     background-color: rgba(0, 0, 0, 0.12);
     margin: 0 14px;
-}
-
-.line.override-mode {
-    margin-left: 28px;
-    margin-right: 14px;
 }
 
 .mat-accordion {
@@ -51,9 +41,4 @@
 
 .simple-remove-btn {
     margin-right: 16px;
-}
-
-.override-indicator {
-    margin-top: 8px;
-    height: 32px;
 }

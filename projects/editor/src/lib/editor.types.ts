@@ -24,7 +24,6 @@ export interface IEditorFieldInfo {
     fieldPath: string[];
     canHaveChildren?: boolean;
     childrenPath?: string; // Lodash path
-    fieldOverride?: Record<string, any>;
 }
 
 export interface IBaseFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
@@ -39,19 +38,13 @@ export interface IEditorFormlyField extends IBaseFormlyField {
     fieldGroup?: IEditorFormlyField[];
 }
 
-export interface IFormOverride {
-    override: Record<string, any>;
-}
-
 export interface IForm {
     id: string;
     name: string;
     fields: IEditorFormlyField[];
     baseFields: IEditorFormlyField[];
-    override: IFormOverride;
     model: Record<string, unknown>;
     activeFieldId?: string;
-    isOverrideMode: boolean;
     isEditMode: boolean;
     fieldIdCounter: number;
 }

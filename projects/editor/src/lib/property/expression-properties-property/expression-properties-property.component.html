@@ -1,8 +1,3 @@
-<span
-    *ngIf="isOverrideMode"
-    class="override-indicator"
-    [class.overriden]="isOverridden"
-></span>
 <mat-expansion-panel
     class="simplified-panel"
     [(expanded)]="isExpanded"
@@ -13,22 +8,12 @@
                 <span>{{ (property.name || property.key) + ' { ' + childProperties.length + ' }' }}</span>
             </span>
 
-            <span class="simplified-header-right">
-                <button
-                    mat-icon-button
-                    (click)="onAddChild(); $event.stopPropagation()"
-                >
-                    <mat-icon>add</mat-icon>
-                </button>
-                <button
-                    *ngIf="isOverrideMode && isOverridden"
-                    class="override-clear-btn"
-                    mat-icon-button
-                    (click)="onClearOverride(); $event.stopPropagation()"
-                >
-                    <mat-icon>clear</mat-icon>
-                </button>
-            </span>
+            <button
+                mat-icon-button
+                (click)="onAddChild(); $event.stopPropagation()"
+            >
+                <mat-icon>add</mat-icon>
+            </button>
         </span>
     </mat-expansion-panel-header>
 

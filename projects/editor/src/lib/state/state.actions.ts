@@ -1,18 +1,11 @@
 import { createAction, props } from '@ngrx/store';
-import {
-    EditorTypeOption,
-    GetDefaultField,
-    IBaseFormlyField,
-    IEditorFormlyField,
-    IFormOverride,
-} from '../editor.types';
+import { EditorTypeOption, GetDefaultField, IBaseFormlyField, IEditorFormlyField } from '../editor.types';
 import { IPropertyChange } from '../property/property.types';
 
 export interface AddForm {
     name: string;
     sourceFields?: IBaseFormlyField[];
     model?: Record<string, unknown>;
-    override?: IFormOverride;
     typeOptions: EditorTypeOption[];
     unknownTypeName?: string;
     getDefaultField: GetDefaultField;
@@ -42,10 +35,6 @@ export interface RemoveField {
 export interface SetEditMode {
     formId: string;
     isEditMode: boolean;
-}
-export interface SetOverrideMode {
-    formId: string;
-    isOverrideMode: boolean;
 }
 export interface ModifyActiveField {
     activeField: IEditorFormlyField;
@@ -80,7 +69,6 @@ export const removeForm = createAction('[Editor] Remove Form', props<RemoveForm>
 export const duplicateForm = createAction('[Editor] Duplicate Form', props<DuplicateForm>());
 export const setActiveFormId = createAction('[Editor] Set Active Form ID', props<SetActiveFormId>());
 export const setEditMode = createAction('[Editor] Set Edit Mode', props<SetEditMode>());
-export const setOverrideMode = createAction('[Editor] Set Override Mode', props<SetOverrideMode>());
 
 export const addField = createAction('[Editor] Add Field', props<AddField>());
 export const removeField = createAction('[Editor] Remove Field', props<RemoveField>());

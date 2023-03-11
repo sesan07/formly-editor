@@ -1,10 +1,5 @@
 <header *ngIf="isEditMode">
     <div class="header-title">
-        <span
-            *ngIf="isOverrideMode"
-            class="override-indicator"
-            [class.overriden]="isOverridden"
-        ></span>
         <span>{{ fieldInfo.name | fieldName : field.key }}</span>
         <ng-content></ng-content>
     </div>
