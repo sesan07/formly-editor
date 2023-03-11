@@ -20,7 +20,6 @@ export class PropertyService {
         PropertyType.TEXTAREA,
     ];
 
-    // TODO Switch to type guards
     public getAsArrayProperty(property: IProperty): IArrayProperty {
         return property as IArrayProperty;
     }

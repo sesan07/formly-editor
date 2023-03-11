@@ -28,7 +28,7 @@ export interface IEditorFieldInfo {
 
 export interface IBaseFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
     type: string;
-    customType?: string; // TODO Can this be moved to _info?
+    customType?: string;
     templateOptions?: T;
     fieldGroup?: IBaseFormlyField[];
 }

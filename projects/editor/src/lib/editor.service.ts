@@ -189,7 +189,6 @@ export class EditorService {
                 })
             ),
         ]).subscribe(([fields, model]) => {
-            // TODO handle with effects
             this.addForm('Form Zero', fields, model);
         });
     }
