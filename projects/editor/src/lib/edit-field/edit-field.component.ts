@@ -11,7 +11,7 @@ import {
 import { MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, shareReplay, takeUntil, tap } from 'rxjs/operators';
 import { EditorService } from '../editor.service';
 
 import { IEditorFormlyField } from '../editor.types';
@@ -19,7 +19,7 @@ import { IObjectProperty } from '../property/object-array-properties/object-prop
 import { PropertyService } from '../property/property.service';
 import { IPropertyChange, PropertyType } from '../property/property.types';
 import { initRootProperty } from '../property/utils';
-import { selectActiveField, selectActiveForm } from '../state/state.selectors';
+import { selectActiveField } from '../state/state.selectors';
 import { IEditorState } from '../state/state.types';
 
 @Component({
@@ -50,14 +50,11 @@ export class EditFieldComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
-        this.field$ = this._store.select(selectActiveField).pipe(takeUntil(this._destroy$));
-        this.parentField$ = this._store.select(selectActiveField).pipe(
-            takeUntil(this._destroy$),
-            map(field => this._editorService.getField(field?._info.parentFieldId))
-        );
-        this.property$ = this._store.select(selectActiveField).pipe(
-            takeUntil(this._destroy$),
-            map(field => {
+        const activeField$ = this._store.select(selectActiveField).pipe(takeUntil(this._destroy$), shareReplay());
+        this.field$ = activeField$;
+        this.parentField$ = activeField$.pipe(map(field => this._editorService.getField(field?._info.parentFieldId)));
+        this.property$ = activeField$.pipe(
+            tap(field => {
                 if (!field) {
                     this._cachedProperty = this._getProperty(null);
                 } else if (
@@ -67,8 +64,8 @@ export class EditFieldComponent implements OnInit, OnDestroy {
                     this._cachedProperty = this._getProperty(field);
                 }
                 this._cachedField = field;
-                return this._cachedProperty;
-            })
+            }),
+            map(() => this._cachedProperty)
         );
 
         this.resizeTabHeader$?.pipe(takeUntil(this._destroy$)).subscribe(() => {
@@ -91,22 +88,5 @@ export class EditFieldComponent implements OnInit, OnDestroy {
         const childProperties = this._editorService.getFieldProperties(field?.type);
         initRootProperty(property, true, childProperties);
         return property;
-        // this._cdRef.markForCheck();
     }
-
-    // private _updateActiveField(): void {
-    //     if (this.field) {
-    //         this.activeFieldTarget = this.field;
-
-    //         if (this.field._info.fieldId !== this._cachedField?._info.fieldId) {
-    //             this.parentField = this._formService.getField(this.field._info.parentFieldId);
-    //             this._getProperty();
-    //         }
-    //     } else {
-    //         this.activeFieldProperty = null;
-    //         this.parentField = null;
-    //     }
-
-    //     this._cachedField = this.field;
-    // }
 }

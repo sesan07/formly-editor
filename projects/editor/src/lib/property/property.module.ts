@@ -6,7 +6,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatExpansionModule } from '@angular/material/expansion';
 
@@ -47,7 +46,6 @@ import { PropertyKeyComponent } from './property-key/property-key.component';
         MatCheckboxModule,
         MatChipsModule,
         MatAutocompleteModule,
-        MatDividerModule,
         MatExpansionModule,
     ],
     exports: [

@@ -12,7 +12,7 @@ import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
 import { cloneDeep } from 'lodash-es';
 import { Observable, Subject } from 'rxjs';
-import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, filter, map, shareReplay, takeUntil, tap } from 'rxjs/operators';
 
 import { EditorService } from '../editor.service';
 import { EditorTypeCategoryOption, IEditorFormlyField, IForm } from '../editor.types';
@@ -51,18 +51,18 @@ export class FormComponent implements OnInit, OnDestroy {
 
     private readonly _debounceTime: number = 100;
 
-    constructor(
-        private _editorService: EditorService,
-        private _cdRef: ChangeDetectorRef,
-        private _store: Store<IEditorState>
-    ) {}
+    constructor(private _editorService: EditorService, private _store: Store<IEditorState>) {}
 
     public ngOnInit(): void {
         this.fieldCategories = this._editorService.fieldCategories;
 
-        this.formFields$ = this._store.select(selectActiveForm).pipe(
+        const activeForm$ = this._store.select(selectActiveForm).pipe(
             takeUntil(this._destroy$),
-            filter(form => form && form.id === this.form.id && form.fields !== this._cachedFields),
+            filter(form => form && form.id === this.form.id),
+            shareReplay()
+        );
+        this.formFields$ = activeForm$.pipe(
+            filter(form => form.fields !== this._cachedFields),
             debounceTime(this._debounceTime),
             tap(form => {
                 this._cachedFields = form.fields;
@@ -72,17 +72,11 @@ export class FormComponent implements OnInit, OnDestroy {
                 const fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
                 fieldsClone.forEach(field => cleanField(field, true, true));
                 this.formFieldsJSON = JSON.stringify(fieldsClone, null, 2);
-
-                this._cdRef.markForCheck();
             }),
             map(form => cloneDeep(form.fields))
         );
 
-        this.model$ = this._store.select(selectActiveForm).pipe(
-            takeUntil(this._destroy$),
-            filter(form => form && form.id === this.form.id),
-            map(form => cloneDeep(form.model))
-        );
+        this.model$ = activeForm$.pipe(map(form => cloneDeep(form.model)));
     }
 
     public ngOnDestroy(): void {

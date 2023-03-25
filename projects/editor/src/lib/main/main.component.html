@@ -1,6 +1,6 @@
 <editor-sidebar
     class="left editor-mat"
-    [class.hidden]="!showSidebars || !activeForm"
+    [hidden]="!showSidebars || !activeForm"
     [position]="typeOfSideBarPosition.LEFT"
     (resizeEnd)="onResizeEnd()"
 >
@@ -83,7 +83,7 @@
 
 <editor-sidebar
     class="right editor-mat"
-    [class.hidden]="!showSidebars || !activeForm"
+    [hidden]="!showSidebars || !activeForm"
     [position]="typeOfSideBarPosition.RIGHT"
     (resizeEnd)="onResizeEnd()"
 >
@@ -97,7 +97,7 @@
 
         <editor-edit-field
             mainContent
-            [class.hidden]="!activeForm?.fields.length"
+            [hidden]="!activeForm?.fields.length"
             [resizeTabHeader$]="resizeEnd$"
             (fieldChanged)="onActiveFieldChanged($event)"
         >
@@ -121,7 +121,7 @@
 
         <div
             class="tree-container"
-            [class.hidden]="!activeForm?.fields.length"
+            [hidden]="!activeForm?.fields.length"
             mainContent
         >
             <editor-object-property

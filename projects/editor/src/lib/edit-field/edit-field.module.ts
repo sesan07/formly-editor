@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,10 +23,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         PropertyModule,
         MatIconModule,
         MatButtonModule,
-        MatDialogModule,
-        MatSlideToggleModule,
         MatSelectModule,
-        MatTooltipModule,
         MatTabsModule,
         MatExpansionModule,
         MatButtonToggleModule,

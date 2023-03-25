@@ -10,17 +10,17 @@ import {
     Output,
     SimpleChanges,
 } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 
-import { EditorService } from '../../editor.service';
-import { EditorTypeCategoryOption, IEditorFormlyField, IEditorFieldInfo } from '../../editor.types';
-import { getFieldChildren } from '../form.utils';
+import { EditorService } from '../editor.service';
+import { EditorTypeCategoryOption, IEditorFormlyField, IEditorFieldInfo } from '../editor.types';
+import { getFieldChildren } from '../form/form.utils';
 import { isEmpty } from 'lodash-es';
-import { trackByFieldId } from '../../editor.utils';
+import { trackByFieldId } from '../editor.utils';
 import { Store } from '@ngrx/store';
-import { IEditorState } from '../../state/state.types';
-import { selectActiveField, selectActiveForm } from '../../state/state.selectors';
+import { IEditorState } from '../state/state.types';
+import { selectActiveField, selectActiveForm } from '../state/state.selectors';
 
 @Component({
     selector: 'editor-field-tree-item',
@@ -36,7 +36,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
 
     @Output() public expandParent: EventEmitter<void> = new EventEmitter();
 
-    public isActiveField: boolean;
+    public isActiveField$: Observable<boolean>;
     public childFields: IEditorFormlyField[] = [];
     public fieldInfo: IEditorFieldInfo;
 
@@ -44,11 +44,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
 
     private _destroy$: Subject<void> = new Subject();
 
-    constructor(
-        private _editorService: EditorService,
-        private _store: Store<IEditorState>,
-        private _cdRef: ChangeDetectorRef
-    ) {}
+    constructor(private _editorService: EditorService, private _store: Store<IEditorState>) {}
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.field) {
@@ -61,16 +57,15 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnInit(): void {
-        this._store
-            .select(selectActiveField)
-            .pipe(takeUntil(this._destroy$))
-            .subscribe(field => {
-                this.isActiveField = this.fieldInfo.fieldId === field?._info.fieldId;
-                if (this.isActiveField) {
+        this.isActiveField$ = this._store.select(selectActiveField).pipe(
+            takeUntil(this._destroy$),
+            map(field => this.fieldInfo.fieldId === field?._info.fieldId),
+            tap(isActiveField => {
+                if (isActiveField) {
                     this.expandParent.emit();
-                    setTimeout(() => this._cdRef.markForCheck());
                 }
-            });
+            })
+        );
     }
 
     ngOnDestroy(): void {
@@ -100,7 +95,6 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
 
     onExpandParent(): void {
         this.isExpanded = true;
-        // this._cdRef.detectChanges();
         this.expandParent.emit();
     }
 }

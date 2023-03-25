@@ -241,7 +241,6 @@ const processReplaceField = (
         unknownTypeName
     );
     // Copy properties that shouldn't change
-    // newField.key = field.key;
     newField.key = field.key || newField.key;
     newField.className = field.className;
     newField.fieldGroupClassName = field.fieldGroupClassName;

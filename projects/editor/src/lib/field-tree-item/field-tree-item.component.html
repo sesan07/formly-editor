@@ -3,7 +3,7 @@
     [treeLevel]="treeLevel"
     [(isExpanded)]="isExpanded"
     [isExpandable]="fieldInfo.canHaveChildren"
-    [isActive]="isActiveField"
+    [isActive]="isActiveField$ | async"
     [hasOptions]="true"
     [optionsMenu]="optionsMenu"
     (isExpandedChange)="onSelected()"
