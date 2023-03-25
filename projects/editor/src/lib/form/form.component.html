@@ -12,7 +12,7 @@
 <ng-container *ngIf="formFields$ | async as fields">
     <mat-tab-group
         class="tab-group"
-        *ngIf="fields?.length; else addFieldButton"
+        *ngIf="fields.length; else addFieldButton"
         [selectedIndex]="toolbarTabIndex"
     >
         <mat-tab>
@@ -31,7 +31,7 @@
                     class="text-editor"
                     [value]="formFieldsJSON"
                     [mode]="'application/json'"
-                    [readOnly]="true"
+                    readonly
                 ></editor-text-editor>
             </ng-template>
         </mat-tab>
