@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddFormDialogComponent } from './add-form-dialog.component';
+import { JSONDialogComponent } from './json-dialog.component';
 
-describe('AddFormDialogComponent', () => {
-    let component: AddFormDialogComponent;
-    let fixture: ComponentFixture<AddFormDialogComponent>;
+describe('ImportFormDialogComponent', () => {
+    let component: JSONDialogComponent;
+    let fixture: ComponentFixture<JSONDialogComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [AddFormDialogComponent],
+            declarations: [JSONDialogComponent],
         }).compileComponents();
     });
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(AddFormDialogComponent);
+        fixture = TestBed.createComponent(JSONDialogComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

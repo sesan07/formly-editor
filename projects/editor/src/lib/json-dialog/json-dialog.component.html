@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content>
+    <form #form="ngForm">
+        <mat-form-field *ngIf="data.name">
+            <mat-label>Name</mat-label>
+            <input
+                #nameModel="ngModel"
+                ngModel
+                name="name"
+                matInput
+                required
+                [pattern]="data.name.pattern"
+                [placeholder]="data.name.placeholder"
+            />
+            <mat-error *ngIf="nameModel.errors?.required">This field is required</mat-error>
+            <mat-error *ngIf="nameModel.errors?.pattern">Invalid pattern</mat-error>
+        </mat-form-field>
+        <div class="json-field-wrapper">
+            <mat-form-field class="json-field">
+                <mat-label>JSON</mat-label>
+                <editor-text-editor
+                    class="text-editor"
+                    #jsonModel="ngModel"
+                    ngModel
+                    name="json"
+                    matInput
+                    required
+                    editorJsonValidator
+                    [mode]="'application/json'"
+                ></editor-text-editor>
+                <mat-error *ngIf="jsonModel.errors?.required">This field is required</mat-error>
+                <mat-error *ngIf="jsonModel.errors?.jsonFormat">Invalid JSON</mat-error>
+            </mat-form-field>
+            <ng-container *ngIf="data.canSelectFile">
+                <button
+                    class="file-select-button"
+                    mat-button
+                    type="button"
+                    (click)="fileSelect.click()"
+                >
+                    <mat-icon>upload_file</mat-icon>
+                    <span>Select File</span>
+                </button>
+                <input
+                    #fileSelect
+                    type="file"
+                    hidden
+                    required
+                    [accept]="'.json, .txt'"
+                    (input)="onFileChanged()"
+                />
+            </ng-container>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button
+        mat-button
+        mat-dialog-close
+    >
+        <mat-icon>close</mat-icon>
+        <span>Cancel</span>
+    </button>
+    <button
+        mat-flat-button
+        color="primary"
+        [disabled]="!form.valid"
+        (click)="onImport()"
+    >
+        <mat-icon>file_download</mat-icon>
+        <span>{{ data.primaryActionText }}</span>
+    </button>
+</mat-dialog-actions>

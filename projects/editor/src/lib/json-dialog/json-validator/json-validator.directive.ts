@@ -6,12 +6,12 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@an
     providers: [
         {
             provide: NG_VALIDATORS,
-            useExisting: JsonValidatorDirective,
+            useExisting: JSONValidatorDirective,
             multi: true,
         },
     ],
 })
-export class JsonValidatorDirective implements Validator {
+export class JSONValidatorDirective implements Validator {
     constructor() {}
 
     validate(control: AbstractControl): ValidationErrors | null {

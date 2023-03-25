@@ -1,18 +1,14 @@
 import { Component, OnInit, TrackByFunction } from '@angular/core';
-import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { cloneDeep } from 'lodash-es';
-import { Observable, Subject, takeUntil, tap } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { EditorService } from '../editor.service';
 import { IForm, IEditorFormlyField, EditorTypeCategoryOption } from '../editor.types';
 import { trackByFieldId } from '../editor.utils';
-import { AddFormDialogComponent } from '../form/add-form-dialog/add-form-dialog.component';
-import { AddFormResponse } from '../form/add-form-dialog/add-json-dialog.types';
-import { ExportFormDialogComponent } from '../form/export-form-dialog/export-form-dialog.component';
-import { ExportJSONRequest, ExportJSONResponse } from '../form/export-form-dialog/export-json-dialog.types';
 import { cleanField } from '../form/form.utils';
-import { ImportModelDialogComponent } from '../form/import-model-dialog/import-model-dialog.component';
-import { ImportModelResponse } from '../form/import-model-dialog/import-model-dialog.types';
+import { JSONDialogComponent } from '../json-dialog/json-dialog.component';
+import { ImportJSONData, ImportJSONValue } from '../json-dialog/json-dialog.types';
 import { IObjectProperty } from '../property/object-array-properties/object-property.types';
 import { PropertyService } from '../property/property.service';
 import { IPropertyChange, PropertyType } from '../property/property.types';
@@ -80,15 +76,22 @@ export class MainComponent implements OnInit {
     }
 
     onAddForm(): void {
-        const dialogRef: MatDialogRef<AddFormDialogComponent, AddFormResponse> =
-            this._dialog.open(AddFormDialogComponent);
-
+        const dialogRef = this._dialog.open<JSONDialogComponent, ImportJSONData, ImportJSONValue>(JSONDialogComponent, {
+            data: {
+                title: 'Add Form',
+                primaryActionText: 'Add',
+                name: {
+                    placeholder: 'Form Name',
+                },
+                defaultValue: {
+                    json: '[]',
+                },
+            },
+        });
         dialogRef.afterClosed().subscribe(res => {
-            if (res?.json) {
+            if (res) {
                 const parsed = JSON.parse(res.json);
                 this._editorService.addForm(res.name, Array.isArray(parsed) ? parsed : [parsed]);
-            } else if (res) {
-                this._editorService.addForm(res.name);
             }
         });
     }
@@ -115,19 +118,20 @@ export class MainComponent implements OnInit {
         const fieldsClone: IEditorFormlyField[] = cloneDeep(this.activeForm.fields);
         fieldsClone.forEach(field => cleanField(field, true, true));
 
-        const config: MatDialogConfig<ExportJSONRequest> = {
+        const dialogRef = this._dialog.open<JSONDialogComponent, ImportJSONData, ImportJSONValue>(JSONDialogComponent, {
             data: {
-                type: 'Form',
-                name: this.activeForm.name + '.json',
-                json: JSON.stringify(fieldsClone, null, 2),
+                title: 'Export Form',
+                primaryActionText: 'Export',
+                name: {
+                    placeholder: 'file-name.json',
+                    pattern: /.+\.json$/,
+                },
+                defaultValue: {
+                    name: this.activeForm.name + '.json',
+                    json: JSON.stringify(fieldsClone, null, 2),
+                },
             },
-        };
-
-        const dialogRef: MatDialogRef<ExportFormDialogComponent, ExportJSONResponse> = this._dialog.open(
-            ExportFormDialogComponent,
-            config
-        );
-
+        });
         dialogRef.afterClosed().subscribe(res => {
             if (res) {
                 this._fileService.saveFile(res.name, res.json);
@@ -147,8 +151,16 @@ export class MainComponent implements OnInit {
     }
 
     onImportModel(): void {
-        const dialogRef: MatDialogRef<ImportModelDialogComponent, ImportModelResponse> =
-            this._dialog.open(ImportModelDialogComponent);
+        const dialogRef = this._dialog.open<JSONDialogComponent, ImportJSONData, ImportJSONValue>(JSONDialogComponent, {
+            data: {
+                title: 'Import Model',
+                primaryActionText: 'Import',
+                canSelectFile: true,
+                defaultValue: {
+                    json: '{}',
+                },
+            },
+        });
         dialogRef.afterClosed().subscribe(res => {
             if (res) {
                 this._editorService.setActiveModel(JSON.parse(res.json));
@@ -157,18 +169,20 @@ export class MainComponent implements OnInit {
     }
 
     onExportModel(): void {
-        const config: MatDialogConfig<ExportJSONRequest> = {
+        const dialogRef = this._dialog.open<JSONDialogComponent, ImportJSONData, ImportJSONValue>(JSONDialogComponent, {
             data: {
-                type: 'Model',
-                name: this.activeForm.name + '.model.json',
-                json: JSON.stringify(this.activeModel, null, 2),
+                title: 'Export Model',
+                primaryActionText: 'Export',
+                name: {
+                    placeholder: 'file-name.json',
+                    pattern: /.+\.json$/,
+                },
+                defaultValue: {
+                    name: this.activeForm.name + '.model.json',
+                    json: JSON.stringify(this.activeModel, null, 2),
+                },
             },
-        };
-
-        const dialogRef: MatDialogRef<ExportFormDialogComponent, ExportJSONResponse> = this._dialog.open(
-            ExportFormDialogComponent,
-            config
-        );
+        });
         dialogRef.afterClosed().subscribe(res => {
             if (res) {
                 this._fileService.saveFile(res.name, res.json);

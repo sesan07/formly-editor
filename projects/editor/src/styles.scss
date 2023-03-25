@@ -1,5 +1,5 @@
 @import 'codemirror/lib/codemirror';
-@import 'codemirror/theme/material';
+@import 'codemirror/theme/elegant';
 
 :root {
     --editor-header-height: 48px;
@@ -133,8 +133,4 @@ formly-field {
 .dialogBackdrop {
     background-color: white;
     opacity: 0.6 !important;
-}
-
-.hidden {
-    display: none !important;
 }
