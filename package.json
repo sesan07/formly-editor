@@ -7,7 +7,7 @@
     "postinstall": "ngcc",
     "ng": "ng",
     "start": "ng serve",
-    "build:deploy": "ng build formly-editor --configuration production",
+    "build": "ng build --configuration production",
     "test": "ng test",
     "e2e": "ng e2e",
     "lint:app": "ng lint formly-editor --fix",
