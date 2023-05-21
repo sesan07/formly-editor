@@ -16,5 +16,6 @@ RUN npm run build
 FROM nginx:latest
 
 COPY --from=build-env /app/dist/formly-editor /usr/share/nginx/html
+COPY ./nginx/default.conf.template /etc/nginx/templates/
 
 EXPOSE 80
