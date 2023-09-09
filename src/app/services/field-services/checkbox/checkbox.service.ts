@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IProperty, PropertyType } from 'editor';
+import { BaseFieldService, IBaseFormlyField, IProperty, PropertyType } from 'editor';
 
-import { BaseFieldService } from '../base-field.service';
 import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 import { ICheckboxTemplateOptions } from './checkbox.types';
 
@@ -27,7 +26,7 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
         };
     }
 
-    protected _getTOChildProperties(): IProperty[] {
+    protected override _getFieldTemplateOptions(): IProperty[] {
         return [
             {
                 name: 'Label',
@@ -50,6 +49,10 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
                 type: PropertyType.TEXT,
             },
         ];
+    }
+
+    protected override _getWrapperTemplateOptions(): IProperty[] {
+        return [];
     }
 
     protected _getWrapperTypes(): WrapperType[] {

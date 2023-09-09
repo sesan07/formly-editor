@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
-import { IProperty } from 'editor';
+import { BaseFieldService, IProperty } from 'editor';
 
-import { BaseFieldService } from '../base-field.service';
 import { IFormlyField, WrapperType } from '../field.types';
 
 @Injectable({
@@ -15,7 +14,11 @@ export class OtherFieldService extends BaseFieldService<FormlyTemplateOptions> {
         };
     }
 
-    protected _getTOChildProperties(): IProperty[] {
+    protected override _getFieldTemplateOptions(): IProperty[] {
+        return [];
+    }
+
+    protected override _getWrapperTemplateOptions(): IProperty[] {
         return [];
     }
 

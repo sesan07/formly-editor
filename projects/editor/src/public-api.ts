@@ -12,6 +12,6 @@ export { IObjectProperty } from './lib/property/object-array-properties/object-p
 export { IExpressionPropertiesProperty } from './lib/property/expression-properties-property/expression-properties-property.types';
 
 export { EditorComponent } from './lib/editor.component';
-export { StylesService } from './lib/edit-field/styles/styles.service';
+export { BaseFieldService } from './lib/field-service/base-field.service';
 export { EditorModule } from './lib/editor.module';
 export { EDITOR_FIELD_SERVICE, IBaseFormlyField, IFieldService } from './lib/editor.types';

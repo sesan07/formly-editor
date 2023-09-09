@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
-import { IBaseFormlyField, IProperty } from 'editor';
+import { BaseFieldService, IBaseFormlyField, IProperty, PropertyType } from 'editor';
 
-import { BaseFieldService } from '../base-field.service';
 import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 
 @Injectable({
@@ -28,9 +27,18 @@ export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> 
 
         return config;
     }
-
-    protected _getTOChildProperties(): IProperty[] {
+    protected override _getFieldTemplateOptions(): IProperty[] {
         return [];
+    }
+
+    protected override _getWrapperTemplateOptions(): IProperty[] {
+        return [
+            {
+                name: 'Card Title - Card Wrapper',
+                key: 'templateOptions.cardTitle',
+                type: PropertyType.TEXT,
+            },
+        ];
     }
 
     protected _getWrapperTypes(): WrapperType[] {

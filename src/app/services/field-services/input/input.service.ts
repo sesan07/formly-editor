@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IProperty, PropertyType } from 'editor';
+import { BaseFieldService, IBaseFormlyField, IProperty, PropertyType } from 'editor';
 
-import { BaseFieldService } from '../base-field.service';
 import { IInputTemplateOptions } from './input.types';
 import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 
@@ -31,7 +30,7 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
         return config;
     }
 
-    protected _getTOChildProperties(): IProperty[] {
+    protected override _getFieldTemplateOptions(): IProperty[] {
         return [
             {
                 name: 'Type',
@@ -59,6 +58,10 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
                 type: PropertyType.BOOLEAN,
             },
         ];
+    }
+
+    protected override _getWrapperTemplateOptions(): IProperty[] {
+        return [];
     }
 
     protected _getWrapperTypes(): WrapperType[] {

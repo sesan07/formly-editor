@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IProperty, PropertyType } from 'editor';
+import { BaseFieldService, IProperty, PropertyType } from 'editor';
 
-import { BaseFieldService } from '../base-field.service';
 import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 import { ITextareaTemplateOptions } from './textarea.types';
 
@@ -22,7 +21,7 @@ export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> 
         };
     }
 
-    protected _getTOChildProperties(): IProperty[] {
+    protected override _getFieldTemplateOptions(): IProperty[] {
         return [
             {
                 name: 'Label',
@@ -45,6 +44,10 @@ export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> 
                 type: PropertyType.BOOLEAN,
             },
         ];
+    }
+
+    protected override _getWrapperTemplateOptions(): IProperty[] {
+        return [];
     }
 
     protected _getWrapperTypes(): WrapperType[] {

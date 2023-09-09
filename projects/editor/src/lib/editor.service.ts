@@ -30,7 +30,7 @@ import {
     setActiveModel,
     setEditMode,
 } from './state/state.actions';
-import { selectActiveField, selectActiveFieldMap, selectActiveForm, selectForms } from './state/state.selectors';
+import { selectActiveField, selectActiveFieldMap, selectForms } from './state/state.selectors';
 import { IProperty, IPropertyChange } from './property/property.types';
 
 @Injectable()
@@ -39,7 +39,6 @@ export class EditorService {
     public typeOptions: EditorTypeOption[];
 
     private _forms: IForm[];
-    private _activeForm: IForm;
     private _activeField: IEditorFormlyField;
     private _activeFieldMap: Record<string, IEditorFormlyField>;
 
@@ -51,7 +50,6 @@ export class EditorService {
         private _store: Store<IEditorState>
     ) {
         this._store.select(selectForms).subscribe(forms => (this._forms = forms));
-        this._store.select(selectActiveForm).subscribe(form => (this._activeForm = form));
         this._store.select(selectActiveField).subscribe(field => (this._activeField = field));
         this._store.select(selectActiveFieldMap).subscribe(fieldMap => (this._activeFieldMap = fieldMap));
     }
@@ -170,7 +168,7 @@ export class EditorService {
     }
 
     public getFieldProperties(type: string): IProperty[] {
-        return this._fieldService.getFieldProperties(type);
+        return this._fieldService.getProperties(type);
     }
 
     private _loadDefaultForm(): void {

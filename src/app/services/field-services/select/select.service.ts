@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IProperty, PropertyType, IObjectProperty, IArrayProperty } from 'editor';
+import { IProperty, PropertyType, IObjectProperty, IArrayProperty, BaseFieldService } from 'editor';
 
-import { BaseFieldService } from '../base-field.service';
 import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
 import { ISelectTemplateOptions } from './select.types';
 
@@ -30,7 +29,7 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
         };
     }
 
-    protected _getTOChildProperties(): IProperty[] {
+    protected override _getFieldTemplateOptions(): IProperty[] {
         return [
             {
                 name: 'Label',
@@ -91,6 +90,10 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
                 } as IObjectProperty,
             } as IArrayProperty,
         ];
+    }
+
+    protected override _getWrapperTemplateOptions(): IProperty[] {
+        return [];
     }
 
     protected _getWrapperTypes(): WrapperType[] {

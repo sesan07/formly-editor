@@ -51,7 +51,7 @@ export interface IForm {
 
 export interface IFieldService {
     getDefaultField: GetDefaultField;
-    getFieldProperties(type: string): IProperty[];
+    getProperties(type: string): IProperty[];
 }
 
 export type IEditorFormlyFieldConfigCache = IEditorFormlyField & FormlyFieldConfigCache;
