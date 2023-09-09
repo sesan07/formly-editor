@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseFieldService, IBaseFormlyField, IFieldService, IProperty } from 'editor';
 
 import { CheckboxService } from './checkbox/checkbox.service';
-import { CustomFieldType, FieldType } from './field.types';
+import { AppCustomFieldType, AppFieldType } from './field.types';
 import { FormlyGroupService } from './formly-group/formly-group.service';
 import { InputService } from './input/input.service';
 import { OtherFieldService } from './other/other-field.service';
@@ -26,31 +26,35 @@ export class FieldService implements IFieldService {
         private _textareaFieldService: TextareaService
     ) {}
 
-    getDefaultField(type: FieldType, customType?: CustomFieldType, sourceField?: IBaseFormlyField): IBaseFormlyField {
+    getDefaultField(
+        type: AppFieldType,
+        customType?: AppCustomFieldType,
+        sourceField?: IBaseFormlyField
+    ): IBaseFormlyField {
         return this._getFieldService(type).getDefaultConfig(customType, sourceField);
     }
 
-    getProperties(type: FieldType): IProperty[] {
+    getProperties(type: AppFieldType): IProperty[] {
         return this._getFieldService(type).getProperties();
     }
 
-    private _getFieldService(type: FieldType): BaseFieldService<any> {
+    private _getFieldService(type: AppFieldType): BaseFieldService<any> {
         switch (type) {
-            case FieldType.CHECKBOX:
+            case AppFieldType.CHECKBOX:
                 return this._checkboxService;
-            case FieldType.FORMLY_GROUP:
+            case AppFieldType.FORMLY_GROUP:
                 return this._formlyGroupService;
-            case FieldType.INPUT:
+            case AppFieldType.INPUT:
                 return this._inputService;
-            case FieldType.OTHER:
+            case AppFieldType.OTHER:
                 return this._otherFieldService;
-            case FieldType.RADIO:
+            case AppFieldType.RADIO:
                 return this._radioService;
             // case FieldType.REPEATING_SECTION:
             //     return this._repeatingSectionService;
-            case FieldType.SELECT:
+            case AppFieldType.SELECT:
                 return this._selectService;
-            case FieldType.TEXTAREA:
+            case AppFieldType.TEXTAREA:
                 return this._textareaFieldService;
             default:
                 console.warn(`Unknown formly type: '${type}', treating as 'other' type`);

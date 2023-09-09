@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { BaseFieldService, IBaseFormlyField, IProperty, PropertyType } from 'editor';
 
 import { IInputTemplateOptions } from './input.types';
-import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
+import { AppCustomFieldType, AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class InputService extends BaseFieldService<IInputTemplateOptions> {
-    public getDefaultConfig(customType?: CustomFieldType): IFormlyField<IInputTemplateOptions> {
+    public getDefaultConfig(customType?: AppCustomFieldType): IFormlyField<IInputTemplateOptions> {
         const config: IFormlyField<IInputTemplateOptions> = {
-            type: FieldType.INPUT,
-            wrappers: [WrapperType.FORM_FIELD],
+            type: AppFieldType.INPUT,
+            wrappers: [AppWrapperType.FORM_FIELD],
             templateOptions: {
                 label: 'Label',
                 placeholder: 'Placeholder',
@@ -21,7 +21,7 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
         };
 
         switch (customType) {
-            case CustomFieldType.NUMBER:
+            case AppCustomFieldType.NUMBER:
                 config.name = 'Number';
                 config.customType = customType;
                 config.templateOptions.type = 'number';
@@ -64,7 +64,7 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
         return [];
     }
 
-    protected _getWrapperTypes(): WrapperType[] {
-        return [WrapperType.FORM_FIELD];
+    protected _getWrapperTypes(): AppWrapperType[] {
+        return [AppWrapperType.FORM_FIELD];
     }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
 import { BaseFieldService, IProperty } from 'editor';
 
-import { IFormlyField, WrapperType } from '../field.types';
+import { IFormlyField, AppWrapperType } from '../field.types';
 
 @Injectable({
     providedIn: 'root',
@@ -22,7 +22,7 @@ export class OtherFieldService extends BaseFieldService<FormlyTemplateOptions> {
         return [];
     }
 
-    protected _getWrapperTypes(): WrapperType[] {
+    protected _getWrapperTypes(): AppWrapperType[] {
         return [];
     }
 }

@@ -8,7 +8,6 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG } from './editor.types';
 import { EditorService } from './editor.service';
-import { CustomFormlyModule } from './custom-formly/custom-formly.module';
 import { FormModule } from './form/form.module';
 import { FileService } from './shared/services/file-service/file.service';
 import { EditorComponent } from './editor.component';
@@ -17,6 +16,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { FieldNameModule } from './field-name/field-name.module';
 import { EditFieldModule } from './edit-field/edit-field.module';
 import { TreeItemModule } from './tree-item/tree-item.module';
+import { CustomFormlyModule } from './custom-formly/custom-formly.module';
 import { StoreModule } from '@ngrx/store';
 import { editorFeature } from './state/state.reducers';
 import { PropertyModule } from './property/property.module';

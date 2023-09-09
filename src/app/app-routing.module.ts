@@ -3,8 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { EditorComponent } from 'editor';
 
 const routes: Routes = [
-    { path: 'home', component: EditorComponent },
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: '', component: EditorComponent },
+    { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 @NgModule({

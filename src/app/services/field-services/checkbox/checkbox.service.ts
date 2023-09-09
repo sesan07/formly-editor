@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService, IBaseFormlyField, IProperty, PropertyType } from 'editor';
 
-import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
+import { AppCustomFieldType, AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
 import { ICheckboxTemplateOptions } from './checkbox.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> {
-    public getDefaultConfig(customType?: CustomFieldType): IFormlyField<ICheckboxTemplateOptions> {
+    public getDefaultConfig(customType?: AppCustomFieldType): IFormlyField<ICheckboxTemplateOptions> {
         return {
-            type: FieldType.CHECKBOX,
-            wrappers: [WrapperType.FORM_FIELD],
+            type: AppFieldType.CHECKBOX,
+            wrappers: [AppWrapperType.FORM_FIELD],
             templateOptions: {
                 label: 'Accept terms',
                 description: 'In order to proceed, please accept terms',
@@ -55,7 +55,7 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
         return [];
     }
 
-    protected _getWrapperTypes(): WrapperType[] {
-        return [WrapperType.FORM_FIELD];
+    protected _getWrapperTypes(): AppWrapperType[] {
+        return [AppWrapperType.FORM_FIELD];
     }
 }

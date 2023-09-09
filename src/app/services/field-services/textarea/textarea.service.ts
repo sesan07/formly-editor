@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService, IProperty, PropertyType } from 'editor';
 
-import { CustomFieldType, FieldType, IFormlyField, WrapperType } from '../field.types';
+import { AppCustomFieldType, AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
 import { ITextareaTemplateOptions } from './textarea.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> {
-    public getDefaultConfig(customType?: CustomFieldType): IFormlyField<ITextareaTemplateOptions> {
+    public getDefaultConfig(customType?: AppCustomFieldType): IFormlyField<ITextareaTemplateOptions> {
         return {
-            type: FieldType.TEXTAREA,
-            wrappers: [WrapperType.FORM_FIELD],
+            type: AppFieldType.TEXTAREA,
+            wrappers: [AppWrapperType.FORM_FIELD],
             templateOptions: {
                 label: 'Label',
                 placeholder: 'Placeholder',
@@ -50,7 +50,7 @@ export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> 
         return [];
     }
 
-    protected _getWrapperTypes(): WrapperType[] {
-        return [WrapperType.FORM_FIELD];
+    protected _getWrapperTypes(): AppWrapperType[] {
+        return [AppWrapperType.FORM_FIELD];
     }
 }

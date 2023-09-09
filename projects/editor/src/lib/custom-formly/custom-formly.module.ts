@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 import { FormlyModule } from '@ngx-formly/core';
-import { FormlyMaterialModule } from '@ngx-formly/ui/material';
 
 import { FieldType } from '../editor.types';
 import { FormlyGroupComponent } from './formly-group/formly-group.component';
@@ -19,7 +18,6 @@ import { FieldNameModule } from '../field-name/field-name.module';
     imports: [
         CommonModule,
         FieldNameModule,
-        FormlyMaterialModule,
         FormlyModule.forRoot({
             types: [
                 {

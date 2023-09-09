@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FieldService } from './services/field-services/field-service';
-import { CustomFieldType, FieldType, WrapperType } from './services/field-services/field.types';
+import { AppCustomFieldType, AppFieldType, AppWrapperType } from './services/field-services/field.types';
 import { CardWrapperComponent } from './components/wrappers/card-wrapper/card-wrapper.component';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { HttpClientModule } from '@angular/common/http';
@@ -25,36 +25,37 @@ import { ActionReducer, StoreModule } from '@ngrx/store';
         AppRoutingModule,
         MatCardModule,
         MatButtonModule,
+        FormlyMaterialModule,
         EditorModule.forRoot({
-            defaultName: FieldType.FORMLY_GROUP,
-            unknownTypeName: FieldType.OTHER,
+            defaultName: AppFieldType.FORMLY_GROUP,
+            unknownTypeName: AppFieldType.OTHER,
             typeCategories: [
                 {
                     name: 'Components',
                     typeOptions: [
                         {
-                            name: FieldType.CHECKBOX,
+                            name: AppFieldType.CHECKBOX,
                             displayName: 'Checkbox',
                         },
                         {
-                            name: FieldType.INPUT,
+                            name: AppFieldType.INPUT,
                             displayName: 'Input',
                         },
                         {
-                            name: FieldType.INPUT,
+                            name: AppFieldType.INPUT,
                             displayName: 'Number',
-                            customName: CustomFieldType.NUMBER,
+                            customName: AppCustomFieldType.NUMBER,
                         },
                         {
-                            name: FieldType.RADIO,
+                            name: AppFieldType.RADIO,
                             displayName: 'Radio',
                         },
                         {
-                            name: FieldType.SELECT,
+                            name: AppFieldType.SELECT,
                             displayName: 'Select',
                         },
                         {
-                            name: FieldType.TEXTAREA,
+                            name: AppFieldType.TEXTAREA,
                             displayName: 'Textarea',
                         },
                     ],
@@ -63,15 +64,15 @@ import { ActionReducer, StoreModule } from '@ngrx/store';
                     name: 'Containers',
                     typeOptions: [
                         {
-                            name: FieldType.FORMLY_GROUP,
-                            displayName: 'Card',
-                            customName: CustomFieldType.CARD,
+                            name: AppFieldType.FORMLY_GROUP,
+                            displayName: 'Group',
                             canHaveChildren: true,
                             childrenPath: 'fieldGroup',
                         },
                         {
-                            name: FieldType.FORMLY_GROUP,
-                            displayName: 'Group',
+                            name: AppFieldType.FORMLY_GROUP,
+                            displayName: 'Card',
+                            customName: AppCustomFieldType.CARD,
                             canHaveChildren: true,
                             childrenPath: 'fieldGroup',
                         },
@@ -88,13 +89,13 @@ import { ActionReducer, StoreModule } from '@ngrx/store';
                     name: 'Others',
                     typeOptions: [
                         {
-                            name: FieldType.OTHER,
+                            name: AppFieldType.OTHER,
                             displayName: 'Other',
                         },
                     ],
                 },
             ],
-            wrappers: [{ name: WrapperType.CARD, component: CardWrapperComponent }],
+            wrappers: [{ name: AppWrapperType.CARD, component: CardWrapperComponent }],
             validationMessages: [{ name: 'required', message: 'This field is required' }],
         }),
         StoreModule.forRoot(
