@@ -1,6 +1,6 @@
 <editor-tree-item
     class="cursor-pointer"
-    *ngIf="!isSimplified; else simplifiedView"
+    *ngIf="treeMode; else simplifiedView"
     [treeLevel]="treeLevel"
     [(isExpanded)]="isExpanded"
     [isExpandable]="true"
@@ -86,7 +86,7 @@
             [path]="getChildPath(child.key)"
             [target]="target"
             [property]="propertyService.getAsObjectProperty(child)"
-            [isSimplified]="isSimplified"
+            [treeMode]="treeMode"
             (remove)="onRemoveChild(index)"
             (targetChanged)="targetChanged.emit($event)"
         >
@@ -98,7 +98,7 @@
             [path]="getChildPath(child.key)"
             [property]="child"
             [target]="target"
-            [isSimplified]="isSimplified"
+            [treeMode]="treeMode"
             (remove)="onRemoveChild(index)"
             (targetChanged)="targetChanged.emit($event)"
         >
@@ -110,7 +110,7 @@
             [path]="getChildPath(child.key)"
             [property]="propertyService.getAsChiplistProperty(child)"
             [target]="target"
-            [isSimplified]="isSimplified"
+            [treeMode]="treeMode"
             (remove)="onRemoveChild(index)"
             (targetChanged)="targetChanged.emit($event)"
         >
@@ -122,7 +122,7 @@
             [path]="getChildPath(child.key)"
             [property]="propertyService.getAsTextareaProperty(child)"
             [target]="target"
-            [isSimplified]="isSimplified"
+            [treeMode]="treeMode"
             (remove)="onRemoveChild(index)"
             (targetChanged)="targetChanged.emit($event)"
         >
@@ -140,7 +140,7 @@
                 [path]="getChildPath(child.key)"
                 [property]="propertyService.getAsInputProperty(child)"
                 [target]="target"
-                [isSimplified]="isSimplified"
+                [treeMode]="treeMode"
                 (remove)="onRemoveChild(index)"
                 (targetChanged)="targetChanged.emit($event)"
             >

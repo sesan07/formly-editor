@@ -1,5 +1,5 @@
 <editor-tree-item
-    *ngIf="!isSimplified; else simplifiedView"
+    *ngIf="treeMode; else simplifiedView"
     [treeLevel]="treeLevel"
     [hasOptions]="hasOptions"
     [optionsMenu]="optionsMenu"

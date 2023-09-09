@@ -22,7 +22,6 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
                 name: 'Key',
                 key: 'key',
                 type: PropertyType.TEXT,
-                isSimple: true,
             },
             ...this._getTOProperty(this._getTOChildProperties(), this._getWrapperTypes()),
             ...this._getSharedProperties(),
@@ -36,13 +35,11 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
                 key: 'defaultValue',
                 type: PropertyType.TEXT,
                 outputRawValue: true,
-                isSimple: true,
             } as IInputProperty,
             {
                 name: 'Hide',
                 key: 'hide',
                 type: PropertyType.BOOLEAN,
-                isSimple: true,
             },
             {
                 name: 'Classes',
@@ -50,7 +47,6 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
                 type: PropertyType.CHIP_LIST,
                 options: this._stylesService.classNames,
                 outputString: true,
-                isSimple: true,
             } as IChipListProperty,
             {
                 name: 'Field Group Classes',
@@ -58,20 +54,17 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
                 type: PropertyType.CHIP_LIST,
                 options: this._stylesService.fieldGroupClassNames,
                 outputString: true,
-                isSimple: true,
             } as IChipListProperty,
             {
                 name: 'Wrappers',
                 key: 'wrappers',
                 type: PropertyType.CHIP_LIST,
                 options: this._getWrapperTypes(),
-                isSimple: true,
             },
             {
                 name: 'Expression Properties',
                 key: 'expressionProperties',
                 type: PropertyType.EXPRESSION_PROPERTIES,
-                isSimple: true,
             } as IExpressionPropertiesProperty,
         ];
     }
@@ -95,7 +88,6 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
                         name: 'Card Title (for cards)',
                         key: 'templateOptions.cardTitle',
                         type: PropertyType.TEXT,
-                        isSimple: true,
                     },
                 ];
             case WrapperType.FORM_FIELD:

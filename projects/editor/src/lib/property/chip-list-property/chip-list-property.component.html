@@ -1,5 +1,5 @@
 <editor-tree-item
-    *ngIf="!isSimplified; else simplifiedView"
+    *ngIf="treeMode; else simplifiedView"
     [treeLevel]="treeLevel"
     [hasOptions]="hasOptions"
     [optionsMenu]="optionsMenu"
@@ -35,7 +35,7 @@
 >
     <mat-form-field
         [appearance]="appearance"
-        [class.simplified]="isSimplified"
+        [class.simplified]="!treeMode"
     >
         <mat-label *ngIf="showLabel">{{ property.name ? property.name : property.key }}</mat-label>
         <mat-chip-list #chipList>

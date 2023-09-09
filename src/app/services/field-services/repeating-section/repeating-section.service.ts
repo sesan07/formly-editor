@@ -28,7 +28,6 @@ export class RepeatingSectionService extends BaseFieldService<IRepeatingSectionT
                 name: 'Add Text',
                 key: 'addText',
                 type: PropertyType.TEXT,
-                isSimple: true,
             },
         ];
     }

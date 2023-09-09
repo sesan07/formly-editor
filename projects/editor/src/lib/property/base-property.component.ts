@@ -22,7 +22,7 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
     @Input() path?: string;
     @Input() target?: Record<string, any> | any[];
     @Input() property?: P;
-    @Input() isSimplified: boolean;
+    @Input() treeMode: boolean;
 
     @Output() public remove: EventEmitter<void> = new EventEmitter();
     @Output() public keyChanged: EventEmitter<string> = new EventEmitter();
@@ -32,7 +32,7 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
     protected abstract defaultValue: V;
 
     @HostBinding('class.tree-item') get isTreeItem(): boolean {
-        return !this.isSimplified;
+        return this.treeMode;
     }
 
     ngOnChanges(changes: SimpleChanges): void {

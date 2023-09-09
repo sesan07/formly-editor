@@ -27,7 +27,6 @@ export interface IBaseProperty {
     key?: string | number;
     isRemovable?: boolean;
     isKeyEditable?: boolean;
-    isSimple?: boolean;
 }
 
 export interface IPropertyChange {

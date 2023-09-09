@@ -150,7 +150,6 @@ export class StylesComponent implements OnChanges, OnInit {
             name: 'Custom classes',
             type: PropertyType.CHIP_LIST,
             outputString: true,
-            isSimple: true,
         };
     }
 }
