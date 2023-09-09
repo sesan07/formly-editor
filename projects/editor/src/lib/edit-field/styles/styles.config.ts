@@ -277,7 +277,7 @@ export const defaultConfig: IStylesConfig = {
                 {
                     name: 'Flex Direction',
                     value: 'flex',
-                    variants: ['column', 'column-reverse', 'row', 'row-reverse'],
+                    variants: ['col', 'col-reverse', 'row', 'row-reverse'],
                     dependsOn: {
                         property: ClassProperty.FIELD_GROUP_CLASS_NAME,
                         value: 'flex',
