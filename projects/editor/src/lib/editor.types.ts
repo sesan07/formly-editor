@@ -1,7 +1,8 @@
 import { InjectionToken } from '@angular/core';
-import { FormlyFieldConfig, FormlyFieldConfigCache, FormlyTemplateOptions } from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyTemplateOptions } from '@ngx-formly/core';
 
 import { IProperty } from './property/property.types';
+import { FormlyFieldConfigCache } from './custom-formly/fieldconfig.cache';
 
 export enum FieldType {
     FORMLY_GROUP = 'formly-group',

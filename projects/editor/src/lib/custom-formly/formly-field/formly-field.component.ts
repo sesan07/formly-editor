@@ -13,7 +13,7 @@ import {
     ViewContainerRef,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { FormlyConfig, FormlyField, FormlyFieldTemplates } from '@ngx-formly/core';
+import { FormlyConfig, FormlyField } from '@ngx-formly/core';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { EditorService } from '../../editor.service';
@@ -21,6 +21,7 @@ import { FieldOption, IEditorFieldInfo, IEditorFormlyField } from '../../editor.
 import { selectActiveField, selectActiveForm } from '../../state/state.selectors';
 import { IEditorState } from '../../state/state.types';
 import { isCategoryOption, isTypeOption } from '../../editor.utils';
+import { FormlyFieldTemplates } from '../formly.template';
 
 @Component({
     selector: 'editor-root-formly-field',

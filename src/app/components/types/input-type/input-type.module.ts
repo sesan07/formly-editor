@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { FormlyMatFormFieldModule } from '@ngx-formly/ui/material/form-field';
+import { FormlyMatFormFieldModule } from '@ngx-formly/material/form-field';
 import { FormlyModule } from '@ngx-formly/core';
 import { InputTypeComponent } from './input-type.component';
 

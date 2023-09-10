@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FieldTypeConfig } from '@ngx-formly/core';
-import { FieldType } from '@ngx-formly/ui/material';
+import { FieldType } from '@ngx-formly/material';
 import { IInputTemplateOptions } from '../../../services/field-services/input/input.types';
 
 @Component({
