@@ -14,7 +14,8 @@ export const trackByFieldId: TrackByFunction<IEditorFormlyField> = (_, field) =>
 
 export const getFormId = (counter: number): string => `form__${counter}`;
 export const getFieldId = (type: string, counter: number): string => `${type}__${counter}`;
-export const getFieldKey = (type: string, counter: number): string => `__${type}_${counter}`;
+export const getFieldKey = (type: string, counter: number, unknownTypeName: string): string =>
+    `__${type ?? unknownTypeName ?? 'generic'}_${counter}`;
 
 export const convertToEditorField = (
     getDefaultField: GetDefaultField,
@@ -31,16 +32,11 @@ export const convertToEditorField = (
     }
 
     // Merge with default properties
-    const baseField: IBaseFormlyField = getDefaultField(sourceField.type, sourceField.customType, sourceField);
+    const typeOption: EditorTypeOption = getTypeOption(typeOptions, sourceField.type, unknownTypeName);
+    const baseField: IBaseFormlyField = getDefaultField(sourceField.type);
     merge(baseField, sourceField);
 
     // Editor information
-    const typeOption: EditorTypeOption = getTypeOption(
-        typeOptions,
-        baseField.type,
-        baseField.customType,
-        unknownTypeName
-    );
     const count = counter.count++;
     const fieldId = getFieldId(baseField.type, count);
     const fieldInfo: IEditorFieldInfo = {
@@ -57,7 +53,9 @@ export const convertToEditorField = (
     const field: IEditorFormlyField = {
         ...baseField,
         _info: fieldInfo,
-        key: baseField.key || (typeOption.canHaveChildren ? undefined : getFieldKey(baseField.type, count)),
+        key:
+            baseField.key ||
+            (typeOption.canHaveChildren ? undefined : getFieldKey(baseField.type, count, unknownTypeName)),
         fieldGroup: undefined,
     };
 
@@ -76,20 +74,17 @@ export const convertToEditorField = (
 export const getTypeOption = (
     typeOptions: EditorTypeOption[],
     type: string,
-    customType?: string,
     unknownTypeName?: string
 ): EditorTypeOption => {
-    let typeOption: EditorTypeOption = typeOptions.find(
-        option => option.name === type && option.customName === customType
-    );
+    let typeOption: EditorTypeOption = typeOptions.find(option => option.type === type);
 
     if (!typeOption && unknownTypeName) {
-        typeOption = typeOptions.find(option => option.name === unknownTypeName);
+        typeOption = typeOptions.find(option => option.type === unknownTypeName);
     }
 
     if (!typeOption) {
         console.warn('EditorTypeOption not configured for type: ' + type);
-        typeOption = { name: undefined, displayName: 'Unknown Type' };
+        typeOption = { type: undefined, displayName: 'Unknown Type' };
     }
 
     return typeOption;

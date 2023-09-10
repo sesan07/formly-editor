@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { IProperty, PropertyType, IObjectProperty, IArrayProperty, BaseFieldService } from 'editor';
 
-import { AppCustomFieldType, AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
+import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
 import { ISelectTemplateOptions } from './select.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
-    public getDefaultConfig(customType?: AppCustomFieldType): IFormlyField<ISelectTemplateOptions> {
+    public getDefaultConfig(type: AppFieldType): IFormlyField<ISelectTemplateOptions> {
         return {
-            type: AppFieldType.SELECT,
+            type,
             wrappers: [AppWrapperType.FORM_FIELD],
             templateOptions: {
                 label: 'Label',

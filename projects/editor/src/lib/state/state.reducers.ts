@@ -112,7 +112,7 @@ const processSetActiveFormId = (state: IEditorState, { activeFormId }: SetActive
 
 const processAddField = (
     state: IEditorState,
-    { fieldType, customType, parent, index, getDefaultField, typeOptions, unknownTypeName }: AddField
+    { fieldType, parent, index, getDefaultField, typeOptions, unknownTypeName }: AddField
 ): IEditorState => {
     const activeForm: IForm = state.formMap[state.activeFormId];
     const counter = { count: activeForm.fieldIdCounter };
@@ -121,7 +121,7 @@ const processAddField = (
         typeOptions,
         counter,
         activeForm.id,
-        getDefaultField(fieldType, customType),
+        getDefaultField(fieldType),
         parent,
         unknownTypeName
     );
@@ -227,7 +227,7 @@ const processSetActiveField = (state: IEditorState, { activeFieldId }: SetActive
 
 const processReplaceField = (
     state: IEditorState,
-    { field, parent, fieldType, customType, typeOptions, unknownTypeName, getDefaultField }: ReplaceField
+    { field, parent, fieldType, typeOptions, unknownTypeName, getDefaultField }: ReplaceField
 ): IEditorState => {
     const activeForm: IForm = state.formMap[state.activeFormId];
     const counter = { count: activeForm.fieldIdCounter };
@@ -236,7 +236,7 @@ const processReplaceField = (
         typeOptions,
         counter,
         activeForm.id,
-        getDefaultField(fieldType, customType),
+        getDefaultField(fieldType),
         parent,
         unknownTypeName
     );

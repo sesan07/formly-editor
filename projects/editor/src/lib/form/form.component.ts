@@ -88,8 +88,8 @@ export class FormComponent implements OnInit, OnDestroy {
         this._editorService.setEditMode(this.form.id, isEditMode);
     }
 
-    onAddField(type: string, customType?: string): void {
-        this._editorService.addField(type, customType);
+    onAddField(type: string): void {
+        this._editorService.addField(type);
     }
 
     onFormModelChanged(model: Record<string, any>): void {

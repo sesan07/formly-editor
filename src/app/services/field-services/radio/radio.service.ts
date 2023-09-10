@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { BaseFieldService, IArrayProperty, IBaseFormlyField, IObjectProperty, IProperty, PropertyType } from 'editor';
+import { BaseFieldService, IArrayProperty, IObjectProperty, IProperty, PropertyType } from 'editor';
 
-import { AppCustomFieldType, AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
+import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
 import { IRadioTemplateOptions } from './radio.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
-    public getDefaultConfig(customType?: AppCustomFieldType): IFormlyField<IRadioTemplateOptions> {
+    public getDefaultConfig(type: AppFieldType): IFormlyField<IRadioTemplateOptions> {
         return {
-            type: AppFieldType.RADIO,
+            type,
             wrappers: [AppWrapperType.FORM_FIELD],
             templateOptions: {
                 label: 'Label',

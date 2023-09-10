@@ -39,5 +39,4 @@ const _removeEmptyProperties = (field: IEditorFormlyField): void => {
 
 const _removeEditorProperties = (field: IEditorFormlyField): void => {
     delete field._info;
-    delete field.customType;
 };

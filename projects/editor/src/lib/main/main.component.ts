@@ -139,8 +139,8 @@ export class MainComponent implements OnInit {
         });
     }
 
-    onAddField(type: string, customType?: string): void {
-        this._editorService.addField(type, customType);
+    onAddField(type: string): void {
+        this._editorService.addField(type);
     }
     onActiveFieldChanged(change: IPropertyChange): void {
         this._editorService.modifyActiveField(change);

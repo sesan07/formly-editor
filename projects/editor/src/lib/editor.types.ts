@@ -13,8 +13,8 @@ export enum FieldType {
     FORMLY_GROUP = 'formly-group',
 }
 
-export type GetDefaultField = (type: string, customType?: string, sourceField?: IBaseFormlyField) => IBaseFormlyField;
-export type GetTypeOption = (type: string, customType?: string) => EditorTypeOption;
+export type GetDefaultField = (type: string) => IBaseFormlyField;
+export type GetTypeOption = (type: string) => EditorTypeOption;
 
 export interface IEditorFieldInfo {
     name: string;
@@ -28,7 +28,6 @@ export interface IEditorFieldInfo {
 
 export interface IBaseFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
     type: string;
-    customType?: string;
     templateOptions?: T;
     fieldGroup?: IBaseFormlyField[];
 }
@@ -49,17 +48,16 @@ export interface IForm {
     fieldIdCounter: number;
 }
 
-export interface IFieldService {
+export interface IEditorFieldService {
     getDefaultField: GetDefaultField;
     getProperties(type: string): IProperty[];
 }
 
 export type IEditorFormlyFieldConfigCache = IEditorFormlyField & FormlyFieldConfigCache;
 
-export interface EditorTypeOption extends TypeOption {
+export interface EditorTypeOption {
+    type: string;
     displayName: string;
-    name: string;
-    customName?: string;
     canHaveChildren?: boolean;
     childrenPath?: string;
 }
@@ -76,5 +74,5 @@ export interface EditorConfigOption extends ConfigOption {
     typeCategories: EditorTypeCategoryOption[];
 }
 
-export const EDITOR_FIELD_SERVICE = new InjectionToken<IFieldService>('EDITOR_FIELD_SERVICE');
+export const EDITOR_FIELD_SERVICE = new InjectionToken<IEditorFieldService>('EDITOR_FIELD_SERVICE');
 export const EDITOR_CONFIG = new InjectionToken<EditorConfigOption[]>('EDITOR_CONFIG');

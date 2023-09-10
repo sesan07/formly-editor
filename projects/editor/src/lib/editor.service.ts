@@ -5,7 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 
 import {
     EDITOR_FIELD_SERVICE,
-    IFieldService,
+    IEditorFieldService,
     IForm,
     IBaseFormlyField,
     EditorConfigOption,
@@ -45,7 +45,7 @@ export class EditorService {
     private _editorConfig: EditorConfigOption;
 
     constructor(
-        @Inject(EDITOR_FIELD_SERVICE) private _fieldService: IFieldService,
+        @Inject(EDITOR_FIELD_SERVICE) private _fieldService: IEditorFieldService,
         private _http: HttpClient,
         private _store: Store<IEditorState>
     ) {
@@ -73,8 +73,7 @@ export class EditorService {
                 model,
                 typeOptions: this.typeOptions,
                 unknownTypeName: this.unknownTypeName,
-                getDefaultField: (type: string, customType?: string, sourceField?: IBaseFormlyField) =>
-                    this._fieldService.getDefaultField(type, customType, sourceField),
+                getDefaultField: (type: string) => this._fieldService.getDefaultField(type),
             })
         );
     }
@@ -95,17 +94,16 @@ export class EditorService {
         this._store.dispatch(setEditMode({ formId, isEditMode }));
     }
 
-    public addField(fieldType: string, customType?: string, parentId?: string, index?: number): void {
+    public addField(fieldType: string, parentId?: string, index?: number): void {
         const parent: IEditorFormlyField = this.getField(parentId);
         this._store.dispatch(
             addField({
                 fieldType,
-                customType,
                 parent,
                 index,
                 typeOptions: this.typeOptions,
                 unknownTypeName: this.unknownTypeName,
-                getDefaultField: (type, cType?, sourceField?) => this.getDefaultField(type, cType, sourceField),
+                getDefaultField: type => this.getDefaultField(type),
             })
         );
     }
@@ -134,7 +132,7 @@ export class EditorService {
         this._store.dispatch(moveField({ parent, from, to }));
     }
 
-    public replaceField(fieldType: string, fieldId: string, customType?: string): void {
+    public replaceField(fieldType: string, fieldId: string): void {
         const field: IEditorFormlyField = this.getField(fieldId);
         const parent: IEditorFormlyField = this.getField(field._info.parentFieldId);
 
@@ -143,10 +141,9 @@ export class EditorService {
                 field,
                 parent,
                 fieldType,
-                customType,
                 typeOptions: this.typeOptions,
                 unknownTypeName: this.unknownTypeName,
-                getDefaultField: (type, cType, sourceField) => this.getDefaultField(type, cType, sourceField),
+                getDefaultField: type => this.getDefaultField(type),
             })
         );
     }
@@ -163,8 +160,8 @@ export class EditorService {
         return this._activeFieldMap?.[fieldId];
     }
 
-    public getDefaultField(type: string, customType?: string, sourceField?: IBaseFormlyField): IBaseFormlyField {
-        return this._fieldService.getDefaultField(type, customType, sourceField);
+    public getDefaultField(type: string): IBaseFormlyField {
+        return this._fieldService.getDefaultField(type);
     }
 
     public getFieldProperties(type: string): IProperty[] {

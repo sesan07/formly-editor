@@ -9,7 +9,7 @@ import { IBaseFormlyField } from '../editor.types';
 export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
     public constructor(private _stylesService: StylesService) {}
 
-    public getProperties(): IProperty[] {
+    public getProperties(type: string): IProperty[] {
         return [
             {
                 name: 'Key',
@@ -27,14 +27,15 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
                 key: 'hide',
                 type: PropertyType.BOOLEAN,
             },
-            ...this._getFieldTemplateOptions(),
+            ...this._getFieldTemplateOptions(type),
+            // TODO Prevent input of items not in options
             {
                 name: 'Wrappers',
                 key: 'wrappers',
                 type: PropertyType.CHIP_LIST,
-                options: this._getWrapperTypes(),
+                options: this._getWrapperTypes(type),
             },
-            ...this._getWrapperTemplateOptions(),
+            ...this._getWrapperTemplateOptions(type),
             {
                 name: 'Classes',
                 key: 'className',
@@ -57,9 +58,9 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
         ];
     }
 
-    public abstract getDefaultConfig(customType?: string, sourceField?: IBaseFormlyField): IBaseFormlyField<T>;
+    public abstract getDefaultConfig(type: string): IBaseFormlyField<T>;
 
-    protected abstract _getFieldTemplateOptions(): IProperty[];
-    protected abstract _getWrapperTemplateOptions(): IProperty[];
-    protected abstract _getWrapperTypes(): string[];
+    protected abstract _getFieldTemplateOptions(type: string): IProperty[];
+    protected abstract _getWrapperTemplateOptions(type: string): IProperty[];
+    protected abstract _getWrapperTypes(type: string): string[];
 }

@@ -73,20 +73,20 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
         this._destroy$.complete();
     }
 
-    onAddChildField(type: string, customType?: string): void {
+    onAddChildField(type: string): void {
         if (this.fieldInfo.canHaveChildren) {
             this.isExpanded = true;
         }
 
-        this._editorService.addField(type, customType, this.fieldInfo.fieldId);
+        this._editorService.addField(type, this.fieldInfo.fieldId);
     }
 
     onRemove(): void {
         this._editorService.removeField(this.fieldInfo.fieldId, this.fieldInfo.parentFieldId);
     }
 
-    onReplaceParentField(type: string, customType?: string): void {
-        this._editorService.replaceField(type, this.fieldInfo.fieldId, customType);
+    onReplaceParentField(type: string): void {
+        this._editorService.replaceField(type, this.fieldInfo.fieldId);
     }
 
     onSelected(): void {

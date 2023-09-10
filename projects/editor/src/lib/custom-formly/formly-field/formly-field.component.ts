@@ -116,12 +116,12 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         this._destroy$.complete();
     }
 
-    onAddChildField(type: string, customType?: string): void {
-        this._editorService.addField(type, customType, this.fieldInfo.fieldId);
+    onAddChildField(type: string): void {
+        this._editorService.addField(type, this.fieldInfo.fieldId);
     }
 
-    onReplaceField(type: string, customType?: string): void {
-        this._editorService.replaceField(type, this.fieldInfo.fieldId, customType);
+    onReplaceField(type: string): void {
+        this._editorService.replaceField(type, this.fieldInfo.fieldId);
     }
 
     onRemove(): void {

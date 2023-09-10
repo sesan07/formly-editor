@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BaseFieldService, IBaseFormlyField, IFieldService, IProperty } from 'editor';
+import { BaseFieldService, IBaseFormlyField, IEditorFieldService, IProperty } from 'editor';
 
 import { CheckboxService } from './checkbox/checkbox.service';
-import { AppCustomFieldType, AppFieldType } from './field.types';
+import { AppFieldType } from './field.types';
 import { FormlyGroupService } from './formly-group/formly-group.service';
 import { InputService } from './input/input.service';
 import { OtherFieldService } from './other/other-field.service';
@@ -10,12 +10,16 @@ import { RadioService } from './radio/radio.service';
 // import { RepeatingSectionService } from './repeating-section/repeating-section.service';
 import { SelectService } from './select/select.service';
 import { TextareaService } from './textarea/textarea.service';
+import { FormlyConfig } from '@ngx-formly/core';
 
 @Injectable({
     providedIn: 'root',
 })
-export class FieldService implements IFieldService {
+export class FieldService implements IEditorFieldService {
+    extensionMap: Record<string, string> = {};
+
     constructor(
+        private _formlyConfig: FormlyConfig,
         private _checkboxService: CheckboxService,
         private _formlyGroupService: FormlyGroupService,
         private _inputService: InputService,
@@ -24,21 +28,21 @@ export class FieldService implements IFieldService {
         // private _repeatingSectionService: RepeatingSectionService,
         private _selectService: SelectService,
         private _textareaFieldService: TextareaService
-    ) {}
-
-    getDefaultField(
-        type: AppFieldType,
-        customType?: AppCustomFieldType,
-        sourceField?: IBaseFormlyField
-    ): IBaseFormlyField {
-        return this._getFieldService(type).getDefaultConfig(customType, sourceField);
+    ) {
+        Object.values(this._formlyConfig.types).forEach(
+            type => (this.extensionMap[type.name] = this._formlyConfig.getType(type.name).extends ?? undefined)
+        );
     }
 
-    getProperties(type: AppFieldType): IProperty[] {
-        return this._getFieldService(type).getProperties();
+    getDefaultField(type: string): IBaseFormlyField {
+        return this._getFieldService(this.extensionMap[type] ?? type).getDefaultConfig(type);
     }
 
-    private _getFieldService(type: AppFieldType): BaseFieldService<any> {
+    getProperties(type: string): IProperty[] {
+        return this._getFieldService(this.extensionMap[type] ?? type).getProperties(type);
+    }
+
+    private _getFieldService(type: string): BaseFieldService<any> {
         switch (type) {
             case AppFieldType.CHECKBOX:
                 return this._checkboxService;

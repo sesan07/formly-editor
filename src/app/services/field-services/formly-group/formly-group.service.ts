@@ -2,46 +2,45 @@ import { Injectable } from '@angular/core';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
 import { BaseFieldService, IBaseFormlyField, IProperty, PropertyType } from 'editor';
 
-import { AppCustomFieldType, AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
+import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> {
-    public getDefaultConfig(customType?: AppCustomFieldType, sourceField?: IBaseFormlyField): IFormlyField {
+    public getDefaultConfig(type: AppFieldType): IFormlyField {
         const config: IFormlyField = {
-            type: AppFieldType.FORMLY_GROUP,
+            type,
             fieldGroup: [],
         };
 
-        if (sourceField?.wrappers?.includes(AppCustomFieldType.CARD)) {
-            customType = customType || AppCustomFieldType.CARD;
-        }
-
-        switch (customType) {
-            case AppCustomFieldType.CARD:
-                config.name = 'Card';
-                config.customType = customType;
-                config.wrappers = [AppWrapperType.CARD];
-        }
-
         return config;
     }
-    protected override _getFieldTemplateOptions(): IProperty[] {
-        return [];
+    protected override _getFieldTemplateOptions(type: AppFieldType): IProperty[] {
+        return type === AppFieldType.FORMLY_GROUP_CARD
+            ? [
+                  {
+                      name: 'Card Title',
+                      key: 'templateOptions.cardTitle',
+                      type: PropertyType.TEXT,
+                  },
+              ]
+            : [];
     }
 
-    protected override _getWrapperTemplateOptions(): IProperty[] {
-        return [
-            {
-                name: 'Card Title - Card Wrapper',
-                key: 'templateOptions.cardTitle',
-                type: PropertyType.TEXT,
-            },
-        ];
+    protected override _getWrapperTemplateOptions(type: AppFieldType): IProperty[] {
+        return type === AppFieldType.FORMLY_GROUP
+            ? [
+                  {
+                      name: 'Card Title',
+                      key: 'templateOptions.cardTitle',
+                      type: PropertyType.TEXT,
+                  },
+              ]
+            : [];
     }
 
-    protected _getWrapperTypes(): AppWrapperType[] {
-        return [AppWrapperType.CARD];
+    protected _getWrapperTypes(type: AppFieldType): AppWrapperType[] {
+        return type === AppFieldType.FORMLY_GROUP ? [AppWrapperType.CARD] : [];
     }
 }

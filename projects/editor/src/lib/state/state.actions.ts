@@ -21,7 +21,6 @@ export interface SetActiveFormId {
 }
 export interface AddField {
     fieldType: string;
-    customType?: string;
     parent?: IEditorFormlyField;
     index?: number;
     typeOptions: EditorTypeOption[];
@@ -53,7 +52,6 @@ export interface ReplaceField {
     field: IEditorFormlyField;
     parent?: IEditorFormlyField;
     fieldType: string;
-    customType?: string;
     typeOptions: EditorTypeOption[];
     unknownTypeName?: string;
     getDefaultField: GetDefaultField;

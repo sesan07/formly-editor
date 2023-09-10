@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { BaseFieldService, IBaseFormlyField, IProperty, PropertyType } from 'editor';
+import { BaseFieldService, IProperty, PropertyType } from 'editor';
 
 import { IInputTemplateOptions } from './input.types';
-import { AppCustomFieldType, AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
+import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class InputService extends BaseFieldService<IInputTemplateOptions> {
-    public getDefaultConfig(customType?: AppCustomFieldType): IFormlyField<IInputTemplateOptions> {
+    public getDefaultConfig(type: AppFieldType): IFormlyField<IInputTemplateOptions> {
         const config: IFormlyField<IInputTemplateOptions> = {
-            type: AppFieldType.INPUT,
+            type,
             wrappers: [AppWrapperType.FORM_FIELD],
             templateOptions: {
                 label: 'Label',
@@ -20,11 +20,8 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
             },
         };
 
-        switch (customType) {
-            case AppCustomFieldType.NUMBER:
-                config.name = 'Number';
-                config.customType = customType;
-                config.templateOptions.type = 'number';
+        if (type === AppFieldType.NUMBER || type === AppFieldType.INTEGER) {
+            config.templateOptions.type = 'number';
         }
 
         return config;

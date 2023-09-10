@@ -1,12 +1,12 @@
 import { Inject, ModuleWithProviders, NgModule, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FORMLY_CONFIG, TypeOption } from '@ngx-formly/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule, MAT_TABS_CONFIG } from '@angular/material/tabs';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { cloneDeep } from 'lodash-es';
 
-import { EditorConfigOption, EditorTypeOption, EDITOR_CONFIG } from './editor.types';
+import { EditorConfigOption, EDITOR_CONFIG } from './editor.types';
 import { EditorService } from './editor.service';
 import { FormModule } from './form/form.module';
 import { FileService } from './shared/services/file-service/file.service';
@@ -47,9 +47,10 @@ const defaultConfig: EditorConfigOption = {
         TreeItemModule,
         PropertyModule,
         JSONDialogModule,
+        CustomFormlyModule,
         StoreModule.forFeature(editorFeature),
     ],
-    exports: [EditorComponent, CustomFormlyModule],
+    exports: [EditorComponent],
     providers: [
         EditorService,
         FileService,
@@ -77,45 +78,14 @@ export class EditorModule {
     }
 
     static forRoot(config: EditorConfigOption): ModuleWithProviders<EditorModule> {
-        const typeOptionMap: Map<string, EditorTypeOption> = new Map();
-        config.typeCategories.forEach(category => {
-            category.typeOptions.forEach(typeOption => {
-                if (!typeOptionMap.has(typeOption.name) && !typeOption.customName) {
-                    const copy: EditorTypeOption = { ...typeOption };
-                    delete copy.displayName;
-                    delete copy.customName;
-                    delete copy.canHaveChildren;
-                    delete copy.childrenPath;
-
-                    typeOptionMap.set(copy.name, copy);
-                }
-            });
-        });
-        const types: TypeOption[] = Array.from(typeOptionMap.values());
-
-        const formlyConfig: EditorConfigOption = { ...config };
-        formlyConfig.types = types;
-        delete formlyConfig.defaultName;
-        delete formlyConfig.defaultCustomName;
-        delete formlyConfig.unknownTypeName;
-        delete formlyConfig.typeCategories;
-
-        const editorConfig: EditorConfigOption = {
-            defaultName: config.defaultName,
-            defaultCustomName: config.defaultCustomName,
-            unknownTypeName: config.unknownTypeName,
-            typeCategories: config.typeCategories,
-        };
-
         return {
             ngModule: EditorModule,
             providers: [
                 {
                     provide: EDITOR_CONFIG,
-                    useValue: editorConfig,
+                    useValue: config,
                     deps: [EditorService],
                 },
-                { provide: FORMLY_CONFIG, useValue: formlyConfig, multi: true },
             ],
         };
     }
