@@ -6,7 +6,7 @@ import { MatTabsModule, MAT_TABS_CONFIG } from '@angular/material/tabs';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash-es';
 
-import { EditorConfigOption, EDITOR_CONFIG } from './editor.types';
+import { EditorConfig, EDITOR_CONFIG } from './editor.types';
 import { EditorService } from './editor.service';
 import { FormModule } from './form/form.module';
 import { FileService } from './shared/services/file-service/file.service';
@@ -27,9 +27,9 @@ import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.compon
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/selection/active-line';
 
-const defaultConfig: EditorConfigOption = {
-    defaultName: 'formly-group',
-    typeCategories: [],
+const defaultConfig: EditorConfig = {
+    defaultType: 'formly-group',
+    options: [],
 };
 
 @NgModule({
@@ -73,11 +73,11 @@ const defaultConfig: EditorConfigOption = {
     ],
 })
 export class EditorModule {
-    constructor(editorService: EditorService, @Optional() @Inject(EDITOR_CONFIG) config: EditorConfigOption) {
+    constructor(editorService: EditorService, @Optional() @Inject(EDITOR_CONFIG) config: EditorConfig) {
         editorService.setup(config ?? defaultConfig);
     }
 
-    static forRoot(config: EditorConfigOption): ModuleWithProviders<EditorModule> {
+    static forRoot(config: EditorConfig): ModuleWithProviders<EditorModule> {
         return {
             ngModule: EditorModule,
             providers: [

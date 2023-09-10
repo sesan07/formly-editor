@@ -1,7 +1,9 @@
 import { TrackByFunction } from '@angular/core';
 import { get, merge, set } from 'lodash-es';
 import {
-    EditorTypeOption,
+    FieldCategoryOption,
+    FieldOption,
+    FieldTypeOption,
     FieldType,
     GetDefaultField,
     IBaseFormlyField,
@@ -12,19 +14,22 @@ import {
 export const trackByKey: TrackByFunction<{ [others: string]: any; key: string }> = (_, val) => val.key;
 export const trackByFieldId: TrackByFunction<IEditorFormlyField> = (_, field) => field._info.fieldId;
 
+export const isCategoryOption = (x: FieldOption): x is FieldCategoryOption => !!(x as FieldCategoryOption).children;
+export const isTypeOption = (x: FieldOption): x is FieldTypeOption => !!(x as FieldTypeOption).type;
+
 export const getFormId = (counter: number): string => `form__${counter}`;
 export const getFieldId = (type: string, counter: number): string => `${type}__${counter}`;
-export const getFieldKey = (type: string, counter: number, unknownTypeName: string): string =>
-    `__${type ?? unknownTypeName ?? 'generic'}_${counter}`;
+export const getFieldKey = (type: string, counter: number, defaultUnknownType: string): string =>
+    `__${type ?? defaultUnknownType ?? 'generic'}_${counter}`;
 
 export const convertToEditorField = (
     getDefaultField: GetDefaultField,
-    typeOptions: EditorTypeOption[],
+    typeOptions: FieldTypeOption[],
     counter: { count: number },
     formId: string,
     sourceField: IBaseFormlyField,
     parent?: IEditorFormlyField,
-    unknownTypeName?: string
+    defaultUnknownType?: string
 ) => {
     // Special case to specify 'formly-group' type
     if (!sourceField.type && sourceField.fieldGroup) {
@@ -32,7 +37,7 @@ export const convertToEditorField = (
     }
 
     // Merge with default properties
-    const typeOption: EditorTypeOption = getTypeOption(typeOptions, sourceField.type, unknownTypeName);
+    const typeOption: FieldTypeOption = getTypeOption(typeOptions, sourceField.type, defaultUnknownType);
     const baseField: IBaseFormlyField = getDefaultField(sourceField.type);
     merge(baseField, sourceField);
 
@@ -55,7 +60,7 @@ export const convertToEditorField = (
         _info: fieldInfo,
         key:
             baseField.key ||
-            (typeOption.canHaveChildren ? undefined : getFieldKey(baseField.type, count, unknownTypeName)),
+            (typeOption.canHaveChildren ? undefined : getFieldKey(baseField.type, count, defaultUnknownType)),
         fieldGroup: undefined,
     };
 
@@ -63,7 +68,7 @@ export const convertToEditorField = (
     if (fieldInfo.canHaveChildren) {
         const baseChildren: IBaseFormlyField[] = get(baseField, fieldInfo.childrenPath);
         const children: IEditorFormlyField[] = baseChildren?.map(child =>
-            convertToEditorField(getDefaultField, typeOptions, counter, formId, child, field, unknownTypeName)
+            convertToEditorField(getDefaultField, typeOptions, counter, formId, child, field, defaultUnknownType)
         );
         set(field, fieldInfo.childrenPath, children);
     }
@@ -72,14 +77,14 @@ export const convertToEditorField = (
 };
 
 export const getTypeOption = (
-    typeOptions: EditorTypeOption[],
+    typeOptions: FieldTypeOption[],
     type: string,
-    unknownTypeName?: string
-): EditorTypeOption => {
-    let typeOption: EditorTypeOption = typeOptions.find(option => option.type === type);
+    defaultUnknownType?: string
+): FieldTypeOption => {
+    let typeOption: FieldTypeOption = typeOptions.find(option => option.type === type);
 
-    if (!typeOption && unknownTypeName) {
-        typeOption = typeOptions.find(option => option.type === unknownTypeName);
+    if (!typeOption && defaultUnknownType) {
+        typeOption = typeOptions.find(option => option.type === defaultUnknownType);
     }
 
     if (!typeOption) {

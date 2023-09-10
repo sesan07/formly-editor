@@ -44,12 +44,12 @@ export const initialState: IEditorState = {
 
 const processAddForm = (
     state: IEditorState,
-    { name, sourceFields, model, getDefaultField, typeOptions, unknownTypeName }: AddForm
+    { name, sourceFields, model, getDefaultField, typeOptions, defaultUnknownType }: AddForm
 ): IEditorState => {
     const id = getFormId(state.formIdCounter + 1);
     const counter = { count: 0 };
     const baseFields = (sourceFields ?? []).map(field =>
-        convertToEditorField(getDefaultField, typeOptions, counter, id, field, undefined, unknownTypeName)
+        convertToEditorField(getDefaultField, typeOptions, counter, id, field, undefined, defaultUnknownType)
     );
     return {
         ...state,
@@ -112,7 +112,7 @@ const processSetActiveFormId = (state: IEditorState, { activeFormId }: SetActive
 
 const processAddField = (
     state: IEditorState,
-    { fieldType, parent, index, getDefaultField, typeOptions, unknownTypeName }: AddField
+    { fieldType, parent, index, getDefaultField, typeOptions, defaultUnknownType }: AddField
 ): IEditorState => {
     const activeForm: IForm = state.formMap[state.activeFormId];
     const counter = { count: activeForm.fieldIdCounter };
@@ -123,7 +123,7 @@ const processAddField = (
         activeForm.id,
         getDefaultField(fieldType),
         parent,
-        unknownTypeName
+        defaultUnknownType
     );
 
     let baseFields = activeForm.baseFields;
@@ -227,7 +227,7 @@ const processSetActiveField = (state: IEditorState, { activeFieldId }: SetActive
 
 const processReplaceField = (
     state: IEditorState,
-    { field, parent, fieldType, typeOptions, unknownTypeName, getDefaultField }: ReplaceField
+    { field, parent, fieldType, typeOptions, defaultUnknownType, getDefaultField }: ReplaceField
 ): IEditorState => {
     const activeForm: IForm = state.formMap[state.activeFormId];
     const counter = { count: activeForm.fieldIdCounter };
@@ -238,7 +238,7 @@ const processReplaceField = (
         activeForm.id,
         getDefaultField(fieldType),
         parent,
-        unknownTypeName
+        defaultUnknownType
     );
     // Copy properties that shouldn't change
     newField.key = field.key || newField.key;

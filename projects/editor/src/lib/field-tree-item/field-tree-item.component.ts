@@ -1,6 +1,5 @@
 import {
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
     EventEmitter,
     Input,
@@ -11,16 +10,15 @@ import {
     SimpleChanges,
 } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { map, takeUntil, tap } from 'rxjs/operators';
 
 import { EditorService } from '../editor.service';
-import { EditorTypeCategoryOption, IEditorFormlyField, IEditorFieldInfo } from '../editor.types';
+import { IEditorFormlyField, IEditorFieldInfo, FieldOption } from '../editor.types';
 import { getFieldChildren } from '../form/form.utils';
-import { isEmpty } from 'lodash-es';
-import { trackByFieldId } from '../editor.utils';
+import { isCategoryOption, isTypeOption, trackByFieldId } from '../editor.utils';
 import { Store } from '@ngrx/store';
 import { IEditorState } from '../state/state.types';
-import { selectActiveField, selectActiveForm } from '../state/state.selectors';
+import { selectActiveField } from '../state/state.selectors';
 
 @Component({
     selector: 'editor-field-tree-item',
@@ -30,7 +28,7 @@ import { selectActiveField, selectActiveForm } from '../state/state.selectors';
 })
 export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public field: IEditorFormlyField;
-    @Input() public fieldCategories: EditorTypeCategoryOption[];
+    @Input() public fieldOptions: FieldOption[];
     @Input() public isExpanded = false;
     @Input() public treeLevel = 0;
 
@@ -41,6 +39,8 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     public fieldInfo: IEditorFieldInfo;
 
     trackByFieldId = trackByFieldId;
+    isCategoryOption = isCategoryOption;
+    isTypeOption = isTypeOption;
 
     private _destroy$: Subject<void> = new Subject();
 
@@ -73,20 +73,17 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
         this._destroy$.complete();
     }
 
-    onAddChildField(type: string): void {
+    addField = (type: string) => {
         if (this.fieldInfo.canHaveChildren) {
             this.isExpanded = true;
         }
-
         this._editorService.addField(type, this.fieldInfo.fieldId);
-    }
+    };
+
+    replaceField = (type: string) => this._editorService.replaceField(type, this.fieldInfo.fieldId);
 
     onRemove(): void {
         this._editorService.removeField(this.fieldInfo.fieldId, this.fieldInfo.parentFieldId);
-    }
-
-    onReplaceParentField(type: string): void {
-        this._editorService.replaceField(type, this.fieldInfo.fieldId);
     }
 
     onSelected(): void {

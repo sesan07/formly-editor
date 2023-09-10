@@ -14,13 +14,13 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FormlyConfig, FormlyField, FormlyFieldTemplates } from '@ngx-formly/core';
-import { isEmpty } from 'lodash-es';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { EditorService } from '../../editor.service';
-import { EditorTypeCategoryOption, IEditorFieldInfo, IEditorFormlyField } from '../../editor.types';
+import { FieldOption, IEditorFieldInfo, IEditorFormlyField } from '../../editor.types';
 import { selectActiveField, selectActiveForm } from '../../state/state.selectors';
 import { IEditorState } from '../../state/state.types';
+import { isCategoryOption, isTypeOption } from '../../editor.utils';
 
 @Component({
     selector: 'editor-root-formly-field',
@@ -46,7 +46,10 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     public isMouseInside: boolean;
     public hideOptions: boolean;
     public fieldInfo: IEditorFieldInfo;
-    public fieldCategories: EditorTypeCategoryOption[];
+    public fieldOptions: FieldOption[];
+
+    isCategoryOption = isCategoryOption;
+    isTypeOption = isTypeOption;
 
     private _destroy$: Subject<void> = new Subject();
 
@@ -85,7 +88,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         this.fieldInfo = this.field._info;
 
         this.hideOptions = this.field.templateOptions.hideEditorWrapperOptions;
-        this.fieldCategories = this._editorService.fieldCategories;
+        this.fieldOptions = this._editorService.fieldOptions;
 
         this._store
             .select(selectActiveForm)
@@ -116,13 +119,8 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         this._destroy$.complete();
     }
 
-    onAddChildField(type: string): void {
-        this._editorService.addField(type, this.fieldInfo.fieldId);
-    }
-
-    onReplaceField(type: string): void {
-        this._editorService.replaceField(type, this.fieldInfo.fieldId);
-    }
+    addField = (type: string) => this._editorService.addField(type, this.fieldInfo.fieldId);
+    replaceField = (type: string) => this._editorService.replaceField(type, this.fieldInfo.fieldId);
 
     onRemove(): void {
         this._editorService.removeField(this.fieldInfo.fieldId, this.fieldInfo.parentFieldId);

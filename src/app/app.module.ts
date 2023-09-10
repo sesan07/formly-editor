@@ -30,41 +30,41 @@ import { FormlyModule } from '@ngx-formly/core';
         FormlyMaterialModule,
         TypesModule,
         EditorModule.forRoot({
-            defaultName: AppFieldType.FORMLY_GROUP,
-            unknownTypeName: AppFieldType.OTHER,
-            typeCategories: [
+            defaultType: AppFieldType.FORMLY_GROUP,
+            defaultUnknownType: AppFieldType.OTHER,
+            options: [
                 {
-                    name: 'Components',
-                    typeOptions: [
+                    displayName: 'Input',
+                    children: [
                         {
-                            type: AppFieldType.CHECKBOX,
-                            displayName: 'Checkbox',
-                        },
-                        {
-                            type: AppFieldType.INPUT,
                             displayName: 'Input',
+                            type: AppFieldType.INPUT,
                         },
                         {
-                            type: AppFieldType.NUMBER,
                             displayName: 'Number',
-                        },
-                        {
-                            type: AppFieldType.RADIO,
-                            displayName: 'Radio',
-                        },
-                        {
-                            type: AppFieldType.SELECT,
-                            displayName: 'Select',
-                        },
-                        {
-                            type: AppFieldType.TEXTAREA,
-                            displayName: 'Textarea',
+                            type: AppFieldType.NUMBER,
                         },
                     ],
                 },
                 {
-                    name: 'Containers',
-                    typeOptions: [
+                    displayName: 'Checkbox',
+                    type: AppFieldType.CHECKBOX,
+                },
+                {
+                    displayName: 'Radio',
+                    type: AppFieldType.RADIO,
+                },
+                {
+                    displayName: 'Select',
+                    type: AppFieldType.SELECT,
+                },
+                {
+                    displayName: 'Textarea',
+                    type: AppFieldType.TEXTAREA,
+                },
+                {
+                    displayName: 'Group',
+                    children: [
                         {
                             type: AppFieldType.FORMLY_GROUP,
                             displayName: 'Group',
@@ -87,17 +87,10 @@ import { FormlyModule } from '@ngx-formly/core';
                     ],
                 },
                 {
-                    name: 'Others',
-                    typeOptions: [
-                        {
-                            type: AppFieldType.OTHER,
-                            displayName: 'Generic',
-                        },
-                    ],
+                    type: AppFieldType.OTHER,
+                    displayName: 'Generic',
                 },
             ],
-            wrappers: [{ name: AppWrapperType.CARD, component: CardWrapperComponent }],
-            validationMessages: [{ name: 'required', message: 'This field is required' }],
         }),
         FormlyModule.forRoot({
             types: [

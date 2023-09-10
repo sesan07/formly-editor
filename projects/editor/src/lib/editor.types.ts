@@ -1,11 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import {
-    ConfigOption,
-    FormlyFieldConfig,
-    FormlyFieldConfigCache,
-    FormlyTemplateOptions,
-    TypeOption,
-} from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyFieldConfigCache, FormlyTemplateOptions } from '@ngx-formly/core';
 
 import { IProperty } from './property/property.types';
 
@@ -14,7 +8,7 @@ export enum FieldType {
 }
 
 export type GetDefaultField = (type: string) => IBaseFormlyField;
-export type GetTypeOption = (type: string) => EditorTypeOption;
+export type GetTypeOption = (type: string) => FieldTypeOption;
 
 export interface IEditorFieldInfo {
     name: string;
@@ -55,24 +49,25 @@ export interface IEditorFieldService {
 
 export type IEditorFormlyFieldConfigCache = IEditorFormlyField & FormlyFieldConfigCache;
 
-export interface EditorTypeOption {
+export type FieldOption = FieldCategoryOption | FieldTypeOption;
+
+export interface FieldCategoryOption {
+    displayName: string;
+    children: FieldTypeOption[];
+}
+
+export interface FieldTypeOption {
     type: string;
     displayName: string;
     canHaveChildren?: boolean;
     childrenPath?: string;
 }
 
-export interface EditorTypeCategoryOption {
-    name: string;
-    typeOptions: EditorTypeOption[];
-}
-
-export interface EditorConfigOption extends ConfigOption {
-    defaultName: string;
-    defaultCustomName?: string;
-    unknownTypeName?: string;
-    typeCategories: EditorTypeCategoryOption[];
+export interface EditorConfig {
+    defaultType: string;
+    defaultUnknownType?: string;
+    options: FieldOption[];
 }
 
 export const EDITOR_FIELD_SERVICE = new InjectionToken<IEditorFieldService>('EDITOR_FIELD_SERVICE');
-export const EDITOR_CONFIG = new InjectionToken<EditorConfigOption[]>('EDITOR_CONFIG');
+export const EDITOR_CONFIG = new InjectionToken<EditorConfig[]>('EDITOR_CONFIG');

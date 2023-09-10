@@ -1,13 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    EventEmitter,
-    Input,
-    OnDestroy,
-    OnInit,
-    Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
 import { cloneDeep } from 'lodash-es';
@@ -15,9 +6,9 @@ import { Observable, Subject } from 'rxjs';
 import { debounceTime, filter, map, shareReplay, takeUntil, tap } from 'rxjs/operators';
 
 import { EditorService } from '../editor.service';
-import { EditorTypeCategoryOption, IEditorFormlyField, IForm } from '../editor.types';
+import { FieldOption, IEditorFormlyField, IForm } from '../editor.types';
 import { cleanField } from './form.utils';
-import { trackByFieldId } from '../editor.utils';
+import { isCategoryOption, isTypeOption, trackByFieldId } from '../editor.utils';
 import { selectActiveForm } from '../state/state.selectors';
 import { Store } from '@ngrx/store';
 import { IEditorState } from '../state/state.types';
@@ -36,7 +27,7 @@ export class FormComponent implements OnInit, OnDestroy {
     @Output() toggleSidebars: EventEmitter<void> = new EventEmitter();
 
     public toolbarTabIndex: 0 | 1 = 0;
-    public fieldCategories: EditorTypeCategoryOption[];
+    public fieldOptions: FieldOption[];
 
     public formFields$: Observable<IEditorFormlyField[]>;
     public model$: Observable<Record<string, any>>;
@@ -45,6 +36,8 @@ export class FormComponent implements OnInit, OnDestroy {
     public options: FormlyFormOptions = {};
 
     trackByFieldId = trackByFieldId;
+    isCategoryOption = isCategoryOption;
+    isTypeOption = isTypeOption;
 
     private _destroy$: Subject<void> = new Subject();
     private _cachedFields: IEditorFormlyField[] = [];
@@ -54,7 +47,7 @@ export class FormComponent implements OnInit, OnDestroy {
     constructor(private _editorService: EditorService, private _store: Store<IEditorState>) {}
 
     public ngOnInit(): void {
-        this.fieldCategories = this._editorService.fieldCategories;
+        this.fieldOptions = this._editorService.fieldOptions;
 
         const activeForm$ = this._store.select(selectActiveForm).pipe(
             takeUntil(this._destroy$),

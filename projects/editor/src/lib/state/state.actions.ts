@@ -1,13 +1,13 @@
 import { createAction, props } from '@ngrx/store';
-import { EditorTypeOption, GetDefaultField, IBaseFormlyField, IEditorFormlyField } from '../editor.types';
+import { FieldTypeOption, GetDefaultField, IBaseFormlyField, IEditorFormlyField } from '../editor.types';
 import { IPropertyChange } from '../property/property.types';
 
 export interface AddForm {
     name: string;
     sourceFields?: IBaseFormlyField[];
     model?: Record<string, unknown>;
-    typeOptions: EditorTypeOption[];
-    unknownTypeName?: string;
+    typeOptions: FieldTypeOption[];
+    defaultUnknownType?: string;
     getDefaultField: GetDefaultField;
 }
 export interface RemoveForm {
@@ -23,8 +23,8 @@ export interface AddField {
     fieldType: string;
     parent?: IEditorFormlyField;
     index?: number;
-    typeOptions: EditorTypeOption[];
-    unknownTypeName?: string;
+    typeOptions: FieldTypeOption[];
+    defaultUnknownType?: string;
     getDefaultField: GetDefaultField;
 }
 export interface RemoveField {
@@ -52,8 +52,8 @@ export interface ReplaceField {
     field: IEditorFormlyField;
     parent?: IEditorFormlyField;
     fieldType: string;
-    typeOptions: EditorTypeOption[];
-    unknownTypeName?: string;
+    typeOptions: FieldTypeOption[];
+    defaultUnknownType?: string;
     getDefaultField: GetDefaultField;
 }
 export interface MoveField {

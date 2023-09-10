@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { cloneDeep } from 'lodash-es';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { EditorService } from '../editor.service';
-import { IForm, IEditorFormlyField, EditorTypeCategoryOption } from '../editor.types';
-import { trackByFieldId } from '../editor.utils';
+import { IForm, IEditorFormlyField, FieldOption } from '../editor.types';
+import { isCategoryOption, isTypeOption, trackByFieldId } from '../editor.utils';
 import { cleanField } from '../form/form.utils';
 import { JSONDialogComponent } from '../json-dialog/json-dialog.component';
 import { ImportJSONData, ImportJSONValue } from '../json-dialog/json-dialog.types';
@@ -42,9 +42,11 @@ export class MainComponent implements OnInit {
     public activeForm: IForm;
     public activeModel: Record<string, unknown>;
     public modelProperty: IObjectProperty;
-    public fieldCategories: EditorTypeCategoryOption[];
+    public fieldOptions: FieldOption[];
 
     trackByFieldId = trackByFieldId;
+    isCategoryOption = isCategoryOption;
+    isTypeOption = isTypeOption;
 
     private _destroy$: Subject<void> = new Subject();
     private _resizeEnd$: Subject<void> = new Subject();
@@ -72,7 +74,7 @@ export class MainComponent implements OnInit {
             .pipe(takeUntil(this._destroy$))
             .subscribe(model => (this.activeModel = model));
         this.modelProperty = this._getModelProperty();
-        this.fieldCategories = this._editorService.fieldCategories;
+        this.fieldOptions = this._editorService.fieldOptions;
     }
 
     onAddForm(): void {

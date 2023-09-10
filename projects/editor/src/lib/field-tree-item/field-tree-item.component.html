@@ -16,7 +16,7 @@
         <editor-field-tree-item
             *ngFor="let child of childFields; trackBy: trackByFieldId"
             [field]="child"
-            [fieldCategories]="fieldCategories"
+            [fieldOptions]="fieldOptions"
             [treeLevel]="treeLevel + 1"
             (expandParent)="onExpandParent()"
         >
@@ -29,16 +29,18 @@
         *ngIf="fieldInfo.canHaveChildren"
         class="editor-mat-menu-item"
         mat-menu-item
-        [matMenuTriggerFor]="addCategoryMenu"
+        [matMenuTriggerFor]="fieldOptionsMenu"
+        [matMenuTriggerData]="{ options: fieldOptions, selected: addField }"
     >
         <mat-icon>add</mat-icon>
         <span>Add</span>
     </button>
     <button
-        *ngIf="fieldCategories.length"
+        *ngIf="fieldOptions.length"
         class="editor-mat-menu-item"
         mat-menu-item
-        [matMenuTriggerFor]="replaceCategoryMenu"
+        [matMenuTriggerFor]="fieldOptionsMenu"
+        [matMenuTriggerData]="{ options: fieldOptions, selected: replaceField }"
     >
         <mat-icon>sync</mat-icon>
         <span>Replace</span>
@@ -53,48 +55,61 @@
     </button>
 </mat-menu>
 
-<mat-menu #addCategoryMenu="matMenu">
-    <ng-container *ngFor="let category of fieldCategories">
-        <button
-            class="editor-mat-menu-item"
-            mat-menu-item
-            [matMenuTriggerFor]="addFieldMenu"
-        >
-            {{ category.name }}
-        </button>
-
-        <mat-menu #addFieldMenu="matMenu">
+<mat-menu #fieldOptionsMenu="matMenu">
+    <ng-template
+        matMenuContent
+        let-options="options"
+        let-selected="selected"
+    >
+        <ng-container *ngFor="let option of options">
             <button
+                *ngIf="isCategoryOption(option)"
                 class="editor-mat-menu-item"
                 mat-menu-item
-                *ngFor="let option of category.typeOptions"
-                (click)="onAddChildField(option.type)"
+                [matMenuTriggerFor]="fieldCategoryOptionsMenu"
+                [matMenuTriggerData]="{ children: option.children, selected }"
+                menu
             >
                 {{ option.displayName }}
             </button>
-        </mat-menu>
-    </ng-container>
-</mat-menu>
 
-<mat-menu #replaceCategoryMenu="matMenu">
-    <ng-container *ngFor="let category of fieldCategories">
-        <button
-            class="editor-mat-menu-item"
-            mat-menu-item
-            [matMenuTriggerFor]="replaceFieldMenu"
-        >
-            {{ category.name }}
-        </button>
-
-        <mat-menu #replaceFieldMenu="matMenu">
-            <button
-                class="editor-mat-menu-item"
-                mat-menu-item
-                *ngFor="let option of category.typeOptions"
-                (click)="onReplaceParentField(option.type)"
+            <ng-container
+                *ngIf="isTypeOption(option)"
+                [ngTemplateOutlet]="fieldTypeOption"
+                [ngTemplateOutletContext]="{ option, selected }"
             >
-                {{ option.displayName }}
-            </button>
-        </mat-menu>
-    </ng-container>
+            </ng-container>
+        </ng-container>
+    </ng-template>
 </mat-menu>
+
+<mat-menu #fieldCategoryOptionsMenu="matMenu">
+    <ng-template
+        matMenuContent
+        let-children="children"
+        let-selected="selected"
+    >
+        <ng-container *ngFor="let child of children">
+            <ng-container
+                *ngIf="isTypeOption(child)"
+                [ngTemplateOutlet]="fieldTypeOption"
+                [ngTemplateOutletContext]="{ option: child, selected }"
+            >
+            </ng-container>
+        </ng-container>
+    </ng-template>
+</mat-menu>
+
+<ng-template
+    #fieldTypeOption
+    let-option="option"
+    let-selected="selected"
+>
+    <button
+        class="editor-mat-menu-item"
+        mat-menu-item
+        (click)="selected(option.type)"
+    >
+        {{ option.displayName }}
+    </button>
+</ng-template>

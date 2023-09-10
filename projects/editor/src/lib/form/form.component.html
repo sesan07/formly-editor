@@ -43,7 +43,8 @@
         <button
             mat-flat-button
             color="primary"
-            [matMenuTriggerFor]="addCategoryMenu"
+            [matMenuTriggerFor]="fieldOptionsMenu"
+            [matMenuTriggerData]="{ options: fieldOptions }"
         >
             <mat-icon>add</mat-icon>
             Add Field
@@ -51,25 +52,59 @@
     </div>
 </ng-template>
 
-<mat-menu #addCategoryMenu="matMenu">
-    <ng-container *ngFor="let category of fieldCategories">
-        <button
-            class="editor-mat-menu-item"
-            mat-menu-item
-            [matMenuTriggerFor]="addFieldMenu"
-        >
-            {{ category.name }}
-        </button>
-
-        <mat-menu #addFieldMenu="matMenu">
+<mat-menu #fieldOptionsMenu="matMenu">
+    <ng-template
+        matMenuContent
+        let-options="options"
+    >
+        <ng-container *ngFor="let option of options">
             <button
+                *ngIf="isCategoryOption(option)"
                 class="editor-mat-menu-item"
                 mat-menu-item
-                *ngFor="let option of category.typeOptions"
-                (click)="onAddField(option.type)"
+                [matMenuTriggerFor]="fieldCategoryOptionsMenu"
+                [matMenuTriggerData]="{ children: option.children }"
+                menu
             >
                 {{ option.displayName }}
             </button>
-        </mat-menu>
-    </ng-container>
+
+            <ng-container
+                *ngIf="isTypeOption(option)"
+                [ngTemplateOutlet]="fieldTypeOption"
+                [ngTemplateOutletContext]="option"
+            >
+            </ng-container>
+        </ng-container>
+    </ng-template>
 </mat-menu>
+
+<mat-menu #fieldCategoryOptionsMenu="matMenu">
+    <ng-template
+        matMenuContent
+        let-children="children"
+    >
+        <ng-container *ngFor="let child of children">
+            <ng-container
+                *ngIf="isTypeOption(child)"
+                [ngTemplateOutlet]="fieldTypeOption"
+                [ngTemplateOutletContext]="child"
+            >
+            </ng-container>
+        </ng-container>
+    </ng-template>
+</mat-menu>
+
+<ng-template
+    #fieldTypeOption
+    let-displayName="displayName"
+    let-type="type"
+>
+    <button
+        class="editor-mat-menu-item"
+        mat-menu-item
+        (click)="onAddField(type)"
+    >
+        {{ displayName }}
+    </button>
+</ng-template>

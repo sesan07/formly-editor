@@ -8,10 +8,10 @@ import {
     IEditorFieldService,
     IForm,
     IBaseFormlyField,
-    EditorConfigOption,
-    EditorTypeCategoryOption,
-    EditorTypeOption,
+    EditorConfig,
+    FieldTypeOption,
     IEditorFormlyField,
+    FieldOption,
 } from './editor.types';
 import { Store } from '@ngrx/store';
 import { IEditorState } from './state/state.types';
@@ -32,17 +32,18 @@ import {
 } from './state/state.actions';
 import { selectActiveField, selectActiveFieldMap, selectForms } from './state/state.selectors';
 import { IProperty, IPropertyChange } from './property/property.types';
+import { isCategoryOption } from './editor.utils';
 
 @Injectable()
 export class EditorService {
-    public fieldCategories: EditorTypeCategoryOption[];
-    public typeOptions: EditorTypeOption[];
+    public fieldOptions: FieldOption[];
+    public typeOptions: FieldTypeOption[];
 
     private _forms: IForm[];
     private _activeField: IEditorFormlyField;
     private _activeFieldMap: Record<string, IEditorFormlyField>;
 
-    private _editorConfig: EditorConfigOption;
+    private _editorConfig: EditorConfig;
 
     constructor(
         @Inject(EDITOR_FIELD_SERVICE) private _fieldService: IEditorFieldService,
@@ -54,14 +55,19 @@ export class EditorService {
         this._store.select(selectActiveFieldMap).subscribe(fieldMap => (this._activeFieldMap = fieldMap));
     }
 
-    public get unknownTypeName(): string {
-        return this._editorConfig.unknownTypeName;
+    public get defaultUnknownType(): string {
+        return this._editorConfig.defaultUnknownType;
     }
 
-    setup(editorConfig: EditorConfigOption) {
+    setup(editorConfig: EditorConfig) {
         this._editorConfig = editorConfig;
-        this.typeOptions = this._editorConfig.typeCategories.reduce((a, b) => [...a, ...b.typeOptions], []);
-        this.fieldCategories = this._editorConfig.typeCategories;
+        const getTypeOptions = (options: FieldOption[]) =>
+            options.reduce<FieldTypeOption[]>(
+                (a, b): FieldTypeOption[] => [...a, ...(isCategoryOption(b) ? getTypeOptions(b.children) : [b])],
+                []
+            );
+        this.fieldOptions = this._editorConfig.options;
+        this.typeOptions = getTypeOptions(this.fieldOptions);
         this._loadDefaultForm();
     }
 
@@ -72,7 +78,7 @@ export class EditorService {
                 sourceFields,
                 model,
                 typeOptions: this.typeOptions,
-                unknownTypeName: this.unknownTypeName,
+                defaultUnknownType: this.defaultUnknownType,
                 getDefaultField: (type: string) => this._fieldService.getDefaultField(type),
             })
         );
@@ -102,7 +108,7 @@ export class EditorService {
                 parent,
                 index,
                 typeOptions: this.typeOptions,
-                unknownTypeName: this.unknownTypeName,
+                defaultUnknownType: this.defaultUnknownType,
                 getDefaultField: type => this.getDefaultField(type),
             })
         );
@@ -142,7 +148,7 @@ export class EditorService {
                 parent,
                 fieldType,
                 typeOptions: this.typeOptions,
-                unknownTypeName: this.unknownTypeName,
+                defaultUnknownType: this.defaultUnknownType,
                 getDefaultField: type => this.getDefaultField(type),
             })
         );
