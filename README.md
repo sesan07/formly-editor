@@ -1,5 +1,5 @@
-# FormlyEditor (WIP)
+# Formly Editor
 
 A configurable editor for ngx-formly forms.
 
-https://formly-editor.sesan.dev
+Demo: https://formly-editor.sesan.dev

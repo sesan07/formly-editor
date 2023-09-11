@@ -1,5 +1,5 @@
 // import { Injectable } from '@angular/core';
-// import { IProperty, PropertyType } from 'editor';
+// import { IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
 // import { BaseFieldService } from '../base-field.service';
 // import { IRepeatingSectionTemplateOptions } from './repeating-section.types';

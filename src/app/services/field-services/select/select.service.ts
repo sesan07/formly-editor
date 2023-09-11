@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IProperty, PropertyType, IObjectProperty, IArrayProperty, BaseFieldService } from 'editor';
+import { IProperty, PropertyType, IObjectProperty, IArrayProperty, BaseFieldService } from '@sesan07/ngx-formly-editor';
 
 import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
 import { ISelectTemplateOptions } from './select.types';

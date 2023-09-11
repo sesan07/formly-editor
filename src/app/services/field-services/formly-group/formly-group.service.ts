@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
-import { BaseFieldService, IBaseFormlyField, IProperty, PropertyType } from 'editor';
+import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
 import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
 

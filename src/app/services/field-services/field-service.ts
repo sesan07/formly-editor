@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseFieldService, IBaseFormlyField, IEditorFieldService, IProperty } from 'editor';
+import { BaseFieldService, IBaseFormlyField, IEditorFieldService, IProperty } from '@sesan07/ngx-formly-editor';
 
 import { CheckboxService } from './checkbox/checkbox.service';
 import { AppFieldType } from './field.types';
@@ -16,7 +16,7 @@ import { FormlyConfig } from '@ngx-formly/core';
     providedIn: 'root',
 })
 export class FieldService implements IEditorFieldService {
-    extensionMap: Record<string, string> = {};
+    extensionMap: Record<string, string | undefined> = {};
 
     constructor(
         private _formlyConfig: FormlyConfig,

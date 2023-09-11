@@ -12,7 +12,7 @@ import { AppFieldType, AppWrapperType } from './services/field-services/field.ty
 import { CardWrapperComponent } from './components/wrappers/card-wrapper/card-wrapper.component';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { HttpClientModule } from '@angular/common/http';
-import { EditorModule, EDITOR_FIELD_SERVICE, FormlyGroupComponent } from 'editor';
+import { EditorModule, EDITOR_FIELD_SERVICE, FormlyGroupComponent } from '@sesan07/ngx-formly-editor';
 import { RepeatingSectionTypeComponent } from './components/types/repeating-section-type/repeating-section-type.component';
 import { ActionReducer, StoreModule } from '@ngrx/store';
 import { TypesModule } from './components/types/types.module';

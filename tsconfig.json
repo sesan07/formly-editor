@@ -14,7 +14,7 @@
     "module": "es2020",
     "lib": ["es2020", "dom"],
     "paths": {
-      "editor": ["projects/editor/src/public-api"]
+      "@sesan07/ngx-formly-editor": ["projects/editor/src/public-api"]
     }
   },
   "angularCompilerOptions": {

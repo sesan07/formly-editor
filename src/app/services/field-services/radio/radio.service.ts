@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseFieldService, IArrayProperty, IObjectProperty, IProperty, PropertyType } from 'editor';
+import { BaseFieldService, IArrayProperty, IObjectProperty, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
 import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
 import { IRadioTemplateOptions } from './radio.types';

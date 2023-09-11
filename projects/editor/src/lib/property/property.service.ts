@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { isMoment } from 'moment';
+// import { isMoment } from 'moment';
 import { IChipListProperty } from './chip-list-property/chip-list-property.types';
 import { IExpressionPropertiesProperty } from './expression-properties-property/expression-properties-property.types';
 import { IInputProperty } from './input-property/input-property.types';
@@ -145,9 +145,10 @@ export class PropertyService {
                     return undefined;
                 } else if (Array.isArray(value)) {
                     return PropertyType.ARRAY;
-                } else if (isMoment(value)) {
-                    return PropertyType.TEXT;
                 }
+                // } else if (isMoment(value)) {
+                //     return PropertyType.TEXT;
+                // }
 
                 return PropertyType.OBJECT;
             case 'boolean':
