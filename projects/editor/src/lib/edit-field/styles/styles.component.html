@@ -80,7 +80,7 @@
             <editor-chip-list-property
                 [target]="editField"
                 [property]="getChipListProperty(classProperty, breakpoint)"
-                [path]="classProperty"
+                [path]="[classProperty]"
                 (targetChanged)="fieldChanged.emit($event)"
             >
             </editor-chip-list-property>

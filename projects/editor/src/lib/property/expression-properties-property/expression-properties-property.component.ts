@@ -27,15 +27,15 @@ export class ExpressionPropertiesPropertyComponent extends BasePropertyDirective
     }
 
     onRemoveChild(key: string): void {
-        this._modifyKey(undefined, undefined, key);
+        this._modifyKey([...this.path, key], undefined);
     }
 
     onChildKeyChanged(currKey: string, newKey: string): void {
-        this._modifyKey(this.currentValue[currKey] || '', newKey, currKey);
+        this._modifyKey([...this.path, currKey], [...this.path, newKey]);
     }
 
     onChildValueChanged(key: string, value: string): void {
-        this._modifyValue(value, key);
+        this._modifyValue(value, [...this.path, key]);
     }
 
     protected _onChanged(isFirstChange: boolean): void {

@@ -32,8 +32,8 @@ export abstract class ObjectArrayPropertyDirective<P extends IBaseProperty, V>
         this.childrenTreeLevel = this.treeLevel + 1;
     }
 
-    getChildPath(key: string | number): string {
-        return this.path ? `${this.path}.${key}` : key + '';
+    getChildPath(key: string | number): string[] {
+        return [...this.path, ...key.toString().split('.')];
     }
 
     protected _onChanged(): void {

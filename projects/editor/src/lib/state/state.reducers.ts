@@ -321,7 +321,7 @@ const processModifyActiveModel = (state: IEditorState, { change }: ModifyActiveM
             model = modifyKey(model, change);
             break;
         case PropertyChangeType.VALUE:
-            model = change.path ? modifyValue(model, change) : { ...change.data };
+            model = change.path.length ? modifyValue(model, change) : { ...change.value };
             break;
     }
 

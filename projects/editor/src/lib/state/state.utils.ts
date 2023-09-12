@@ -1,4 +1,4 @@
-import { get, isNil, set } from 'lodash-es';
+import { get, set, unset } from 'lodash-es';
 import { IEditorFormlyField } from '../editor.types';
 import { setFieldChildren, getFieldChildren } from '../form/form.utils';
 import produce from 'immer';
@@ -59,44 +59,23 @@ export const getFieldMap = (field: IEditorFormlyField): Record<string, IEditorFo
     return fieldMap;
 };
 
-export const modifyKey = <T extends Record<string, any>>(
-    target: T,
-    { path, data: newKey, childPath, deleteChildPath }: IPropertyChange
-): T =>
+export const modifyKey = <T extends Record<string, any>>(target: T, { path, newPath }: IPropertyChange): T =>
     produce(target, draft => {
-        const isModifyingChild = !isNil(childPath) || !isNil(deleteChildPath);
-        if (isModifyingChild) {
-            const parent = get(draft, path) ?? {};
-            delete parent[deleteChildPath];
+        if (newPath) {
+            set(draft, newPath, get(draft, path));
 
-            if (!isNil(childPath)) {
-                parent[childPath] = newKey;
+            // Clear previous key if new path isn't empty
+            if (newPath.slice(-1)[0]) {
+                unset(draft, path);
             }
-
-            set(draft, path, parent);
         } else {
-            const pathArr: string[] = path.split('.');
-            const currKey = pathArr.pop();
-            let parent = pathArr.length ? get(draft, pathArr) : draft;
-            parent = Object.entries(parent)
-                .map(([k, v]): [string, unknown] => (k === currKey ? [newKey, v] : [k, v]))
-                .reduce((a, [k, v]) => ({ ...a, [k]: v }), {});
-
-            return pathArr.length ? set(draft, pathArr, parent) : parent;
+            unset(draft, path);
         }
     });
 
-export const modifyValue = <T extends Record<string, any>>(
-    target: T,
-    { path, data: newValue, childPath }: IPropertyChange
-): T =>
+export const modifyValue = <T extends Record<string, any>>(target: T, { path, value }: IPropertyChange): T =>
     produce(target, draft => {
-        if (typeof childPath === 'string') {
-            const parent = get(draft, path) ?? {};
-            parent[childPath] = newValue;
-        } else {
-            set(draft, path, newValue);
-        }
+        set(draft, path, value);
     });
 
 export const updateParentFieldId = (field: IEditorFormlyField, parentFieldId: string) => {

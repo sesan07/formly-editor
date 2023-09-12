@@ -31,10 +31,9 @@ export interface IBaseProperty {
 
 export interface IPropertyChange {
     type: PropertyChangeType;
-    path: string;
-    childPath?: string;
-    deleteChildPath?: string;
-    data: any;
+    path: string[];
+    newPath?: string[];
+    value?: any;
 }
 
 export type IProperty =

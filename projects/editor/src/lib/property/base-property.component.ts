@@ -19,7 +19,7 @@ import { isParentProperty } from './utils';
 @Directive()
 export abstract class BasePropertyDirective<P extends IBaseProperty, V> implements OnChanges {
     @Input() treeLevel = 0;
-    @Input() path?: string;
+    @Input() path: string[] = [];
     @Input() target?: Record<string, any> | any[];
     @Input() property?: P;
     @Input() treeMode: boolean;
@@ -38,7 +38,7 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.target || changes.property) {
             const isFirstChange = !!changes.target?.firstChange;
-            const newValue: any = this.path
+            const newValue: any = this.path.length
                 ? get(this.target, this.path, this.defaultValue)
                 : this.target ?? this.defaultValue;
 
@@ -53,27 +53,23 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
     }
 
     public onKeyChanged(newKey: string): void {
-        this._modifyKey(newKey);
+        this._modifyKey(this.path, [...this.path.slice(0, -1), newKey]);
     }
 
-    protected _modifyKey(newKey: string, childPath?: string, deleteChildPath?: string): void {
+    protected _modifyKey(currPath: string[], newPath: string[]): void {
         const change: IPropertyChange = {
             type: PropertyChangeType.KEY,
-            path: this.path,
-            childPath,
-            deleteChildPath,
-            data: newKey,
+            path: currPath,
+            newPath,
         };
         this.targetChanged.emit(change);
     }
 
-    protected _modifyValue(value: any, childPath?: string, deleteChildPath?: string): void {
+    protected _modifyValue(value: any, path: string[] = this.path): void {
         const change: IPropertyChange = {
             type: PropertyChangeType.VALUE,
-            path: this.path,
-            childPath,
-            deleteChildPath,
-            data: value,
+            path,
+            value,
         };
         this.targetChanged.emit(change);
     }

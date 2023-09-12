@@ -152,8 +152,8 @@ export class StyleOptionComponent implements OnChanges {
     private _emitChange(newValue: string): void {
         this.optionChanged.emit({
             type: PropertyChangeType.VALUE,
-            path: this.propertyPath,
-            data: newValue,
+            path: [this.propertyPath],
+            value: newValue,
         });
     }
 }
