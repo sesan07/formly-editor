@@ -21,7 +21,6 @@ import { StoreModule } from '@ngrx/store';
 import { editorFeature } from './state/state.reducers';
 import { PropertyModule } from './property/property.module';
 import { JSONDialogModule } from './json-dialog/json-dialog.module';
-import { MainComponent } from './main/main.component';
 import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
 
 import 'codemirror/mode/javascript/javascript';
@@ -33,7 +32,7 @@ const defaultConfig: EditorConfig = {
 };
 
 @NgModule({
-    declarations: [EditorComponent, FieldTreeItemComponent, MainComponent],
+    declarations: [EditorComponent, FieldTreeItemComponent],
     imports: [
         CommonModule,
         FormModule,
