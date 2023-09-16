@@ -34,7 +34,7 @@ header {
 
 .options {
     display: flex;
-    justify-content: space-between;
+    column-gap: 4px;
     visibility: hidden;
 }
 

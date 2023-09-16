@@ -1,4 +1,7 @@
-<header *ngIf="isEditMode">
+<header
+    *ngIf="isEditMode"
+    class="editor-mat"
+>
     <div class="header-title">
         <span>{{ fieldInfo.name | fieldName : field.key }}</span>
         <ng-content></ng-content>
