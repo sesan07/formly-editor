@@ -1,10 +1,10 @@
 import { ComponentRef, ElementRef, EmbeddedViewRef, Injector, ViewContainerRef } from '@angular/core';
-import { AsyncValidatorFn, ValidatorFn, FormArray, FormGroup, AbstractControl } from '@angular/forms';
+import { AsyncValidatorFn, ValidatorFn, UntypedFormArray, UntypedFormGroup, AbstractControl } from '@angular/forms';
 import { FormlyFieldConfig, FieldType, FormlyExtension, FormlyFormOptions } from '@ngx-formly/core';
 import { Observable, Subscription } from 'rxjs';
 
 export interface FormlyFieldConfigCache extends FormlyFieldConfig {
-    form?: FormGroup | FormArray;
+    form?: UntypedFormGroup | UntypedFormArray;
     model?: any;
     // eslint-disable-next-line @typescript-eslint/ban-types
     formControl?: AbstractControl & {

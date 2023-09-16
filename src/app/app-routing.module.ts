@@ -4,11 +4,11 @@ import { EditorComponent } from '@sesan07/ngx-formly-editor';
 
 const routes: Routes = [
     { path: '', component: EditorComponent },
-    { path: '**', redirectTo: '', pathMatch: 'full' },
+    { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+    imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
 export class AppRoutingModule {}
