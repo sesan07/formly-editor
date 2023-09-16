@@ -1,5 +1,6 @@
 @import 'codemirror/lib/codemirror';
 @import 'codemirror/theme/elegant';
+@import 'codemirror/addon/fold/foldgutter';
 
 :root {
     --editor-header-height: 48px;
@@ -92,6 +93,11 @@ editor-sidebar .resizing {
     border-radius: 4px;
     padding: 4px;
     box-sizing: border-box;
+}
+
+.CodeMirror-foldmarker {
+    color: black;
+    text-shadow: none;
 }
 
 formly-field {

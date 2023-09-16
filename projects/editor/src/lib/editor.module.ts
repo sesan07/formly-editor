@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule, MAT_TABS_CONFIG } from '@angular/material/tabs';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
-import { cloneDeep } from 'lodash-es';
 
 import { EditorConfig, EDITOR_CONFIG } from './editor.types';
 import { EditorService } from './editor.service';
@@ -25,6 +24,8 @@ import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.compon
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/selection/active-line';
+import 'codemirror/addon/fold/foldgutter';
+import 'codemirror/addon/fold/brace-fold';
 
 const defaultConfig: EditorConfig = {
     defaultType: 'formly-group',

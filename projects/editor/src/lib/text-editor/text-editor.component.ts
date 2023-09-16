@@ -107,6 +107,8 @@ export class TextEditorComponent implements AfterViewInit {
             theme: 'elegant',
             lineNumbers: true,
             styleActiveLine: true,
+            foldGutter: true,
+            gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
         };
         this.editorInstance = fromTextArea(this.ref.nativeElement, options);
         this.editorInstance.setValue(this.value || '');
