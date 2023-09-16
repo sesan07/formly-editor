@@ -16,7 +16,7 @@ export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> 
 
         return config;
     }
-    protected override _getFieldTemplateOptions(type: AppFieldType): IProperty[] {
+    protected override _getFieldProperties(type: AppFieldType): IProperty[] {
         return type === AppFieldType.FORMLY_GROUP_CARD
             ? [
                   {
@@ -28,7 +28,7 @@ export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> 
             : [];
     }
 
-    protected override _getWrapperTemplateOptions(type: AppFieldType): IProperty[] {
+    protected override _getWrapperProperties(type: AppFieldType): IProperty[] {
         return type === AppFieldType.FORMLY_GROUP
             ? [
                   {

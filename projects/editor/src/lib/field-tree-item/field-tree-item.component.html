@@ -2,7 +2,7 @@
     class="cursor-pointer"
     [treeLevel]="treeLevel"
     [(isExpanded)]="isExpanded"
-    [isExpandable]="fieldInfo.canHaveChildren"
+    [isExpandable]="!!fieldInfo.childrenConfig"
     [isActive]="isActiveField$ | async"
     [hasOptions]="true"
     [optionsMenu]="optionsMenu"
@@ -26,7 +26,7 @@
 
 <mat-menu #optionsMenu="matMenu">
     <button
-        *ngIf="fieldInfo.canHaveChildren"
+        *ngIf="fieldInfo.childrenConfig"
         class="editor-mat-menu-item"
         mat-menu-item
         [matMenuTriggerFor]="fieldOptionsMenu"

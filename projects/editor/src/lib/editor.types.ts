@@ -17,8 +17,7 @@ export interface IEditorFieldInfo {
     fieldId: string;
     parentFieldId?: string;
     fieldPath: string[];
-    canHaveChildren?: boolean;
-    childrenPath?: string; // Lodash path
+    childrenConfig?: FieldTypeChildrenConfig;
 }
 
 export interface IBaseFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
@@ -60,8 +59,13 @@ export interface FieldCategoryOption {
 export interface FieldTypeOption {
     type: string;
     displayName: string;
-    canHaveChildren?: boolean;
-    childrenPath?: string;
+    disableKeyGeneration?: boolean; // Prevent auto generating keys
+    childrenConfig?: FieldTypeChildrenConfig;
+}
+
+export interface FieldTypeChildrenConfig {
+    path: string; // Lodash path for children
+    isObject?: boolean; // Whether child is a single object instead of a list of children
 }
 
 export interface EditorConfig {

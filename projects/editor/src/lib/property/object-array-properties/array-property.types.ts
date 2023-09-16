@@ -1,6 +1,6 @@
 import { IBaseProperty, IProperty } from '../property.types';
 
 export interface IArrayProperty extends IBaseProperty {
-    childProperty: IProperty;
+    childProperty?: IProperty;
     canAdd?: boolean;
 }

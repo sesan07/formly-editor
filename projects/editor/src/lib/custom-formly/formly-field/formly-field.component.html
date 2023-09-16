@@ -34,7 +34,7 @@
 
     <mat-menu #optionsMenu="matMenu">
         <button
-            *ngIf="fieldInfo.canHaveChildren"
+            *ngIf="fieldInfo.childrenConfig"
             class="editor-mat-menu-item"
             mat-menu-item
             [matMenuTriggerFor]="fieldOptionsMenu"

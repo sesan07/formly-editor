@@ -14,11 +14,11 @@ export class OtherFieldService extends BaseFieldService<FormlyTemplateOptions> {
         };
     }
 
-    protected override _getFieldTemplateOptions(): IProperty[] {
+    protected override _getFieldProperties(): IProperty[] {
         return [];
     }
 
-    protected override _getWrapperTemplateOptions(): IProperty[] {
+    protected override _getWrapperProperties(): IProperty[] {
         return [];
     }
 

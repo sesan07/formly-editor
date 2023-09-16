@@ -13,13 +13,12 @@ import { CardWrapperComponent } from './components/wrappers/card-wrapper/card-wr
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { HttpClientModule } from '@angular/common/http';
 import { EditorModule, EDITOR_FIELD_SERVICE, FormlyGroupComponent } from '@sesan07/ngx-formly-editor';
-import { RepeatingSectionTypeComponent } from './components/types/repeating-section-type/repeating-section-type.component';
 import { ActionReducer, StoreModule } from '@ngrx/store';
 import { TypesModule } from './components/types/types.module';
 import { FormlyModule } from '@ngx-formly/core';
 
 @NgModule({
-    declarations: [AppComponent, CardWrapperComponent, RepeatingSectionTypeComponent],
+    declarations: [AppComponent, CardWrapperComponent],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -66,29 +65,34 @@ import { FormlyModule } from '@ngx-formly/core';
                     displayName: 'Group',
                     children: [
                         {
-                            type: AppFieldType.FORMLY_GROUP,
                             displayName: 'Group',
-                            canHaveChildren: true,
-                            childrenPath: 'fieldGroup',
+                            type: AppFieldType.FORMLY_GROUP,
+                            disableKeyGeneration: true,
+                            childrenConfig: {
+                                path: 'fieldGroup',
+                            },
                         },
                         {
-                            type: AppFieldType.FORMLY_GROUP_CARD,
                             displayName: 'Card - Custom',
-                            canHaveChildren: true,
-                            childrenPath: 'fieldGroup',
+                            type: AppFieldType.FORMLY_GROUP_CARD,
+                            disableKeyGeneration: true,
+                            childrenConfig: {
+                                path: 'fieldGroup',
+                            },
                         },
-                        // {
-                        //     name: FieldType.REPEATING_SECTION,
-                        //     displayName: 'Repeating Section',
-                        //     canHaveChildren: true,
-                        //     childrenPath: 'fieldArray.fieldGroup',
-                        //     component: RepeatingSectionTypeComponent
-                        // },
                     ],
                 },
                 {
-                    type: AppFieldType.OTHER,
+                    displayName: 'Repeating Section',
+                    type: AppFieldType.REPEATING_SECTION,
+                    childrenConfig: {
+                        path: 'fieldArray',
+                        isObject: true,
+                    },
+                },
+                {
                     displayName: 'Generic',
+                    type: AppFieldType.OTHER,
                 },
             ],
         }),

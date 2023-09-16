@@ -50,8 +50,7 @@ export const convertToEditorField = (
         fieldId,
         parentFieldId: parent?._info.fieldId,
         fieldPath: parent ? [...parent._info.fieldPath, fieldId] : [fieldId],
-        canHaveChildren: typeOption.canHaveChildren,
-        childrenPath: typeOption.childrenPath,
+        childrenConfig: typeOption.childrenConfig,
     };
 
     // Create field
@@ -60,17 +59,30 @@ export const convertToEditorField = (
         _info: fieldInfo,
         key:
             baseField.key ||
-            (typeOption.canHaveChildren ? undefined : getFieldKey(baseField.type, count, defaultUnknownType)),
+            (typeOption.disableKeyGeneration ? undefined : getFieldKey(baseField.type, count, defaultUnknownType)),
         fieldGroup: undefined,
     };
 
     // Process children (e.g. 'fieldGroup')
-    if (fieldInfo.canHaveChildren) {
-        const baseChildren: IBaseFormlyField[] = get(baseField, fieldInfo.childrenPath);
-        const children: IEditorFormlyField[] = baseChildren?.map(child =>
-            convertToEditorField(getDefaultField, typeOptions, counter, formId, child, field, defaultUnknownType)
-        );
-        set(field, fieldInfo.childrenPath, children);
+    if (fieldInfo.childrenConfig) {
+        const baseChildren: IBaseFormlyField | IBaseFormlyField[] = get(baseField, fieldInfo.childrenConfig.path);
+        let children: IEditorFormlyField | IEditorFormlyField[];
+        if (Array.isArray(baseChildren)) {
+            children = baseChildren?.map(child =>
+                convertToEditorField(getDefaultField, typeOptions, counter, formId, child, field, defaultUnknownType)
+            );
+        } else {
+            children = convertToEditorField(
+                getDefaultField,
+                typeOptions,
+                counter,
+                formId,
+                baseChildren,
+                field,
+                defaultUnknownType
+            );
+        }
+        set(field, fieldInfo.childrenConfig.path, children);
     }
 
     return field;

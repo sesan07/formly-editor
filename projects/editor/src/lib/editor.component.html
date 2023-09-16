@@ -28,18 +28,17 @@
                 </button>
             </div>
             <div
-                class="tree-container"
+                *ngIf="activeForm?.fields.length"
                 mainContent
+                class="tree-container"
             >
-                <ng-container *ngIf="activeForm?.fields.length">
-                    <editor-field-tree-item
-                        *ngFor="let field of activeForm.fields; trackBy: trackByFieldId"
-                        [field]="field"
-                        [fieldOptions]="fieldOptions"
-                        [isExpanded]="true"
-                    >
-                    </editor-field-tree-item>
-                </ng-container>
+                <editor-field-tree-item
+                    *ngFor="let field of activeForm.fields; trackBy: trackByFieldId"
+                    [field]="field"
+                    [fieldOptions]="fieldOptions"
+                    [isExpanded]="true"
+                >
+                </editor-field-tree-item>
             </div>
         </editor-sidebar-section>
     </editor-sidebar>
@@ -129,9 +128,9 @@
                 </button>
             </div>
 
+            <!-- TODO delete field data from model on replace or remove -->
             <div
                 class="tree-container"
-                [hidden]="!activeForm?.fields.length"
                 mainContent
             >
                 <editor-object-property

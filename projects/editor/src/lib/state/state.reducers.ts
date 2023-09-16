@@ -1,6 +1,5 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { cloneDeep } from 'lodash-es';
 import { IEditorFormlyField, IForm } from '../editor.types';
 import { convertToEditorField, getFormId } from '../editor.utils';
 import { getFieldChildren, setFieldChildren } from '../form/form.utils';
@@ -128,10 +127,16 @@ const processAddField = (
 
     let baseFields = activeForm.baseFields;
     if (parent) {
-        const siblings: IEditorFormlyField[] = [...getFieldChildren(parent)];
-        index = typeof index === 'number' ? index : siblings.length;
-        siblings.splice(index, 0, field);
-        parent = setFieldChildren({ ...parent }, siblings);
+        let siblings: IEditorFormlyField | IEditorFormlyField[] = getFieldChildren(parent);
+        if (Array.isArray(siblings)) {
+            siblings = [...siblings];
+            index = typeof index === 'number' ? index : siblings.length;
+            siblings.splice(index, 0, field);
+            parent = setFieldChildren({ ...parent }, siblings);
+        } else {
+            parent = setFieldChildren({ ...parent }, field);
+        }
+
         baseFields = modifyFields(activeForm.baseFields, parent);
     } else {
         baseFields = [...baseFields, field];
@@ -156,8 +161,14 @@ const processRemoveField = (state: IEditorState, { fieldId, parent }: RemoveFiel
     const activeForm: IForm = state.formMap[state.activeFormId];
     let baseFields = activeForm.baseFields;
     if (parent) {
-        const siblings: IEditorFormlyField[] = getFieldChildren(parent).filter(f => f._info.fieldId !== fieldId);
-        parent = setFieldChildren({ ...parent }, siblings);
+        let siblings: IEditorFormlyField | IEditorFormlyField[] = getFieldChildren(parent);
+        if (Array.isArray(siblings)) {
+            siblings = siblings.filter(f => f._info.fieldId !== fieldId);
+            parent = setFieldChildren(parent, siblings);
+        } else {
+            parent = setFieldChildren(parent, undefined);
+        }
+
         baseFields = modifyFields(activeForm.baseFields, parent);
     } else {
         baseFields = baseFields.filter(f => f._info.fieldId !== fieldId);
@@ -227,7 +238,7 @@ const processSetActiveField = (state: IEditorState, { activeFieldId }: SetActive
 
 const processReplaceField = (
     state: IEditorState,
-    { field, parent, fieldType, typeOptions, defaultUnknownType, getDefaultField }: ReplaceField
+    { field, parent, newFieldType, typeOptions, defaultUnknownType, getDefaultField }: ReplaceField
 ): IEditorState => {
     const activeForm: IForm = state.formMap[state.activeFormId];
     const counter = { count: activeForm.fieldIdCounter };
@@ -236,7 +247,7 @@ const processReplaceField = (
         typeOptions,
         counter,
         activeForm.id,
-        getDefaultField(fieldType),
+        getDefaultField(newFieldType),
         parent,
         defaultUnknownType
     );
@@ -246,28 +257,45 @@ const processReplaceField = (
     newField.fieldGroupClassName = field.fieldGroupClassName;
 
     // Copy children to new field's children
-    if (field._info.canHaveChildren) {
-        const newChildren = getFieldChildren(field).map(f => ({
+    if (newField._info.childrenConfig && field._info.childrenConfig) {
+        const getNewChild = (f: IEditorFormlyField) => ({
             ...f,
             _info: {
                 ...f._info,
                 parentFieldId: newField._info.fieldId,
             },
-        }));
+        });
+
+        let children = getFieldChildren(field);
+        let newChildren: IEditorFormlyField | IEditorFormlyField[];
+        if (Array.isArray(children)) {
+            children = children.map(f => getNewChild(f));
+            newChildren = newField._info.childrenConfig.isObject ? children[0] : children;
+        } else if (children) {
+            children = getNewChild(children);
+            newChildren = newField._info.childrenConfig.isObject ? children : [children];
+        }
+
         setFieldChildren(newField, newChildren);
     }
 
     let baseFields = activeForm.baseFields;
-    let siblings: IEditorFormlyField[] = parent ? getFieldChildren(parent) : baseFields;
-    const index: number = siblings.findIndex(f => f._info.fieldId === field._info.fieldId);
-    siblings = siblings.filter(f => f._info.fieldId !== field._info.fieldId);
-    siblings.splice(index, 0, newField);
-
     if (parent) {
-        parent = setFieldChildren({ ...parent }, siblings);
+        let siblings: IEditorFormlyField | IEditorFormlyField[] = getFieldChildren(parent);
+        if (Array.isArray(siblings)) {
+            const index: number = siblings.findIndex(f => f._info.fieldId === field._info.fieldId);
+            siblings = siblings.filter(f => f._info.fieldId !== field._info.fieldId);
+            siblings.splice(index, 0, newField);
+            parent = setFieldChildren({ ...parent }, siblings);
+        } else {
+            parent = setFieldChildren({ ...parent }, newField);
+        }
+
         baseFields = modifyFields(activeForm.baseFields, parent);
     } else {
-        baseFields = siblings;
+        const index: number = baseFields.findIndex(f => f._info.fieldId === field._info.fieldId);
+        baseFields = baseFields.filter(f => f._info.fieldId !== field._info.fieldId);
+        baseFields.splice(index, 0, newField);
     }
 
     return {
@@ -289,10 +317,15 @@ const processMoveField = (state: IEditorState, { parent, from, to }: MoveField):
     const activeForm: IForm = state.formMap[state.activeFormId];
     let baseFields: IEditorFormlyField[];
     if (parent) {
-        const siblings: IEditorFormlyField[] = [...getFieldChildren(parent)];
-        parent = setFieldChildren({ ...parent }, siblings);
-        to = typeof to === 'number' ? to : siblings.length;
-        moveItemInArray(siblings, from, to);
+        let children: IEditorFormlyField[] = getFieldChildren(parent) as IEditorFormlyField[];
+        if (Array.isArray(children)) {
+            children = [...children];
+        } else {
+            throw new Error('Cannot move field in an object parent');
+        }
+        parent = setFieldChildren({ ...parent }, children);
+        to = typeof to === 'number' ? to : children.length;
+        moveItemInArray(children, from, to);
         baseFields = modifyFields(activeForm.baseFields, parent);
     } else {
         baseFields = [...activeForm.baseFields];

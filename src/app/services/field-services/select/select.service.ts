@@ -29,7 +29,7 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
         };
     }
 
-    protected override _getFieldTemplateOptions(): IProperty[] {
+    protected override _getFieldProperties(): IProperty[] {
         return [
             {
                 name: 'Label',
@@ -92,7 +92,7 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
         ];
     }
 
-    protected override _getWrapperTemplateOptions(): IProperty[] {
+    protected override _getWrapperProperties(): IProperty[] {
         return [];
     }
 

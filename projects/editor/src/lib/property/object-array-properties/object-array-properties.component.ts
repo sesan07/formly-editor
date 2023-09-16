@@ -3,18 +3,26 @@ import { cloneDeep } from 'lodash-es';
 
 import { BasePropertyDirective } from '../base-property.component';
 import { PropertyService } from '../property.service';
-import { PropertyType, IProperty, IBaseProperty } from '../property.types';
+import { PropertyType, IProperty } from '../property.types';
 import { IArrayProperty } from './array-property.types';
 import { IObjectProperty } from './object-property.types';
 
 @Directive()
-export abstract class ObjectArrayPropertyDirective<P extends IBaseProperty, V>
+export abstract class ObjectArrayPropertyDirective<P extends IArrayProperty | IObjectProperty, V>
     extends BasePropertyDirective<P, V>
     implements OnInit
 {
     @Input() isExpanded: boolean;
     public canAdd: boolean;
     public hasOptions: boolean;
+    public addOptions: PropertyType[] = [
+        PropertyType.ARRAY,
+        PropertyType.BOOLEAN,
+        PropertyType.NUMBER,
+        PropertyType.OBJECT,
+        PropertyType.TEXT,
+        PropertyType.TEXTAREA,
+    ];
 
     public typeofProperty: typeof PropertyType = PropertyType;
     public childProperties: IProperty[] = [];
@@ -37,7 +45,7 @@ export abstract class ObjectArrayPropertyDirective<P extends IBaseProperty, V>
     }
 
     protected _onChanged(): void {
-        this.canAdd = this._canAdd;
+        this.canAdd = this.property.canAdd;
         this.hasOptions = this.property.isRemovable || this._canAdd;
         this._populateChildren();
     }
@@ -58,8 +66,8 @@ export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayP
         return this.property.canAdd;
     }
 
-    onAddChild(): void {
-        const childValue: any = this.propertyService.getDefaultPropertyValue(this.property.childProperty.type);
+    onAddChild(type: PropertyType): void {
+        const childValue: any = this.propertyService.getDefaultPropertyValue(type);
         const newValue = [...this.currentValue, childValue];
         this._modifyValue(newValue);
 
@@ -72,18 +80,18 @@ export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayP
     }
 
     protected _populateChildren(): void {
-        this.childProperties = [];
-        this.currentValue.forEach((_, index) => {
-            const childPropertyClone: IProperty = this._getChildPropertyClone(index);
-            this.childProperties.push(childPropertyClone);
-        });
-    }
+        this.childProperties = this.currentValue.map((childValue, index) => {
+            let childProperty: IProperty;
+            if (this.property.childProperty) {
+                childProperty = cloneDeep(this.property.childProperty);
+            } else {
+                childProperty = this.propertyService.getDefaultPropertyFromValue(childValue ?? '');
+            }
+            childProperty.key = index;
+            childProperty.isKeyEditable = false;
 
-    private _getChildPropertyClone(index: number): IProperty {
-        const property: IProperty = cloneDeep(this.property.childProperty);
-        property.key = index;
-        property.isKeyEditable = false;
-        return property;
+            return childProperty;
+        });
     }
 }
 
@@ -97,10 +105,10 @@ export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjec
     protected defaultValue = {};
 
     protected get _canAdd(): boolean {
-        return !!this.property.addOptions?.length;
+        return this.property.canAdd;
     }
 
-    onAddChild(type: PropertyType, arrayType?: PropertyType): void {
+    onAddChild(type: PropertyType): void {
         const childValue: any = this.propertyService.getDefaultPropertyValue(type);
         const newValue = {
             ...this.currentValue,
@@ -134,7 +142,7 @@ export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjec
     private _populateChildrenFromTarget() {
         this.childProperties = [];
 
-        Object.entries(this.currentValue).forEach(([key, value]) => {
+        Object.entries(this.currentValue ?? {}).forEach(([key, value]) => {
             const childProperty = this.propertyService.getDefaultPropertyFromValue(value, key);
             if (childProperty) {
                 this.childProperties.push(childProperty);

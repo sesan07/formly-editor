@@ -12,14 +12,6 @@ import { ITextareaProperty } from './textarea-property/textarea-property.types';
     providedIn: 'root',
 })
 export class PropertyService {
-    public readonly possibleArrayAddTypes: PropertyType[] = [
-        PropertyType.BOOLEAN,
-        PropertyType.OBJECT,
-        PropertyType.NUMBER,
-        PropertyType.TEXT,
-        PropertyType.TEXTAREA,
-    ];
-
     public getAsArrayProperty(property: IProperty): IArrayProperty {
         return property as IArrayProperty;
     }
@@ -44,7 +36,7 @@ export class PropertyService {
         return property as IExpressionPropertiesProperty;
     }
 
-    public getDefaultProperty(type: PropertyType, key: string | number = '', arrayChildType?: PropertyType): IProperty {
+    public getDefaultProperty(type: PropertyType, key: string | number = ''): IProperty {
         // Properties added by the user should have editable keys and be deletable
         const baseProperty: IBaseProperty = {
             type,
@@ -56,7 +48,10 @@ export class PropertyService {
         switch (type) {
             case PropertyType.BOOLEAN:
             case PropertyType.TEXT:
-                return baseProperty;
+                return {
+                    ...baseProperty,
+                    outputRawValue: true,
+                };
             case PropertyType.TEXTAREA:
                 return {
                     ...baseProperty,
@@ -70,25 +65,14 @@ export class PropertyService {
             case PropertyType.OBJECT:
                 return {
                     ...baseProperty,
-                    addOptions: [
-                        PropertyType.ARRAY,
-                        PropertyType.BOOLEAN,
-                        PropertyType.NUMBER,
-                        PropertyType.OBJECT,
-                        PropertyType.TEXT,
-                    ],
+                    canAdd: true,
                     childProperties: [],
                     populateChildrenFromTarget: true,
                 } as IObjectProperty;
             case PropertyType.ARRAY:
-                if (!arrayChildType) {
-                    throw new SyntaxError('arrayChildType parameter is required when adding an array type');
-                }
-
                 return {
                     ...baseProperty,
                     canAdd: true,
-                    childProperty: this.getDefaultProperty(arrayChildType),
                 } as IArrayProperty;
         }
     }
@@ -98,26 +82,7 @@ export class PropertyService {
         if (!propertyType) {
             return undefined;
         }
-
-        switch (propertyType) {
-            case PropertyType.ARRAY:
-                if ((value as []).length) {
-                    const childPropertyType: PropertyType | undefined = this.getPropertyType(value[0]);
-                    if (!childPropertyType) {
-                        return undefined;
-                    }
-
-                    return this.getDefaultProperty(PropertyType.ARRAY, key, childPropertyType) as IArrayProperty;
-                } else {
-                    return undefined;
-                }
-            case PropertyType.OBJECT:
-                const property: IObjectProperty = this.getDefaultProperty(PropertyType.OBJECT, key) as IObjectProperty;
-
-                return property;
-            default:
-                return this.getDefaultProperty(propertyType, key);
-        }
+        return this.getDefaultProperty(propertyType, key);
     }
 
     public getDefaultPropertyValue(type: PropertyType): any {
@@ -134,7 +99,7 @@ export class PropertyService {
             case PropertyType.TEXTAREA:
                 return '';
             default:
-                throw new Error(`Object property does not support adding ${type}`);
+                throw new Error(`Property type ${type} does not have a default value`);
         }
     }
 

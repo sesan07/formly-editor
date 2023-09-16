@@ -14,7 +14,15 @@ import { FieldNameModule } from '../field-name/field-name.module';
 
 @NgModule({
     declarations: [FormlyGroupComponent, FormlyFieldComponent, RootFormlyFieldComponent, FormlyFormComponent],
-    imports: [CommonModule, FieldNameModule, MatMenuModule, MatIconModule, MatButtonModule, PropertyModule],
-    exports: [FormlyFormComponent, FormlyModule],
+    imports: [
+        CommonModule,
+        FormlyModule,
+        FieldNameModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        PropertyModule,
+    ],
+    exports: [FormlyFormComponent],
 })
 export class CustomFormlyModule {}

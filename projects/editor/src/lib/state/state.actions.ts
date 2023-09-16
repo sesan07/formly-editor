@@ -51,7 +51,7 @@ export interface SetActiveModel {
 export interface ReplaceField {
     field: IEditorFormlyField;
     parent?: IEditorFormlyField;
-    fieldType: string;
+    newFieldType: string;
     typeOptions: FieldTypeOption[];
     defaultUnknownType?: string;
     getDefaultField: GetDefaultField;

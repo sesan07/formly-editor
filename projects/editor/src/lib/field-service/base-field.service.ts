@@ -27,7 +27,7 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
                 key: 'hide',
                 type: PropertyType.BOOLEAN,
             },
-            ...this._getFieldTemplateOptions(type),
+            ...this._getFieldProperties(type),
             // TODO Prevent input of items not in options
             {
                 name: 'Wrappers',
@@ -35,7 +35,7 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
                 type: PropertyType.CHIP_LIST,
                 options: this._getWrapperTypes(type),
             },
-            ...this._getWrapperTemplateOptions(type),
+            ...this._getWrapperProperties(type),
             {
                 name: 'Classes',
                 key: 'className',
@@ -60,7 +60,7 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
 
     public abstract getDefaultConfig(type: string): IBaseFormlyField<T>;
 
-    protected abstract _getFieldTemplateOptions(type: string): IProperty[];
-    protected abstract _getWrapperTemplateOptions(type: string): IProperty[];
+    protected abstract _getFieldProperties(type: string): IProperty[];
+    protected abstract _getWrapperProperties(type: string): IProperty[];
     protected abstract _getWrapperTypes(type: string): string[];
 }

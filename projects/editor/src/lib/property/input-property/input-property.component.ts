@@ -45,11 +45,9 @@ export class InputPropertyComponent extends BasePropertyDirective<IInputProperty
         if (value === '') {
             newValue = null;
         } else if (this.property.outputRawValue) {
-            // eslint-disable-next-line @typescript-eslint/quotes
-            if (value.match("'.*'")) {
+            if (value.match(`'.*'`)) {
                 // enforced string (when the value is wrapped in single quotes)
-                // eslint-disable-next-line @typescript-eslint/quotes
-                newValue = value.match("(?<=').*(?=')")[0];
+                newValue = value.match(`(?<=').*(?=')`)[0];
             } else if (!isNaN(Number(value))) {
                 // Number
                 newValue = Number(value);

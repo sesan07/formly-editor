@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormlyMatFormFieldModule } from '@ngx-formly/material/form-field';
 import { FormlyModule } from '@ngx-formly/core';
 import { InputTypeComponent } from './input-type.component';
+import { AppFieldType } from 'src/app/services/field-services/field.types';
 
 @NgModule({
     declarations: [InputTypeComponent],
@@ -16,14 +17,14 @@ import { InputTypeComponent } from './input-type.component';
         FormlyModule.forChild({
             types: [
                 {
-                    name: 'input',
+                    name: AppFieldType.INPUT,
                     component: InputTypeComponent,
                     wrappers: ['form-field'],
                 },
                 { name: 'string', extends: 'input' },
                 {
-                    name: 'number',
-                    extends: 'input',
+                    name: AppFieldType.NUMBER,
+                    extends: AppFieldType.INPUT,
                     defaultOptions: {
                         props: {
                             type: 'number',
@@ -31,8 +32,8 @@ import { InputTypeComponent } from './input-type.component';
                     },
                 },
                 {
-                    name: 'integer',
-                    extends: 'input',
+                    name: AppFieldType.INTEGER,
+                    extends: AppFieldType.INPUT,
                     defaultOptions: {
                         props: {
                             type: 'number',

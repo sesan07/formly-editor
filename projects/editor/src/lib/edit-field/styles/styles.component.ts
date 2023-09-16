@@ -85,7 +85,7 @@ export class StylesComponent implements OnChanges, OnInit {
         this.allClassNameCategories = this.classNameCategories[defaultBreakpoint.value];
         this.allFieldGroupClassNameCategories = this.fieldGroupClassNameCategories[defaultBreakpoint.value];
 
-        if (!this.editField?._info.canHaveChildren) {
+        if (!this.editField?._info.childrenConfig) {
             this.tabIndex = 0;
         }
     }

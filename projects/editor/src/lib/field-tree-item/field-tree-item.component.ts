@@ -50,8 +50,9 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
         if (changes.field) {
             this.fieldInfo = this.field._info;
 
-            if (this.fieldInfo.canHaveChildren) {
-                this.childFields = getFieldChildren(this.field);
+            if (this.fieldInfo.childrenConfig) {
+                const children = getFieldChildren(this.field);
+                this.childFields = Array.isArray(children) ? children : children ? [children] : [];
             }
         }
     }
@@ -74,7 +75,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     addField = (type: string) => {
-        if (this.fieldInfo.canHaveChildren) {
+        if (this.fieldInfo.childrenConfig) {
             this.isExpanded = true;
         }
         this._editorService.addField(type, this.fieldInfo.fieldId);

@@ -34,7 +34,7 @@
                 <button
                     *ngIf="canAdd"
                     mat-icon-button
-                    (click)="onAddChild(); $event.stopPropagation()"
+                    (click)="onAddChild(property.childProperty.type); $event.stopPropagation()"
                 >
                     <mat-icon>add</mat-icon>
                 </button>
@@ -80,6 +80,18 @@
     let-index="index"
 >
     <ng-container [ngSwitch]="child.type">
+        <editor-array-property
+            *ngSwitchCase="typeofProperty.ARRAY"
+            [treeLevel]="childrenTreeLevel"
+            [path]="getChildPath(child.key)"
+            [target]="target"
+            [property]="propertyService.getAsArrayProperty(child)"
+            [treeMode]="treeMode"
+            (remove)="onRemoveChild(index)"
+            (targetChanged)="targetChanged.emit($event)"
+        >
+        </editor-array-property>
+
         <editor-object-property
             *ngSwitchCase="typeofProperty.OBJECT"
             [treeLevel]="childrenTreeLevel"
@@ -151,13 +163,22 @@
 
 <mat-menu #optionsMenu="matMenu">
     <button
-        *ngIf="canAdd"
+        *ngIf="canAdd && property.childProperty"
         class="editor-mat-menu-item"
         mat-menu-item
-        (click)="onAddChild()"
+        (click)="onAddChild(property.childProperty.type)"
     >
         <mat-icon>add</mat-icon>
         <span>Add {{ property.childProperty.type }}</span>
+    </button>
+    <button
+        *ngIf="canAdd && !property.childProperty"
+        class="editor-mat-menu-item"
+        mat-menu-item
+        [matMenuTriggerFor]="addMenu"
+    >
+        <mat-icon>add</mat-icon>
+        <span>Add</span>
     </button>
     <button
         *ngIf="property.isRemovable"
@@ -167,5 +188,16 @@
     >
         <mat-icon>remove</mat-icon>
         <span>Remove</span>
+    </button>
+</mat-menu>
+
+<mat-menu #addMenu="matMenu">
+    <button
+        *ngFor="let option of addOptions"
+        class="editor-mat-menu-item"
+        mat-menu-item
+        (click)="onAddChild(option)"
+    >
+        {{ option }}
     </button>
 </mat-menu>

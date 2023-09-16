@@ -1,4 +1,5 @@
 <div
+    *ngIf="field._info; else basicField"
     [id]="field._info.fieldId"
     [class]="this.field.fieldGroupClassName || ''"
 >
@@ -11,3 +12,11 @@
     >
     </editor-formly-field>
 </div>
+
+<ng-template #basicField>
+    <formly-field
+        *ngFor="let f of field.fieldGroup"
+        [class]="this.field.fieldGroupClassName || ''"
+        [field]="f"
+    ></formly-field>
+</ng-template>

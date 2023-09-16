@@ -156,32 +156,11 @@
 
 <mat-menu #addMenu="matMenu">
     <button
+        *ngFor="let option of addOptions"
         class="editor-mat-menu-item"
         mat-menu-item
-        *ngIf="property?.addOptions?.includes(typeofProperty.ARRAY)"
-        [matMenuTriggerFor]="addArrayMenu"
+        (click)="onAddChild(option)"
     >
-        {{ typeofProperty.ARRAY }}
-    </button>
-    <ng-container *ngFor="let type of propertyService.possibleArrayAddTypes">
-        <button
-            class="editor-mat-menu-item"
-            mat-menu-item
-            *ngIf="property?.addOptions?.includes(type)"
-            (click)="onAddChild(type)"
-        >
-            {{ type }}
-        </button>
-    </ng-container>
-</mat-menu>
-
-<mat-menu #addArrayMenu="matMenu">
-    <button
-        *ngFor="let type of propertyService.possibleArrayAddTypes"
-        class="editor-mat-menu-item"
-        mat-menu-item
-        (click)="onAddChild(typeofProperty.ARRAY, type)"
-    >
-        {{ type }}
+        {{ option }}
     </button>
 </mat-menu>

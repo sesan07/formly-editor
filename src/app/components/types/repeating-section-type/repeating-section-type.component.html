@@ -1,26 +1,28 @@
+<legend *ngIf="props.label">{{ props.label }}</legend>
+<p *ngIf="props.description">{{ props.description }}</p>
+
 <div
-    style="display: flex; column-gap: 16px"
     *ngFor="let field of field.fieldGroup; let i = index"
+    style="display: flex; align-items: baseline"
 >
     <formly-field
         style="flex-grow: 1"
         [field]="field"
     ></formly-field>
     <button
-        style="height: auto"
-        mat-button
+        mat-icon-button
         color="warn"
         (click)="remove(i)"
     >
-        Remove
+        <mat-icon>remove</mat-icon>
     </button>
 </div>
 <div style="margin: 16px 0">
     <button
-        mat-button
+        mat-flat-button
         color="primary"
         (click)="add()"
     >
-        {{ to.addText }}
+        {{ props.addText }}
     </button>
 </div>

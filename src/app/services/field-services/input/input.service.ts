@@ -27,7 +27,7 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
         return config;
     }
 
-    protected override _getFieldTemplateOptions(): IProperty[] {
+    protected override _getFieldProperties(): IProperty[] {
         return [
             {
                 name: 'Type',
@@ -57,7 +57,7 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
         ];
     }
 
-    protected override _getWrapperTemplateOptions(): IProperty[] {
+    protected override _getWrapperProperties(): IProperty[] {
         return [];
     }
 

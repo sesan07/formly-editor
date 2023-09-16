@@ -138,7 +138,7 @@ export class EditorService {
         this._store.dispatch(moveField({ parent, from, to }));
     }
 
-    public replaceField(fieldType: string, fieldId: string): void {
+    public replaceField(newFieldType: string, fieldId: string): void {
         const field: IEditorFormlyField = this.getField(fieldId);
         const parent: IEditorFormlyField = this.getField(field._info.parentFieldId);
 
@@ -146,7 +146,7 @@ export class EditorService {
             replaceField({
                 field,
                 parent,
-                fieldType,
+                newFieldType,
                 typeOptions: this.typeOptions,
                 defaultUnknownType: this.defaultUnknownType,
                 getDefaultField: type => this.getDefaultField(type),

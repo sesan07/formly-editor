@@ -17,7 +17,7 @@ export const initRootProperty = (
         const objectProperty: IObjectProperty = property as IObjectProperty;
         objectProperty.childProperties = childProperties;
         objectProperty.populateChildrenFromTarget = false;
-        objectProperty.addOptions = [];
+        objectProperty.canAdd = false;
     }
 };
 
