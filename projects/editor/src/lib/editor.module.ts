@@ -16,7 +16,7 @@ import { FieldNameModule } from './field-name/field-name.module';
 import { EditFieldModule } from './edit-field/edit-field.module';
 import { TreeItemModule } from './tree-item/tree-item.module';
 import { CustomFormlyModule } from './custom-formly/custom-formly.module';
-import { StoreModule } from '@ngrx/store';
+import { ActionReducer, META_REDUCERS, StoreModule } from '@ngrx/store';
 import { editorFeature } from './state/state.reducers';
 import { PropertyModule } from './property/property.module';
 import { JSONDialogModule } from './json-dialog/json-dialog.module';
@@ -31,6 +31,14 @@ import 'codemirror/addon/fold/brace-fold';
 const defaultConfig: EditorConfig = {
     options: [],
 };
+
+const metaReducerFactory =
+    () =>
+    (reducer: ActionReducer<any>): ActionReducer<any> =>
+    (state, action) => {
+        console.log('Action:', action.type);
+        return reducer(state, action);
+    };
 
 @NgModule({
     declarations: [EditorComponent, FieldTreeItemComponent],
@@ -70,6 +78,11 @@ const defaultConfig: EditorConfig = {
             useValue: {
                 animationDuration: '250ms',
             },
+        },
+        {
+            provide: META_REDUCERS,
+            useFactory: metaReducerFactory,
+            multi: true,
         },
     ],
 })

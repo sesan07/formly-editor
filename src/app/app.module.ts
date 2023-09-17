@@ -12,7 +12,7 @@ import { CardWrapperComponent } from './components/wrappers/card-wrapper/card-wr
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { HttpClientModule } from '@angular/common/http';
 import { EditorModule, FormlyGroupComponent } from '@sesan07/ngx-formly-editor';
-import { ActionReducer, StoreModule } from '@ngrx/store';
+import { StoreModule } from '@ngrx/store';
 import { TypesModule } from './components/types/types.module';
 import { FormlyModule } from '@ngx-formly/core';
 import { InputService } from './services/field-services/input/input.service';
@@ -123,19 +123,7 @@ import { RepeatingSectionService } from './services/field-services/repeating-sec
             wrappers: [{ name: AppWrapperType.CARD, component: CardWrapperComponent }],
             validationMessages: [{ name: 'required', message: 'This field is required' }],
         }),
-        StoreModule.forRoot(
-            {},
-            {
-                metaReducers: [
-                    (reducer: ActionReducer<any>): ActionReducer<any> =>
-                        (state, action) => {
-                            console.log('Action:', action.type);
-
-                            return reducer(state, action);
-                        },
-                ],
-            }
-        ),
+        StoreModule.forRoot({}),
     ],
     bootstrap: [AppComponent],
 })

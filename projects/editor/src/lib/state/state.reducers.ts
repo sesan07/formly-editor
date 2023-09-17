@@ -396,7 +396,7 @@ const processSetActiveModel = (state: IEditorState, { model }: SetActiveModel): 
     },
 });
 
-const newReducer = createReducer(
+const editorReducer = createReducer(
     initialState,
     on(addForm, processAddForm),
     on(removeForm, processRemoveForm),
@@ -415,5 +415,5 @@ const newReducer = createReducer(
 
 export const editorFeature = createFeature({
     name: 'editor',
-    reducer: newReducer,
+    reducer: editorReducer,
 });
