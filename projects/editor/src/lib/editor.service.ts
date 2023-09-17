@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { get, set } from 'lodash-es';
 
 import {
     EDITOR_FIELD_SERVICE,
@@ -42,6 +43,7 @@ export class EditorService {
     private _forms: IForm[];
     private _activeField: IEditorFormlyField;
     private _activeFieldMap: Record<string, IEditorFormlyField>;
+    private _keyPathMap: Record<string, string> = {}; // Record<formId.fieldId, keyPath>
 
     private _editorConfig: EditorConfig;
 
@@ -114,9 +116,10 @@ export class EditorService {
         );
     }
 
-    public removeField(fieldId: string, parentId?: string, removeChildren: boolean = true): void {
+    public removeField(fieldId: string, parentId?: string): void {
+        const field = this.getField(fieldId);
         const parent = this.getField(parentId);
-        this._store.dispatch(removeField({ fieldId, parent }));
+        this._store.dispatch(removeField({ fieldId, parent, keyPath: this._getKeyPath(field) }));
     }
 
     public modifyActiveField(change: IPropertyChange) {
@@ -149,6 +152,7 @@ export class EditorService {
                 newFieldType,
                 typeOptions: this.typeOptions,
                 defaultUnknownType: this.defaultUnknownType,
+                keyPath: this._getKeyPath(field),
                 getDefaultField: type => this.getDefaultField(type),
             })
         );
@@ -172,6 +176,14 @@ export class EditorService {
 
     public getFieldProperties(type: string): IProperty[] {
         return this._fieldService.getProperties(type);
+    }
+
+    public registerKeyPath({ _info: { formId, fieldId } }: IEditorFormlyField, keyPath: string): void {
+        set(this._keyPathMap, [`${formId}.${fieldId}`], keyPath);
+    }
+
+    private _getKeyPath({ _info: { formId, fieldId } }: IEditorFormlyField): string | undefined {
+        return get(this._keyPathMap, [`${formId}.${fieldId}`]);
     }
 
     private _loadDefaultForm(): void {

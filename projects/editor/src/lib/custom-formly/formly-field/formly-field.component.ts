@@ -20,7 +20,7 @@ import { EditorService } from '../../editor.service';
 import { FieldOption, IEditorFieldInfo, IEditorFormlyField } from '../../editor.types';
 import { selectActiveField, selectActiveForm } from '../../state/state.selectors';
 import { IEditorState } from '../../state/state.types';
-import { isCategoryOption, isTypeOption } from '../../editor.utils';
+import { getKeyPath, isCategoryOption, isTypeOption } from '../../editor.utils';
 import { FormlyFieldTemplates } from '../formly.template';
 
 @Component({
@@ -90,6 +90,10 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
 
         this.hideOptions = this.field.templateOptions.hideEditorWrapperOptions;
         this.fieldOptions = this._editorService.fieldOptions;
+
+        if (this.field.key) {
+            this._editorService.registerKeyPath(this.field, getKeyPath(this.field.formControl));
+        }
 
         this._store
             .select(selectActiveForm)

@@ -30,6 +30,7 @@ export interface AddField {
 export interface RemoveField {
     fieldId: string;
     parent?: IEditorFormlyField;
+    keyPath?: string;
 }
 export interface SetEditMode {
     formId: string;
@@ -54,6 +55,7 @@ export interface ReplaceField {
     newFieldType: string;
     typeOptions: FieldTypeOption[];
     defaultUnknownType?: string;
+    keyPath?: string;
     getDefaultField: GetDefaultField;
 }
 export interface MoveField {

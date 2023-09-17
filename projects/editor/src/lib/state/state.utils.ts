@@ -1,9 +1,103 @@
-import { get, set, unset } from 'lodash-es';
-import { IEditorFormlyField } from '../editor.types';
+import { get, merge, set, unset } from 'lodash-es';
+import {
+    FieldType,
+    FieldTypeOption,
+    GetDefaultField,
+    IBaseFormlyField,
+    IEditorFieldInfo,
+    IEditorFormlyField,
+} from '../editor.types';
 import { setFieldChildren, getFieldChildren } from '../form/form.utils';
 import produce from 'immer';
-import { getFieldId } from '../editor.utils';
 import { IPropertyChange } from '../property/property.types';
+
+import { nanoid } from 'nanoid';
+
+export const generateFormId = (counter: number): string => `form__${nanoid()}`;
+const generateFieldId = (type: string, counter: number): string => `${type}__${nanoid()}`;
+const generateFieldKey = (type: string, counter: number, defaultUnknownType: string): string =>
+    `__${type ?? defaultUnknownType ?? 'generic'}_${nanoid(5)}`;
+
+export const convertToEditorField = (
+    getDefaultField: GetDefaultField,
+    typeOptions: FieldTypeOption[],
+    counter: { count: number },
+    formId: string,
+    sourceField: IBaseFormlyField,
+    parent?: IEditorFormlyField,
+    defaultUnknownType?: string
+) => {
+    // Special case to specify 'formly-group' type
+    if (!sourceField.type && sourceField.fieldGroup) {
+        sourceField.type = FieldType.FORMLY_GROUP;
+    }
+
+    // Merge with default properties
+    const typeOption: FieldTypeOption = getTypeOption(typeOptions, sourceField.type, defaultUnknownType);
+    const baseField: IBaseFormlyField = getDefaultField(sourceField.type);
+    merge(baseField, sourceField);
+
+    // Editor information
+    const count = counter.count++;
+    const fieldId = generateFieldId(baseField.type, count);
+    const fieldInfo: IEditorFieldInfo = {
+        name: typeOption.displayName,
+        formId,
+        fieldId,
+        parentFieldId: parent?._info.fieldId,
+        fieldPath: parent ? [...parent._info.fieldPath, fieldId] : [fieldId],
+        childrenConfig: typeOption.childrenConfig,
+    };
+
+    // Create field
+    const field: IEditorFormlyField = {
+        ...baseField,
+        _info: fieldInfo,
+        key:
+            baseField.key ||
+            (typeOption.disableKeyGeneration ? undefined : generateFieldKey(baseField.type, count, defaultUnknownType)),
+        fieldGroup: undefined,
+    };
+
+    // Process children (e.g. 'fieldGroup')
+    if (fieldInfo.childrenConfig) {
+        const baseChildren: IBaseFormlyField | IBaseFormlyField[] = get(baseField, fieldInfo.childrenConfig.path);
+        let children: IEditorFormlyField | IEditorFormlyField[];
+        if (Array.isArray(baseChildren)) {
+            children = baseChildren?.map(child =>
+                convertToEditorField(getDefaultField, typeOptions, counter, formId, child, field, defaultUnknownType)
+            );
+        } else {
+            children = convertToEditorField(
+                getDefaultField,
+                typeOptions,
+                counter,
+                formId,
+                baseChildren,
+                field,
+                defaultUnknownType
+            );
+        }
+        set(field, fieldInfo.childrenConfig.path, children);
+    }
+
+    return field;
+};
+
+const getTypeOption = (typeOptions: FieldTypeOption[], type: string, defaultUnknownType?: string): FieldTypeOption => {
+    let typeOption: FieldTypeOption = typeOptions.find(option => option.type === type);
+
+    if (!typeOption && defaultUnknownType) {
+        typeOption = typeOptions.find(option => option.type === defaultUnknownType);
+    }
+
+    if (!typeOption) {
+        console.warn('EditorTypeOption not configured for type: ' + type);
+        typeOption = { type: undefined, displayName: 'Unknown Type' };
+    }
+
+    return typeOption;
+};
 
 export const duplicateFields = (
     fields: IEditorFormlyField | IEditorFormlyField[],
@@ -21,7 +115,7 @@ const duplicateFieldObject = (
     parentFieldId?: string,
     counter = { count: 0 }
 ) => {
-    const fieldId = getFieldId(field.type, counter.count++);
+    const fieldId = generateFieldId(field.type, counter.count++);
     return {
         ...field,
         _info: {
@@ -112,13 +206,3 @@ export const modifyValue = <T extends Record<string, any>>(target: T, { path, va
     produce(target, draft => {
         set(draft, path, value);
     });
-
-export const updateParentFieldId = (field: IEditorFormlyField, parentFieldId: string) => {
-    field = {
-        ...field,
-        _info: {
-            ...field._info,
-            parentFieldId,
-        },
-    };
-};

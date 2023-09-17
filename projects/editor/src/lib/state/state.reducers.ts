@@ -1,7 +1,8 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { createFeature, createReducer, on } from '@ngrx/store';
+import { cloneDeep, unset } from 'lodash-es';
 import { IEditorFormlyField, IForm } from '../editor.types';
-import { convertToEditorField, getFormId } from '../editor.utils';
+import { convertToEditorField, generateFormId } from './state.utils';
 import { getFieldChildren, setFieldChildren } from '../form/form.utils';
 import { PropertyChangeType } from '../property/property.types';
 import {
@@ -45,7 +46,7 @@ const processAddForm = (
     state: IEditorState,
     { name, sourceFields, model, getDefaultField, typeOptions, defaultUnknownType }: AddForm
 ): IEditorState => {
-    const id = getFormId(state.formIdCounter + 1);
+    const id = generateFormId(state.formIdCounter + 1);
     const counter = { count: 0 };
     const baseFields = (sourceFields ?? []).map(field =>
         convertToEditorField(getDefaultField, typeOptions, counter, id, field, undefined, defaultUnknownType)
@@ -82,7 +83,7 @@ const processRemoveForm = (state: IEditorState, { formId }: RemoveForm): IEditor
 
 const processDuplicateForm = (state: IEditorState, { formId }: DuplicateForm): IEditorState => {
     const sourceForm = state.formMap[formId];
-    const id = getFormId(state.formIdCounter + 1);
+    const id = generateFormId(state.formIdCounter + 1);
     const baseFields = duplicateFields(sourceForm.baseFields, id);
 
     return {
@@ -157,7 +158,7 @@ const processAddField = (
     };
 };
 
-const processRemoveField = (state: IEditorState, { fieldId, parent }: RemoveField): IEditorState => {
+const processRemoveField = (state: IEditorState, { fieldId, parent, keyPath }: RemoveField): IEditorState => {
     const activeForm: IForm = state.formMap[state.activeFormId];
     let baseFields = activeForm.baseFields;
     if (parent) {
@@ -174,6 +175,12 @@ const processRemoveField = (state: IEditorState, { fieldId, parent }: RemoveFiel
         baseFields = baseFields.filter(f => f._info.fieldId !== fieldId);
     }
 
+    let model = activeForm.model;
+    if (keyPath) {
+        model = cloneDeep(model);
+        unset(model, keyPath);
+    }
+
     return {
         ...state,
         formMap: {
@@ -183,6 +190,7 @@ const processRemoveField = (state: IEditorState, { fieldId, parent }: RemoveFiel
                 fields: baseFields,
                 baseFields,
                 activeFieldId: parent?._info.fieldId ?? baseFields[0]?._info.fieldId,
+                model,
             },
         },
     };
@@ -238,7 +246,7 @@ const processSetActiveField = (state: IEditorState, { activeFieldId }: SetActive
 
 const processReplaceField = (
     state: IEditorState,
-    { field, parent, newFieldType, typeOptions, defaultUnknownType, getDefaultField }: ReplaceField
+    { field, parent, newFieldType, typeOptions, defaultUnknownType, keyPath, getDefaultField }: ReplaceField
 ): IEditorState => {
     const activeForm: IForm = state.formMap[state.activeFormId];
     const counter = { count: activeForm.fieldIdCounter };
@@ -298,6 +306,12 @@ const processReplaceField = (
         baseFields.splice(index, 0, newField);
     }
 
+    let model = activeForm.model;
+    if (keyPath) {
+        model = cloneDeep(model);
+        unset(model, keyPath);
+    }
+
     return {
         ...state,
         formMap: {
@@ -308,6 +322,7 @@ const processReplaceField = (
                 baseFields,
                 fieldIdCounter: counter.count,
                 activeFieldId: newField._info.fieldId,
+                model,
             },
         },
     };
