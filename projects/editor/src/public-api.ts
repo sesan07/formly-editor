@@ -15,4 +15,4 @@ export { EditorComponent } from './lib/editor.component';
 export { FormlyGroupComponent } from './lib/custom-formly/formly-group/formly-group.component';
 export { BaseFieldService } from './lib/field-service/base-field.service';
 export { EditorModule } from './lib/editor.module';
-export { EDITOR_FIELD_SERVICE, IBaseFormlyField, IEditorFieldService } from './lib/editor.types';
+export { IBaseFormlyField, IEditorFieldService } from './lib/editor.types';

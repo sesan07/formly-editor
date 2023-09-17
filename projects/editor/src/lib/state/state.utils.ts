@@ -1,6 +1,6 @@
 import { get, merge, set, unset } from 'lodash-es';
 import {
-    FieldType,
+    EditorFieldType,
     FieldTypeOption,
     GetDefaultField,
     IBaseFormlyField,
@@ -20,19 +20,20 @@ const generateFieldKey = (prefix?: string): string => `__${prefix ? `${prefix}_`
 export const convertToEditorField = (
     getDefaultField: GetDefaultField,
     typeOptions: FieldTypeOption[],
+    defaultTypeOption: FieldTypeOption,
     counter: { count: number },
     formId: string,
     sourceField: IBaseFormlyField,
-    parent?: IEditorFormlyField,
-    defaultUnknownType?: string
+    parent?: IEditorFormlyField
 ) => {
     // Special case to specify 'formly-group' type
     if (!sourceField.type && sourceField.fieldGroup) {
-        sourceField.type = FieldType.FORMLY_GROUP;
+        sourceField.type = EditorFieldType.FORMLY_GROUP;
     }
 
     // Merge with default properties
-    const typeOption: FieldTypeOption = getTypeOption(typeOptions, sourceField.type, defaultUnknownType);
+    const typeOption: FieldTypeOption =
+        typeOptions.find(option => option.type === sourceField.type) ?? defaultTypeOption;
     const baseField: IBaseFormlyField = getDefaultField(sourceField.type);
     merge(baseField, sourceField);
 
@@ -64,38 +65,23 @@ export const convertToEditorField = (
         let children: IEditorFormlyField | IEditorFormlyField[];
         if (Array.isArray(baseChildren)) {
             children = baseChildren?.map(child =>
-                convertToEditorField(getDefaultField, typeOptions, counter, formId, child, field, defaultUnknownType)
+                convertToEditorField(getDefaultField, typeOptions, defaultTypeOption, counter, formId, child, field)
             );
         } else {
             children = convertToEditorField(
                 getDefaultField,
                 typeOptions,
+                defaultTypeOption,
                 counter,
                 formId,
                 baseChildren,
-                field,
-                defaultUnknownType
+                field
             );
         }
         set(field, fieldInfo.childrenConfig.path, children);
     }
 
     return field;
-};
-
-const getTypeOption = (typeOptions: FieldTypeOption[], type: string, defaultUnknownType?: string): FieldTypeOption => {
-    let typeOption: FieldTypeOption = typeOptions.find(option => option.type === type);
-
-    if (!typeOption && defaultUnknownType) {
-        typeOption = typeOptions.find(option => option.type === defaultUnknownType);
-    }
-
-    if (!typeOption) {
-        console.warn('EditorTypeOption not configured for type: ' + type);
-        typeOption = { type: undefined, displayName: 'Unknown Type' };
-    }
-
-    return typeOption;
 };
 
 export const duplicateFields = (

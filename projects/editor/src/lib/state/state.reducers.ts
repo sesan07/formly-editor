@@ -44,12 +44,12 @@ export const initialState: IEditorState = {
 
 const processAddForm = (
     state: IEditorState,
-    { name, sourceFields, model, getDefaultField, typeOptions, defaultUnknownType }: AddForm
+    { name, sourceFields, model, getDefaultField, typeOptions, defaultTypeOption }: AddForm
 ): IEditorState => {
     const id = generateFormId(state.formIdCounter + 1);
     const counter = { count: 0 };
     const baseFields = (sourceFields ?? []).map(field =>
-        convertToEditorField(getDefaultField, typeOptions, counter, id, field, undefined, defaultUnknownType)
+        convertToEditorField(getDefaultField, typeOptions, defaultTypeOption, counter, id, field)
     );
     return {
         ...state,
@@ -112,18 +112,18 @@ const processSetActiveFormId = (state: IEditorState, { activeFormId }: SetActive
 
 const processAddField = (
     state: IEditorState,
-    { fieldType, parent, index, getDefaultField, typeOptions, defaultUnknownType }: AddField
+    { fieldType, parent, index, getDefaultField, typeOptions, defaultTypeOption }: AddField
 ): IEditorState => {
     const activeForm: IForm = state.formMap[state.activeFormId];
     const counter = { count: activeForm.fieldIdCounter };
     const field = convertToEditorField(
         getDefaultField,
         typeOptions,
+        defaultTypeOption,
         counter,
         activeForm.id,
         getDefaultField(fieldType),
-        parent,
-        defaultUnknownType
+        parent
     );
 
     let baseFields = activeForm.baseFields;
@@ -246,18 +246,18 @@ const processSetActiveField = (state: IEditorState, { activeFieldId }: SetActive
 
 const processReplaceField = (
     state: IEditorState,
-    { field, parent, newFieldType, typeOptions, defaultUnknownType, keyPath, getDefaultField }: ReplaceField
+    { field, parent, newFieldType, typeOptions, defaultTypeOption, keyPath, getDefaultField }: ReplaceField
 ): IEditorState => {
     const activeForm: IForm = state.formMap[state.activeFormId];
     const counter = { count: activeForm.fieldIdCounter };
     const newField = convertToEditorField(
         getDefaultField,
         typeOptions,
+        defaultTypeOption,
         counter,
         activeForm.id,
         getDefaultField(newFieldType),
-        parent,
-        defaultUnknownType
+        parent
     );
     // Copy properties that shouldn't change
     newField.key = field.key || newField.key;

@@ -8,7 +8,7 @@ import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
     providedIn: 'root',
 })
 export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> {
-    public getDefaultConfig(type: AppFieldType): IFormlyField {
+    public getDefaultField(type: AppFieldType): IFormlyField {
         const config: IFormlyField = {
             type,
             fieldGroup: [],

@@ -8,7 +8,7 @@ import { ISelectTemplateOptions } from './select.types';
     providedIn: 'root',
 })
 export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
-    public getDefaultConfig(type: AppFieldType): IFormlyField<ISelectTemplateOptions> {
+    public getDefaultField(type: AppFieldType): IFormlyField<ISelectTemplateOptions> {
         return {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],

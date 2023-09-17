@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, NgZone } from '@angular/core';
 import { FormlyConfig, FormlyForm, FormlyFormBuilder } from '@ngx-formly/core';
 
-import { FieldType, IEditorFormlyFieldConfigCache } from '../../editor.types';
+import { EditorFieldType, IEditorFormlyFieldConfigCache } from '../../editor.types';
 import { FormlyFieldTemplates } from '../formly.template';
 
 @Component({
@@ -19,7 +19,7 @@ export class FormlyFormComponent extends FormlyForm {
             fieldId: undefined,
             fieldPath: undefined,
         },
-        type: FieldType.FORMLY_GROUP,
+        type: EditorFieldType.FORMLY_GROUP,
     };
 
     constructor(

@@ -1,11 +1,10 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { get, set } from 'lodash-es';
 
 import {
-    EDITOR_FIELD_SERVICE,
     IEditorFieldService,
     IForm,
     IBaseFormlyField,
@@ -13,6 +12,7 @@ import {
     FieldTypeOption,
     IEditorFormlyField,
     FieldOption,
+    EditorFieldType,
 } from './editor.types';
 import { Store } from '@ngrx/store';
 import { IEditorState } from './state/state.types';
@@ -34,42 +34,45 @@ import {
 import { selectActiveField, selectActiveFieldMap, selectForms } from './state/state.selectors';
 import { IProperty, IPropertyChange } from './property/property.types';
 import { isCategoryOption } from './editor.utils';
+import { GenericFieldService } from './field-service/generic/generic-field.service';
 
 @Injectable()
 export class EditorService {
     public fieldOptions: FieldOption[];
-    public typeOptions: FieldTypeOption[];
 
     private _forms: IForm[];
     private _activeField: IEditorFormlyField;
     private _activeFieldMap: Record<string, IEditorFormlyField>;
     private _keyPathMap: Record<string, string> = {}; // Record<formId.fieldId, keyPath>
+    private _typeOptions: FieldTypeOption[];
+    private _fieldServiceMap: Record<string, IEditorFieldService> = {}; // Record<type, service>
+
+    private readonly _defaultTypeOption: FieldTypeOption = {
+        displayName: 'Generic',
+        type: EditorFieldType.GENERIC,
+        disableKeyGeneration: true,
+        service: GenericFieldService,
+    };
 
     private _editorConfig: EditorConfig;
 
-    constructor(
-        @Inject(EDITOR_FIELD_SERVICE) private _fieldService: IEditorFieldService,
-        private _http: HttpClient,
-        private _store: Store<IEditorState>
-    ) {
+    constructor(private _http: HttpClient, private _store: Store<IEditorState>) {
         this._store.select(selectForms).subscribe(forms => (this._forms = forms));
         this._store.select(selectActiveField).subscribe(field => (this._activeField = field));
         this._store.select(selectActiveFieldMap).subscribe(fieldMap => (this._activeFieldMap = fieldMap));
     }
 
-    public get defaultUnknownType(): string {
-        return this._editorConfig.defaultUnknownType;
-    }
-
     setup(editorConfig: EditorConfig) {
         this._editorConfig = editorConfig;
+        this.fieldOptions = [...this._editorConfig.options, this._defaultTypeOption];
+
         const getTypeOptions = (options: FieldOption[]) =>
             options.reduce<FieldTypeOption[]>(
                 (a, b): FieldTypeOption[] => [...a, ...(isCategoryOption(b) ? getTypeOptions(b.children) : [b])],
                 []
             );
-        this.fieldOptions = this._editorConfig.options;
-        this.typeOptions = getTypeOptions(this.fieldOptions);
+        this._typeOptions = getTypeOptions(this.fieldOptions);
+        this._fieldServiceMap = this._typeOptions.reduce((acc, o) => ({ ...acc, [o.type]: inject(o.service) }), {});
         this._loadDefaultForm();
     }
 
@@ -79,9 +82,9 @@ export class EditorService {
                 name,
                 sourceFields,
                 model,
-                typeOptions: this.typeOptions,
-                defaultUnknownType: this.defaultUnknownType,
-                getDefaultField: (type: string) => this._fieldService.getDefaultField(type),
+                typeOptions: this._typeOptions,
+                defaultTypeOption: this._defaultTypeOption,
+                getDefaultField: (type: string) => this._getFieldService(type).getDefaultField(type),
             })
         );
     }
@@ -109,8 +112,8 @@ export class EditorService {
                 fieldType,
                 parent,
                 index,
-                typeOptions: this.typeOptions,
-                defaultUnknownType: this.defaultUnknownType,
+                typeOptions: this._typeOptions,
+                defaultTypeOption: this._defaultTypeOption,
                 getDefaultField: type => this.getDefaultField(type),
             })
         );
@@ -150,8 +153,8 @@ export class EditorService {
                 field,
                 parent,
                 newFieldType,
-                typeOptions: this.typeOptions,
-                defaultUnknownType: this.defaultUnknownType,
+                typeOptions: this._typeOptions,
+                defaultTypeOption: this._defaultTypeOption,
                 keyPath: this._getKeyPath(field),
                 getDefaultField: type => this.getDefaultField(type),
             })
@@ -171,11 +174,11 @@ export class EditorService {
     }
 
     public getDefaultField(type: string): IBaseFormlyField {
-        return this._fieldService.getDefaultField(type);
+        return this._getFieldService(type).getDefaultField(type);
     }
 
     public getFieldProperties(type: string): IProperty[] {
-        return this._fieldService.getProperties(type);
+        return this._getFieldService(type).getProperties(type);
     }
 
     public registerKeyPath({ _info: { formId, fieldId } }: IEditorFormlyField, keyPath: string): void {
@@ -184,6 +187,10 @@ export class EditorService {
 
     private _getKeyPath({ _info: { formId, fieldId } }: IEditorFormlyField): string | undefined {
         return get(this._keyPathMap, [`${formId}.${fieldId}`]);
+    }
+
+    private _getFieldService(type: string): IEditorFieldService {
+        return this._fieldServiceMap[type] ?? this._fieldServiceMap[this._defaultTypeOption.type];
     }
 
     private _loadDefaultForm(): void {

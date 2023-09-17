@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 
 import { StylesService } from '../edit-field/styles/styles.service';
 import { IProperty, PropertyType } from '../property/property.types';
-import { IBaseFormlyField } from '../editor.types';
+import { IBaseFormlyField, IEditorFieldService } from '../editor.types';
 
 @Injectable()
-export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
+export abstract class BaseFieldService<T extends FormlyTemplateOptions> implements IEditorFieldService {
     public constructor(private _stylesService: StylesService) {}
 
     public getProperties(type: string): IProperty[] {
@@ -58,7 +58,7 @@ export abstract class BaseFieldService<T extends FormlyTemplateOptions> {
         ];
     }
 
-    public abstract getDefaultConfig(type: string): IBaseFormlyField<T>;
+    public abstract getDefaultField(type: string): IBaseFormlyField<T>;
 
     protected abstract _getFieldProperties(type: string): IProperty[];
     protected abstract _getWrapperProperties(type: string): IProperty[];

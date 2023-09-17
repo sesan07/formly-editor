@@ -8,7 +8,7 @@ import { IRadioTemplateOptions } from './radio.types';
     providedIn: 'root',
 })
 export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
-    public getDefaultConfig(type: AppFieldType): IFormlyField<IRadioTemplateOptions> {
+    public getDefaultField(type: AppFieldType): IFormlyField<IRadioTemplateOptions> {
         return {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],

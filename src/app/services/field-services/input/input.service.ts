@@ -8,7 +8,7 @@ import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
     providedIn: 'root',
 })
 export class InputService extends BaseFieldService<IInputTemplateOptions> {
-    public getDefaultConfig(type: AppFieldType): IFormlyField<IInputTemplateOptions> {
+    public getDefaultField(type: AppFieldType): IFormlyField<IInputTemplateOptions> {
         const config: IFormlyField<IInputTemplateOptions> = {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],

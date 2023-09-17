@@ -8,7 +8,6 @@ export enum AppFieldType {
     INPUT = 'input',
     NUMBER = 'number',
     INTEGER = 'integer',
-    OTHER = 'other',
     RADIO = 'radio',
     REPEATING_SECTION = 'repeating-section',
     SELECT = 'select',

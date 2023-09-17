@@ -8,7 +8,7 @@ import { ICheckboxTemplateOptions } from './checkbox.types';
     providedIn: 'root',
 })
 export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> {
-    public getDefaultConfig(type: AppFieldType): IFormlyField<ICheckboxTemplateOptions> {
+    public getDefaultField(type: AppFieldType): IFormlyField<ICheckboxTemplateOptions> {
         return {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],

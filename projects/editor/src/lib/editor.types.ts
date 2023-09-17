@@ -1,11 +1,13 @@
-import { InjectionToken } from '@angular/core';
+import { InjectionToken, Type } from '@angular/core';
 import { FormlyFieldConfig, FormlyTemplateOptions } from '@ngx-formly/core';
 
 import { IProperty } from './property/property.types';
 import { FormlyFieldConfigCache } from './custom-formly/fieldconfig.cache';
+import { BaseFieldService } from './field-service/base-field.service';
 
-export enum FieldType {
+export enum EditorFieldType {
     FORMLY_GROUP = 'formly-group',
+    GENERIC = 'generic',
 }
 
 export type GetDefaultField = (type: string) => IBaseFormlyField;
@@ -62,6 +64,7 @@ export interface FieldTypeOption {
     keyGenerationPrefix?: string;
     disableKeyGeneration?: boolean; // Prevent auto generating keys
     childrenConfig?: FieldTypeChildrenConfig;
+    service: Type<BaseFieldService<FormlyTemplateOptions>>;
 }
 
 export interface FieldTypeChildrenConfig {
@@ -70,10 +73,7 @@ export interface FieldTypeChildrenConfig {
 }
 
 export interface EditorConfig {
-    defaultType: string;
-    defaultUnknownType?: string;
     options: FieldOption[];
 }
 
-export const EDITOR_FIELD_SERVICE = new InjectionToken<IEditorFieldService>('EDITOR_FIELD_SERVICE');
 export const EDITOR_CONFIG = new InjectionToken<EditorConfig[]>('EDITOR_CONFIG');

@@ -7,7 +7,7 @@ export interface AddForm {
     sourceFields?: IBaseFormlyField[];
     model?: Record<string, unknown>;
     typeOptions: FieldTypeOption[];
-    defaultUnknownType?: string;
+    defaultTypeOption: FieldTypeOption;
     getDefaultField: GetDefaultField;
 }
 export interface RemoveForm {
@@ -24,7 +24,7 @@ export interface AddField {
     parent?: IEditorFormlyField;
     index?: number;
     typeOptions: FieldTypeOption[];
-    defaultUnknownType?: string;
+    defaultTypeOption: FieldTypeOption;
     getDefaultField: GetDefaultField;
 }
 export interface RemoveField {
@@ -54,7 +54,7 @@ export interface ReplaceField {
     parent?: IEditorFormlyField;
     newFieldType: string;
     typeOptions: FieldTypeOption[];
-    defaultUnknownType?: string;
+    defaultTypeOption: FieldTypeOption;
     keyPath?: string;
     getDefaultField: GetDefaultField;
 }

@@ -7,15 +7,21 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { FieldService } from './services/field-services/field-service';
 import { AppFieldType, AppWrapperType } from './services/field-services/field.types';
 import { CardWrapperComponent } from './components/wrappers/card-wrapper/card-wrapper.component';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { HttpClientModule } from '@angular/common/http';
-import { EditorModule, EDITOR_FIELD_SERVICE, FormlyGroupComponent } from '@sesan07/ngx-formly-editor';
+import { EditorModule, FormlyGroupComponent } from '@sesan07/ngx-formly-editor';
 import { ActionReducer, StoreModule } from '@ngrx/store';
 import { TypesModule } from './components/types/types.module';
 import { FormlyModule } from '@ngx-formly/core';
+import { InputService } from './services/field-services/input/input.service';
+import { CheckboxService } from './services/field-services/checkbox/checkbox.service';
+import { RadioService } from './services/field-services/radio/radio.service';
+import { SelectService } from './services/field-services/select/select.service';
+import { TextareaService } from './services/field-services/textarea/textarea.service';
+import { FormlyGroupService } from './services/field-services/formly-group/formly-group.service';
+import { RepeatingSectionService } from './services/field-services/repeating-section/repeating-section.service';
 
 @NgModule({
     declarations: [AppComponent, CardWrapperComponent],
@@ -29,8 +35,6 @@ import { FormlyModule } from '@ngx-formly/core';
         FormlyMaterialModule,
         TypesModule,
         EditorModule.forRoot({
-            defaultType: AppFieldType.FORMLY_GROUP,
-            defaultUnknownType: AppFieldType.OTHER,
             options: [
                 {
                     displayName: 'Input',
@@ -39,11 +43,13 @@ import { FormlyModule } from '@ngx-formly/core';
                             displayName: 'Input',
                             type: AppFieldType.INPUT,
                             keyGenerationPrefix: 'inp',
+                            service: InputService,
                         },
                         {
                             displayName: 'Number',
                             type: AppFieldType.NUMBER,
                             keyGenerationPrefix: 'num',
+                            service: InputService,
                         },
                     ],
                 },
@@ -51,21 +57,25 @@ import { FormlyModule } from '@ngx-formly/core';
                     displayName: 'Checkbox',
                     type: AppFieldType.CHECKBOX,
                     keyGenerationPrefix: 'chk',
+                    service: CheckboxService,
                 },
                 {
                     displayName: 'Radio',
                     type: AppFieldType.RADIO,
                     keyGenerationPrefix: 'rad',
+                    service: RadioService,
                 },
                 {
                     displayName: 'Select',
                     type: AppFieldType.SELECT,
                     keyGenerationPrefix: 'sel',
+                    service: SelectService,
                 },
                 {
                     displayName: 'Textarea',
                     type: AppFieldType.TEXTAREA,
                     keyGenerationPrefix: 'txt',
+                    service: TextareaService,
                 },
                 {
                     displayName: 'Group',
@@ -77,6 +87,7 @@ import { FormlyModule } from '@ngx-formly/core';
                             childrenConfig: {
                                 path: 'fieldGroup',
                             },
+                            service: FormlyGroupService,
                         },
                         {
                             displayName: 'Card - Custom',
@@ -85,6 +96,7 @@ import { FormlyModule } from '@ngx-formly/core';
                             childrenConfig: {
                                 path: 'fieldGroup',
                             },
+                            service: FormlyGroupService,
                         },
                     ],
                 },
@@ -96,11 +108,7 @@ import { FormlyModule } from '@ngx-formly/core';
                         path: 'fieldArray',
                         isObject: true,
                     },
-                },
-                {
-                    displayName: 'Generic',
-                    type: AppFieldType.OTHER,
-                    disableKeyGeneration: true,
+                    service: RepeatingSectionService,
                 },
             ],
         }),
@@ -110,10 +118,6 @@ import { FormlyModule } from '@ngx-formly/core';
                 {
                     name: AppFieldType.FORMLY_GROUP,
                     component: FormlyGroupComponent,
-                },
-                // Default generic field
-                {
-                    name: AppFieldType.OTHER,
                 },
             ],
             wrappers: [{ name: AppWrapperType.CARD, component: CardWrapperComponent }],
@@ -133,7 +137,6 @@ import { FormlyModule } from '@ngx-formly/core';
             }
         ),
     ],
-    providers: [{ provide: EDITOR_FIELD_SERVICE, useClass: FieldService }],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

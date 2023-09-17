@@ -8,7 +8,7 @@ import { ITextareaTemplateOptions } from './textarea.types';
     providedIn: 'root',
 })
 export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> {
-    public getDefaultConfig(type: AppFieldType): IFormlyField<ITextareaTemplateOptions> {
+    public getDefaultField(type: AppFieldType): IFormlyField<ITextareaTemplateOptions> {
         return {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],

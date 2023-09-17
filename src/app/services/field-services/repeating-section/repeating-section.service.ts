@@ -9,7 +9,7 @@ import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
     providedIn: 'root',
 })
 export class RepeatingSectionService extends BaseFieldService<IRepeatingSectionTemplateOptions> {
-    public getDefaultConfig(type?: AppFieldType): IFormlyField<IRepeatingSectionTemplateOptions> {
+    public getDefaultField(type?: AppFieldType): IFormlyField<IRepeatingSectionTemplateOptions> {
         return {
             // key: 'tempKey',
             type,

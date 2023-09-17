@@ -21,6 +21,7 @@ import { editorFeature } from './state/state.reducers';
 import { PropertyModule } from './property/property.module';
 import { JSONDialogModule } from './json-dialog/json-dialog.module';
 import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
+import { GenericFieldService } from './field-service/generic/generic-field.service';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/selection/active-line';
@@ -28,7 +29,6 @@ import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
 
 const defaultConfig: EditorConfig = {
-    defaultType: 'formly-group',
     options: [],
 };
 
@@ -52,6 +52,7 @@ const defaultConfig: EditorConfig = {
     ],
     exports: [EditorComponent],
     providers: [
+        GenericFieldService,
         EditorService,
         FileService,
         {
