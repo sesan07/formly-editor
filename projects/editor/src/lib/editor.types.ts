@@ -59,6 +59,7 @@ export interface FieldCategoryOption {
 export interface FieldTypeOption {
     type: string;
     displayName: string;
+    keyGenerationPrefix?: string;
     disableKeyGeneration?: boolean; // Prevent auto generating keys
     childrenConfig?: FieldTypeChildrenConfig;
 }

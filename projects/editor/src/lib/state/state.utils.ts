@@ -15,8 +15,7 @@ import { nanoid } from 'nanoid';
 
 export const generateFormId = (counter: number): string => `form__${nanoid()}`;
 const generateFieldId = (type: string, counter: number): string => `${type}__${nanoid()}`;
-const generateFieldKey = (type: string, counter: number, defaultUnknownType: string): string =>
-    `__${type ?? defaultUnknownType ?? 'generic'}_${nanoid(5)}`;
+const generateFieldKey = (prefix?: string): string => `__${prefix ? `${prefix}_` : ''}${nanoid(5)}`;
 
 export const convertToEditorField = (
     getDefaultField: GetDefaultField,
@@ -55,7 +54,7 @@ export const convertToEditorField = (
         _info: fieldInfo,
         key:
             baseField.key ||
-            (typeOption.disableKeyGeneration ? undefined : generateFieldKey(baseField.type, count, defaultUnknownType)),
+            (typeOption.disableKeyGeneration ? undefined : generateFieldKey(typeOption.keyGenerationPrefix)),
         fieldGroup: undefined,
     };
 

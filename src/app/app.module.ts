@@ -38,28 +38,34 @@ import { FormlyModule } from '@ngx-formly/core';
                         {
                             displayName: 'Input',
                             type: AppFieldType.INPUT,
+                            keyGenerationPrefix: 'inp',
                         },
                         {
                             displayName: 'Number',
                             type: AppFieldType.NUMBER,
+                            keyGenerationPrefix: 'num',
                         },
                     ],
                 },
                 {
                     displayName: 'Checkbox',
                     type: AppFieldType.CHECKBOX,
+                    keyGenerationPrefix: 'chk',
                 },
                 {
                     displayName: 'Radio',
                     type: AppFieldType.RADIO,
+                    keyGenerationPrefix: 'rad',
                 },
                 {
                     displayName: 'Select',
                     type: AppFieldType.SELECT,
+                    keyGenerationPrefix: 'sel',
                 },
                 {
                     displayName: 'Textarea',
                     type: AppFieldType.TEXTAREA,
+                    keyGenerationPrefix: 'txt',
                 },
                 {
                     displayName: 'Group',
@@ -85,6 +91,7 @@ import { FormlyModule } from '@ngx-formly/core';
                 {
                     displayName: 'Repeating Section',
                     type: AppFieldType.REPEATING_SECTION,
+                    keyGenerationPrefix: 'rep',
                     childrenConfig: {
                         path: 'fieldArray',
                         isObject: true,
@@ -93,6 +100,7 @@ import { FormlyModule } from '@ngx-formly/core';
                 {
                     displayName: 'Generic',
                     type: AppFieldType.OTHER,
+                    disableKeyGeneration: true,
                 },
             ],
         }),
