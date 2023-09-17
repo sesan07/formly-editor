@@ -4,8 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule, MAT_TABS_CONFIG } from '@angular/material/tabs';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { FormlyConfig } from '@ngx-formly/core';
 
-import { EditorConfig, EDITOR_CONFIG } from './editor.types';
+import { EditorConfig, EDITOR_CONFIG, EditorFieldType } from './editor.types';
 import { EditorService } from './editor.service';
 import { FormModule } from './form/form.module';
 import { FileService } from './shared/services/file-service/file.service';
@@ -22,6 +23,7 @@ import { PropertyModule } from './property/property.module';
 import { JSONDialogModule } from './json-dialog/json-dialog.module';
 import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
 import { GenericFieldService } from './field-service/generic/generic-field.service';
+import { FormlyGroupComponent } from './custom-formly/formly-group/formly-group.component';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/selection/active-line';
@@ -87,8 +89,18 @@ const metaReducerFactory =
     ],
 })
 export class EditorModule {
-    constructor(editorService: EditorService, @Optional() @Inject(EDITOR_CONFIG) config: EditorConfig) {
+    constructor(
+        editorService: EditorService,
+        formlyConfig: FormlyConfig,
+        @Optional() @Inject(EDITOR_CONFIG) config: EditorConfig
+    ) {
+        // Setup editor
         editorService.setup(config ?? defaultConfig);
+        // Override default formly-group
+        formlyConfig.setType({
+            name: EditorFieldType.FORMLY_GROUP,
+            component: FormlyGroupComponent,
+        });
     }
 
     static forRoot(config: EditorConfig): ModuleWithProviders<EditorModule> {
@@ -98,7 +110,6 @@ export class EditorModule {
                 {
                     provide: EDITOR_CONFIG,
                     useValue: config,
-                    deps: [EditorService],
                 },
             ],
         };

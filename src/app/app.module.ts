@@ -113,13 +113,6 @@ import { RepeatingSectionService } from './services/field-services/repeating-sec
             ],
         }),
         FormlyModule.forRoot({
-            types: [
-                // Override default formly-group
-                {
-                    name: AppFieldType.FORMLY_GROUP,
-                    component: FormlyGroupComponent,
-                },
-            ],
             wrappers: [{ name: AppWrapperType.CARD, component: CardWrapperComponent }],
             validationMessages: [{ name: 'required', message: 'This field is required' }],
         }),
