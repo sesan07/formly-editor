@@ -1,8 +1,13 @@
+:host ::ng-deep {
+    .mat-tab-body-wrapper {
+        height: 100%;
+    }
+}
+
 mat-tab-group {
     height: 100%;
 }
 
-.styling-wrapper {
-    padding: 8px;
-    box-sizing: border-box;
+editor-styles {
+    height: 100%;
 }

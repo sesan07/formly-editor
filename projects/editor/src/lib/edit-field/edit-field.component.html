@@ -11,13 +11,11 @@
         </div>
     </mat-tab>
     <mat-tab label="Styling">
-        <div class="styling-wrapper">
-            <editor-styles
-                [editField]="field$ | async"
-                [parentField]="parentField$ | async"
-                (fieldChanged)="onFieldChanged($event)"
-            >
-            </editor-styles>
-        </div>
+        <editor-styles
+            [editField]="field$ | async"
+            [parentField]="parentField$ | async"
+            (fieldChanged)="onFieldChanged($event)"
+        >
+        </editor-styles>
     </mat-tab>
 </mat-tab-group>

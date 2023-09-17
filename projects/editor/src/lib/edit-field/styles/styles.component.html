@@ -1,16 +1,18 @@
-<mat-button-toggle-group [(value)]="tabIndex">
-    <mat-button-toggle [value]="0">
-        <mat-icon>person</mat-icon>
-        <span>Style Self</span>
-    </mat-button-toggle>
-    <mat-button-toggle
-        [disabled]="!editField?._info.childrenConfig"
-        [value]="1"
-    >
-        <mat-icon>groups</mat-icon>
-        <span>Style Content</span>
-    </mat-button-toggle>
-</mat-button-toggle-group>
+<div class="toggle-group-wrapper">
+    <mat-button-toggle-group [(value)]="tabIndex">
+        <mat-button-toggle [value]="0">
+            <mat-icon>person</mat-icon>
+            <span>Style Self</span>
+        </mat-button-toggle>
+        <mat-button-toggle
+            [disabled]="!editField?._info.childrenConfig"
+            [value]="1"
+        >
+            <mat-icon>groups</mat-icon>
+            <span>Style Content</span>
+        </mat-button-toggle>
+    </mat-button-toggle-group>
+</div>
 <mat-tab-group
     class="styles-tab-group"
     [selectedIndex]="tabIndex"

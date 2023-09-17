@@ -39,7 +39,7 @@
 </div>
 <div
     *ngIf="isExpandable"
-    class="children"
+    [class.children-collapsed]="!isExpanded"
     [@bodyExpansion]="expansionState"
 >
     <ng-content select="[childrenContent]"></ng-content>
