@@ -1,5 +1,7 @@
 :host {
-    --add-form-width: 140px;
+    --add-form-btn-width: 120px;
+    // add-btn + git-btn + spacing
+    --add-form-width: calc(var(--add-form-btn-width) + 40px + 24px);
     display: flex;
     height: 100%;
 
@@ -71,9 +73,14 @@ editor-sidebar {
     display: flex;
     align-items: center;
     justify-content: center;
+    column-gap: 8px;
     height: var(--editor-header-height);
     width: var(--add-form-width);
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.add-form-btn {
+    width: var(--add-form-btn-width);
 }
 
 .empty-view {
