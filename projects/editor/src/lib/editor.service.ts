@@ -185,6 +185,10 @@ export class EditorService {
         set(this._keyPathMap, [`${formId}.${fieldId}`], keyPath);
     }
 
+    public onDisplayFields(fields: IEditorFormlyField[], model: Record<string, any>): IEditorFormlyField[] {
+        return this._editorConfig.onDisplayFields?.(fields, model) ?? fields;
+    }
+
     private _getKeyPath({ _info: { formId, fieldId } }: IEditorFormlyField): string | undefined {
         return get(this._keyPathMap, [`${formId}.${fieldId}`]);
     }

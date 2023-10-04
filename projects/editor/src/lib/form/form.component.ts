@@ -41,6 +41,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
     private _destroy$: Subject<void> = new Subject();
     private _cachedFields: IEditorFormlyField[] = [];
+    private _cachedModel: Record<string, any> = {};
 
     private readonly _debounceTime: number = 100;
 
@@ -62,14 +63,21 @@ export class FormComponent implements OnInit, OnDestroy {
                 this.formGroup = new UntypedFormGroup({});
                 this.options = {};
 
-                const fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
+                let fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
                 fieldsClone.forEach(field => cleanField(field, true, true));
                 this.formFieldsJSON = JSON.stringify(fieldsClone, null, 2);
+
+                fieldsClone = this._editorService.onDisplayFields(fieldsClone, this._cachedModel);
             }),
             map(form => cloneDeep(form.fields))
         );
 
-        this.model$ = activeForm$.pipe(map(form => cloneDeep(form.model)));
+        this.model$ = activeForm$.pipe(
+            map(form => {
+                this._cachedModel = cloneDeep(form.model);
+                return this._cachedModel;
+            })
+        );
     }
 
     public ngOnDestroy(): void {

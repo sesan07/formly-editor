@@ -74,6 +74,7 @@ export interface FieldTypeChildrenConfig {
 
 export interface EditorConfig {
     options: FieldOption[];
+    onDisplayFields?: (fields: IEditorFormlyField[], model: Record<string, any>) => IEditorFormlyField[];
 }
 
 export const EDITOR_CONFIG = new InjectionToken<EditorConfig[]>('EDITOR_CONFIG');
