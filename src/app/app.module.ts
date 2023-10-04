@@ -11,7 +11,7 @@ import { AppFieldType, AppWrapperType } from './services/field-services/field.ty
 import { CardWrapperComponent } from './components/wrappers/card-wrapper/card-wrapper.component';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { HttpClientModule } from '@angular/common/http';
-import { EditorModule, FormlyGroupComponent } from '@sesan07/ngx-formly-editor';
+import { EditorModule } from '@sesan07/ngx-formly-editor';
 import { StoreModule } from '@ngrx/store';
 import { TypesModule } from './components/types/types.module';
 import { FormlyModule } from '@ngx-formly/core';
@@ -113,6 +113,12 @@ import { RepeatingSectionService } from './services/field-services/repeating-sec
             ],
         }),
         FormlyModule.forRoot({
+            types: [
+                { name: 'input', defaultOptions: { props: { appearance: 'outline' } } },
+                { name: 'radio', defaultOptions: { props: { appearance: 'outline' } } },
+                { name: 'select', defaultOptions: { props: { appearance: 'outline' } } },
+                { name: 'textarea', defaultOptions: { props: { appearance: 'outline' } } },
+            ],
             wrappers: [{ name: AppWrapperType.CARD, component: CardWrapperComponent }],
             validationMessages: [{ name: 'required', message: 'This field is required' }],
         }),
