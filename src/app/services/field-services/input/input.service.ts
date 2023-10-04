@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
+import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
 import { IInputTemplateOptions } from './input.types';
-import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
 
 @Injectable({
     providedIn: 'root',
@@ -27,7 +27,7 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
         return config;
     }
 
-    protected override _getFieldProperties(): IProperty[] {
+    protected _getFieldProperties(): IProperty[] {
         return [
             {
                 name: 'Type',
@@ -57,7 +57,7 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
         ];
     }
 
-    protected override _getWrapperProperties(): IProperty[] {
+    protected _getWrapperProperties(): IProperty[] {
         return [];
     }
 

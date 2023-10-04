@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
 import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
-import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
+import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
 
 @Injectable({
     providedIn: 'root',
@@ -16,7 +16,7 @@ export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> 
 
         return config;
     }
-    protected override _getFieldProperties(type: AppFieldType): IProperty[] {
+    protected _getFieldProperties(type: AppFieldType): IProperty[] {
         return type === AppFieldType.FORMLY_GROUP_CARD
             ? [
                   {
@@ -28,7 +28,7 @@ export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> 
             : [];
     }
 
-    protected override _getWrapperProperties(type: AppFieldType): IProperty[] {
+    protected _getWrapperProperties(type: AppFieldType): IProperty[] {
         return type === AppFieldType.FORMLY_GROUP
             ? [
                   {

@@ -26,7 +26,7 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
         };
     }
 
-    protected override _getFieldProperties(): IProperty[] {
+    protected _getFieldProperties(): IProperty[] {
         return [
             {
                 name: 'Label',
@@ -51,7 +51,7 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
         ];
     }
 
-    protected override _getWrapperProperties(): IProperty[] {
+    protected _getWrapperProperties(): IProperty[] {
         return [];
     }
 

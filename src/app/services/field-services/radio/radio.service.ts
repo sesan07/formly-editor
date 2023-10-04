@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService, IArrayProperty, IObjectProperty, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
-import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
+import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
 import { IRadioTemplateOptions } from './radio.types';
 
 @Injectable({
@@ -27,7 +27,7 @@ export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
         };
     }
 
-    protected override _getFieldProperties(): IProperty[] {
+    protected _getFieldProperties(): IProperty[] {
         return [
             {
                 name: 'Label',
@@ -80,7 +80,7 @@ export class RadioService extends BaseFieldService<IRadioTemplateOptions> {
         ];
     }
 
-    protected override _getWrapperProperties(): IProperty[] {
+    protected _getWrapperProperties(): IProperty[] {
         return [];
     }
 

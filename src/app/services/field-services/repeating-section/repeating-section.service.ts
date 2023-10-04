@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
 // import { BaseFieldService } from '../base-field.service';
-import { IRepeatingSectionTemplateOptions } from './repeating-section.types';
 import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
+import { IRepeatingSectionTemplateOptions } from './repeating-section.types';
 
 @Injectable({
     providedIn: 'root',
@@ -22,7 +22,7 @@ export class RepeatingSectionService extends BaseFieldService<IRepeatingSectionT
         };
     }
 
-    protected override _getFieldProperties(): IProperty[] {
+    protected _getFieldProperties(): IProperty[] {
         return [
             {
                 name: 'Add Text',
@@ -32,7 +32,7 @@ export class RepeatingSectionService extends BaseFieldService<IRepeatingSectionT
         ];
     }
 
-    protected override _getWrapperProperties(): IProperty[] {
+    protected _getWrapperProperties(): IProperty[] {
         return [];
     }
 

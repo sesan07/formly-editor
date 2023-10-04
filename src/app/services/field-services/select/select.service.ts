@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { IProperty, PropertyType, IObjectProperty, IArrayProperty, BaseFieldService } from '@sesan07/ngx-formly-editor';
+import { BaseFieldService, IArrayProperty, IObjectProperty, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
-import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
+import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
 import { ISelectTemplateOptions } from './select.types';
 
 @Injectable({
@@ -29,7 +29,7 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
         };
     }
 
-    protected override _getFieldProperties(): IProperty[] {
+    protected _getFieldProperties(): IProperty[] {
         return [
             {
                 name: 'Label',
@@ -92,7 +92,7 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
         ];
     }
 
-    protected override _getWrapperProperties(): IProperty[] {
+    protected _getWrapperProperties(): IProperty[] {
         return [];
     }
 

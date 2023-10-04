@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
-import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
+import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
 import { ITextareaTemplateOptions } from './textarea.types';
 
 @Injectable({
@@ -21,7 +21,7 @@ export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> 
         };
     }
 
-    protected override _getFieldProperties(): IProperty[] {
+    protected _getFieldProperties(): IProperty[] {
         return [
             {
                 name: 'Label',
@@ -46,7 +46,7 @@ export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> 
         ];
     }
 
-    protected override _getWrapperProperties(): IProperty[] {
+    protected _getWrapperProperties(): IProperty[] {
         return [];
     }
 
