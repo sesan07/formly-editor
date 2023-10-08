@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnChanges, SimpleChanges } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { get, isNil } from 'lodash-es';
 import { IEditorFormlyField } from '../../editor.types';
 
@@ -14,7 +14,7 @@ import { IInputProperty } from './input-property.types';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputPropertyComponent extends BasePropertyDirective<IInputProperty, string | number | boolean> {
-    public formControl: UntypedFormControl;
+    public formControl: FormControl;
     public hasOptions: boolean;
     public isInArray: boolean;
 
@@ -22,7 +22,7 @@ export class InputPropertyComponent extends BasePropertyDirective<IInputProperty
 
     protected _onChanged(isFirstChange: boolean): void {
         if (isFirstChange) {
-            this.formControl = new UntypedFormControl(this.currentValue);
+            this.formControl = new FormControl(this.currentValue);
             this.formControl.valueChanges.subscribe(val => this._updateValue(val));
         }
 

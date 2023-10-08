@@ -157,5 +157,6 @@
         }
       }
     }
-  }
+  },
+  "defaultProject": "formly-editor"
 }
