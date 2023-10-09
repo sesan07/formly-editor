@@ -17,11 +17,6 @@ import { RepeatingSectionTypeModule } from './repeating-section-type/repeating-s
                     name: AppFieldType.FORMLY_GROUP_CARD,
                     extends: 'formly-group',
                     wrappers: ['card'],
-                    defaultOptions: {
-                        props: {
-                            cardTitle: 'Hello!',
-                        },
-                    },
                 },
             ],
         }),

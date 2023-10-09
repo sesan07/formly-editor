@@ -3,8 +3,7 @@
     "type": "formly-group",
     "fieldGroup": [
       {
-        "type": "formly-group",
-        "wrappers": ["card"],
+        "type": "formly-group-card",
         "fieldGroup": [
           {
             "type": "input",
@@ -16,83 +15,118 @@
               "required": true
             },
             "key": "input"
+          },
+          {
+            "type": "number",
+            "wrappers": ["form-field"],
+            "templateOptions": {
+              "label": "Label",
+              "placeholder": "Placeholder",
+              "description": "Description",
+              "required": true,
+              "type": "number"
+            },
+            "key": "number"
+          },
+          {
+            "type": "checkbox",
+            "wrappers": ["form-field"],
+            "templateOptions": {
+              "label": "Accept terms",
+              "description": "In order to proceed, please accept terms",
+              "pattern": "true",
+              "required": true
+            },
+            "validation": {
+              "messages": {
+                "pattern": "Please accept the terms"
+              }
+            },
+            "key": "checkbox",
+            "className": "col-span-2"
           }
         ],
-        "key": "card"
+        "key": "card",
+        "fieldGroupClassName": "gap-2 grid grid-cols-2",
+        "templateOptions": {
+          "cardTitle": "Title!"
+        }
       },
       {
-        "type": "input",
-        "wrappers": ["form-field"],
+        "type": "repeating-section",
         "templateOptions": {
-          "label": "Label",
-          "placeholder": "Placeholder",
-          "description": "Description",
-          "required": true,
-          "type": "number"
+          "addText": "Add Section"
         },
-        "key": "number"
-      },
-      {
-        "type": "radio",
-        "wrappers": ["form-field"],
-        "templateOptions": {
-          "label": "Label",
-          "placeholder": "Placeholder",
-          "description": "Description",
-          "required": true,
-          "options": [
+        "fieldArray": {
+          "type": "formly-group",
+          "fieldGroup": [
             {
-              "value": 1,
-              "label": "Option 1"
+              "type": "radio",
+              "wrappers": ["form-field"],
+              "templateOptions": {
+                "label": "Label",
+                "placeholder": "Placeholder",
+                "description": "Description",
+                "required": true,
+                "options": [
+                  {
+                    "value": 1,
+                    "label": "Option 1"
+                  },
+                  {
+                    "value": 2,
+                    "label": "Option 2"
+                  },
+                  {
+                    "value": 3,
+                    "label": "Option 3"
+                  },
+                  {
+                    "value": 4,
+                    "label": "Option 4",
+                    "disabled": true
+                  }
+                ]
+              },
+              "key": "radio"
             },
             {
-              "value": 2,
-              "label": "Option 2"
-            },
-            {
-              "value": 3,
-              "label": "Option 3"
-            },
-            {
-              "value": 4,
-              "label": "Option 4",
-              "disabled": true
+              "type": "select",
+              "wrappers": ["form-field"],
+              "templateOptions": {
+                "label": "Label",
+                "placeholder": "Placeholder",
+                "description": "Description",
+                "required": true,
+                "multiple": true,
+                "selectAllOption": "Select All",
+                "options": [
+                  {
+                    "value": 1,
+                    "label": "Option 1"
+                  },
+                  {
+                    "value": 2,
+                    "label": "Option 2"
+                  },
+                  {
+                    "value": 3,
+                    "label": "Option 3"
+                  },
+                  {
+                    "value": 4,
+                    "label": "Option 4",
+                    "disabled": true
+                  }
+                ]
+              },
+              "key": "select"
             }
-          ]
+          ],
+          "fieldGroupClassName": "grid grid-cols-2 gap-x-2"
         },
-        "key": "radio"
-      },
-      {
-        "type": "select",
-        "wrappers": ["form-field"],
-        "templateOptions": {
-          "label": "Label",
-          "placeholder": "Placeholder",
-          "description": "Description",
-          "required": true,
-          "multiple": true,
-          "selectAllOption": "Select All",
-          "options": [
-            {
-              "value": 1,
-              "label": "Option 1"
-            },
-            {
-              "value": 2,
-              "label": "Option 2"
-            },
-            {
-              "value": 3,
-              "label": "Option 3"
-            },
-            {
-              "value": 4,
-              "label": "Option 4",
-              "disabled": true
-            }
-          ]
-        },
-        "key": "select"
+        "key": "repeat",
+        "fieldGroupClassName": ""
       },
       {
         "type": "textarea",
@@ -106,6 +140,7 @@
         "key": "textarea"
       }
     ],
-    "key": "group"
+    "key": "group",
+    "fieldGroupClassName": "grid gap-2"
   }
 ]
