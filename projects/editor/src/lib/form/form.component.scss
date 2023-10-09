@@ -16,7 +16,7 @@
 }
 
 .tab-group {
-    height: calc(100% - var(--editor-header-height));
+    height: calc(100% - var(--editor-header-height) - 1px);
 }
 
 .categories-wrapper {
