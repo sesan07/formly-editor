@@ -1,73 +1,109 @@
-<header
-    *ngIf="isEditMode"
-    class="editor-mat"
+<div
+    class="editor-field-container"
+    [class.edit-mode]="isEditMode"
+    [class.active]="isActiveField"
+    [dragPreview]="dragSource"
+    [dropTarget]="dropTarget"
 >
-    <div class="header-title">
-        <span>{{ fieldInfo.name | fieldName : field.key }}</span>
-        <ng-content></ng-content>
-    </div>
-    <div
-        class="options"
-        [class.visible]="isMouseInside"
-        *ngIf="!hideOptions"
+    <header
+        *ngIf="isEditMode"
+        class="editor-mat"
     >
-        <button
-            [disabled]="isFirstChild"
-            mat-icon-button
-            (click)="onMoveUp()"
+        <div
+            class="header-title"
+            [dragSource]="dragSource"
         >
-            <mat-icon>arrow_upward</mat-icon>
-        </button>
+            <span>{{ fieldInfo.name | fieldName : field.key }}</span>
+        </div>
+        <div
+            class="options"
+            [class.visible]="isMouseInside"
+            *ngIf="!hideOptions"
+        >
+            <button
+                [disabled]="isFirstChild"
+                mat-icon-button
+                (click)="onMoveUp()"
+            >
+                <mat-icon>arrow_upward</mat-icon>
+            </button>
 
-        <button
-            [disabled]="isLastChild"
-            mat-icon-button
-            (click)="onMoveDown()"
-        >
-            <mat-icon>arrow_downward</mat-icon>
-        </button>
+            <button
+                [disabled]="isLastChild"
+                mat-icon-button
+                (click)="onMoveDown()"
+            >
+                <mat-icon>arrow_downward</mat-icon>
+            </button>
 
-        <button
-            mat-icon-button
-            [matMenuTriggerFor]="optionsMenu"
-        >
-            <mat-icon>more_vert</mat-icon>
-        </button>
+            <button
+                mat-icon-button
+                [matMenuTriggerFor]="optionsMenu"
+            >
+                <mat-icon>more_vert</mat-icon>
+            </button>
+        </div>
+
+        <mat-menu #optionsMenu="matMenu">
+            <button
+                *ngIf="fieldInfo.childrenConfig"
+                class="editor-mat-menu-item"
+                mat-menu-item
+                [matMenuTriggerFor]="fieldOptionsMenu"
+                [matMenuTriggerData]="{ options: fieldOptions, selected: addField }"
+            >
+                <mat-icon>add</mat-icon>
+                <span>Add</span>
+            </button>
+
+            <button
+                *ngIf="fieldOptions.length"
+                class="editor-mat-menu-item"
+                mat-menu-item
+                [matMenuTriggerFor]="fieldOptionsMenu"
+                [matMenuTriggerData]="{ options: fieldOptions, selected: replaceField }"
+            >
+                <mat-icon>sync</mat-icon>
+                <span>Replace</span>
+            </button>
+
+            <button
+                class="editor-mat-menu-item"
+                mat-menu-item
+                (click)="onRemove()"
+            >
+                <mat-icon>remove</mat-icon>
+                <span>Remove</span>
+            </button>
+        </mat-menu>
+    </header>
+
+    <ng-template #container></ng-template>
+
+    <div
+        class="drop-position-indicator-overlay"
+        [class.hovering]="isHovering$ | async"
+    >
+        <ng-container *ngIf="hoverPosition$ | async as hoverPosition">
+            <div
+                class="droppable"
+                [style.width.%]="dropWidth.left"
+                [class.hovering]="hoverPosition === 'left'"
+            ></div>
+            <div
+                *ngIf="field._info.childrenConfig"
+                class="droppable"
+                [style.width.%]="dropWidth.center"
+                [class.hovering]="hoverPosition === 'center'"
+            ></div>
+            <div
+                class="droppable"
+                [style.width.%]="dropWidth.right"
+                [class.hovering]="hoverPosition === 'right'"
+            ></div>
+        </ng-container>
     </div>
-
-    <mat-menu #optionsMenu="matMenu">
-        <button
-            *ngIf="fieldInfo.childrenConfig"
-            class="editor-mat-menu-item"
-            mat-menu-item
-            [matMenuTriggerFor]="fieldOptionsMenu"
-            [matMenuTriggerData]="{ options: fieldOptions, selected: addField }"
-        >
-            <mat-icon>add</mat-icon>
-            <span>Add</span>
-        </button>
-
-        <button
-            *ngIf="fieldOptions.length"
-            class="editor-mat-menu-item"
-            mat-menu-item
-            [matMenuTriggerFor]="fieldOptionsMenu"
-            [matMenuTriggerData]="{ options: fieldOptions, selected: replaceField }"
-        >
-            <mat-icon>sync</mat-icon>
-            <span>Replace</span>
-        </button>
-
-        <button
-            class="editor-mat-menu-item"
-            mat-menu-item
-            (click)="onRemove()"
-        >
-            <mat-icon>remove</mat-icon>
-            <span>Remove</span>
-        </button>
-    </mat-menu>
-</header>
+</div>
 
 <mat-menu #fieldOptionsMenu="matMenu">
     <ng-template
@@ -127,5 +163,3 @@
         {{ option.displayName }}
     </button>
 </ng-template>
-
-<ng-template #container></ng-template>

@@ -29,6 +29,8 @@
     "@angular/platform-browser": "13.3.11",
     "@angular/platform-browser-dynamic": "13.3.11",
     "@angular/router": "13.3.11",
+    "@ng-dnd/core": "^2.0.2",
+    "@ng-dnd/multi-backend": "^2.0.2",
     "@ngrx/store": "^13.2.0",
     "@ngx-formly/core": "^6.1.8",
     "@ngx-formly/material": "^6.1.8",

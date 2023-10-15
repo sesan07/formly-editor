@@ -52,7 +52,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
         const activeForm$ = this._store.select(selectActiveForm).pipe(
             takeUntil(this._destroy$),
-            filter(form => form && form.id === this.form.id),
+            filter(form => form?.id === this.form.id),
             shareReplay()
         );
         this.formFields$ = activeForm$.pipe(

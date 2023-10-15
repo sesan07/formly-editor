@@ -5,6 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule, MAT_TABS_CONFIG } from '@angular/material/tabs';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { FormlyConfig } from '@ngx-formly/core';
+import { DndModule } from '@ng-dnd/core';
+import { HTML5Backend } from '@ng-dnd/multi-backend';
 
 import { EditorConfig, EDITOR_CONFIG, EditorFieldType } from './editor.types';
 import { EditorService } from './editor.service';
@@ -59,6 +61,7 @@ const metaReducerFactory =
         JSONDialogModule,
         CustomFormlyModule,
         StoreModule.forFeature(editorFeature),
+        DndModule.forRoot({ backend: HTML5Backend }),
     ],
     exports: [EditorComponent],
     providers: [

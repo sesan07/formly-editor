@@ -1,3 +1,4 @@
+import produce from 'immer';
 import { get, merge, set, unset } from 'lodash-es';
 import {
     EditorFieldType,
@@ -7,21 +8,19 @@ import {
     IEditorFieldInfo,
     IEditorFormlyField,
 } from '../editor.types';
-import { setFieldChildren, getFieldChildren } from '../form/form.utils';
-import produce from 'immer';
+import { getFieldChildren, setFieldChildren } from '../form/form.utils';
 import { IPropertyChange } from '../property/property.types';
 
 import { nanoid } from 'nanoid';
 
-export const generateFormId = (counter: number): string => `form__${nanoid()}`;
-const generateFieldId = (type: string, counter: number): string => `${type}__${nanoid()}`;
+export const generateFormId = (): string => `form__${nanoid()}`;
+const generateFieldId = (type: string): string => `${type}__${nanoid()}`;
 const generateFieldKey = (prefix?: string): string => `${prefix ? `${prefix}_` : ''}${nanoid(3)}`;
 
 export const convertToEditorField = (
     getDefaultField: GetDefaultField,
     typeOptions: FieldTypeOption[],
     defaultTypeOption: FieldTypeOption,
-    counter: { count: number },
     formId: string,
     sourceField: IBaseFormlyField,
     parent?: IEditorFormlyField
@@ -38,8 +37,7 @@ export const convertToEditorField = (
     merge(baseField, sourceField);
 
     // Editor information
-    const count = counter.count++;
-    const fieldId = generateFieldId(baseField.type, count);
+    const fieldId = generateFieldId(baseField.type);
     const fieldInfo: IEditorFieldInfo = {
         name: typeOption.displayName,
         formId,
@@ -65,14 +63,13 @@ export const convertToEditorField = (
         let children: IEditorFormlyField | IEditorFormlyField[];
         if (Array.isArray(baseChildren)) {
             children = baseChildren?.map(child =>
-                convertToEditorField(getDefaultField, typeOptions, defaultTypeOption, counter, formId, child, field)
+                convertToEditorField(getDefaultField, typeOptions, defaultTypeOption, formId, child, field)
             );
         } else {
             children = convertToEditorField(
                 getDefaultField,
                 typeOptions,
                 defaultTypeOption,
-                counter,
                 formId,
                 baseChildren,
                 field
@@ -84,37 +81,88 @@ export const convertToEditorField = (
     return field;
 };
 
+export const getField = (fieldPath: string[], fields: IEditorFormlyField | IEditorFormlyField[]): IEditorFormlyField =>
+    Array.isArray(fields) ? getFieldFromArray(fieldPath, fields) : getFieldFromObject(fieldPath, fields);
+
+const getFieldFromArray = (fieldPath: string[], fields: IEditorFormlyField[]): IEditorFormlyField => {
+    const targetId = fieldPath[0];
+    const field = fields.find(f => f._info.fieldId === targetId);
+    if (fieldPath.length === 1) {
+        return field;
+    }
+
+    return field ? getField(fieldPath.slice(1), getFieldChildren(field)) : undefined;
+};
+
+const getFieldFromObject = (fieldPath: string[], field: IEditorFormlyField): IEditorFormlyField => {
+    if (fieldPath.length === 1) {
+        return field;
+    }
+
+    return getField(fieldPath.slice(1), getFieldChildren(field));
+};
+
+export const modifyField = (field: IEditorFormlyField, parentFieldPath: string[] | undefined): IEditorFormlyField => {
+    field = {
+        ...field,
+        _info: {
+            ...field._info,
+            parentFieldId: [...(parentFieldPath ?? [])].pop(),
+            fieldPath: [...(parentFieldPath ?? []), field._info.fieldId],
+        },
+    };
+
+    if (field._info.childrenConfig) {
+        let children = getFieldChildren(field);
+        if (Array.isArray(children)) {
+            children = children.map(c => modifyField(c, field._info.fieldPath));
+        } else if (children) {
+            children = modifyField(children, field._info.fieldPath);
+        }
+        setFieldChildren(field, children);
+    }
+
+    return field;
+};
+
+export const moveFieldInArray = (target: IEditorFormlyField[], sourceIndex: number, targetIndex: number) => {
+    if (sourceIndex === targetIndex) {
+        return;
+    }
+
+    const field = target[sourceIndex];
+    if (targetIndex < sourceIndex) {
+        target.splice(sourceIndex, 1);
+        target.splice(targetIndex, 0, field);
+    } else {
+        target.splice(targetIndex, 0, field);
+        target.splice(sourceIndex, 1);
+    }
+};
+
 export const duplicateFields = (
     fields: IEditorFormlyField | IEditorFormlyField[],
     formId: string,
-    parentFieldId?: string,
-    counter = { count: 0 }
+    parentFieldPath?: string[]
 ) =>
     Array.isArray(fields)
-        ? fields.map(field => duplicateFieldObject(field, formId, parentFieldId, counter))
-        : duplicateFieldObject(fields, formId, parentFieldId, counter);
+        ? fields.map(field => duplicateFieldObject(field, formId, parentFieldPath))
+        : duplicateFieldObject(fields, formId, parentFieldPath);
 
-const duplicateFieldObject = (
-    field: IEditorFormlyField,
-    formId: string,
-    parentFieldId?: string,
-    counter = { count: 0 }
-) => {
-    const fieldId = generateFieldId(field.type, counter.count++);
+const duplicateFieldObject = (field: IEditorFormlyField, formId: string, parentFieldPath: string[] | undefined) => {
+    const fieldId = generateFieldId(field.type);
+    const fieldPath = [...(parentFieldPath ?? []), fieldId];
     return {
         ...field,
         _info: {
             ...field._info,
-            parentFieldId,
+            parentFieldId: [...(parentFieldPath ?? [])].pop(),
             formId,
             fieldId,
+            fieldPath,
         },
         ...(field._info.childrenConfig
-            ? set(
-                  {},
-                  field._info.childrenConfig.path,
-                  duplicateFields(getFieldChildren(field), formId, fieldId, counter)
-              )
+            ? set({}, field._info.childrenConfig.path, duplicateFields(getFieldChildren(field), formId, fieldPath))
             : {}),
     };
 };

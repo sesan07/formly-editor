@@ -1,55 +1,61 @@
-import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { cloneDeep, unset } from 'lodash-es';
 import { IEditorFormlyField, IForm } from '../editor.types';
-import { convertToEditorField, generateFormId } from './state.utils';
 import { getFieldChildren, setFieldChildren } from '../form/form.utils';
 import { PropertyChangeType } from '../property/property.types';
 import {
-    addForm,
-    setEditMode,
-    modifyActiveField,
-    setActiveField,
-    setActiveFormId,
-    addField,
-    setActiveModel,
-    modifyActiveModel,
-    AddForm,
     AddField,
-    SetEditMode,
+    AddForm,
+    DuplicateForm,
     ModifyActiveField,
-    SetActiveField,
     ModifyActiveModel,
-    SetActiveModel,
     MoveField,
+    RemoveField,
+    RemoveForm,
+    ReplaceField,
+    SetActiveField,
+    SetActiveFormId,
+    SetActiveModel,
+    SetEditMode,
+    addField,
+    addForm,
+    duplicateForm,
+    modifyActiveField,
+    modifyActiveModel,
     moveField,
     removeField,
-    RemoveField,
-    SetActiveFormId,
-    RemoveForm,
     removeForm,
-    DuplicateForm,
-    duplicateForm,
-    ReplaceField,
     replaceField,
+    setActiveField,
+    setActiveFormId,
+    setActiveModel,
+    setEditMode,
 } from './state.actions';
 import { IEditorState } from './state.types';
-import { duplicateFields, modifyFields, modifyKey, modifyValue } from './state.utils';
+import {
+    convertToEditorField,
+    duplicateFields,
+    generateFormId,
+    getField,
+    modifyField,
+    modifyFields,
+    modifyKey,
+    modifyValue,
+    moveFieldInArray,
+} from './state.utils';
 
 export const initialState: IEditorState = {
     formMap: {},
     activeFormId: null,
-    formIdCounter: 0,
 };
 
 const processAddForm = (
     state: IEditorState,
     { name, sourceFields, model, getDefaultField, typeOptions, defaultTypeOption }: AddForm
 ): IEditorState => {
-    const id = generateFormId(state.formIdCounter + 1);
-    const counter = { count: 0 };
+    const id = generateFormId();
     const baseFields = (sourceFields ?? []).map(field =>
-        convertToEditorField(getDefaultField, typeOptions, defaultTypeOption, counter, id, field)
+        convertToEditorField(getDefaultField, typeOptions, defaultTypeOption, id, field)
     );
     return {
         ...state,
@@ -63,11 +69,9 @@ const processAddForm = (
                 model: model ?? {},
                 activeFieldId: baseFields[0]?._info.fieldId,
                 isEditMode: true,
-                fieldIdCounter: counter.count,
             },
         },
         activeFormId: id,
-        formIdCounter: state.formIdCounter + 1,
     };
 };
 
@@ -83,7 +87,7 @@ const processRemoveForm = (state: IEditorState, { formId }: RemoveForm): IEditor
 
 const processDuplicateForm = (state: IEditorState, { formId }: DuplicateForm): IEditorState => {
     const sourceForm = state.formMap[formId];
-    const id = generateFormId(state.formIdCounter + 1);
+    const id = generateFormId();
     const baseFields = duplicateFields(sourceForm.baseFields, id);
 
     return {
@@ -101,7 +105,6 @@ const processDuplicateForm = (state: IEditorState, { formId }: DuplicateForm): I
             },
         },
         activeFormId: id,
-        formIdCounter: state.formIdCounter + 1,
     };
 };
 
@@ -115,12 +118,10 @@ const processAddField = (
     { fieldType, parent, index, getDefaultField, typeOptions, defaultTypeOption }: AddField
 ): IEditorState => {
     const activeForm: IForm = state.formMap[state.activeFormId];
-    const counter = { count: activeForm.fieldIdCounter };
     const field = convertToEditorField(
         getDefaultField,
         typeOptions,
         defaultTypeOption,
-        counter,
         activeForm.id,
         getDefaultField(fieldType),
         parent
@@ -152,7 +153,6 @@ const processAddField = (
                 fields: baseFields,
                 baseFields,
                 activeFieldId: field._info.fieldId,
-                fieldIdCounter: counter.count,
             },
         },
     };
@@ -249,12 +249,10 @@ const processReplaceField = (
     { field, parent, newFieldType, typeOptions, defaultTypeOption, keyPath, getDefaultField }: ReplaceField
 ): IEditorState => {
     const activeForm: IForm = state.formMap[state.activeFormId];
-    const counter = { count: activeForm.fieldIdCounter };
     const newField = convertToEditorField(
         getDefaultField,
         typeOptions,
         defaultTypeOption,
-        counter,
         activeForm.id,
         getDefaultField(newFieldType),
         parent
@@ -320,7 +318,6 @@ const processReplaceField = (
                 ...activeForm,
                 fields: baseFields,
                 baseFields,
-                fieldIdCounter: counter.count,
                 activeFieldId: newField._info.fieldId,
                 model,
             },
@@ -328,24 +325,90 @@ const processReplaceField = (
     };
 };
 
-const processMoveField = (state: IEditorState, { parent, from, to }: MoveField): IEditorState => {
-    const activeForm: IForm = state.formMap[state.activeFormId];
-    let baseFields: IEditorFormlyField[];
-    if (parent) {
-        let children: IEditorFormlyField[] = getFieldChildren(parent) as IEditorFormlyField[];
-        if (Array.isArray(children)) {
-            children = [...children];
+const processMoveField = (
+    state: IEditorState,
+    { sourceField, sourceParent, targetParent, sourceIndex, targetIndex }: MoveField
+): IEditorState => {
+    const activeForm = state.formMap[state.activeFormId];
+    const sourceParentId = sourceParent?._info.fieldId;
+    const targetParentId = targetParent?._info.fieldId;
+    let sourceChildren = sourceParent ? getFieldChildren(sourceParent) : undefined;
+    let targetChildren = targetParent ? getFieldChildren(targetParent) : undefined;
+    let baseFields = [...activeForm.baseFields];
+    targetIndex = typeof targetIndex === 'number' ? targetIndex : 0;
+
+    const updateObjectSource = () => {
+        sourceParent = setFieldChildren(sourceParent, undefined);
+        baseFields = modifyFields(baseFields, sourceParent);
+    };
+
+    const updateArraySource = () => {
+        sourceChildren = [...(sourceChildren as IEditorFormlyField[])];
+        sourceChildren.splice(sourceIndex, 1);
+        sourceParent = setFieldChildren(sourceParent, sourceChildren);
+        baseFields = modifyFields(baseFields, sourceParent);
+    };
+
+    const updateObjectTarget = () => {
+        // Make sure targetParent is up to date (in case targetParent was inside sourceParent)
+        targetParent = getField(targetParent._info.fieldPath, baseFields);
+        targetParent = setFieldChildren(targetParent, modifyField(sourceField, targetParent._info.fieldPath));
+        baseFields = modifyFields(baseFields, targetParent);
+    };
+
+    const updateArrayTarget = () => {
+        // Make sure targetParent is up to date (in case targetParent was inside sourceParent)
+        targetParent = getField(targetParent._info.fieldPath, baseFields);
+        targetChildren = [...(getFieldChildren(targetParent) as IEditorFormlyField[])];
+        targetChildren.splice(targetIndex, 0, modifyField(sourceField, targetParent._info.fieldPath));
+        targetParent = setFieldChildren(targetParent, targetChildren);
+        baseFields = modifyFields(baseFields, targetParent);
+    };
+
+    // If source and target are root fields
+    if (!sourceParentId && !targetParentId) {
+        moveFieldInArray(baseFields, sourceIndex, targetIndex);
+    } else if (sourceParentId && targetParentId) {
+        if (sourceParentId === targetParentId) {
+            let children = getFieldChildren(sourceParent);
+            if (Array.isArray(children)) {
+                children = [...children];
+                moveFieldInArray(children, sourceIndex, targetIndex);
+
+                sourceParent = setFieldChildren(sourceParent, children);
+                baseFields = modifyFields(baseFields, sourceParent);
+            }
         } else {
-            throw new Error('Cannot move field in an object parent');
+            if (Array.isArray(sourceChildren) && Array.isArray(targetChildren)) {
+                updateArraySource();
+                updateArrayTarget();
+            } else if (Array.isArray(sourceChildren)) {
+                updateArraySource();
+                updateObjectTarget();
+            } else if (Array.isArray(targetChildren)) {
+                updateObjectSource();
+                updateArrayTarget();
+            } else {
+                updateObjectSource();
+                updateObjectTarget();
+            }
         }
-        parent = setFieldChildren({ ...parent }, children);
-        to = typeof to === 'number' ? to : children.length;
-        moveItemInArray(children, from, to);
-        baseFields = modifyFields(activeForm.baseFields, parent);
-    } else {
-        baseFields = [...activeForm.baseFields];
-        to = typeof to === 'number' ? to : baseFields.length;
-        moveItemInArray(baseFields, from, to);
+    } else if (sourceParentId && !targetParentId) {
+        if (Array.isArray(sourceChildren)) {
+            updateArraySource();
+        } else {
+            updateObjectSource();
+        }
+
+        baseFields.splice(targetIndex, 0, modifyField(sourceField, undefined));
+    } else if (!sourceParentId && targetParentId) {
+        baseFields.splice(sourceIndex, 1);
+
+        if (Array.isArray(targetChildren)) {
+            updateArrayTarget();
+        } else {
+            updateObjectTarget();
+        }
     }
 
     return {

@@ -3,29 +3,38 @@ import {
     ChangeDetectorRef,
     Component,
     ElementRef,
-    HostBinding,
     HostListener,
     Input,
+    NgZone,
     OnDestroy,
     OnInit,
     Optional,
     Renderer2,
     ViewContainerRef,
 } from '@angular/core';
+import { DndService, DragSource, DropTarget } from '@ng-dnd/core';
 import { Store } from '@ngrx/store';
 import { FormlyConfig, FormlyField } from '@ngx-formly/core';
-import { filter, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, distinctUntilChanged, filter, takeUntil } from 'rxjs';
 
 import { EditorService } from '../../editor.service';
-import { FieldOption, IEditorFieldInfo, IEditorFormlyField } from '../../editor.types';
+import {
+    DragAction,
+    DragType,
+    FieldOption,
+    IEditorFieldInfo,
+    IEditorFormlyField,
+    IFieldDragData,
+} from '../../editor.types';
+import { getKeyPath, isCategoryOption, isTypeOption } from '../../editor.utils';
 import { selectActiveField, selectActiveForm } from '../../state/state.selectors';
 import { IEditorState } from '../../state/state.types';
-import { getKeyPath, isCategoryOption, isTypeOption } from '../../editor.utils';
 import { FormlyFieldTemplates } from '../formly.template';
 
 @Component({
     selector: 'editor-root-formly-field',
     template: '<ng-template #container></ng-template>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RootFormlyFieldComponent extends FormlyField {}
 
@@ -41,23 +50,35 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     @Input() public isFirstChild: boolean;
     @Input() public isLastChild: boolean;
 
-    @HostBinding('class.edit-mode') isEditMode: boolean;
-    @HostBinding('class.active') isActiveField: boolean;
+    public isEditMode: boolean;
+    public isActiveField: boolean;
 
     public isMouseInside: boolean;
     public hideOptions: boolean;
     public fieldInfo: IEditorFieldInfo;
     public fieldOptions: FieldOption[];
 
+    public dragSource: DragSource<IFieldDragData, Record<string, never>>;
+    public dropTarget: DropTarget<IFieldDragData, Record<string, never>>;
+    public isHovering$: Observable<boolean>;
+    public hoverPosition$: Observable<'left' | 'center' | 'right'>;
+    public dropWidth: { left: number; center?: number; right: number };
+
     isCategoryOption = isCategoryOption;
     isTypeOption = isTypeOption;
 
     private _destroy$: Subject<void> = new Subject();
+    // Base class has a private _elementRef
+    private _elementRef2: ElementRef<HTMLElement>;
+    private _boundingRect: DOMRect;
+    private _hoverPosition$: BehaviorSubject<'left' | 'center' | 'right'> = new BehaviorSubject('left');
 
     constructor(
         private _editorService: EditorService,
         private _cdRef: ChangeDetectorRef,
         private _store: Store<IEditorState>,
+        private _dnd: DndService,
+        private _ngZone: NgZone,
         config: FormlyConfig,
         renderer: Renderer2,
         elementRef: ElementRef,
@@ -65,6 +86,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         @Optional() form: FormlyFieldTemplates
     ) {
         super(config, renderer, elementRef, hostContainerRef, form);
+        this._elementRef2 = elementRef;
     }
 
     @HostListener('click', ['$event'])
@@ -99,7 +121,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
             .select(selectActiveForm)
             .pipe(
                 takeUntil(this._destroy$),
-                filter(form => form && form.id === this.fieldInfo.formId)
+                filter(form => form?.id === this.fieldInfo.formId)
             )
             .subscribe(form => {
                 this.isEditMode = form.isEditMode;
@@ -116,12 +138,16 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
                 this.isActiveField = field?._info.fieldId === this.fieldInfo.fieldId;
                 this._cdRef.markForCheck();
             });
+
+        this._setupDragAndDrop();
     }
 
     override ngOnDestroy(): void {
         super.ngOnDestroy();
         this._destroy$.next();
         this._destroy$.complete();
+        this.dragSource.unsubscribe();
+        this.dropTarget.unsubscribe();
     }
 
     addField = (type: string) => this._editorService.addField(type, this.fieldInfo.fieldId);
@@ -132,10 +158,99 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     }
 
     onMoveUp(): void {
-        this._editorService.moveField(this.fieldInfo.fieldId, this.index, this.index - 1);
+        const sourceField: IEditorFormlyField = this._editorService.getField(this.field._info.fieldId);
+        const sourceParent: IEditorFormlyField = this._editorService.getField(this.field._info.parentFieldId);
+        this._editorService.moveField(sourceField, sourceParent, sourceParent, this.index, this.index - 1);
     }
 
     onMoveDown(): void {
-        this._editorService.moveField(this.fieldInfo.fieldId, this.index, this.index + 1);
+        const sourceField: IEditorFormlyField = this._editorService.getField(this.field._info.fieldId);
+        const sourceParent: IEditorFormlyField = this._editorService.getField(this.field._info.parentFieldId);
+        this._editorService.moveField(sourceField, sourceParent, sourceParent, this.index, this.index + 2);
+    }
+
+    private _setupDragAndDrop(): void {
+        this.dropWidth = this.field._info.childrenConfig
+            ? {
+                  left: 25,
+                  center: 50,
+                  right: 25,
+              }
+            : {
+                  left: 50,
+                  right: 50,
+              };
+
+        this.hoverPosition$ = this._hoverPosition$.pipe(distinctUntilChanged());
+
+        this.dragSource = this._dnd.dragSource(DragType.FORMLY_FIELD, {
+            beginDrag: () => ({
+                action: DragAction.MOVE,
+                index: this.index,
+                field: this._editorService.getField(this.field._info.fieldId),
+                fieldParent: this._editorService.getField(this.field._info.parentFieldId),
+            }),
+        });
+
+        this.dropTarget = this._dnd.dropTarget(DragType.FORMLY_FIELD, {
+            canDrop: monitor =>
+                monitor.isOver({ shallow: true }) && monitor.getItem().field._info.fieldId !== this.field._info.fieldId,
+            drop: monitor => {
+                if (monitor.didDrop()) {
+                    return;
+                }
+
+                const targetParent =
+                    this._hoverPosition$.value === 'center'
+                        ? this._editorService.getField(this.field._info.fieldId)
+                        : this._editorService.getField(this.field._info.parentFieldId);
+
+                const sourceData: IFieldDragData = monitor.getItem();
+                const dragIndex: number = sourceData.index;
+                const dropIndex: number =
+                    this._hoverPosition$.value === 'center'
+                        ? undefined
+                        : this._hoverPosition$.value === 'left'
+                        ? this.index
+                        : this.index + 1;
+
+                this._ngZone.run(() => {
+                    switch (sourceData.action) {
+                        case DragAction.MOVE:
+                            this._editorService.moveField(
+                                sourceData.field,
+                                sourceData.fieldParent,
+                                targetParent,
+                                dragIndex,
+                                dropIndex
+                            );
+                            break;
+                    }
+                });
+                return {};
+            },
+            hover: monitor => {
+                if (!(this._boundingRect && monitor.canDrop())) {
+                    return;
+                }
+
+                const mousePosition = monitor.getClientOffset();
+                const xDelta = mousePosition.x - this._boundingRect.x;
+                const xPercent = (xDelta / this._boundingRect.width) * 100;
+                const position =
+                    xPercent <= this.dropWidth.left
+                        ? 'left'
+                        : this.field._info.childrenConfig && xPercent <= this.dropWidth.left + this.dropWidth.center
+                        ? 'center'
+                        : 'right';
+                this._hoverPosition$.next(position);
+            },
+        });
+
+        this.isHovering$ = this.dropTarget.listen(monitor => monitor.canDrop());
+        this.dropTarget
+            .listen(monitor => monitor.canDrop())
+            .pipe(takeUntil(this._destroy$))
+            .subscribe(() => (this._boundingRect = this._elementRef2.nativeElement.getBoundingClientRect()));
     }
 }

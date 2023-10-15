@@ -1,21 +1,23 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { get, set } from 'lodash-es';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { get, set } from 'lodash-es';
 
-import {
-    IEditorFieldService,
-    IForm,
-    IBaseFormlyField,
-    EditorConfig,
-    FieldTypeOption,
-    IEditorFormlyField,
-    FieldOption,
-    EditorFieldType,
-} from './editor.types';
 import { Store } from '@ngrx/store';
-import { IEditorState } from './state/state.types';
+import {
+    EditorConfig,
+    EditorFieldType,
+    FieldOption,
+    FieldTypeOption,
+    IBaseFormlyField,
+    IEditorFieldService,
+    IEditorFormlyField,
+    IForm,
+} from './editor.types';
+import { isCategoryOption } from './editor.utils';
+import { GenericFieldService } from './field-service/generic/generic-field.service';
+import { IProperty, IPropertyChange } from './property/property.types';
 import {
     addField,
     addForm,
@@ -32,9 +34,7 @@ import {
     setEditMode,
 } from './state/state.actions';
 import { selectActiveField, selectActiveFieldMap, selectForms } from './state/state.selectors';
-import { IProperty, IPropertyChange } from './property/property.types';
-import { isCategoryOption } from './editor.utils';
-import { GenericFieldService } from './field-service/generic/generic-field.service';
+import { IEditorState } from './state/state.types';
 
 @Injectable()
 export class EditorService {
@@ -137,11 +137,14 @@ export class EditorService {
         this._store.dispatch(setActiveField({ activeFieldId }));
     }
 
-    // Move field within a parent field in a form
-    public moveField(fieldId: string, from: number, to?: number): void {
-        const field: IEditorFormlyField = this.getField(fieldId);
-        const parent: IEditorFormlyField = this.getField(field._info.parentFieldId);
-        this._store.dispatch(moveField({ parent, from, to }));
+    public moveField(
+        sourceField: IEditorFormlyField,
+        sourceParent: IEditorFormlyField | undefined,
+        targetParent: IEditorFormlyField | undefined,
+        sourceIndex: number,
+        targetIndex: number | undefined
+    ): void {
+        this._store.dispatch(moveField({ sourceField, sourceParent, targetParent, sourceIndex, targetIndex }));
     }
 
     public replaceField(newFieldType: string, fieldId: string): void {

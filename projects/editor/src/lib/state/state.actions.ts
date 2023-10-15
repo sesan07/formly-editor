@@ -59,9 +59,11 @@ export interface ReplaceField {
     getDefaultField: GetDefaultField;
 }
 export interface MoveField {
-    parent?: IEditorFormlyField;
-    from: number;
-    to?: number;
+    sourceField: IEditorFormlyField;
+    sourceParent: IEditorFormlyField;
+    targetParent?: IEditorFormlyField;
+    sourceIndex: number;
+    targetIndex?: number;
 }
 
 export const addForm = createAction('[Editor] Add Form', props<AddForm>());

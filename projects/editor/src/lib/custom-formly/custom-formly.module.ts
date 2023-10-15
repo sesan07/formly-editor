@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 import { FormlyModule } from '@ngx-formly/core';
+import { DndModule } from '@ng-dnd/core';
 
 import { FormlyGroupComponent } from './formly-group/formly-group.component';
 import { FormlyFieldComponent, RootFormlyFieldComponent } from './formly-field/formly-field.component';
@@ -17,6 +18,7 @@ import { FieldNameModule } from '../field-name/field-name.module';
     imports: [
         CommonModule,
         FormlyModule,
+        DndModule,
         FieldNameModule,
         MatMenuModule,
         MatIconModule,

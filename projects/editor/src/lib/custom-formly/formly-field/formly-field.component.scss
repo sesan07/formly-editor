@@ -1,22 +1,51 @@
 :host {
     display: block;
-    padding: 0;
-    box-sizing: border-box;
 }
 
-:host.edit-mode {
-    padding: 4px;
+.editor-field-container {
+    position: relative;
+}
+
+.editor-field-container.edit-mode {
+    padding: 2px;
     background-color: white;
     border: 1px solid transparent;
     border-radius: 4px;
 }
 
-:host.edit-mode:hover {
+.editor-field-container.edit-mode:hover {
     border: 1px solid #e0e0e0;
 }
 
-:host.edit-mode.active {
+.editor-field-container.edit-mode.active {
     border: 2px solid #a3a3a3;
+}
+
+.drop-position-indicator-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    pointer-events: none;
+    touch-action: none;
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+
+    &.hovering {
+        opacity: 1;
+    }
+
+    .droppable {
+        opacity: 0;
+        transition: opacity 0.15s ease-in-out;
+
+        &.hovering {
+            opacity: 0.5;
+            background-color: greenyellow;
+        }
+    }
 }
 
 header {
@@ -30,6 +59,7 @@ header {
     display: flex;
     align-items: center;
     column-gap: 4px;
+    cursor: grab;
 }
 
 .options {

@@ -1,13 +1,22 @@
 import { InjectionToken, Type } from '@angular/core';
 import { FormlyFieldConfig, FormlyTemplateOptions } from '@ngx-formly/core';
 
-import { IProperty } from './property/property.types';
 import { FormlyFieldConfigCache } from './custom-formly/fieldconfig.cache';
 import { BaseFieldService } from './field-service/base-field.service';
+import { IProperty } from './property/property.types';
 
 export enum EditorFieldType {
     FORMLY_GROUP = 'formly-group',
     GENERIC = 'generic',
+}
+
+export enum DragAction {
+    COPY = 'copy',
+    MOVE = 'move',
+}
+
+export enum DragType {
+    FORMLY_FIELD = 'formly-field',
 }
 
 export type GetDefaultField = (type: string) => IBaseFormlyField;
@@ -41,7 +50,6 @@ export interface IForm {
     model: Record<string, unknown>;
     activeFieldId?: string;
     isEditMode: boolean;
-    fieldIdCounter: number;
 }
 
 export interface IEditorFieldService {
@@ -75,6 +83,13 @@ export interface FieldTypeChildrenConfig {
 export interface EditorConfig {
     options: FieldOption[];
     onDisplayFields?: (fields: IEditorFormlyField[], model: Record<string, any>) => IEditorFormlyField[];
+}
+
+export interface IFieldDragData {
+    action: DragAction;
+    index: number;
+    field: IEditorFormlyField;
+    fieldParent?: IEditorFormlyField;
 }
 
 export const EDITOR_CONFIG = new InjectionToken<EditorConfig[]>('EDITOR_CONFIG');
