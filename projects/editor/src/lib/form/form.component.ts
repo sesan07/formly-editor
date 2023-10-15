@@ -63,13 +63,11 @@ export class FormComponent implements OnInit, OnDestroy {
                 this.formGroup = new FormGroup({});
                 this.options = {};
 
-                let fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
+                const fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
                 fieldsClone.forEach(field => cleanField(field, true, true));
                 this.formFieldsJSON = JSON.stringify(fieldsClone, null, 2);
-
-                fieldsClone = this._editorService.onDisplayFields(fieldsClone, this._cachedModel);
             }),
-            map(form => cloneDeep(form.fields))
+            map(form => this._editorService.onDisplayFields(cloneDeep(form.fields), this._cachedModel))
         );
 
         this.model$ = activeForm$.pipe(
