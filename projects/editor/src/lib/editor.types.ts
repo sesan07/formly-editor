@@ -47,7 +47,7 @@ export interface IForm {
     name: string;
     fields: IEditorFormlyField[];
     baseFields: IEditorFormlyField[];
-    model: Record<string, unknown>;
+    model: object;
     activeFieldId?: string;
     isEditMode: boolean;
 }

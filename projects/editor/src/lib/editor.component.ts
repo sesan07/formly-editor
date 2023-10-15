@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { cloneDeep } from 'lodash-es';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { EditorService } from './editor.service';
-import { IForm, IEditorFormlyField, FieldOption } from './editor.types';
+import { FieldOption, IEditorFormlyField, IForm } from './editor.types';
 import { isCategoryOption, isTypeOption, trackByFieldId } from './editor.utils';
 import { cleanField } from './form/form.utils';
 import { JSONDialogComponent } from './json-dialog/json-dialog.component';
@@ -18,11 +18,11 @@ import { initRootProperty } from './property/utils';
 import { FileService } from './shared/services/file-service/file.service';
 import { SideBarPosition } from './sidebar/sidebar.types';
 import {
-    selectForms,
+    selectActiveField,
     selectActiveForm,
     selectActiveFormIndex,
-    selectActiveField,
     selectActiveModel,
+    selectForms,
 } from './state/state.selectors';
 import { IEditorState } from './state/state.types';
 
@@ -56,7 +56,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     public toolbarTabIndex: 0 | 1 = 0;
 
     public activeForm: IForm;
-    public activeModel: Record<string, unknown>;
+    public activeModel: object;
     public modelProperty: IObjectProperty;
     public fieldOptions: FieldOption[];
 

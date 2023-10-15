@@ -239,3 +239,8 @@ export const modifyValue = <T extends Record<string, any>>(target: T, { path, va
     produce(target, draft => {
         set(draft, path, value);
     });
+
+export const unsetPath = (target: object, path: string) =>
+    produce(target, draft => {
+        unset(draft, path);
+    });

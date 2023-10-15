@@ -42,6 +42,7 @@ import {
     modifyKey,
     modifyValue,
     moveFieldInArray,
+    unsetPath,
 } from './state.utils';
 
 export const initialState: IEditorState = {
@@ -306,8 +307,7 @@ const processReplaceField = (
 
     let model = activeForm.model;
     if (keyPath) {
-        model = cloneDeep(model);
-        unset(model, keyPath);
+        model = unsetPath(model, keyPath);
     }
 
     return {
@@ -426,7 +426,7 @@ const processMoveField = (
 
 const processModifyActiveModel = (state: IEditorState, { change }: ModifyActiveModel): IEditorState => {
     const activeForm: IForm = state.formMap[state.activeFormId];
-    let model: Record<string, unknown> = activeForm.model;
+    let model: object = activeForm.model;
     switch (change.type) {
         case PropertyChangeType.KEY:
             model = modifyKey(model, change);
