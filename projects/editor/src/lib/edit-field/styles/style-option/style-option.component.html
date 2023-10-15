@@ -1,4 +1,7 @@
-<mat-form-field *ngIf="!breakpoint.value || option.hasBreakpoints">
+<mat-form-field
+    *ngIf="!breakpoint.value || option.hasBreakpoints"
+    appearance="fill"
+>
     <mat-label>{{ option.name }}</mat-label>
     <mat-select
         [value]="selectedVariant"

@@ -1,7 +1,10 @@
 <h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content>
     <form #form="ngForm">
-        <mat-form-field *ngIf="data.name">
+        <mat-form-field
+            *ngIf="data.name"
+            appearance="fill"
+        >
             <mat-label>Name</mat-label>
             <input
                 #nameModel="ngModel"
@@ -16,7 +19,10 @@
             <mat-error *ngIf="nameModel.errors?.pattern">Invalid pattern</mat-error>
         </mat-form-field>
         <div class="json-field-wrapper">
-            <mat-form-field class="json-field">
+            <mat-form-field
+                class="json-field"
+                appearance="fill"
+            >
                 <mat-label>JSON</mat-label>
                 <editor-text-editor
                     class="text-editor"
