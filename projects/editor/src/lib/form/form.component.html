@@ -29,7 +29,7 @@
             <ng-template matTabContent>
                 <editor-text-editor
                     class="text-editor"
-                    [value]="formFieldsJSON"
+                    [value]="formFieldsJSON$ | async"
                     [mode]="'application/json'"
                     readonly
                 ></editor-text-editor>

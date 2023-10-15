@@ -9,7 +9,7 @@ import { EditorService } from '../editor.service';
 import { FieldOption, IEditorFormlyField, IForm } from '../editor.types';
 import { cleanField } from './form.utils';
 import { isCategoryOption, isTypeOption, trackByFieldId } from '../editor.utils';
-import { selectActiveForm } from '../state/state.selectors';
+import { selectActiveForm, selectActiveFormId } from '../state/state.selectors';
 import { Store } from '@ngrx/store';
 import { IEditorState } from '../state/state.types';
 
@@ -31,7 +31,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
     public formFields$: Observable<IEditorFormlyField[]>;
     public model$: Observable<Record<string, any>>;
-    public formFieldsJSON: string;
+    public formFieldsJSON$: Observable<string>;
     public formGroup: FormGroup = new FormGroup({});
     public options: FormlyFormOptions = {};
 
@@ -52,28 +52,38 @@ export class FormComponent implements OnInit, OnDestroy {
 
         const activeForm$ = this._store.select(selectActiveForm).pipe(
             takeUntil(this._destroy$),
-            filter(form => form?.id === this.form.id),
-            shareReplay()
+            filter(form => form?.id === this.form.id)
         );
-        this.formFields$ = activeForm$.pipe(
-            filter(form => form.fields !== this._cachedFields),
+
+        const activeFields$ = activeForm$.pipe(
             debounceTime(this._debounceTime),
-            tap(form => {
-                this._cachedFields = form.fields;
+            filter(form => form.fields !== this._cachedFields),
+            map(form => form.fields),
+            tap(fields => (this._cachedFields = fields)),
+            shareReplay(1)
+        );
+
+        this.formFields$ = activeFields$.pipe(
+            tap(() => {
                 this.formGroup = new FormGroup({});
                 this.options = {};
-
-                const fieldsClone: IEditorFormlyField[] = cloneDeep(form.fields);
-                fieldsClone.forEach(field => cleanField(field, true, true));
-                this.formFieldsJSON = JSON.stringify(fieldsClone, null, 2);
             }),
-            map(form => this._editorService.onDisplayFields(cloneDeep(form.fields), this._cachedModel))
+            map(fields => this._editorService.onDisplayFields(cloneDeep(fields), this._cachedModel))
+        );
+
+        this.formFieldsJSON$ = activeFields$.pipe(
+            map(fields => {
+                const fieldsClone: IEditorFormlyField[] = cloneDeep(fields);
+                fieldsClone.forEach(field => cleanField(field, true, true));
+                return JSON.stringify(fieldsClone, null, 2);
+            })
         );
 
         this.model$ = activeForm$.pipe(
+            filter(form => form.model !== this._cachedModel),
             map(form => {
-                this._cachedModel = cloneDeep(form.model);
-                return this._cachedModel;
+                this._cachedModel = form.model;
+                return cloneDeep(this._cachedModel);
             })
         );
     }

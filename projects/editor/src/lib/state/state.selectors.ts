@@ -5,8 +5,8 @@ import { getFieldMap } from './state.utils';
 
 export const selectEditor = createFeatureSelector<Readonly<IEditorState>>('editor');
 export const selectFormMap = createSelector(selectEditor, editor => editor.formMap);
-export const selectForms = createSelector(selectFormMap, formMap => Object.values(formMap));
 export const selectActiveFormId = createSelector(selectEditor, editor => editor.activeFormId);
+export const selectForms = createSelector(selectFormMap, formMap => Object.values(formMap));
 export const selectActiveForm = createSelector(selectFormMap, selectActiveFormId, (formMap, formId) => formMap[formId]);
 export const selectActiveFormIndex = createSelector(selectFormMap, selectActiveFormId, (formMap, formId) =>
     Object.keys(formMap).indexOf(formId)
