@@ -1,6 +1,5 @@
 import {
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
     ElementRef,
     HostListener,
@@ -15,7 +14,7 @@ import {
 import { DndService, DragSource, DropTarget } from '@ng-dnd/core';
 import { Store } from '@ngrx/store';
 import { FormlyConfig, FormlyField } from '@ngx-formly/core';
-import { BehaviorSubject, Observable, Subject, distinctUntilChanged, filter, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, distinctUntilChanged, filter, map, takeUntil } from 'rxjs';
 
 import { EditorService } from '../../editor.service';
 import {
@@ -27,7 +26,7 @@ import {
     IFieldDragData,
 } from '../../editor.types';
 import { getKeyPath, isCategoryOption, isTypeOption } from '../../editor.utils';
-import { selectActiveField, selectActiveForm } from '../../state/state.selectors';
+import { selectActiveForm } from '../../state/state.selectors';
 import { IEditorState } from '../../state/state.types';
 import { FormlyFieldTemplates } from '../formly.template';
 
@@ -50,8 +49,8 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     @Input() public isFirstChild: boolean;
     @Input() public isLastChild: boolean;
 
-    public isEditMode: boolean;
-    public isActiveField: boolean;
+    public isEditMode$: Observable<boolean>;
+    public isActiveField$: Observable<boolean>;
 
     public isMouseInside: boolean;
     public hideOptions: boolean;
@@ -75,7 +74,6 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
 
     constructor(
         private _editorService: EditorService,
-        private _cdRef: ChangeDetectorRef,
         private _store: Store<IEditorState>,
         private _dnd: DndService,
         private _ngZone: NgZone,
@@ -117,27 +115,12 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
             this._editorService.registerKeyPath(this.field, getKeyPath(this.field.formControl));
         }
 
-        this._store
-            .select(selectActiveForm)
-            .pipe(
-                takeUntil(this._destroy$),
-                filter(form => form?.id === this.fieldInfo.formId)
-            )
-            .subscribe(form => {
-                this.isEditMode = form.isEditMode;
-                this._cdRef.markForCheck();
-            });
-
-        this._store
-            .select(selectActiveField)
-            .pipe(
-                takeUntil(this._destroy$),
-                filter(field => field && field._info.formId === this.fieldInfo.formId)
-            )
-            .subscribe(field => {
-                this.isActiveField = field?._info.fieldId === this.fieldInfo.fieldId;
-                this._cdRef.markForCheck();
-            });
+        const activeForm$ = this._store.select(selectActiveForm).pipe(
+            takeUntil(this._destroy$),
+            filter(form => form?.id === this.fieldInfo.formId)
+        );
+        this.isEditMode$ = activeForm$.pipe(map(form => form.isEditMode));
+        this.isActiveField$ = activeForm$.pipe(map(form => form.activeFieldId === this.fieldInfo.fieldId));
 
         this._setupDragAndDrop();
     }

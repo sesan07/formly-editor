@@ -1,12 +1,12 @@
 <div
     class="editor-field-container"
-    [class.edit-mode]="isEditMode"
-    [class.active]="isActiveField"
+    [class.edit-mode]="isEditMode$ | async"
+    [class.active]="isActiveField$ | async"
     [dragPreview]="dragSource"
     [dropTarget]="dropTarget"
 >
     <header
-        *ngIf="isEditMode"
+        *ngIf="isEditMode$ | async"
         class="editor-mat"
     >
         <div
