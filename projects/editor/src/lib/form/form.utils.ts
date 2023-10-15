@@ -1,14 +1,15 @@
-import { cloneDeep, get, isEmpty, set } from 'lodash-es';
+import produce from 'immer';
+import { get, isEmpty, set } from 'lodash-es';
 
 import { IEditorFormlyField } from '../editor.types';
 
-export const getFieldChildren = (field: IEditorFormlyField): IEditorFormlyField | IEditorFormlyField[] | undefined =>
+export const getFieldChildren = <T extends IEditorFormlyField>(field: T): T | T[] | undefined =>
     get(field, field._info.childrenConfig.path);
 
-export const setFieldChildren = (
-    field: IEditorFormlyField,
-    children: IEditorFormlyField | IEditorFormlyField[]
-): IEditorFormlyField => set(cloneDeep(field), field._info.childrenConfig.path, children);
+export const setFieldChildren = <T extends IEditorFormlyField>(field: T, children: T | T[]): T =>
+    produce(field, draft => {
+        set(draft, field._info.childrenConfig.path, children);
+    });
 
 export const cleanField = (
     field: IEditorFormlyField,
