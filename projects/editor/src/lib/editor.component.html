@@ -33,8 +33,9 @@
                 class="tree-container"
             >
                 <editor-field-tree-item
-                    *ngFor="let field of activeForm.fields; trackBy: trackByFieldId"
+                    *ngFor="let field of activeForm.fields; let index = index; trackBy: trackByFieldId"
                     [field]="field"
+                    [index]="index"
                     [fieldOptions]="fieldOptions"
                     [isExpanded]="true"
                 >

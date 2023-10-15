@@ -1,11 +1,13 @@
 <editor-tree-item
     class="cursor-pointer"
     [treeLevel]="treeLevel"
-    [(isExpanded)]="isExpanded"
+    [isExpanded]="isExpanded$ | async"
     [isExpandable]="!!fieldInfo.childrenConfig"
     [isActive]="isActiveField$ | async"
     [hasOptions]="true"
     [optionsMenu]="optionsMenu"
+    [dragSource]="dragSource"
+    [dropTarget]="dropTarget"
     (isExpandedChange)="onSelected()"
 >
     <ng-container headerContent>
@@ -14,8 +16,9 @@
 
     <ng-container childrenContent>
         <editor-field-tree-item
-            *ngFor="let child of childFields; trackBy: trackByFieldId"
+            *ngFor="let child of childFields; let index = index; trackBy: trackByFieldId"
             [field]="child"
+            [index]="index"
             [fieldOptions]="fieldOptions"
             [treeLevel]="treeLevel + 1"
             (expandParent)="onExpandParent()"
@@ -23,6 +26,30 @@
         </editor-field-tree-item>
     </ng-container>
 </editor-tree-item>
+
+<div
+    class="drop-position-indicator-overlay"
+    [class.hovering]="isHovering$ | async"
+>
+    <ng-container *ngIf="hoverPosition$ | async as hoverPosition">
+        <div
+            class="droppable"
+            [style.width.%]="dropWidth.left"
+            [class.hovering]="hoverPosition === 'left'"
+        ></div>
+        <div
+            *ngIf="field._info.childrenConfig"
+            class="droppable"
+            [style.width.%]="dropWidth.center"
+            [class.hovering]="hoverPosition === 'center'"
+        ></div>
+        <div
+            class="droppable"
+            [style.width.%]="dropWidth.right"
+            [class.hovering]="hoverPosition === 'right'"
+        ></div>
+    </ng-container>
+</div>
 
 <mat-menu #optionsMenu="matMenu">
     <button

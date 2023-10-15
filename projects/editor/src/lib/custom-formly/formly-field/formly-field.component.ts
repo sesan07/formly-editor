@@ -11,7 +11,7 @@ import {
     Renderer2,
     ViewContainerRef,
 } from '@angular/core';
-import { DndService, DragSource, DropTarget } from '@ng-dnd/core';
+import { DndService, DragSource, DropTarget, DropTargetMonitor } from '@ng-dnd/core';
 import { Store } from '@ngrx/store';
 import { FormlyConfig, FormlyField } from '@ngx-formly/core';
 import { BehaviorSubject, Observable, Subject, distinctUntilChanged, filter, map, takeUntil } from 'rxjs';
@@ -167,67 +167,13 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         this.hoverPosition$ = this._hoverPosition$.pipe(distinctUntilChanged());
 
         this.dragSource = this._dnd.dragSource(DragType.FORMLY_FIELD, {
-            beginDrag: () => ({
-                action: DragAction.MOVE,
-                index: this.index,
-                field: this._editorService.getField(this.field._info.fieldId),
-                fieldParent: this._editorService.getField(this.field._info.parentFieldId),
-            }),
+            beginDrag: () => this._getDragData(),
         });
 
         this.dropTarget = this._dnd.dropTarget(DragType.FORMLY_FIELD, {
-            canDrop: monitor =>
-                monitor.isOver({ shallow: true }) && monitor.getItem().field._info.fieldId !== this.field._info.fieldId,
-            drop: monitor => {
-                if (monitor.didDrop()) {
-                    return;
-                }
-
-                const targetParent =
-                    this._hoverPosition$.value === 'center'
-                        ? this._editorService.getField(this.field._info.fieldId)
-                        : this._editorService.getField(this.field._info.parentFieldId);
-
-                const sourceData: IFieldDragData = monitor.getItem();
-                const dragIndex: number = sourceData.index;
-                const dropIndex: number =
-                    this._hoverPosition$.value === 'center'
-                        ? undefined
-                        : this._hoverPosition$.value === 'left'
-                        ? this.index
-                        : this.index + 1;
-
-                this._ngZone.run(() => {
-                    switch (sourceData.action) {
-                        case DragAction.MOVE:
-                            this._editorService.moveField(
-                                sourceData.field,
-                                sourceData.fieldParent,
-                                targetParent,
-                                dragIndex,
-                                dropIndex
-                            );
-                            break;
-                    }
-                });
-                return {};
-            },
-            hover: monitor => {
-                if (!(this._boundingRect && monitor.canDrop())) {
-                    return;
-                }
-
-                const mousePosition = monitor.getClientOffset();
-                const xDelta = mousePosition.x - this._boundingRect.x;
-                const xPercent = (xDelta / this._boundingRect.width) * 100;
-                const position =
-                    xPercent <= this.dropWidth.left
-                        ? 'left'
-                        : this.field._info.childrenConfig && xPercent <= this.dropWidth.left + this.dropWidth.center
-                        ? 'center'
-                        : 'right';
-                this._hoverPosition$.next(position);
-            },
+            canDrop: monitor => this._canDrop(monitor),
+            drop: monitor => this._onDrop(monitor),
+            hover: monitor => this._onHover(monitor),
         });
 
         this.isHovering$ = this.dropTarget.listen(monitor => monitor.canDrop());
@@ -235,5 +181,76 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
             .listen(monitor => monitor.canDrop())
             .pipe(takeUntil(this._destroy$))
             .subscribe(() => (this._boundingRect = this._elementRef2.nativeElement.getBoundingClientRect()));
+    }
+
+    private _getDragData(): IFieldDragData {
+        return {
+            action: DragAction.MOVE,
+            index: this.index,
+            field: this._editorService.getField(this.field._info.fieldId),
+            fieldParent: this._editorService.getField(this.field._info.parentFieldId),
+        };
+    }
+
+    private _canDrop(monitor: DropTargetMonitor<IFieldDragData>): boolean {
+        const sourceFieldPath = monitor.getItem().field._info.fieldPath;
+        const fieldPath = this.field._info.fieldPath;
+        // Prevent dropping self or parent
+        const invalid =
+            sourceFieldPath.length <= fieldPath.length && sourceFieldPath.every((id, index) => id === fieldPath[index]);
+
+        return monitor.isOver({ shallow: true }) && !invalid;
+    }
+
+    private _onDrop(monitor: DropTargetMonitor<IFieldDragData>): Record<string, never> {
+        if (monitor.didDrop()) {
+            return;
+        }
+
+        const targetParent =
+            this._hoverPosition$.value === 'center'
+                ? this._editorService.getField(this.field._info.fieldId)
+                : this._editorService.getField(this.field._info.parentFieldId);
+
+        const sourceData: IFieldDragData = monitor.getItem();
+        const dragIndex: number = sourceData.index;
+        const dropIndex: number =
+            this._hoverPosition$.value === 'center'
+                ? undefined
+                : this._hoverPosition$.value === 'left'
+                ? this.index
+                : this.index + 1;
+
+        this._ngZone.run(() => {
+            switch (sourceData.action) {
+                case DragAction.MOVE:
+                    this._editorService.moveField(
+                        sourceData.field,
+                        sourceData.fieldParent,
+                        targetParent,
+                        dragIndex,
+                        dropIndex
+                    );
+                    break;
+            }
+        });
+        return {};
+    }
+
+    private _onHover(monitor: DropTargetMonitor<IFieldDragData>): void {
+        if (!(this._boundingRect && monitor.canDrop())) {
+            return;
+        }
+
+        const mousePosition = monitor.getClientOffset();
+        const xDelta = mousePosition.x - this._boundingRect.x;
+        const xPercent = (xDelta / this._boundingRect.width) * 100;
+        const position =
+            xPercent <= this.dropWidth.left
+                ? 'left'
+                : this.field._info.childrenConfig && xPercent <= this.dropWidth.left + this.dropWidth.center
+                ? 'center'
+                : 'right';
+        this._hoverPosition$.next(position);
     }
 }
