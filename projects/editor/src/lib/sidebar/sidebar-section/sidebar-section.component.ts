@@ -3,9 +3,9 @@ import {
     ChangeDetectorRef,
     Component,
     ElementRef,
+    HostBinding,
     Input,
     OnChanges,
-    Renderer2,
     SimpleChanges,
 } from '@angular/core';
 
@@ -18,59 +18,52 @@ import { SidebarComponent } from '../sidebar.component';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarSectionComponent implements OnChanges {
-    @Input() isCollapsible = true;
     @Input() isCollapsed: boolean;
 
     public element: HTMLElement;
     public index = 0;
-    public availableHeight: number;
-    public contentHeight: number;
-    public cachedContentHeight: number;
-    public minContentHeight = 50;
-    public minHeight = 0;
+    public cachedCollapseHeight: number;
+    public minContentHeight: number;
     public maxHeight = 0;
+    public sideBar: SidebarComponent;
 
     private readonly _headerHeight = 48;
     private readonly _dividerHeight = 4;
-    private _sideBar: SidebarComponent;
-
     private _height: number;
 
-    constructor(private _renderer: Renderer2, private _cdRef: ChangeDetectorRef, elementRef: ElementRef<HTMLElement>) {
+    constructor(private _cdRef: ChangeDetectorRef, elementRef: ElementRef<HTMLElement>) {
         this.element = elementRef.nativeElement;
     }
 
+    public get headerHeight(): number {
+        return this._headerHeight + (this.index === 0 ? 0 : this._dividerHeight);
+    }
+
+    public get availableHeight(): number {
+        return this.height - this.headerHeight - (this.isCollapsed ? 0 : this.minContentHeight);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    @HostBinding('style.height.px')
     public get height(): number {
         return this._height;
     }
-    public set height(newHeight: number) {
-        this._height = newHeight;
-        this.contentHeight = this._height - this.minHeight;
-        this.availableHeight = this._height - (this.minHeight + (this.isCollapsed ? 0 : this.minContentHeight));
-
-        this._renderer.setStyle(this.element, 'height', this._height + 'px');
+    public set height(val: number) {
+        this._height = val;
         this._cdRef.markForCheck();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.isCollapsed && !changes.isCollapsed.firstChange) {
-            this._sideBar.toggleSection(this);
+            this.sideBar.toggleSection(this);
         }
     }
 
     onSectionMouseDown(event: MouseEvent): void {
-        this._sideBar.onSectionMouseDown(event, this);
+        this.sideBar.onSectionMouseDown(event, this);
     }
 
     onToggleExpansionClicked(): void {
-        this._sideBar.toggleSection(this);
-    }
-
-    setup(sidebar: SidebarComponent, index: number, height: number): void {
-        this._sideBar = sidebar;
-        this.index = index;
-        this.minHeight = this._headerHeight + (this.index === 0 ? 0 : this._dividerHeight);
-        this.height = height;
-        this._sideBar.toggleSection(this);
+        this.sideBar.toggleSection(this);
     }
 }

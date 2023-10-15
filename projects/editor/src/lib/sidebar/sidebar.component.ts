@@ -31,7 +31,6 @@ export class SidebarComponent implements AfterContentInit {
     public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
 
     private _height: number;
-    private _width: number;
 
     private _prevResizeX: number;
     private _prevResizeY: number;
@@ -51,13 +50,7 @@ export class SidebarComponent implements AfterContentInit {
             return;
         }
 
-        // Wait until sidebar is in DOM to setup sections
-        const int = setInterval(() => {
-            if (this._elementRef.nativeElement.clientHeight > 0) {
-                this._setupSections();
-                clearInterval(int);
-            }
-        }, 200);
+        this._setupSections();
     }
 
     onSidebarMouseDown(event: MouseEvent): void {
@@ -138,11 +131,11 @@ export class SidebarComponent implements AfterContentInit {
         );
 
         if (bottomSection) {
-            const heightDiff: number = section.height - section.minHeight;
+            const heightDiff: number = section.height - section.headerHeight;
             bottomSection.height += heightDiff;
-            section.cachedContentHeight = heightDiff;
-            section.height = section.minHeight;
-            section.isCollapsed = !section.isCollapsed;
+            section.cachedCollapseHeight = heightDiff;
+            section.height = section.headerHeight;
+            section.isCollapsed = true;
         } else {
             const topSection: SidebarSectionComponent = this.sections
                 .toArray()
@@ -150,11 +143,11 @@ export class SidebarComponent implements AfterContentInit {
                 .find(s => !s.isCollapsed && s.index < section.index);
 
             if (topSection) {
-                const heightDiff: number = section.height - section.minHeight;
+                const heightDiff: number = section.height - section.headerHeight;
                 topSection.height += heightDiff;
-                section.cachedContentHeight = heightDiff;
-                section.height = section.minHeight;
-                section.isCollapsed = !section.isCollapsed;
+                section.cachedCollapseHeight = heightDiff;
+                section.height = section.headerHeight;
+                section.isCollapsed = true;
             }
         }
     }
@@ -162,7 +155,8 @@ export class SidebarComponent implements AfterContentInit {
     private _expandSection(section: SidebarSectionComponent): void {
         // Resize bottom
         this._bottomResizeIndex = section.index + 1;
-        let remainingResize: number = section.cachedContentHeight;
+        const targetResize = section.cachedCollapseHeight || section.minContentHeight;
+        let remainingResize: number = targetResize;
         while (remainingResize > 0 && this._bottomResizeIndex < this.sections.length) {
             const currSection: SidebarSectionComponent = this.sections.toArray()[this._bottomResizeIndex];
             const availableHeight: number = currSection.availableHeight;
@@ -199,19 +193,39 @@ export class SidebarComponent implements AfterContentInit {
             }
         }
 
-        section.height = section.minHeight + (section.cachedContentHeight - remainingResize);
-        section.isCollapsed = !section.isCollapsed;
+        section.height = section.headerHeight + (targetResize - remainingResize);
+        section.isCollapsed = false;
     }
 
     private _setupSections(): void {
         const rect: DOMRect = this._elementRef.nativeElement.getBoundingClientRect();
         this._height = rect.height;
-        this._width = rect.width;
+        const minContentHeight = this._height * 0.25;
 
-        const sectionHeight: number = this._height / this.sections.length;
+        // Set up all collapsed
+        let usedHeight = 0;
+        this.sections.forEach((section, index) => {
+            if (section.isCollapsed) {
+                section.sideBar = this;
+                section.index = index;
+                section.height = section.headerHeight;
+                section.minContentHeight = minContentHeight;
+                usedHeight += section.headerHeight;
+            }
+        });
+
+        // Set up all expanded with remaining height
+        const expandedSections = this.sections.filter(section => !section.isCollapsed);
+        const remainingHeight = this._height - usedHeight;
+        const sectionHeight: number = remainingHeight / expandedSections.length;
 
         this.sections.forEach((section, index) => {
-            section.setup(this, index, sectionHeight);
+            if (!section.isCollapsed) {
+                section.sideBar = this;
+                section.index = index;
+                section.height = sectionHeight;
+                section.minContentHeight = this._height * 0.25;
+            }
         });
     }
 
@@ -234,7 +248,6 @@ export class SidebarComponent implements AfterContentInit {
         this._totalResizeDeltaX += this.position === SideBarPosition.LEFT ? -resizeXDelta : resizeXDelta;
         const targetWidth: number = this._sidebarStartWidth - this._totalResizeDeltaX;
 
-        // const sidebar: HTMLElement = document.getElementById(sidebarId);
         this._renderer.setStyle(this._elementRef.nativeElement, 'width', targetWidth + 'px');
 
         this._prevResizeX = newPositionX;
