@@ -71,7 +71,9 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
         private _dnd: DndService,
         private _ngZone: NgZone,
         private _elementRef: ElementRef<HTMLElement>
-    ) {}
+    ) {
+        this.isExpanded$ = this._isExpanded$.asObservable();
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.field) {
@@ -89,7 +91,6 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.isExpanded$ = this._isExpanded$.asObservable();
         this.isActiveField$ = this._store.select(selectActiveField).pipe(
             takeUntil(this._destroy$),
             map(field => this.fieldInfo.fieldId === field?._info.fieldId),
@@ -173,13 +174,21 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private _canDrop(monitor: DropTargetMonitor<IFieldDragData>): boolean {
+        if (!monitor.isOver({ shallow: true })) {
+            return false;
+        }
+
+        if (monitor.getItem().action === DragAction.COPY) {
+            return true;
+        }
+
         const sourceFieldPath = monitor.getItem().field._info.fieldPath;
         const fieldPath = this.field._info.fieldPath;
         // Prevent dropping self or parent
         const invalid =
             sourceFieldPath.length <= fieldPath.length && sourceFieldPath.every((id, index) => id === fieldPath[index]);
 
-        return monitor.isOver({ shallow: true }) && !invalid;
+        return !invalid;
     }
 
     private _onDrop(monitor: DropTargetMonitor<IFieldDragData>): Record<string, never> {
@@ -203,6 +212,9 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
 
         this._ngZone.run(() => {
             switch (sourceData.action) {
+                case DragAction.COPY:
+                    this._editorService.addField(sourceData.field.type, targetParent?._info.fieldId, dropIndex);
+                    break;
                 case DragAction.MOVE:
                     this._editorService.moveField(
                         sourceData.field,

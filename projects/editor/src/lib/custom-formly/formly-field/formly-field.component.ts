@@ -193,13 +193,21 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     }
 
     private _canDrop(monitor: DropTargetMonitor<IFieldDragData>): boolean {
+        if (!monitor.isOver({ shallow: true })) {
+            return false;
+        }
+
+        if (monitor.getItem().action === DragAction.COPY) {
+            return true;
+        }
+
         const sourceFieldPath = monitor.getItem().field._info.fieldPath;
         const fieldPath = this.field._info.fieldPath;
         // Prevent dropping self or parent
         const invalid =
             sourceFieldPath.length <= fieldPath.length && sourceFieldPath.every((id, index) => id === fieldPath[index]);
 
-        return monitor.isOver({ shallow: true }) && !invalid;
+        return !invalid;
     }
 
     private _onDrop(monitor: DropTargetMonitor<IFieldDragData>): Record<string, never> {
@@ -223,6 +231,9 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
 
         this._ngZone.run(() => {
             switch (sourceData.action) {
+                case DragAction.COPY:
+                    this._editorService.addField(sourceData.field.type, targetParent?._info.fieldId, dropIndex);
+                    break;
                 case DragAction.MOVE:
                     this._editorService.moveField(
                         sourceData.field,

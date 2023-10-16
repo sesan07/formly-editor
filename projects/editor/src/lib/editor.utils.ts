@@ -4,6 +4,7 @@ import { FieldCategoryOption, FieldOption, FieldTypeOption, IEditorFormlyField }
 
 export const trackByKey: TrackByFunction<{ [others: string]: any; key: string }> = (_, val) => val.key;
 export const trackByFieldId: TrackByFunction<IEditorFormlyField> = (_, field) => field._info.fieldId;
+export const trackByDisplayName: TrackByFunction<FieldOption> = (_, opt) => opt.displayName;
 
 export const isCategoryOption = (x: FieldOption): x is FieldCategoryOption => !!(x as FieldCategoryOption).children;
 export const isTypeOption = (x: FieldOption): x is FieldTypeOption => !!(x as FieldTypeOption).type;

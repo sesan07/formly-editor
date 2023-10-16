@@ -133,7 +133,7 @@ const processAddField = (
         let siblings: IEditorFormlyField | IEditorFormlyField[] = getFieldChildren(parent);
         if (Array.isArray(siblings)) {
             siblings = [...siblings];
-            index = typeof index === 'number' ? index : siblings.length;
+            index = typeof index === 'number' ? index : 0;
             siblings.splice(index, 0, field);
             parent = setFieldChildren({ ...parent }, siblings);
         } else {

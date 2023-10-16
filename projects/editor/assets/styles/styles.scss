@@ -121,6 +121,10 @@ formly-field {
     cursor: pointer;
 }
 
+.cursor-grab {
+    cursor: grab;
+}
+
 .expand-icon {
     color: rgba(0, 0, 0, 0.54);
     transition: transform 0.2s ease-out;

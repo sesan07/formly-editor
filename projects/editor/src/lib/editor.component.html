@@ -43,6 +43,26 @@
                 </editor-field-tree-item>
             </div>
         </editor-sidebar-section>
+        <editor-sidebar-section>
+            <div
+                class="section-header-content"
+                headerContent
+            >
+                <span>Add New Field</span>
+            </div>
+            <div
+                mainContent
+                class="tree-container"
+            >
+                <editor-add-field-tree-item
+                    *ngFor="let option of fieldOptions; let index = index; trackBy: trackByDisplayName"
+                    [fieldOption]="option"
+                    [index]="index"
+                    [isExpanded]="true"
+                >
+                </editor-add-field-tree-item>
+            </div>
+        </editor-sidebar-section>
     </editor-sidebar>
 
     <div class="form-view">

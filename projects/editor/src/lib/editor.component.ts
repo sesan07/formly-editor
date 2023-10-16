@@ -7,7 +7,7 @@ import { cloneDeep } from 'lodash-es';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { EditorService } from './editor.service';
 import { FieldOption, IEditorFormlyField, IForm } from './editor.types';
-import { isCategoryOption, isTypeOption, trackByFieldId } from './editor.utils';
+import { isCategoryOption, isTypeOption, trackByDisplayName, trackByFieldId } from './editor.utils';
 import { cleanField } from './form/form.utils';
 import { JSONDialogComponent } from './json-dialog/json-dialog.component';
 import { ImportJSONData, ImportJSONValue } from './json-dialog/json-dialog.types';
@@ -63,6 +63,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     public canShowMain = false;
 
     trackByFieldId = trackByFieldId;
+    trackByDisplayName = trackByDisplayName;
     isCategoryOption = isCategoryOption;
     isTypeOption = isTypeOption;
 

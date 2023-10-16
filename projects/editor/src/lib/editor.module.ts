@@ -26,6 +26,7 @@ import { JSONDialogModule } from './json-dialog/json-dialog.module';
 import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
 import { GenericFieldService } from './field-service/generic/generic-field.service';
 import { FormlyGroupComponent } from './custom-formly/formly-group/formly-group.component';
+import { AddFieldTreeItemComponent } from './add-field-tree-item/add-field-tree-item.component';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/selection/active-line';
@@ -45,7 +46,7 @@ const metaReducerFactory =
     };
 
 @NgModule({
-    declarations: [EditorComponent, FieldTreeItemComponent],
+    declarations: [EditorComponent, FieldTreeItemComponent, AddFieldTreeItemComponent],
     imports: [
         CommonModule,
         FormModule,
