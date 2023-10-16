@@ -3,7 +3,7 @@
     "card": {
       "input": "Hello!",
       "number": 321,
-      "checkbox": true
+      "textarea": "Bye!"
     },
     "repeat": [
       {
@@ -15,6 +15,6 @@
         "select": [2, 3]
       }
     ],
-    "textarea": "Bye!"
+    "checkbox": true
   }
 }
