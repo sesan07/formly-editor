@@ -1,5 +1,4 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { cloneDeep, unset } from 'lodash-es';
 import { IEditorFormlyField, IForm } from '../editor.types';
 import { getFieldChildren, setFieldChildren } from '../form/form.utils';
 import { PropertyChangeType } from '../property/property.types';
@@ -142,7 +141,7 @@ const processAddField = (
 
         baseFields = modifyFields(activeForm.baseFields, parent);
     } else {
-        baseFields = [...baseFields, field];
+        baseFields = [field, ...baseFields];
     }
 
     return {
@@ -178,8 +177,7 @@ const processRemoveField = (state: IEditorState, { fieldId, parent, keyPath }: R
 
     let model = activeForm.model;
     if (keyPath) {
-        model = cloneDeep(model);
-        unset(model, keyPath);
+        model = unsetPath(model, keyPath);
     }
 
     return {
