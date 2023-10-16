@@ -27,7 +27,10 @@ export const convertToEditorField = (
 ) => {
     // Special case to specify 'formly-group' type
     if (!sourceField.type && sourceField.fieldGroup) {
-        sourceField.type = EditorFieldType.FORMLY_GROUP;
+        sourceField = {
+            ...sourceField,
+            type: EditorFieldType.FORMLY_GROUP,
+        };
     }
 
     // Merge with default properties
