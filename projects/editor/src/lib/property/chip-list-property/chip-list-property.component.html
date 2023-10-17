@@ -39,9 +39,8 @@
     >
         <mat-label *ngIf="showLabel">{{ property.name ? property.name : property.key }}</mat-label>
         <mat-chip-list #chipList>
-            <ng-container *ngFor="let option of selectedOptions">
+            <ng-container *ngFor="let option of selectedOptions$ | async">
                 <mat-chip
-                    *ngIf="isSelectable(option)"
                     selectable
                     (removed)="onRemove(option)"
                 >
@@ -51,12 +50,14 @@
             </ng-container>
             <input
                 #input
+                #autocompleteTrigger="matAutocompleteTrigger"
                 [formControl]="formControl"
                 [placeholder]="'start typing...'"
                 [matAutocomplete]="autoComplete"
                 [matChipInputFor]="chipList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 (matChipInputTokenEnd)="onAdd($event)"
+                (blur)="autocompleteTrigger.closePanel()"
             />
         </mat-chip-list>
         <mat-autocomplete
@@ -65,7 +66,7 @@
         >
             <mat-option
                 class="editor-mat-option"
-                *ngFor="let option of filteredOptions"
+                *ngFor="let option of filteredOptions$ | async"
                 [value]="option"
             >
                 {{ option }}

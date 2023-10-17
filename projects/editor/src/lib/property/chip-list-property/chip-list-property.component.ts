@@ -1,13 +1,13 @@
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { isObservable, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Subject, isObservable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { IChipListProperty } from './chip-list-property.types';
 import { BasePropertyDirective } from '../base-property.component';
+import { IChipListProperty } from './chip-list-property.types';
 
 @Component({
     selector: 'editor-chip-list-property',
@@ -20,19 +20,15 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
 
     public formControl: FormControl = new FormControl();
     public separatorKeysCodes: number[] = [ENTER, COMMA];
-    public selectedOptions: string[];
+    public selectedOptions$: BehaviorSubject<string[]> = new BehaviorSubject([]);
     public selectableOptions: string[];
-    public filteredOptions$: Observable<string[]>;
-    public filteredOptions: string[];
+    public filteredOptions$: BehaviorSubject<string[]> = new BehaviorSubject([]);
     public hasOptions: boolean;
 
     protected defaultValue = null;
 
     private _unSubOptions$: Subject<void> = new Subject();
-
-    isSelectable(option: string): boolean {
-        return this.selectableOptions.includes(option);
-    }
+    private readonly _maxFilteredItems = 50;
 
     onAdd(event: MatChipInputEvent): void {
         const input: HTMLInputElement = event.input;
@@ -40,7 +36,7 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
         this._updateSelectedOptions();
 
         if ((value || '').trim()) {
-            this.selectedOptions.push(value.trim());
+            this.selectedOptions$.next([...this.selectedOptions$.value, value.trim()]);
             this._updateValue();
         }
 
@@ -53,16 +49,16 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
 
     onRemove(option: string): void {
         this._updateSelectedOptions();
-        const index: number = this.selectedOptions.indexOf(option);
+        const index: number = this.selectedOptions$.value.indexOf(option);
         if (index >= 0) {
-            this.selectedOptions.splice(index, 1);
+            this.selectedOptions$.value.splice(index, 1);
             this._updateValue();
         }
     }
 
     onSelected(event: MatAutocompleteSelectedEvent): void {
         this._updateSelectedOptions();
-        this.selectedOptions.push(event.option.viewValue);
+        this.selectedOptions$.value.push(event.option.viewValue);
         this.inputElementRef.nativeElement.value = '';
         this.formControl.setValue(null);
         this._updateValue();
@@ -90,11 +86,6 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
         }
     }
 
-    private _filter(value: string): string[] {
-        const filterValue: string = value.toLowerCase();
-        return this.selectableOptions.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
-    }
-
     private _updateSelectedOptions(): void {
         if (this.currentValue) {
             // If the target already has some selection
@@ -102,22 +93,26 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
                 ? (this.currentValue as string).split(' ')
                 : (this.currentValue as string[]);
 
-            this.selectedOptions = [...existingOptions];
+            this.selectedOptions$.next([...existingOptions]);
         } else {
-            this.selectedOptions = [];
+            this.selectedOptions$.next([]);
         }
     }
 
     private _updateFilteredOptions(value?: string): void {
-        this.filteredOptions = value ? this._filter(value) : this.selectableOptions.slice();
+        const selectable = value
+            ? this.selectableOptions.filter(option => option.toLowerCase().includes(value.toLowerCase()))
+            : this.selectableOptions;
+        const notSelected = selectable.filter(option => !this.selectedOptions$.value.includes(option));
+        this.filteredOptions$.next(notSelected.slice(0, this._maxFilteredItems));
     }
 
     private _updateValue(): void {
         let newValue: string | string[];
         if (this.property.outputString) {
-            newValue = this.selectedOptions.join(' ');
+            newValue = this.selectedOptions$.value.join(' ');
         } else {
-            newValue = this.selectedOptions.slice();
+            newValue = this.selectedOptions$.value.slice();
         }
 
         this._modifyValue(newValue);
