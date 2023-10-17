@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { get, set } from 'lodash-es';
 import { forkJoin, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, debounceTime, map } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 import {
@@ -33,14 +33,14 @@ import {
     setActiveModel,
     setEditMode,
 } from './state/state.actions';
-import { selectActiveField, selectActiveFieldMap, selectForms } from './state/state.selectors';
+import { selectActiveField, selectActiveFieldMap, selectEditor, selectForms } from './state/state.selectors';
 import { IEditorState } from './state/state.types';
 
 @Injectable()
 export class EditorService {
     public fieldOptions: FieldOption[];
 
-    private _forms: IForm[];
+    private _forms: IForm[] = [];
     private _activeField: IEditorFormlyField;
     private _activeFieldMap: Record<string, IEditorFormlyField>;
     private _keyPathMap: Record<string, string> = {}; // Record<formId.fieldId, keyPath>
@@ -54,18 +54,25 @@ export class EditorService {
         service: GenericFieldService,
     };
 
+    private readonly _stateStoragekey = 'editor';
+    private readonly _defaultAutosaveDelay = 5000;
+
     private _editorConfig: EditorConfig;
 
-    constructor(private _http: HttpClient, private _store: Store<IEditorState>) {
-        this._store.select(selectForms).subscribe(forms => (this._forms = forms));
-        this._store.select(selectActiveField).subscribe(field => (this._activeField = field));
-        this._store.select(selectActiveFieldMap).subscribe(fieldMap => (this._activeFieldMap = fieldMap));
-    }
+    constructor(private _http: HttpClient, private _store: Store<IEditorState>) {}
 
     setup(editorConfig: EditorConfig) {
         this._editorConfig = editorConfig;
-        this.fieldOptions = [...this._editorConfig.options, this._defaultTypeOption];
 
+        this._store.select(selectForms).subscribe(forms => (this._forms = forms));
+        this._store.select(selectActiveField).subscribe(field => (this._activeField = field));
+        this._store.select(selectActiveFieldMap).subscribe(fieldMap => (this._activeFieldMap = fieldMap));
+        this._store
+            .select(selectEditor)
+            .pipe(debounceTime(this._editorConfig.autosaveDelay ?? this._defaultAutosaveDelay))
+            .subscribe(state => this._saveState(state));
+
+        this.fieldOptions = [...this._editorConfig.options, this._defaultTypeOption];
         const getTypeOptions = (options: FieldOption[]) =>
             options.reduce<FieldTypeOption[]>(
                 (a, b): FieldTypeOption[] => [...a, ...(isCategoryOption(b) ? getTypeOptions(b.children) : [b])],
@@ -73,7 +80,10 @@ export class EditorService {
             );
         this._typeOptions = getTypeOptions(this.fieldOptions);
         this._fieldServiceMap = this._typeOptions.reduce((acc, o) => ({ ...acc, [o.type]: inject(o.service) }), {});
-        this._loadDefaultForm();
+
+        if (!this._forms.length) {
+            this._loadDefaultForm();
+        }
     }
 
     public addForm(name: string, sourceFields?: IBaseFormlyField[], model?: Record<string, unknown>): void {
@@ -218,5 +228,9 @@ export class EditorService {
         ]).subscribe(([fields, model]) => {
             this.addForm('Form Zero', fields, model);
         });
+    }
+
+    private _saveState(state: IEditorState): void {
+        localStorage.setItem(this._stateStoragekey, JSON.stringify(state));
     }
 }

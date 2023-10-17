@@ -82,6 +82,7 @@ export interface FieldTypeChildrenConfig {
 
 export interface EditorConfig {
     options: FieldOption[];
+    autosaveDelay?: number;
     onDisplayFields?: (fields: IEditorFormlyField[], model: Record<string, any>) => IEditorFormlyField[];
 }
 

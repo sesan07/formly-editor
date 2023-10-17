@@ -4,7 +4,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { cloneDeep } from 'lodash-es';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, debounceTime, takeUntil } from 'rxjs';
 import { EditorService } from './editor.service';
 import { FieldOption, IEditorFormlyField, IForm } from './editor.types';
 import { isCategoryOption, isTypeOption, trackByDisplayName, trackByFieldId } from './editor.utils';
@@ -86,7 +86,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.forms$ = this._store.select(selectForms).pipe(takeUntil(this._destroy$));
-        this.activeFormIndex$ = this._store.select(selectActiveFormIndex).pipe(takeUntil(this._destroy$));
+        this.activeFormIndex$ = this._store.select(selectActiveFormIndex).pipe(
+            takeUntil(this._destroy$),
+            debounceTime(0) // allows tab header to render properly when non-zero index on startup
+        );
         this.activeField$ = this._store.select(selectActiveField).pipe(takeUntil(this._destroy$));
         this._store
             .select(selectActiveForm)
