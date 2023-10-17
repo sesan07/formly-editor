@@ -141,7 +141,9 @@ const processAddField = (
 
         baseFields = modifyFields(activeForm.baseFields, parent);
     } else {
-        baseFields = [field, ...baseFields];
+        index = typeof index === 'number' ? index : 0;
+        baseFields = [...baseFields];
+        baseFields.splice(index, 0, field);
     }
 
     return {
