@@ -255,7 +255,7 @@ const processReplaceField = (
     { field, parent, newFieldType, typeOptions, defaultTypeOption, keyPath, getDefaultField }: ReplaceField
 ): IEditorState => {
     const activeForm: IForm = state.formMap[state.activeFormId];
-    const newField = convertToEditorField(
+    let newField = convertToEditorField(
         getDefaultField,
         typeOptions,
         defaultTypeOption,
@@ -288,7 +288,7 @@ const processReplaceField = (
             newChildren = newField._info.childrenConfig.isObject ? children : [children];
         }
 
-        setFieldChildren(newField, newChildren);
+        newField = setFieldChildren(newField, newChildren);
     }
 
     let baseFields = activeForm.baseFields;

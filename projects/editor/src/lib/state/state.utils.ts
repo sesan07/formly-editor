@@ -122,7 +122,7 @@ export const modifyField = (field: IEditorFormlyField, parentFieldPath: string[]
         } else if (children) {
             children = modifyField(children, field._info.fieldPath);
         }
-        setFieldChildren(field, children);
+        field = setFieldChildren(field, children);
     }
 
     return field;
