@@ -1,0 +1,25 @@
+:host {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    pointer-events: none;
+    touch-action: none;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.15s ease-out;
+
+    &.hovering {
+        opacity: 1;
+    }
+
+    .dropzone {
+        background-color: greenyellow;
+        opacity: 0;
+        transition: opacity 0.15s ease-out;
+
+        &.hovering {
+            opacity: 0.5;
+        }
+    }
+}

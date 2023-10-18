@@ -80,29 +80,12 @@
 
     <ng-template #container></ng-template>
 
-    <div
-        class="drop-position-indicator-overlay"
-        [class.hovering]="dnd.isHovering$ | async"
+    <editor-field-drop-overlay
+        [isHovering]="dnd.isHovering$ | async"
+        [hoverPosition]="dnd.hoverPosition$ | async"
+        [dropWidth]="dnd.dropWidth"
     >
-        <ng-container *ngIf="dnd.hoverPosition$ | async as hoverPosition">
-            <div
-                class="droppable"
-                [style.width.%]="dnd.dropWidth.left"
-                [class.hovering]="hoverPosition === 'left'"
-            ></div>
-            <div
-                *ngIf="field._info.childrenConfig"
-                class="droppable"
-                [style.width.%]="dnd.dropWidth.center"
-                [class.hovering]="hoverPosition === 'center'"
-            ></div>
-            <div
-                class="droppable"
-                [style.width.%]="dnd.dropWidth.right"
-                [class.hovering]="hoverPosition === 'right'"
-            ></div>
-        </ng-container>
-    </div>
+    </editor-field-drop-overlay>
 </div>
 
 <mat-menu #fieldOptionsMenu="matMenu">

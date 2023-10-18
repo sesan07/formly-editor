@@ -1,0 +1,16 @@
+<div
+    class="dropzone"
+    [style.width.%]="dropWidth.left"
+    [class.hovering]="hoverPosition === 'left'"
+></div>
+<div
+    *ngIf="dropWidth.center"
+    class="dropzone"
+    [style.width.%]="dropWidth.center"
+    [class.hovering]="hoverPosition === 'center'"
+></div>
+<div
+    class="dropzone"
+    [style.width.%]="dropWidth.right"
+    [class.hovering]="hoverPosition === 'right'"
+></div>

@@ -12,6 +12,7 @@ import { FormlyFieldComponent, RootFormlyFieldComponent } from './formly-field/f
 import { FormlyFormComponent } from './formly-form/formly-form.component';
 import { PropertyModule } from '../property/property.module';
 import { FieldNameModule } from '../field-name/field-name.module';
+import { FieldDropOverlayModule } from '../field-drag-drop/field-drop-overlay/field-drop-overlay.module';
 
 @NgModule({
     declarations: [FormlyGroupComponent, FormlyFieldComponent, RootFormlyFieldComponent, FormlyFormComponent],
@@ -20,6 +21,7 @@ import { FieldNameModule } from '../field-name/field-name.module';
         FormlyModule,
         DndModule,
         FieldNameModule,
+        FieldDropOverlayModule,
         MatMenuModule,
         MatIconModule,
         MatButtonModule,

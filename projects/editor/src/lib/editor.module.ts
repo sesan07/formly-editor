@@ -32,6 +32,7 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/selection/active-line';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
+import { FieldDropOverlayModule } from './field-drag-drop/field-drop-overlay/field-drop-overlay.module';
 
 const defaultConfig: EditorConfig = {
     options: [],
@@ -61,6 +62,7 @@ const metaReducerFactory =
         PropertyModule,
         JSONDialogModule,
         CustomFormlyModule,
+        FieldDropOverlayModule,
         StoreModule.forFeature(editorFeature),
         DndModule.forRoot({ backend: HTML5Backend }),
     ],

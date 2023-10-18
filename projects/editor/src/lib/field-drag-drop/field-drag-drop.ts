@@ -4,14 +4,14 @@ import { BehaviorSubject, Observable, Subject, distinctUntilChanged, takeUntil }
 
 import { EditorService } from '../editor.service';
 import { DropAction, DragType, IEditorFormlyField } from '../editor.types';
-import { FieldDropPosition, IFieldDragData } from './field-drag-drop.types';
+import { FieldDropPosition, FieldDropWidth, IFieldDragData } from './field-drag-drop.types';
 
 export class FieldDragDrop {
     public dragSource: DragSource<IFieldDragData, Record<string, never>>;
     public dropTarget: DropTarget<IFieldDragData, Record<string, never>>;
     public isHovering$: Observable<boolean>;
     public hoverPosition$: Observable<FieldDropPosition>;
-    public dropWidth: { left: number; center?: number; right: number };
+    public dropWidth: FieldDropWidth;
 
     private _field: IEditorFormlyField;
     private _index: number;
