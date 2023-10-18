@@ -13,7 +13,6 @@
         <editor-add-field-tree-item
             *ngFor="let child of childOptions; let index = index; trackBy: trackByDisplayName"
             [fieldOption]="child"
-            [index]="index"
             [treeLevel]="treeLevel + 1"
         >
         </editor-add-field-tree-item>
@@ -26,7 +25,7 @@
         [treeLevel]="treeLevel"
         [isExpanded]="isExpanded$ | async"
         [isExpandable]="false"
-        [dragSource]="dragSource"
+        [dragSource]="dnd.dragSource"
     >
         <ng-container headerContent>
             {{ fieldOption.displayName }}

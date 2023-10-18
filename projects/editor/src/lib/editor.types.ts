@@ -10,7 +10,7 @@ export enum EditorFieldType {
     GENERIC = 'generic',
 }
 
-export enum DragAction {
+export enum DropAction {
     COPY = 'copy',
     MOVE = 'move',
 }
@@ -84,13 +84,6 @@ export interface EditorConfig {
     options: FieldOption[];
     autosaveDelay?: number;
     onDisplayFields?: (fields: IEditorFormlyField[], model: Record<string, any>) => IEditorFormlyField[];
-}
-
-export interface IFieldDragData {
-    action: DragAction;
-    index: number;
-    field: IEditorFormlyField;
-    fieldParent?: IEditorFormlyField;
 }
 
 export const EDITOR_CONFIG = new InjectionToken<EditorConfig[]>('EDITOR_CONFIG');

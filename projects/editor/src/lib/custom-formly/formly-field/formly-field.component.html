@@ -2,8 +2,8 @@
     class="editor-field-container"
     [class.edit-mode]="isEditMode$ | async"
     [class.active]="isActiveField$ | async"
-    [dragPreview]="dragSource"
-    [dropTarget]="dropTarget"
+    [dragPreview]="dnd.dragSource"
+    [dropTarget]="dnd.dropTarget"
 >
     <header
         *ngIf="isEditMode$ | async"
@@ -11,7 +11,7 @@
     >
         <div
             class="header-title"
-            [dragSource]="dragSource"
+            [dragSource]="dnd.dragSource"
         >
             <span>{{ fieldInfo.name | fieldName : field.key }}</span>
         </div>
@@ -82,23 +82,23 @@
 
     <div
         class="drop-position-indicator-overlay"
-        [class.hovering]="isHovering$ | async"
+        [class.hovering]="dnd.isHovering$ | async"
     >
-        <ng-container *ngIf="hoverPosition$ | async as hoverPosition">
+        <ng-container *ngIf="dnd.hoverPosition$ | async as hoverPosition">
             <div
                 class="droppable"
-                [style.width.%]="dropWidth.left"
+                [style.width.%]="dnd.dropWidth.left"
                 [class.hovering]="hoverPosition === 'left'"
             ></div>
             <div
                 *ngIf="field._info.childrenConfig"
                 class="droppable"
-                [style.width.%]="dropWidth.center"
+                [style.width.%]="dnd.dropWidth.center"
                 [class.hovering]="hoverPosition === 'center'"
             ></div>
             <div
                 class="droppable"
-                [style.width.%]="dropWidth.right"
+                [style.width.%]="dnd.dropWidth.right"
                 [class.hovering]="hoverPosition === 'right'"
             ></div>
         </ng-container>

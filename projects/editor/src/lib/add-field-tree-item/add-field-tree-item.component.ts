@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { DndService, DragSource } from '@ng-dnd/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { DndService } from '@ng-dnd/core';
 import { BehaviorSubject } from 'rxjs';
 import { EditorService } from '../editor.service';
-import { DragAction, DragType, FieldOption, IEditorFormlyField, IFieldDragData } from '../editor.types';
+import { DropAction, FieldOption, IEditorFormlyField } from '../editor.types';
 import { isCategoryOption, isTypeOption, trackByDisplayName } from '../editor.utils';
+import { FieldDragDrop } from '../field-drag-drop/field-drag-drop';
 
 @Component({
     selector: 'editor-add-field-tree-item',
@@ -11,21 +12,24 @@ import { isCategoryOption, isTypeOption, trackByDisplayName } from '../editor.ut
     styleUrls: ['./add-field-tree-item.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddFieldTreeItemComponent implements OnInit, OnChanges {
+export class AddFieldTreeItemComponent implements OnChanges, OnDestroy {
     @Input() public fieldOption: FieldOption;
-    @Input() public index: number;
     @Input() public isExpanded = false;
     @Input() public treeLevel = 0;
 
     public isExpanded$: BehaviorSubject<boolean> = new BehaviorSubject(this.isExpanded);
     public isCategoryOption: boolean;
     public childOptions: FieldOption[] = [];
-    public field: IEditorFormlyField;
-    public dragSource: DragSource<IFieldDragData, Record<string, never>>;
+
+    public dnd: FieldDragDrop;
 
     trackByDisplayName = trackByDisplayName;
 
-    constructor(private _editorService: EditorService, private _dnd: DndService) {}
+    private _field: IEditorFormlyField;
+
+    constructor(private _editorService: EditorService, private _dndService: DndService) {
+        this.dnd = new FieldDragDrop(DropAction.COPY, this._editorService, this._dndService);
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.fieldOption) {
@@ -33,7 +37,8 @@ export class AddFieldTreeItemComponent implements OnInit, OnChanges {
                 this.isCategoryOption = true;
                 this.childOptions = this.fieldOption.children;
             } else if (isTypeOption(this.fieldOption)) {
-                this.field = this._editorService.getDefaultField(this.fieldOption.type) as IEditorFormlyField;
+                this._field = this._editorService.getDefaultField(this.fieldOption.type) as IEditorFormlyField;
+                this.dnd.setup(this._field);
             }
         }
 
@@ -42,23 +47,7 @@ export class AddFieldTreeItemComponent implements OnInit, OnChanges {
         }
     }
 
-    ngOnInit(): void {
-        if (!this.isCategoryOption) {
-            this._setupDragAndDrop();
-        }
-    }
-
-    private _setupDragAndDrop(): void {
-        this.dragSource = this._dnd.dragSource(DragType.FORMLY_FIELD, {
-            beginDrag: () => this._getDragData(),
-        });
-    }
-
-    private _getDragData(): IFieldDragData {
-        return {
-            action: DragAction.COPY,
-            index: undefined,
-            field: this.field,
-        };
+    ngOnDestroy(): void {
+        this.dnd.destroy();
     }
 }

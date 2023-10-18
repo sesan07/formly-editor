@@ -6,8 +6,8 @@
     [isActive]="isActiveField$ | async"
     [hasOptions]="true"
     [optionsMenu]="optionsMenu"
-    [dragSource]="dragSource"
-    [dropTarget]="dropTarget"
+    [dragSource]="dnd.dragSource"
+    [dropTarget]="dnd.dropTarget"
     (isExpandedChange)="onSelected()"
 >
     <ng-container headerContent>
@@ -29,23 +29,23 @@
 
 <div
     class="drop-position-indicator-overlay"
-    [class.hovering]="isHovering$ | async"
+    [class.hovering]="dnd.isHovering$ | async"
 >
-    <ng-container *ngIf="hoverPosition$ | async as hoverPosition">
+    <ng-container *ngIf="dnd.hoverPosition$ | async as hoverPosition">
         <div
             class="droppable"
-            [style.width.%]="dropWidth.left"
+            [style.width.%]="dnd.dropWidth.left"
             [class.hovering]="hoverPosition === 'left'"
         ></div>
         <div
             *ngIf="field._info.childrenConfig"
             class="droppable"
-            [style.width.%]="dropWidth.center"
+            [style.width.%]="dnd.dropWidth.center"
             [class.hovering]="hoverPosition === 'center'"
         ></div>
         <div
             class="droppable"
-            [style.width.%]="dropWidth.right"
+            [style.width.%]="dnd.dropWidth.right"
             [class.hovering]="hoverPosition === 'right'"
         ></div>
     </ng-container>
