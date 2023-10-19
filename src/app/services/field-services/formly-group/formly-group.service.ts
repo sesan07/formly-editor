@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormlyTemplateOptions } from '@ngx-formly/core';
-import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
+import { BaseFieldService, IProperty } from '@sesan07/ngx-formly-editor';
 
 import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
 
@@ -9,35 +9,17 @@ import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
 })
 export class FormlyGroupService extends BaseFieldService<FormlyTemplateOptions> {
     public getDefaultField(type: AppFieldType): IFormlyField {
-        const config: IFormlyField = {
+        return {
             type,
             fieldGroup: [],
         };
-
-        return config;
     }
     protected _getFieldProperties(type: AppFieldType): IProperty[] {
-        return type === AppFieldType.FORMLY_GROUP_CARD
-            ? [
-                  {
-                      name: 'Card Title',
-                      key: 'templateOptions.cardTitle',
-                      type: PropertyType.TEXT,
-                  },
-              ]
-            : [];
+        return [];
     }
 
     protected _getWrapperProperties(type: AppFieldType): IProperty[] {
-        return type === AppFieldType.FORMLY_GROUP
-            ? [
-                  {
-                      name: 'Card Title',
-                      key: 'templateOptions.cardTitle',
-                      type: PropertyType.TEXT,
-                  },
-              ]
-            : [];
+        return [];
     }
 
     protected _getWrapperTypes(type: AppFieldType): AppWrapperType[] {

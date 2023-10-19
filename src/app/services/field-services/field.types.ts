@@ -4,7 +4,6 @@ import { IBaseFormlyField } from '@sesan07/ngx-formly-editor';
 export enum AppFieldType {
     CHECKBOX = 'checkbox',
     FORMLY_GROUP = 'formly-group',
-    FORMLY_GROUP_CARD = 'formly-group-card',
     INPUT = 'input',
     NUMBER = 'number',
     INTEGER = 'integer',
