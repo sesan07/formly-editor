@@ -57,7 +57,6 @@
                 [matChipInputFor]="chipList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 (matChipInputTokenEnd)="onAdd($event)"
-                (blur)="autocompleteTrigger.closePanel()"
             />
         </mat-chip-list>
         <mat-autocomplete

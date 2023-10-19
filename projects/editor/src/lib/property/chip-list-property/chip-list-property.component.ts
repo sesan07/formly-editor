@@ -1,7 +1,7 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { BehaviorSubject, Subject, isObservable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -51,14 +51,16 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
         this._updateSelectedOptions();
         const index: number = this.selectedOptions$.value.indexOf(option);
         if (index >= 0) {
-            this.selectedOptions$.value.splice(index, 1);
+            const newOptions = [...this.selectedOptions$.value];
+            newOptions.splice(index, 1);
+            this.selectedOptions$.next(newOptions);
             this._updateValue();
         }
     }
 
     onSelected(event: MatAutocompleteSelectedEvent): void {
         this._updateSelectedOptions();
-        this.selectedOptions$.value.push(event.option.viewValue);
+        this.selectedOptions$.next([...this.selectedOptions$.value, event.option.viewValue]);
         this.inputElementRef.nativeElement.value = '';
         this.formControl.setValue(null);
         this._updateValue();
