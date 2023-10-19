@@ -21,26 +21,17 @@
             *ngIf="!hideOptions"
         >
             <button
-                [disabled]="isFirstChild"
-                mat-icon-button
-                (click)="onMoveUp()"
-            >
-                <mat-icon>arrow_upward</mat-icon>
-            </button>
-
-            <button
-                [disabled]="isLastChild"
-                mat-icon-button
-                (click)="onMoveDown()"
-            >
-                <mat-icon>arrow_downward</mat-icon>
-            </button>
-
-            <button
                 mat-icon-button
                 [matMenuTriggerFor]="optionsMenu"
             >
                 <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <button
+                mat-icon-button
+                (click)="onRemove(); $event.stopPropagation()"
+            >
+                <mat-icon>delete</mat-icon>
             </button>
         </div>
 
@@ -70,10 +61,21 @@
             <button
                 class="editor-mat-menu-item"
                 mat-menu-item
-                (click)="onRemove()"
+                [disabled]="isFirstChild"
+                (click)="onMoveUp()"
             >
-                <mat-icon>remove</mat-icon>
-                <span>Remove</span>
+                <mat-icon>arrow_upward</mat-icon>
+                <span>Move Up</span>
+            </button>
+
+            <button
+                class="editor-mat-menu-item"
+                mat-menu-item
+                [disabled]="isLastChild"
+                (click)="onMoveDown()"
+            >
+                <mat-icon>arrow_downward</mat-icon>
+                <span>Move Down</span>
             </button>
         </mat-menu>
     </header>
