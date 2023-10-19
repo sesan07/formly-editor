@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule, MAT_TABS_CONFIG } from '@angular/material/tabs';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
 import { FormlyConfig } from '@ngx-formly/core';
 import { DndModule } from '@ng-dnd/core';
 import { HTML5Backend } from '@ng-dnd/multi-backend';
@@ -14,25 +15,22 @@ import { FormModule } from './form/form.module';
 import { FileService } from './shared/services/file-service/file.service';
 import { EditorComponent } from './editor.component';
 import { SidebarModule } from './sidebar/sidebar.module';
-import { MatMenuModule } from '@angular/material/menu';
 import { FieldNameModule } from './field-name/field-name.module';
 import { EditFieldModule } from './edit-field/edit-field.module';
-import { TreeItemModule } from './tree-item/tree-item.module';
 import { CustomFormlyModule } from './custom-formly/custom-formly.module';
 import { ActionReducer, META_REDUCERS, StoreModule } from '@ngrx/store';
 import { editorFeature } from './state/state.reducers';
 import { PropertyModule } from './property/property.module';
 import { JSONDialogModule } from './json-dialog/json-dialog.module';
-import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
 import { GenericFieldService } from './field-service/generic/generic-field.service';
 import { FormlyGroupComponent } from './custom-formly/formly-group/formly-group.component';
-import { AddFieldTreeItemComponent } from './add-field-tree-item/add-field-tree-item.component';
+import { FieldTreeItemModule } from './field-tree-item/field-tree-item.module';
+import { AddFieldTreeItemModule } from './add-field-tree-item/add-field-tree-item.module';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/selection/active-line';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
-import { FieldDropOverlayModule } from './field-drag-drop/field-drop-overlay/field-drop-overlay.module';
 
 const defaultConfig: EditorConfig = {
     options: [],
@@ -47,7 +45,7 @@ const metaReducerFactory =
     };
 
 @NgModule({
-    declarations: [EditorComponent, FieldTreeItemComponent, AddFieldTreeItemComponent],
+    declarations: [EditorComponent],
     imports: [
         CommonModule,
         FormModule,
@@ -58,11 +56,11 @@ const metaReducerFactory =
         SidebarModule,
         FieldNameModule,
         EditFieldModule,
-        TreeItemModule,
+        AddFieldTreeItemModule,
+        FieldTreeItemModule,
         PropertyModule,
         JSONDialogModule,
         CustomFormlyModule,
-        FieldDropOverlayModule,
         StoreModule.forFeature(editorFeature),
         DndModule.forRoot({ backend: HTML5Backend }),
     ],
