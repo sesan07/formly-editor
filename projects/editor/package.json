@@ -1,10 +1,10 @@
 {
   "name": "@sesan07/ngx-formly-editor",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A configurable editor for ngx-formly forms.",
   "author": "Samuel Esan <samuel.esan@proton.me> (https://sesan.dev)",
-  "license": "GPL-3.0",
-  "homepage": "https://github.com/sesan07/formly-editor-app#readme",
+  "license": "MIT",
+  "homepage": "https://github.com/sesan07/formly-editor#readme",
   "peerDependencies": {
     "@angular/core": "13 || 14",
     "@angular/material": "13 || 14",
