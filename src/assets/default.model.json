@@ -1,20 +1,12 @@
 {
   "group": {
-    "card": {
+    "group2": {
       "input": "Hello!",
       "number": 321,
       "textarea": "Bye!"
     },
-    "repeat": [
-      {
-        "radio": 1,
-        "select": [1]
-      },
-      {
-        "radio": 2,
-        "select": [2, 3]
-      }
-    ],
-    "checkbox": true
-  }
+    "radio": 1,
+    "select": [2, 3]
+  },
+  "checkbox": true
 }

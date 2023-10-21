@@ -3,7 +3,7 @@
     "type": "formly-group",
     "fieldGroup": [
       {
-        "type": "formly-group-card",
+        "type": "formly-group",
         "fieldGroup": [
           {
             "type": "input",
@@ -41,106 +41,93 @@
             "className": "col-span-2"
           }
         ],
-        "key": "card",
-        "fieldGroupClassName": "gap-2 grid grid-cols-2",
-        "templateOptions": {
-          "cardTitle": "Title!"
-        }
+        "className": "col-span-2",
+        "fieldGroupClassName": "grid grid-cols-2 gap-2",
+        "key": "group2"
       },
       {
-        "type": "repeating-section",
-        "templateOptions": {
-          "addText": "Add Section"
-        },
-        "fieldArray": {
-          "type": "formly-group",
-          "fieldGroup": [
-            {
-              "type": "radio",
-              "wrappers": ["form-field"],
-              "templateOptions": {
-                "label": "Label",
-                "placeholder": "Placeholder",
-                "description": "Description",
-                "required": true,
-                "options": [
-                  {
-                    "value": 1,
-                    "label": "Option 1"
-                  },
-                  {
-                    "value": 2,
-                    "label": "Option 2"
-                  },
-                  {
-                    "value": 3,
-                    "label": "Option 3"
-                  },
-                  {
-                    "value": 4,
-                    "label": "Option 4",
-                    "disabled": true
-                  }
-                ]
-              },
-              "key": "radio"
-            },
-            {
-              "type": "select",
-              "wrappers": ["form-field"],
-              "templateOptions": {
-                "label": "Label",
-                "placeholder": "Placeholder",
-                "description": "Description",
-                "required": true,
-                "multiple": true,
-                "selectAllOption": "Select All",
-                "options": [
-                  {
-                    "value": 1,
-                    "label": "Option 1"
-                  },
-                  {
-                    "value": 2,
-                    "label": "Option 2"
-                  },
-                  {
-                    "value": 3,
-                    "label": "Option 3"
-                  },
-                  {
-                    "value": 4,
-                    "label": "Option 4",
-                    "disabled": true
-                  }
-                ]
-              },
-              "key": "select"
-            }
-          ],
-          "fieldGroupClassName": "grid grid-cols-2 gap-x-2"
-        },
-        "key": "repeat",
-        "fieldGroupClassName": ""
-      },
-      {
-        "type": "checkbox",
+        "type": "radio",
         "wrappers": ["form-field"],
         "templateOptions": {
-          "label": "Accept terms",
-          "description": "In order to proceed, please accept terms",
-          "pattern": "true",
-          "required": true
+          "label": "Label",
+          "placeholder": "Placeholder",
+          "description": "Description",
+          "required": true,
+          "options": [
+            {
+              "value": 1,
+              "label": "Option 1"
+            },
+            {
+              "value": 2,
+              "label": "Option 2"
+            },
+            {
+              "value": 3,
+              "label": "Option 3"
+            },
+            {
+              "value": 4,
+              "label": "Option 4",
+              "disabled": true
+            }
+          ]
         },
-        "validation": {
-          "messages": {
-            "pattern": "Please accept the terms"
-          }
+        "key": "radio",
+        "className": "col-6"
+      },
+      {
+        "type": "select",
+        "wrappers": ["form-field"],
+        "templateOptions": {
+          "label": "Label",
+          "placeholder": "Placeholder",
+          "description": "Description",
+          "required": true,
+          "multiple": true,
+          "selectAllOption": "Select All",
+          "options": [
+            {
+              "value": 1,
+              "label": "Option 1"
+            },
+            {
+              "value": 2,
+              "label": "Option 2"
+            },
+            {
+              "value": 3,
+              "label": "Option 3"
+            },
+            {
+              "value": 4,
+              "label": "Option 4",
+              "disabled": true
+            }
+          ]
         },
-        "key": "checkbox"
+        "key": "select",
+        "className": "col-6"
       }
     ],
     "key": "group",
-    "fieldGroupClassName": "grid gap-2"
+    "fieldGroupClassName": "grid grid-cols-2 gap-2"
+  },
+  {
+    "type": "checkbox",
+    "wrappers": ["form-field"],
+    "templateOptions": {
+      "label": "Accept terms",
+      "description": "In order to proceed, please accept terms",
+      "pattern": "true",
+      "required": true
+    },
+    "validation": {
+      "messages": {
+        "pattern": "Please accept the terms"
+      }
+    },
+    "key": "checkbox",
+    "className": "mt-2"
   }
 ]
