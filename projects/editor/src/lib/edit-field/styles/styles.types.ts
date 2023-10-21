@@ -5,6 +5,7 @@ export enum ClassProperty {
 
 export enum BreakpointAffix {
     PREFIX = 'prefix',
+    INFIX = 'infix',
     SUFFIX = 'suffix',
 }
 

@@ -10,6 +10,7 @@ import {
 import { IEditorFormlyField } from '../../../editor.types';
 import { IPropertyChange, PropertyChangeType } from '../../../property/property.types';
 import { BreakpointAffix, ClassProperty, IBreakpoint, IStyleOption, IStyleOptionCategory } from '../styles.types';
+import { findVariant, formatVariant } from '../styles.utils';
 
 @Component({
     selector: 'editor-style-option',
@@ -36,10 +37,6 @@ export class StyleOptionComponent implements OnChanges {
         return this.field[this.propertyPath] ?? '';
     }
 
-    get classPrefix(): string {
-        return this.option.value ? `${this.option.value}-` : '';
-    }
-
     ngOnChanges(changes: SimpleChanges) {
         if (changes.field && this.field) {
             this._updateSelection();
@@ -52,7 +49,7 @@ export class StyleOptionComponent implements OnChanges {
 
     onVariantSelected(variant: string): void {
         let newPropertyValue: string = this._removeSelection();
-        const newClassName = this._addBreakpoint(this.option, `${this.classPrefix}${variant}`, '', '');
+        const newClassName = formatVariant(variant, this.option, this.breakpoint, this.breakpointAffix);
         if (newPropertyValue) {
             newPropertyValue = `${newPropertyValue} ${newClassName}`;
         } else {
@@ -102,16 +99,9 @@ export class StyleOptionComponent implements OnChanges {
         propertyValue: string,
         currBreakpoint: IBreakpoint = this.breakpoint
     ): string {
-        const classPrefix: string = option.value ? `${option.value}-` : '';
         const variantsStr = `(${option.variants.join('|')})`;
         const regex = new RegExp(
-            `(?<=(\\s|^))${this._addBreakpoint(
-                option,
-                `${classPrefix}${variantsStr}`,
-                '',
-                '',
-                currBreakpoint
-            )}(?=(\\s|$))`
+            `(?<=(\\s|^))${formatVariant(variantsStr, option, currBreakpoint, this.breakpointAffix)}(?=(\\s|$))`
         );
         const cleaned = propertyValue
             .replace(regex, '*')
@@ -123,30 +113,12 @@ export class StyleOptionComponent implements OnChanges {
     }
 
     private _updateSelection(): void {
-        const variantsStr = `(${this.option.variants.join('|')})`;
-        const regex = new RegExp(
-            `(?<=${this._addBreakpoint(this.option, `${this.classPrefix})${variantsStr}(?=`, '(\\s|^)', '(\\s|$)')})`
+        this.selectedVariant = findVariant(
+            this.propertyValue ?? '',
+            this.option,
+            this.breakpoint,
+            this.breakpointAffix
         );
-        const matches: string[] | null = this.propertyValue?.match(regex);
-        this.selectedVariant = matches ? matches[0] : null;
-    }
-
-    private _addBreakpoint(
-        option: IStyleOption,
-        text: string,
-        prefixDefault: string,
-        suffixDefault: string,
-        breakpoint: IBreakpoint = this.breakpoint
-    ): string {
-        return `${
-            this.breakpointAffix === BreakpointAffix.PREFIX && breakpoint.value && option.hasBreakpoints
-                ? breakpoint.value
-                : prefixDefault
-        }${text}${
-            this.breakpointAffix === BreakpointAffix.SUFFIX && breakpoint.value && option.hasBreakpoints
-                ? breakpoint.value
-                : suffixDefault
-        }`;
     }
 
     private _emitChange(newValue: string): void {
