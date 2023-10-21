@@ -38,6 +38,7 @@ import { IEditorState } from './state/state.types';
 
 @Injectable()
 export class EditorService {
+    public config: EditorConfig;
     public fieldOptions: FieldOption[];
 
     private _forms: IForm[] = [];
@@ -57,22 +58,20 @@ export class EditorService {
     private readonly _stateStoragekey = 'editor';
     private readonly _defaultAutosaveDelay = 5000;
 
-    private _editorConfig: EditorConfig;
-
     constructor(private _http: HttpClient, private _store: Store<IEditorState>) {}
 
-    setup(editorConfig: EditorConfig) {
-        this._editorConfig = editorConfig;
+    setup(config: EditorConfig) {
+        this.config = config;
 
         this._store.select(selectForms).subscribe(forms => (this._forms = forms));
         this._store.select(selectActiveField).subscribe(field => (this._activeField = field));
         this._store.select(selectActiveFieldMap).subscribe(fieldMap => (this._activeFieldMap = fieldMap));
         this._store
             .select(selectEditor)
-            .pipe(debounceTime(this._editorConfig.autosaveDelay ?? this._defaultAutosaveDelay))
+            .pipe(debounceTime(this.config.autosaveDelay ?? this._defaultAutosaveDelay))
             .subscribe(state => this._saveState(state));
 
-        this.fieldOptions = [...this._editorConfig.options, this._defaultTypeOption];
+        this.fieldOptions = [...this.config.options, this._defaultTypeOption];
         const getTypeOptions = (options: FieldOption[]) =>
             options.reduce<FieldTypeOption[]>(
                 (a, b): FieldTypeOption[] => [...a, ...(isCategoryOption(b) ? getTypeOptions(b.children) : [b])],
@@ -199,7 +198,7 @@ export class EditorService {
     }
 
     public onDisplayFields(fields: IEditorFormlyField[], model: Record<string, any>): IEditorFormlyField[] {
-        return this._editorConfig.onDisplayFields?.(fields, model) ?? fields;
+        return this.config.onDisplayFields?.(fields, model) ?? fields;
     }
 
     private _getKeyPath({ _info: { formId, fieldId } }: IEditorFormlyField): string | undefined {

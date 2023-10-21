@@ -4,6 +4,7 @@ import { FormlyFieldConfig, FormlyTemplateOptions } from '@ngx-formly/core';
 import { FormlyFieldConfigCache } from './custom-formly/fieldconfig.cache';
 import { BaseFieldService } from './field-service/base-field.service';
 import { IProperty } from './property/property.types';
+import { IStylesConfig } from './edit-field/styles/styles.types';
 
 export enum EditorFieldType {
     FORMLY_GROUP = 'formly-group',
@@ -83,6 +84,7 @@ export interface FieldTypeChildrenConfig {
 export interface EditorConfig {
     options: FieldOption[];
     autosaveDelay?: number;
+    stylesConfig?: IStylesConfig;
     onDisplayFields?: (fields: IEditorFormlyField[], model: Record<string, any>) => IEditorFormlyField[];
 }
 

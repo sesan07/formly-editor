@@ -1,24 +1,20 @@
 import { Injectable } from '@angular/core';
-import { defaultConfig } from './styles.config';
 
-import {
-    BreakpointAffix,
-    ClassProperty,
-    IBreakpoint,
-    IStyleOption,
-    IStyleOptionCategory,
-    IStylesConfig,
-} from './styles.types';
+import { ClassProperty, IBreakpoint, IStyleOption, IStyleOptionCategory, IStylesConfig } from './styles.types';
+import { formatVariant } from './styles.utils';
+import { EditorService } from '../../editor.service';
+import { tailwindConfig } from './styles-config/tailwind.styles-config';
 
 @Injectable({
     providedIn: 'root',
 })
 export class StylesService {
-    stylesConfig: IStylesConfig = defaultConfig;
+    stylesConfig: IStylesConfig;
     classNames: string[];
     fieldGroupClassNames: string[];
 
-    constructor() {
+    constructor(editorService: EditorService) {
+        this.stylesConfig = editorService.config.stylesConfig ?? tailwindConfig;
         this.classNames = this._getPropertyClasses(ClassProperty.CLASS_NAME);
         this.fieldGroupClassNames = this._getPropertyClasses(ClassProperty.FIELD_GROUP_CLASS_NAME);
     }
@@ -27,23 +23,17 @@ export class StylesService {
         return categories.reduce(
             (a, category) => [
                 ...a,
-                ...category.options.reduce(
-                    (b, option) => [...b, ...this._getOptionClasses(option, breakpoint.value)],
-                    []
-                ),
+                ...category.options.reduce((b, option) => [...b, ...this._getOptionClasses(option, breakpoint)], []),
             ],
             []
         );
     }
 
-    private _getOptionClasses(option: IStyleOption, breakpoint: string): string[] {
+    private _getOptionClasses(option: IStyleOption, breakpoint: IBreakpoint): string[] {
         const classes =
-            !breakpoint || option.hasBreakpoints
-                ? option.variants.map(
-                      variant =>
-                          `${this.stylesConfig.breakpointAffix === BreakpointAffix.PREFIX ? breakpoint : ''}${
-                              option.value ? `${option.value}-` : ''
-                          }${variant}${this.stylesConfig.breakpointAffix === BreakpointAffix.SUFFIX ? breakpoint : ''}`
+            !breakpoint.value || option.hasBreakpoints
+                ? option.variants.map(variant =>
+                      formatVariant(variant, option, breakpoint, this.stylesConfig.breakpointAffix)
                   )
                 : [];
 

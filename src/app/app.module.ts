@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
-import { EditorModule } from '@sesan07/ngx-formly-editor';
+import { EditorModule, tailwindConfig } from '@sesan07/ngx-formly-editor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CheckboxService } from './services/field-services/checkbox/checkbox.service';
@@ -26,6 +26,7 @@ import { TextareaService } from './services/field-services/textarea/textarea.ser
         AppRoutingModule,
         FormlyMaterialModule,
         EditorModule.forRoot({
+            stylesConfig: tailwindConfig,
             options: [
                 {
                     displayName: 'Input',
