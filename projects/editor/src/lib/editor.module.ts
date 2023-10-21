@@ -11,6 +11,7 @@ import { HTML5Backend } from '@ng-dnd/multi-backend';
 
 import { EditorConfig, EDITOR_CONFIG, EditorFieldType } from './editor.types';
 import { EditorService } from './editor.service';
+import { StylesService } from './edit-field/styles/styles.service';
 import { FormModule } from './form/form.module';
 import { FileService } from './shared/services/file-service/file.service';
 import { EditorComponent } from './editor.component';
@@ -95,11 +96,15 @@ const metaReducerFactory =
 export class EditorModule {
     constructor(
         editorService: EditorService,
+        stylesService: StylesService,
         formlyConfig: FormlyConfig,
         @Optional() @Inject(EDITOR_CONFIG) config: EditorConfig
     ) {
         // Setup editor
-        editorService.setup(config ?? defaultConfig);
+        config = config ?? defaultConfig;
+        editorService.setup(config);
+        stylesService.setup(config.stylesConfig);
+
         // Override default formly-group
         formlyConfig.setType({
             name: EditorFieldType.FORMLY_GROUP,
@@ -107,7 +112,7 @@ export class EditorModule {
         });
     }
 
-    static forRoot(config: EditorConfig): ModuleWithProviders<EditorModule> {
+    static forRoot(config?: EditorConfig): ModuleWithProviders<EditorModule> {
         return {
             ngModule: EditorModule,
             providers: [
