@@ -8,7 +8,7 @@
           {
             "type": "input",
             "wrappers": ["form-field"],
-            "templateOptions": {
+            "props": {
               "label": "Label",
               "placeholder": "Placeholder",
               "description": "Description",
@@ -19,7 +19,7 @@
           {
             "type": "number",
             "wrappers": ["form-field"],
-            "templateOptions": {
+            "props": {
               "label": "Label",
               "placeholder": "Placeholder",
               "description": "Description",
@@ -31,7 +31,7 @@
           {
             "type": "textarea",
             "wrappers": ["form-field"],
-            "templateOptions": {
+            "props": {
               "label": "Label",
               "placeholder": "Placeholder",
               "description": "Description",
@@ -48,7 +48,7 @@
       {
         "type": "radio",
         "wrappers": ["form-field"],
-        "templateOptions": {
+        "props": {
           "label": "Label",
           "placeholder": "Placeholder",
           "description": "Description",
@@ -79,7 +79,7 @@
       {
         "type": "select",
         "wrappers": ["form-field"],
-        "templateOptions": {
+        "props": {
           "label": "Label",
           "placeholder": "Placeholder",
           "description": "Description",
@@ -116,7 +116,7 @@
   {
     "type": "checkbox",
     "wrappers": ["form-field"],
-    "templateOptions": {
+    "props": {
       "label": "Accept terms",
       "description": "In order to proceed, please accept terms",
       "pattern": "true",

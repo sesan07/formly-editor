@@ -2,17 +2,17 @@ import { Injectable } from '@angular/core';
 import { BaseFieldService, IArrayProperty, IObjectProperty, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
 import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
-import { ISelectTemplateOptions } from './select.types';
+import { ISelectProps } from './select.types';
 
 @Injectable({
     providedIn: 'root',
 })
-export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
-    public getDefaultField(type: AppFieldType): IFormlyField<ISelectTemplateOptions> {
+export class SelectService extends BaseFieldService<ISelectProps> {
+    public getDefaultField(type: AppFieldType): IFormlyField<ISelectProps> {
         return {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],
-            templateOptions: {
+            props: {
                 label: 'Label',
                 placeholder: 'Placeholder',
                 description: 'Description',
@@ -33,37 +33,37 @@ export class SelectService extends BaseFieldService<ISelectTemplateOptions> {
         return [
             {
                 name: 'Label',
-                key: 'templateOptions.label',
+                key: 'props.label',
                 type: PropertyType.TEXT,
             },
             {
                 name: 'Placeholder',
-                key: 'templateOptions.placeholder',
+                key: 'props.placeholder',
                 type: PropertyType.TEXT,
             },
             {
                 name: 'Description',
-                key: 'templateOptions.description',
+                key: 'props.description',
                 type: PropertyType.TEXT,
             },
             {
                 name: 'Select all options label',
-                key: 'templateOptions.selectAllOption',
+                key: 'props.selectAllOption',
                 type: PropertyType.TEXT,
             },
             {
                 name: 'Multiple selections',
-                key: 'templateOptions.multiple',
+                key: 'props.multiple',
                 type: PropertyType.BOOLEAN,
             },
             {
                 name: 'Required',
-                key: 'templateOptions.required',
+                key: 'props.required',
                 type: PropertyType.BOOLEAN,
             },
             {
                 name: 'Options',
-                key: 'templateOptions.options',
+                key: 'props.options',
                 type: PropertyType.ARRAY,
                 canAdd: true,
                 childProperty: {

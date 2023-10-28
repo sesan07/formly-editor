@@ -2,17 +2,17 @@ import { Injectable } from '@angular/core';
 import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
 import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
-import { IInputTemplateOptions } from './input.types';
+import { IInputProps } from './input.types';
 
 @Injectable({
     providedIn: 'root',
 })
-export class InputService extends BaseFieldService<IInputTemplateOptions> {
-    public getDefaultField(type: AppFieldType): IFormlyField<IInputTemplateOptions> {
-        const config: IFormlyField<IInputTemplateOptions> = {
+export class InputService extends BaseFieldService<IInputProps> {
+    public getDefaultField(type: AppFieldType): IFormlyField<IInputProps> {
+        const config: IFormlyField<IInputProps> = {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],
-            templateOptions: {
+            props: {
                 label: 'Label',
                 placeholder: 'Placeholder',
                 description: 'Description',
@@ -21,7 +21,7 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
         };
 
         if (type === AppFieldType.NUMBER || type === AppFieldType.INTEGER) {
-            config.templateOptions.type = 'number';
+            config.props.type = 'number';
         }
 
         return config;
@@ -31,27 +31,27 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
         return [
             {
                 name: 'Type',
-                key: 'templateOptions.type',
+                key: 'props.type',
                 type: PropertyType.TEXT,
             },
             {
                 name: 'Label',
-                key: 'templateOptions.label',
+                key: 'props.label',
                 type: PropertyType.TEXT,
             },
             {
                 name: 'Placeholder',
-                key: 'templateOptions.placeholder',
+                key: 'props.placeholder',
                 type: PropertyType.TEXT,
             },
             {
                 name: 'Description',
-                key: 'templateOptions.description',
+                key: 'props.description',
                 type: PropertyType.TEXT,
             },
             {
                 name: 'Required',
-                key: 'templateOptions.required',
+                key: 'props.required',
                 type: PropertyType.BOOLEAN,
             },
         ];

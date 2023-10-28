@@ -1,4 +1,4 @@
-import { FormlyTemplateOptions } from '@ngx-formly/core';
+import { FormlyFieldProps } from '@ngx-formly/core';
 import { IBaseFormlyField } from '@sesan07/ngx-formly-editor';
 
 export enum AppFieldType {
@@ -8,16 +8,14 @@ export enum AppFieldType {
     NUMBER = 'number',
     INTEGER = 'integer',
     RADIO = 'radio',
-    REPEATING_SECTION = 'repeating-section',
     SELECT = 'select',
     TEXTAREA = 'textarea',
 }
 
 export enum AppWrapperType {
     FORM_FIELD = 'form-field',
-    CARD = 'card',
 }
 
-export interface IFormlyField<T = FormlyTemplateOptions> extends IBaseFormlyField<T> {
+export interface IFormlyField<T = FormlyFieldProps> extends IBaseFormlyField<T> {
     fieldGroup?: IFormlyField[];
 }

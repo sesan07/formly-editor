@@ -1,5 +1,5 @@
 import { InjectionToken, Type } from '@angular/core';
-import { FormlyFieldConfig, FormlyTemplateOptions } from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyFieldProps } from '@ngx-formly/core';
 
 import { FormlyFieldConfigCache } from './custom-formly/fieldconfig.cache';
 import { BaseFieldService } from './field-service/base-field.service';
@@ -32,9 +32,11 @@ export interface IEditorFieldInfo {
     childrenConfig?: FieldTypeChildrenConfig;
 }
 
-export interface IBaseFormlyField<T = FormlyTemplateOptions> extends FormlyFieldConfig {
+// TODO remove this?
+export interface IBaseFormlyField<T = FormlyFieldProps> extends FormlyFieldConfig {
     type: string;
     templateOptions?: T;
+    props?: T;
     fieldGroup?: IBaseFormlyField[];
 }
 
@@ -73,7 +75,7 @@ export interface FieldTypeOption {
     keyGenerationPrefix?: string;
     disableKeyGeneration?: boolean; // Prevent auto generating keys
     childrenConfig?: FieldTypeChildrenConfig;
-    service: Type<BaseFieldService<FormlyTemplateOptions>>;
+    service: Type<BaseFieldService<FormlyFieldProps>>;
 }
 
 export interface FieldTypeChildrenConfig {

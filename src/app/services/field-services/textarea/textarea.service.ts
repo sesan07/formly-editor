@@ -2,17 +2,17 @@ import { Injectable } from '@angular/core';
 import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
 import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
-import { ITextareaTemplateOptions } from './textarea.types';
+import { ITextareaProps } from './textarea.types';
 
 @Injectable({
     providedIn: 'root',
 })
-export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> {
-    public getDefaultField(type: AppFieldType): IFormlyField<ITextareaTemplateOptions> {
+export class TextareaService extends BaseFieldService<ITextareaProps> {
+    public getDefaultField(type: AppFieldType): IFormlyField<ITextareaProps> {
         return {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],
-            templateOptions: {
+            props: {
                 label: 'Label',
                 placeholder: 'Placeholder',
                 description: 'Description',
@@ -25,22 +25,22 @@ export class TextareaService extends BaseFieldService<ITextareaTemplateOptions> 
         return [
             {
                 name: 'Label',
-                key: 'templateOptions.label',
+                key: 'props.label',
                 type: PropertyType.TEXT,
             },
             {
                 name: 'Placeholder',
-                key: 'templateOptions.placeholder',
+                key: 'props.placeholder',
                 type: PropertyType.TEXT,
             },
             {
                 name: 'Description',
-                key: 'templateOptions.description',
+                key: 'props.description',
                 type: PropertyType.TEXT,
             },
             {
                 name: 'Required',
-                key: 'templateOptions.required',
+                key: 'props.required',
                 type: PropertyType.BOOLEAN,
             },
         ];

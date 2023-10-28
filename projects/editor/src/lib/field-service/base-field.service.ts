@@ -1,4 +1,4 @@
-import { FormlyTemplateOptions } from '@ngx-formly/core';
+import { FormlyFieldProps } from '@ngx-formly/core';
 import { Injectable } from '@angular/core';
 
 import { StylesService } from '../edit-field/styles/styles.service';
@@ -6,7 +6,7 @@ import { IProperty, PropertyType } from '../property/property.types';
 import { IBaseFormlyField, IEditorFieldService } from '../editor.types';
 
 @Injectable()
-export abstract class BaseFieldService<T extends FormlyTemplateOptions> implements IEditorFieldService {
+export abstract class BaseFieldService<T extends FormlyFieldProps> implements IEditorFieldService {
     public constructor(private _stylesService: StylesService) {}
 
     public getProperties(type: string): IProperty[] {

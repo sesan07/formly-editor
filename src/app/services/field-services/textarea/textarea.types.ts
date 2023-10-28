@@ -1,6 +1,6 @@
-import { FormlyTemplateOptions } from '@ngx-formly/core';
+import { FormlyFieldProps } from '@ngx-formly/core';
 
-export interface ITextareaTemplateOptions extends FormlyTemplateOptions {
+export interface ITextareaProps extends FormlyFieldProps {
     label: string;
     placeholder: string;
     description: string;

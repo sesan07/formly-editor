@@ -62,7 +62,7 @@ export interface FieldTypeOption {
     childrenConfig?: FieldTypeChildrenConfig;
     // A service that the editor can call to get data for this field type
     // BaseFieldService is exported by the editor, and can be extended for each or all field types
-    service: Type<BaseFieldService<FormlyTemplateOptions>>;
+    service: Type<BaseFieldService<FormlyFieldProps>>;
 }
 
 export interface FieldTypeChildrenConfig {
@@ -143,18 +143,18 @@ The editor uses configured field services to get data. Here's an example
 import { Injectable } from '@angular/core';
 import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
-import { IInputTemplateOptions } from './input.types';
+import { IInputProps } from './input.types';
 
 @Injectable({
     providedIn: 'root',
 })
-export class InputService extends BaseFieldService<IInputTemplateOptions> {
+export class InputService extends BaseFieldService<IInputProps> {
     // Returns a default configuration based on the field type
     public getDefaultField(type: string) {
         const config = {
             type,
             wrappers: ['form-field'],
-            templateOptions: {
+            props: {
                 label: 'Label',
                 placeholder: 'Placeholder',
                 description: 'Description',
@@ -163,7 +163,7 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
         };
 
         if (type === 'number' || type === 'integer') {
-            config.templateOptions.type = 'number';
+            config.props.type = 'number';
         }
 
         return config;
@@ -176,14 +176,14 @@ export class InputService extends BaseFieldService<IInputTemplateOptions> {
                 // Name of this option
                 name: 'Type',
                 // Dot separated path in the field
-                key: 'templateOptions.type',
+                key: 'props.type',
                 // The type of input field to display on the UI
                 type: PropertyType.TEXT,
             },
             ...
             {
                 name: 'Required',
-                key: 'templateOptions.required',
+                key: 'props.required',
                 type: PropertyType.BOOLEAN,
             },
             ...

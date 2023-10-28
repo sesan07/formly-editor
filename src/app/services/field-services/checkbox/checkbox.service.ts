@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
-import { AppFieldType, IFormlyField, AppWrapperType } from '../field.types';
-import { ICheckboxTemplateOptions } from './checkbox.types';
+import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
+import { ICheckboxProps } from './checkbox.types';
 
 @Injectable({
     providedIn: 'root',
 })
-export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> {
-    public getDefaultField(type: AppFieldType): IFormlyField<ICheckboxTemplateOptions> {
+export class CheckboxService extends BaseFieldService<ICheckboxProps> {
+    public getDefaultField(type: AppFieldType): IFormlyField<ICheckboxProps> {
         return {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],
-            templateOptions: {
+            props: {
                 label: 'Accept terms',
                 description: 'In order to proceed, please accept terms',
                 pattern: 'true',
@@ -30,22 +30,22 @@ export class CheckboxService extends BaseFieldService<ICheckboxTemplateOptions> 
         return [
             {
                 name: 'Label',
-                key: 'templateOptions.label',
+                key: 'props.label',
                 type: PropertyType.TEXT,
             },
             {
                 name: 'Description',
-                key: 'templateOptions.description',
+                key: 'props.description',
                 type: PropertyType.TEXT,
             },
             {
                 name: 'Required',
-                key: 'templateOptions.required',
+                key: 'props.required',
                 type: PropertyType.BOOLEAN,
             },
             {
                 name: 'Pattern',
-                key: 'templateOptions.pattern',
+                key: 'props.pattern',
                 type: PropertyType.TEXT,
             },
         ];

@@ -1,6 +1,6 @@
-import { FormlyTemplateOptions } from '@ngx-formly/core';
+import { FormlyFieldProps } from '@ngx-formly/core';
 
-export interface ICheckboxTemplateOptions extends FormlyTemplateOptions {
+export interface ICheckboxProps extends FormlyFieldProps {
     label: string;
     description: string;
     pattern: string;

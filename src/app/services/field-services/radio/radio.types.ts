@@ -1,6 +1,6 @@
-import { FormlyTemplateOptions } from '@ngx-formly/core';
+import { FormlyFieldProps } from '@ngx-formly/core';
 
-export interface IRadioTemplateOptions extends FormlyTemplateOptions {
+export interface IRadioProps extends FormlyFieldProps {
     label: string;
     placeholder: string;
     description: string;
