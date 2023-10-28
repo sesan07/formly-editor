@@ -47,7 +47,6 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     public isActiveField$: Observable<boolean>;
 
     public isMouseInside: boolean;
-    public hideOptions: boolean;
     public fieldInfo: IEditorFieldInfo;
     public fieldOptions: FieldOption[];
 
@@ -97,7 +96,6 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         this._editorField = this._editorService.getField(this.field._info.fieldId);
         this.fieldInfo = this._editorField._info;
 
-        this.hideOptions = this.field.templateOptions.hideEditorWrapperOptions;
         this.fieldOptions = this._editorService.fieldOptions;
 
         if (this.field.key) {
