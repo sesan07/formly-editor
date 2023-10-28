@@ -34,15 +34,11 @@ export const cleanField = (
 };
 
 const _removeEmptyProperties = (field: IEditorFormlyField): void => {
-    if (isEmpty(field.wrappers)) {
-        delete field.wrappers;
-    }
-    if (isEmpty(field.templateOptions)) {
-        delete field.templateOptions;
-    }
-    if (isEmpty(field.expressionProperties)) {
-        delete field.expressionProperties;
-    }
+    ['wrappers', 'templateOptions', 'props', 'expressionProperties', 'className', 'fieldGroupClassName'].forEach(p => {
+        if (isEmpty(field[p])) {
+            delete field[p];
+        }
+    });
 };
 
 const _removeEditorProperties = (field: IEditorFormlyField): void => {
