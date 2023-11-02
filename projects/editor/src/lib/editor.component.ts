@@ -1,8 +1,11 @@
-import { AfterViewInit, Component, OnInit, TrackByFunction } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, TrackByFunction } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { cloneDeep } from 'lodash-es';
 import { Observable, Subject, debounceTime, takeUntil } from 'rxjs';
+
+import { StylesService } from './edit-field/styles/styles.service';
+import { IStylesConfig } from './edit-field/styles/styles.types';
 import { EditorService } from './editor.service';
 import { FieldOption, IEditorFormlyField, IForm } from './editor.types';
 import { isCategoryOption, isTypeOption, trackByDisplayName, trackByFieldId } from './editor.utils';
@@ -30,6 +33,8 @@ import { IEditorState } from './state/state.types';
     styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit, AfterViewInit {
+    @Input() stylesConfig: IStylesConfig;
+
     public forms$: Observable<ReadonlyArray<IForm>>;
     public activeFormIndex$: Observable<number>;
     public activeField$: Observable<IEditorFormlyField>;
@@ -59,7 +64,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
         private _store: Store<IEditorState>,
         private _dialog: MatDialog,
         private _fileService: FileService,
-        private _propertyService: PropertyService
+        private _propertyService: PropertyService,
+        private _stylesService: StylesService
     ) {}
 
     trackFormById: TrackByFunction<IForm> = (_, form: IForm) => form.id;
@@ -81,6 +87,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
             .subscribe(model => (this.activeModel = model));
         this.modelProperty = this._getModelProperty();
         this.fieldOptions = this._editorService.fieldOptions;
+
+        this._stylesService.setup(this.stylesConfig);
     }
 
     ngAfterViewInit(): void {

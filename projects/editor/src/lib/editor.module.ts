@@ -1,37 +1,36 @@
-import { Inject, ModuleWithProviders, NgModule, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Inject, ModuleWithProviders, NgModule, Optional } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTabsModule, MAT_TABS_CONFIG } from '@angular/material/tabs';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { FormlyConfig } from '@ngx-formly/core';
+import { MAT_TABS_CONFIG, MatTabsModule } from '@angular/material/tabs';
 import { DndModule } from '@ng-dnd/core';
 import { HTML5Backend } from '@ng-dnd/multi-backend';
+import { FormlyConfig } from '@ngx-formly/core';
 
-import { EditorConfig, EDITOR_CONFIG, EditorFieldType } from './editor.types';
-import { EditorService } from './editor.service';
-import { StylesService } from './edit-field/styles/styles.service';
-import { FormModule } from './form/form.module';
-import { FileService } from './shared/services/file-service/file.service';
-import { EditorComponent } from './editor.component';
-import { SidebarModule } from './sidebar/sidebar.module';
-import { FieldNameModule } from './field-name/field-name.module';
-import { EditFieldModule } from './edit-field/edit-field.module';
-import { CustomFormlyModule } from './custom-formly/custom-formly.module';
 import { ActionReducer, META_REDUCERS, StoreModule } from '@ngrx/store';
-import { editorFeature } from './state/state.reducers';
-import { PropertyModule } from './property/property.module';
-import { JSONDialogModule } from './json-dialog/json-dialog.module';
-import { GenericFieldService } from './field-service/generic/generic-field.service';
-import { FormlyGroupComponent } from './custom-formly/formly-group/formly-group.component';
-import { FieldTreeItemModule } from './field-tree-item/field-tree-item.module';
 import { AddFieldTreeItemModule } from './add-field-tree-item/add-field-tree-item.module';
+import { CustomFormlyModule } from './custom-formly/custom-formly.module';
+import { FormlyGroupComponent } from './custom-formly/formly-group/formly-group.component';
+import { EditFieldModule } from './edit-field/edit-field.module';
+import { EditorComponent } from './editor.component';
+import { EditorService } from './editor.service';
+import { EDITOR_CONFIG, EditorConfig, EditorFieldType } from './editor.types';
+import { FieldNameModule } from './field-name/field-name.module';
+import { GenericFieldService } from './field-service/generic/generic-field.service';
+import { FieldTreeItemModule } from './field-tree-item/field-tree-item.module';
+import { FormModule } from './form/form.module';
+import { JSONDialogModule } from './json-dialog/json-dialog.module';
+import { PropertyModule } from './property/property.module';
+import { FileService } from './shared/services/file-service/file.service';
+import { SidebarModule } from './sidebar/sidebar.module';
+import { editorFeature } from './state/state.reducers';
 
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/addon/selection/active-line';
-import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
+import 'codemirror/addon/fold/foldgutter';
+import 'codemirror/addon/selection/active-line';
+import 'codemirror/mode/javascript/javascript';
 
 const defaultConfig: EditorConfig = {
     options: [],
@@ -96,14 +95,11 @@ const metaReducerFactory =
 export class EditorModule {
     constructor(
         editorService: EditorService,
-        stylesService: StylesService,
         formlyConfig: FormlyConfig,
         @Optional() @Inject(EDITOR_CONFIG) config: EditorConfig
     ) {
         // Setup editor
-        config = config ?? defaultConfig;
-        editorService.setup(config);
-        stylesService.setup(config.stylesConfig);
+        editorService.setup(config ?? defaultConfig);
 
         // Override default formly-group
         formlyConfig.setType({
