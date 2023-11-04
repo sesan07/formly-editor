@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { EditorComponent } from '@sesan07/ngx-formly-editor';
+import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-    { path: '', component: EditorComponent },
-    { path: '**', redirectTo: '', pathMatch: 'full' },
+    { path: 'bootstrap', loadChildren: () => import('./bootstrap/bootstrap.module').then(m => m.BootstrapModule) },
+    { path: 'material', loadChildren: () => import('./material/material.module').then(m => m.MaterialModule) },
+    { path: '**', redirectTo: 'material' },
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+    imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
 export class AppRoutingModule {}

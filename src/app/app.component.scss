@@ -1,8 +1,45 @@
+$app-header-height: 64px;
+
 :host {
     display: block;
     height: 100%;
+
+    ::ng-deep .app-header {
+        .mat-form-field-wrapper {
+            padding: 0;
+        }
+
+        .mat-form-field-subscript-wrapper {
+            display: none;
+        }
+
+        .mat-form-field-underline {
+            bottom: 0;
+        }
+    }
 }
 
-.close-btn {
-    margin-left: 8px;
+.app-header {
+    height: $app-header-height - 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.app-editor-container {
+    height: calc(100% - $app-header-height);
+}
+
+.app-title {
+    font-size: 1.25em;
+    font-weight: 500;
+}
+
+.app-actions {
+    display: flex;
+    align-items: center;
+    column-gap: 16px;
 }

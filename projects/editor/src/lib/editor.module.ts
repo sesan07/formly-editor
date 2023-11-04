@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Inject, ModuleWithProviders, NgModule, Optional } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -67,7 +67,6 @@ const metaReducerFactory =
     exports: [EditorComponent],
     providers: [
         GenericFieldService,
-        EditorService,
         FileService,
         {
             provide: MAT_DIALOG_DEFAULT_OPTIONS,
@@ -93,14 +92,7 @@ const metaReducerFactory =
     ],
 })
 export class EditorModule {
-    constructor(
-        editorService: EditorService,
-        formlyConfig: FormlyConfig,
-        @Optional() @Inject(EDITOR_CONFIG) config: EditorConfig
-    ) {
-        // Setup editor
-        editorService.setup(config ?? defaultConfig);
-
+    constructor(formlyConfig: FormlyConfig) {
         // Override default formly-group
         formlyConfig.setType({
             name: EditorFieldType.FORMLY_GROUP,
@@ -114,8 +106,9 @@ export class EditorModule {
             providers: [
                 {
                     provide: EDITOR_CONFIG,
-                    useValue: config,
+                    useValue: config ?? defaultConfig,
                 },
+                EditorService,
             ],
         };
     }

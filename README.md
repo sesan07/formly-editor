@@ -31,9 +31,6 @@ The configuration interface
 export interface EditorConfig {
     // Configuration for field types. Unconfigured field types will be treated as generic
     options: FieldOption[];
-    // Configuration for the styling tab.
-    // `tailwindConfig` and `bootstrapConfig` are provided by the editor, but you can create yours
-    stylesConfig?: IStylesConfig;
 }
 ```
 
@@ -95,7 +92,6 @@ import { InputService } from './services/field-services/input/input.service';
         }),
         // Configure editor
         EditorModule.forRoot({
-            stylesConfig: tailwindConfig,
             options: [
                 {
                     displayName: 'Input',

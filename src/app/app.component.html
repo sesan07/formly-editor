@@ -1,1 +1,32 @@
-<router-outlet></router-outlet>
+<div class="app-header">
+    <div class="app-title">Formly Editor</div>
+    <div class="app-actions">
+        <mat-form-field appearance="fill">
+            <mat-label>Formly UI</mat-label>
+            <mat-select [value]="currPath$ | async">
+                <mat-option
+                    value="material"
+                    routerLink="material"
+                >
+                    Material
+                </mat-option>
+                <mat-option
+                    value="bootstrap"
+                    routerLink="bootstrap"
+                >
+                    Bootstrap
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <a
+            href="https://github.com/sesan07/formly-editor"
+            target="_blank"
+            mat-icon-button
+        >
+            <mat-icon svgIcon="github"></mat-icon>
+        </a>
+    </div>
+</div>
+<div class="app-editor-container">
+    <router-outlet></router-outlet>
+</div>

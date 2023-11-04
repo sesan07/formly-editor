@@ -1,16 +1,17 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Inject, Injectable, inject } from '@angular/core';
 import { get, set } from 'lodash-es';
 import { forkJoin, of } from 'rxjs';
 import { catchError, debounceTime, map } from 'rxjs/operators';
-
 import { Store } from '@ngrx/store';
+import { FormlyFieldConfig } from '@ngx-formly/core';
+
 import {
+    EDITOR_CONFIG,
     EditorConfig,
     EditorFieldType,
     FieldOption,
     FieldTypeOption,
-    IBaseFormlyField,
     IEditorFieldService,
     IEditorFormlyField,
     IForm,
@@ -58,7 +59,13 @@ export class EditorService {
     private readonly _stateStoragekey = 'editor';
     private readonly _defaultAutosaveDelay = 5000;
 
-    constructor(private _http: HttpClient, private _store: Store<IEditorState>) {}
+    constructor(
+        @Inject(EDITOR_CONFIG) config: EditorConfig,
+        private _http: HttpClient,
+        private _store: Store<IEditorState>
+    ) {
+        this.setup(config);
+    }
 
     setup(config: EditorConfig) {
         this.config = config;
@@ -85,7 +92,7 @@ export class EditorService {
         }
     }
 
-    public addForm(name: string, sourceFields?: IBaseFormlyField[], model?: Record<string, unknown>): void {
+    public addForm(name: string, sourceFields?: FormlyFieldConfig[], model?: object): void {
         this._store.dispatch(
             addForm({
                 name,
@@ -185,7 +192,7 @@ export class EditorService {
         return this._activeFieldMap?.[fieldId];
     }
 
-    public getDefaultField(type: string): IBaseFormlyField {
+    public getDefaultField(type: string): FormlyFieldConfig {
         return this._getFieldService(type).getDefaultField(type);
     }
 
@@ -211,7 +218,7 @@ export class EditorService {
 
     private _loadDefaultForm(): void {
         forkJoin([
-            this._http.get<IBaseFormlyField | IBaseFormlyField[]>('assets/default.fields.json').pipe(
+            this._http.get<FormlyFieldConfig | FormlyFieldConfig[]>('assets/default.fields.json').pipe(
                 map(data => (Array.isArray(data) ? data : [data])),
                 catchError(() => {
                     console.warn('Unable to load default fields');

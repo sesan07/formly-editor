@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
-import { FormlyModule } from '@ngx-formly/core';
-import { FormlyMaterialModule } from '@ngx-formly/material';
-import { EditorModule, tailwindConfig } from '@sesan07/ngx-formly-editor';
+import { EditorModule } from '@sesan07/ngx-formly-editor';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CheckboxService } from './services/field-services/checkbox/checkbox.service';
@@ -24,9 +24,9 @@ import { TextareaService } from './services/field-services/textarea/textarea.ser
         BrowserAnimationsModule,
         HttpClientModule,
         AppRoutingModule,
-        FormlyMaterialModule,
+        MatIconModule,
+        MatSelectModule,
         EditorModule.forRoot({
-            stylesConfig: tailwindConfig,
             options: [
                 {
                     displayName: 'Input',
@@ -79,9 +79,6 @@ import { TextareaService } from './services/field-services/textarea/textarea.ser
                     service: FormlyGroupService,
                 },
             ],
-        }),
-        FormlyModule.forRoot({
-            validationMessages: [{ name: 'required', message: 'This field is required' }],
         }),
         StoreModule.forRoot({}),
     ],
