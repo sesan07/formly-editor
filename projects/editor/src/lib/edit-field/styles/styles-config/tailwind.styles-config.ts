@@ -77,7 +77,7 @@ const fieldLayout: IStyleOptionCategory = {
     options: [
         {
             name: 'Column Start',
-            value: 'col-start',
+            value: 'tw-col-start',
             variants: ['1', '2', '3'],
             hasBreakpoints: true,
             dependsOnParent: {
@@ -87,7 +87,7 @@ const fieldLayout: IStyleOptionCategory = {
         },
         {
             name: 'Column Span',
-            value: 'col-span',
+            value: 'tw-col-span',
             variants: ['1', '2', '3'],
             hasBreakpoints: true,
             dependsOnParent: {
@@ -97,7 +97,7 @@ const fieldLayout: IStyleOptionCategory = {
         },
         {
             name: 'Row Start',
-            value: 'row-start',
+            value: 'tw-row-start',
             variants: ['1', '2', '3'],
             hasBreakpoints: true,
             dependsOnParent: {
@@ -107,7 +107,7 @@ const fieldLayout: IStyleOptionCategory = {
         },
         {
             name: 'Row Span',
-            value: 'row-span',
+            value: 'tw-row-span',
             variants: ['1', '2', '3'],
             hasBreakpoints: true,
             dependsOnParent: {
@@ -123,13 +123,13 @@ const fieldSizing: IStyleOptionCategory = {
     options: [
         {
             name: 'Height',
-            value: 'h',
+            value: 'tw-h',
             hasBreakpoints: true,
             variants: [...numberVariants, ...fractionVariants, ...textVariants2],
         },
         {
             name: 'Width',
-            value: 'w',
+            value: 'tw-w',
             hasBreakpoints: true,
             variants: [...numberVariants, ...fractionVariants2, ...textVariants2],
         },
@@ -141,44 +141,44 @@ const fieldMargin: IStyleOptionCategory = {
     options: [
         {
             name: 'General',
-            value: 'm',
+            value: 'tw-m',
             spanWidth: true,
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },
         {
             name: 'Horizintal',
-            value: 'mx',
+            value: 'tw-mx',
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },
         {
             name: 'Vertical',
-            value: 'my',
+            value: 'tw-my',
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },
         {
             name: 'Top',
-            value: 'mt',
+            value: 'tw-mt',
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },
         {
             name: 'Bottom',
-            value: 'mb',
+            value: 'tw-mb',
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },
         {
             name: 'Left',
-            value: 'ml',
+            value: 'tw-ml',
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },
         {
             name: 'Right',
-            value: 'mr',
+            value: 'tw-mr',
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },
@@ -190,12 +190,12 @@ const fieldGroupLayout: IStyleOptionCategory = {
     options: [
         {
             name: 'System',
-            variants: ['flex', 'grid'],
+            variants: ['tw-flex', 'tw-grid'],
             spanWidth: true,
         },
         {
             name: 'Flex Direction',
-            value: 'flex',
+            value: 'tw-flex',
             variants: ['col', 'col-reverse', 'row', 'row-reverse'],
             dependsOn: {
                 property: ClassProperty.FIELD_GROUP_CLASS_NAME,
@@ -205,7 +205,7 @@ const fieldGroupLayout: IStyleOptionCategory = {
         },
         {
             name: 'Columns',
-            value: 'grid-cols',
+            value: 'tw-grid-cols',
             variants: ['1', '2', '3'],
             dependsOn: {
                 property: ClassProperty.FIELD_GROUP_CLASS_NAME,
@@ -215,7 +215,7 @@ const fieldGroupLayout: IStyleOptionCategory = {
         },
         {
             name: 'Rows',
-            value: 'grid-rows',
+            value: 'tw-grid-rows',
             variants: ['1', '2', '3'],
             dependsOn: {
                 property: ClassProperty.FIELD_GROUP_CLASS_NAME,
@@ -225,13 +225,13 @@ const fieldGroupLayout: IStyleOptionCategory = {
         },
         {
             name: 'Align Items',
-            value: 'items',
+            value: 'tw-items',
             variants: ['start', 'center', 'end'],
             hasBreakpoints: true,
         },
         {
             name: 'Justify Content',
-            value: 'justify',
+            value: 'tw-justify',
             variants: ['start', 'center', 'end', 'around', 'between', 'evenly'],
             hasBreakpoints: true,
         },
@@ -243,18 +243,18 @@ const fieldGroupGap: IStyleOptionCategory = {
     options: [
         {
             name: 'General',
-            value: 'gap',
+            value: 'tw-gap',
             spanWidth: true,
             variants: [...numberVariants],
         },
         {
             name: 'Horizontal',
-            value: 'gap-x',
+            value: 'tw-gap-x',
             variants: [...numberVariants],
         },
         {
             name: 'Vertical',
-            value: 'gap-y',
+            value: 'tw-gap-y',
             variants: [...numberVariants],
         },
     ],
@@ -265,44 +265,44 @@ const fieldGroupPadding: IStyleOptionCategory = {
     options: [
         {
             name: 'General',
-            value: 'p',
+            value: 'tw-p',
             spanWidth: true,
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },
         {
             name: 'Horizintal',
-            value: 'px',
+            value: 'tw-px',
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },
         {
             name: 'Vertical',
-            value: 'py',
+            value: 'tw-py',
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },
         {
             name: 'Top',
-            value: 'pt',
+            value: 'tw-pt',
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },
         {
             name: 'Bottom',
-            value: 'pb',
+            value: 'tw-pb',
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },
         {
             name: 'Left',
-            value: 'pl',
+            value: 'tw-pl',
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },
         {
             name: 'Right',
-            value: 'pr',
+            value: 'tw-pr',
             hasBreakpoints: true,
             variants: [...numberVariants, ...textVariants],
         },

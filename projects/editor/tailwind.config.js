@@ -17,6 +17,7 @@ const sizing = ['width', 'height'];
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    prefix: 'tw-',
     safelist: [
         {
             pattern: /./,

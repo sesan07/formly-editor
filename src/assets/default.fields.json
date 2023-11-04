@@ -38,11 +38,11 @@
               "required": true
             },
             "key": "textarea",
-            "className": "col-span-2"
+            "className": "tw-col-span-2"
           }
         ],
-        "className": "col-span-2",
-        "fieldGroupClassName": "grid grid-cols-2 gap-2",
+        "className": "tw-col-span-2",
+        "fieldGroupClassName": "tw-grid tw-grid-cols-2 tw-gap-2",
         "key": "group2"
       },
       {
@@ -74,7 +74,7 @@
           ]
         },
         "key": "radio",
-        "className": "col-6"
+        "className": "tw-col-6"
       },
       {
         "type": "select",
@@ -107,11 +107,11 @@
           ]
         },
         "key": "select",
-        "className": "col-6"
+        "className": "tw-col-6"
       }
     ],
     "key": "group",
-    "fieldGroupClassName": "grid grid-cols-2 gap-2"
+    "fieldGroupClassName": "tw-grid tw-grid-cols-2 tw-gap-2"
   },
   {
     "type": "checkbox",
@@ -128,6 +128,6 @@
       }
     },
     "key": "checkbox",
-    "className": "mt-2"
+    "className": "tw-mt-2"
   }
 ]
