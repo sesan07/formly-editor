@@ -1,3 +1,13 @@
+// Generated tailwind styles for the editor's styling system (styling tab)
+@import './projects/editor/assets/styles/tailwind.scss';
+
+// Styles required by the editor
+// TODO use theming mixing
+@import './projects/editor/assets/styles/styles.scss';
+
+// Angular material theme
+@import './theme';
+
 html,
 body,
 app-root {
