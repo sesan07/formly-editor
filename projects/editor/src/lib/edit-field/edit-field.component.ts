@@ -85,7 +85,7 @@ export class EditFieldComponent implements OnInit, OnDestroy {
 
     private _getProperty(field: IEditorFormlyField | null): IObjectProperty {
         const property = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
-        const childProperties = this._editorService.getFieldProperties(field?.type);
+        const childProperties = this._editorService.getFieldProperties(field?.type as string);
         initRootProperty(property, true, childProperties);
         return property;
     }

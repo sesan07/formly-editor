@@ -1,9 +1,9 @@
-import { FormlyFieldProps } from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyFieldProps } from '@ngx-formly/core';
 import { Injectable } from '@angular/core';
 
 import { StylesService } from '../edit-field/styles/styles.service';
 import { IProperty, PropertyType } from '../property/property.types';
-import { IBaseFormlyField, IEditorFieldService } from '../editor.types';
+import { IEditorFieldService } from '../editor.types';
 
 @Injectable()
 export abstract class BaseFieldService<T extends FormlyFieldProps> implements IEditorFieldService {
@@ -58,7 +58,7 @@ export abstract class BaseFieldService<T extends FormlyFieldProps> implements IE
         ];
     }
 
-    public abstract getDefaultField(type: string): IBaseFormlyField<T>;
+    public abstract getDefaultField(type: string): FormlyFieldConfig<T>;
 
     protected abstract _getFieldProperties(type: string): IProperty[];
     protected abstract _getWrapperProperties(type: string): IProperty[];

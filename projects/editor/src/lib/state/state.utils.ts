@@ -1,10 +1,10 @@
+import { FormlyFieldConfig } from '@ngx-formly/core';
 import produce from 'immer';
 import { get, merge, set, unset } from 'lodash-es';
 import {
     EditorFieldType,
     FieldTypeOption,
     GetDefaultField,
-    IBaseFormlyField,
     IEditorFieldInfo,
     IEditorFormlyField,
 } from '../editor.types';
@@ -22,7 +22,7 @@ export const convertToEditorField = (
     typeOptions: FieldTypeOption[],
     defaultTypeOption: FieldTypeOption,
     formId: string,
-    sourceField: IBaseFormlyField,
+    sourceField: FormlyFieldConfig,
     parent?: IEditorFormlyField
 ) => {
     // Special case to specify 'formly-group' type
@@ -36,11 +36,11 @@ export const convertToEditorField = (
     // Merge with default properties
     const typeOption: FieldTypeOption =
         typeOptions.find(option => option.type === sourceField.type) ?? defaultTypeOption;
-    const baseField: IBaseFormlyField = getDefaultField(sourceField.type);
+    const baseField: FormlyFieldConfig = getDefaultField(sourceField.type as string);
     merge(baseField, sourceField);
 
     // Editor information
-    const fieldId = generateFieldId(baseField.type);
+    const fieldId = generateFieldId(baseField.type as string);
     const fieldInfo: IEditorFieldInfo = {
         name: typeOption.displayName,
         formId,
@@ -62,7 +62,7 @@ export const convertToEditorField = (
 
     // Process children (e.g. 'fieldGroup')
     if (fieldInfo.childrenConfig) {
-        const baseChildren: IBaseFormlyField | IBaseFormlyField[] = get(baseField, fieldInfo.childrenConfig.path);
+        const baseChildren: FormlyFieldConfig | FormlyFieldConfig[] = get(baseField, fieldInfo.childrenConfig.path);
         let children: IEditorFormlyField | IEditorFormlyField[];
         if (Array.isArray(baseChildren)) {
             children = baseChildren?.map(child =>
@@ -153,7 +153,7 @@ export const duplicateFields = (
         : duplicateFieldObject(fields, formId, parentFieldPath);
 
 const duplicateFieldObject = (field: IEditorFormlyField, formId: string, parentFieldPath: string[] | undefined) => {
-    const fieldId = generateFieldId(field.type);
+    const fieldId = generateFieldId(field.type as string);
     const fieldPath = [...(parentFieldPath ?? []), fieldId];
     return {
         ...field,

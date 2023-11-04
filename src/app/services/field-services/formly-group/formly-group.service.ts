@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormlyFieldProps } from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyFieldProps } from '@ngx-formly/core';
 import { BaseFieldService, IProperty } from '@sesan07/ngx-formly-editor';
 
-import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
+import { AppFieldType, AppWrapperType } from '../field.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class FormlyGroupService extends BaseFieldService<FormlyFieldProps> {
-    public getDefaultField(type: AppFieldType): IFormlyField {
+    public getDefaultField(type: AppFieldType): FormlyFieldConfig {
         return {
             type,
             fieldGroup: [],

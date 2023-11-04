@@ -1,6 +1,3 @@
-import { FormlyFieldProps } from '@ngx-formly/core';
-import { IBaseFormlyField } from '@sesan07/ngx-formly-editor';
-
 export enum AppFieldType {
     CHECKBOX = 'checkbox',
     FORMLY_GROUP = 'formly-group',
@@ -14,8 +11,4 @@ export enum AppFieldType {
 
 export enum AppWrapperType {
     FORM_FIELD = 'form-field',
-}
-
-export interface IFormlyField<T = FormlyFieldProps> extends IBaseFormlyField<T> {
-    fieldGroup?: IFormlyField[];
 }

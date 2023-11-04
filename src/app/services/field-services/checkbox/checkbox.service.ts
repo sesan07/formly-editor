@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
-import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
+import { AppFieldType, AppWrapperType } from '../field.types';
 import { ICheckboxProps } from './checkbox.types';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CheckboxService extends BaseFieldService<ICheckboxProps> {
-    public getDefaultField(type: AppFieldType): IFormlyField<ICheckboxProps> {
+    public getDefaultField(type: AppFieldType): FormlyFieldConfig<ICheckboxProps> {
         return {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],

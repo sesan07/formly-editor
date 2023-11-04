@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { FormlyFieldProps } from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyFieldProps } from '@ngx-formly/core';
+
 import { BaseFieldService } from '../base-field.service';
-import { IBaseFormlyField } from '../../editor.types';
 import { IProperty } from '../../property/property.types';
 
 @Injectable()
 export class GenericFieldService extends BaseFieldService<FormlyFieldProps> {
-    public getDefaultField(): IBaseFormlyField<FormlyFieldProps> {
+    public getDefaultField(): FormlyFieldConfig {
         return { type: undefined };
     }
 

@@ -20,7 +20,7 @@ export enum DragType {
     FORMLY_FIELD = 'formly-field',
 }
 
-export type GetDefaultField = (type: string) => IBaseFormlyField;
+export type GetDefaultField = (type: string) => FormlyFieldConfig;
 export type GetTypeOption = (type: string) => FieldTypeOption;
 
 export interface IEditorFieldInfo {
@@ -32,15 +32,7 @@ export interface IEditorFieldInfo {
     childrenConfig?: FieldTypeChildrenConfig;
 }
 
-// TODO remove this?
-export interface IBaseFormlyField<T = FormlyFieldProps> extends FormlyFieldConfig {
-    type: string;
-    templateOptions?: T;
-    props?: T;
-    fieldGroup?: IBaseFormlyField[];
-}
-
-export interface IEditorFormlyField extends IBaseFormlyField {
+export interface IEditorFormlyField extends FormlyFieldConfig {
     _info: IEditorFieldInfo;
     fieldGroup?: IEditorFormlyField[];
 }

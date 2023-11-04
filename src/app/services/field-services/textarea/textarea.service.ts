@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
-import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
+import { AppFieldType, AppWrapperType } from '../field.types';
 import { ITextareaProps } from './textarea.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class TextareaService extends BaseFieldService<ITextareaProps> {
-    public getDefaultField(type: AppFieldType): IFormlyField<ITextareaProps> {
+    public getDefaultField(type: AppFieldType): FormlyFieldConfig<ITextareaProps> {
         return {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],

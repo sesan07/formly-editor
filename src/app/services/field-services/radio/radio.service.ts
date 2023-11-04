@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 import { BaseFieldService, IArrayProperty, IObjectProperty, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
-import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
+import { AppFieldType, AppWrapperType } from '../field.types';
 import { IRadioProps } from './radio.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class RadioService extends BaseFieldService<IRadioProps> {
-    public getDefaultField(type: AppFieldType): IFormlyField<IRadioProps> {
+    public getDefaultField(type: AppFieldType): FormlyFieldConfig<IRadioProps> {
         return {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],

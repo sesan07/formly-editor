@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
-import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
+import { AppFieldType, AppWrapperType } from '../field.types';
 import { IInputProps } from './input.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class InputService extends BaseFieldService<IInputProps> {
-    public getDefaultField(type: AppFieldType): IFormlyField<IInputProps> {
-        const config: IFormlyField<IInputProps> = {
+    public getDefaultField(type: AppFieldType): FormlyFieldConfig<IInputProps> {
+        const config: FormlyFieldConfig<IInputProps> = {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],
             props: {

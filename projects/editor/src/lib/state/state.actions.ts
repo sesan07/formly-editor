@@ -1,11 +1,12 @@
 import { createAction, props } from '@ngrx/store';
-import { FieldTypeOption, GetDefaultField, IBaseFormlyField, IEditorFormlyField } from '../editor.types';
+import { FieldTypeOption, GetDefaultField, IEditorFormlyField } from '../editor.types';
 import { IPropertyChange } from '../property/property.types';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 
 export interface AddForm {
     name: string;
-    sourceFields?: IBaseFormlyField[];
-    model?: Record<string, unknown>;
+    sourceFields?: FormlyFieldConfig[];
+    model?: object;
     typeOptions: FieldTypeOption[];
     defaultTypeOption: FieldTypeOption;
     getDefaultField: GetDefaultField;

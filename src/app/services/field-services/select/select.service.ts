@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 import { BaseFieldService, IArrayProperty, IObjectProperty, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
-import { AppFieldType, AppWrapperType, IFormlyField } from '../field.types';
+import { AppFieldType, AppWrapperType } from '../field.types';
 import { ISelectProps } from './select.types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SelectService extends BaseFieldService<ISelectProps> {
-    public getDefaultField(type: AppFieldType): IFormlyField<ISelectProps> {
+    public getDefaultField(type: AppFieldType): FormlyFieldConfig<ISelectProps> {
         return {
             type,
             wrappers: [AppWrapperType.FORM_FIELD],

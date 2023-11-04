@@ -127,7 +127,11 @@ export class FieldDragDrop {
         this._ngZone.run(() => {
             switch (sourceData.action) {
                 case DropAction.COPY:
-                    this._editorService.addField(sourceData.field.type, targetParent?._info.fieldId, dropIndex);
+                    this._editorService.addField(
+                        sourceData.field.type as string,
+                        targetParent?._info.fieldId,
+                        dropIndex
+                    );
                     break;
                 case DropAction.MOVE:
                     this._editorService.moveField(
