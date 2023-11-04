@@ -79,7 +79,12 @@
         </mat-menu>
     </header>
 
-    <ng-template #container></ng-template>
+    <div
+        class="editor-field-content"
+        [class.edit-mode]="isEditMode$ | async"
+    >
+        <ng-template #container></ng-template>
+    </div>
 
     <editor-field-drop-overlay
         [isHovering]="dnd.isHovering$ | async"

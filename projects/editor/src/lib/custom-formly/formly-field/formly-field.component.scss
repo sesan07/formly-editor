@@ -7,23 +7,26 @@
 }
 
 .editor-field-container.edit-mode {
-    padding: 2px;
     background-color: white;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     border-radius: 4px;
 }
 
 .editor-field-container.edit-mode:hover {
-    border: 1px solid #e0e0e0;
+    border: 2px solid rgba(0, 0, 0, 0.04);
 }
 
 .editor-field-container.edit-mode.active {
-    border: 2px solid #a3a3a3;
+    border: 2px solid rgba(0, 0, 0, 0.12);
 }
 
 header {
     display: flex;
     user-select: none;
+    border-radius: 2px 2px 0 0;
+    padding: 2px;
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.12);
 }
 
 .header-title {
@@ -43,4 +46,8 @@ header {
 
 .options.visible {
     visibility: visible;
+}
+
+.editor-field-content.edit-mode {
+    padding: 2px;
 }
