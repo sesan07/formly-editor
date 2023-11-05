@@ -7,9 +7,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MAT_TABS_CONFIG, MatTabsModule } from '@angular/material/tabs';
 import { DndModule } from '@ng-dnd/core';
 import { HTML5Backend } from '@ng-dnd/multi-backend';
+import { ActionReducer, META_REDUCERS, StoreModule } from '@ngrx/store';
 import { FormlyConfig } from '@ngx-formly/core';
 
-import { ActionReducer, META_REDUCERS, StoreModule } from '@ngrx/store';
 import { AddFieldTreeItemModule } from './add-field-tree-item/add-field-tree-item.module';
 import { CustomFormlyModule } from './custom-formly/custom-formly.module';
 import { FormlyGroupComponent } from './custom-formly/formly-group/formly-group.component';
@@ -100,13 +100,13 @@ export class EditorModule {
         });
     }
 
-    static forRoot(config?: EditorConfig): ModuleWithProviders<EditorModule> {
+    static forRoot(config: EditorConfig = defaultConfig): ModuleWithProviders<EditorModule> {
         return {
             ngModule: EditorModule,
             providers: [
                 {
                     provide: EDITOR_CONFIG,
-                    useValue: config ?? defaultConfig,
+                    useValue: config,
                 },
                 EditorService,
             ],

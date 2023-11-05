@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, TrackByFunction } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { cloneDeep } from 'lodash-es';
@@ -7,7 +7,7 @@ import { Observable, Subject, debounceTime, takeUntil } from 'rxjs';
 import { StylesService } from './edit-field/styles/styles.service';
 import { IStylesConfig } from './edit-field/styles/styles.types';
 import { EditorService } from './editor.service';
-import { FieldOption, IEditorFormlyField, IForm } from './editor.types';
+import { FieldOption, IDefaultForm, IEditorFormlyField, IForm } from './editor.types';
 import { isCategoryOption, isTypeOption, trackByDisplayName, trackByFieldId } from './editor.utils';
 import { cleanField } from './form/form.utils';
 import { JSONDialogComponent } from './json-dialog/json-dialog.component';
@@ -18,11 +18,13 @@ import { IPropertyChange, PropertyType } from './property/property.types';
 import { initRootProperty } from './property/utils';
 import { FileService } from './shared/services/file-service/file.service';
 import { SideBarPosition } from './sidebar/sidebar.types';
+import { initialState } from './state/state.reducers';
 import {
     selectActiveField,
     selectActiveForm,
     selectActiveFormIndex,
     selectActiveModel,
+    selectEditor,
     selectForms,
 } from './state/state.selectors';
 import { IEditorState } from './state/state.types';
@@ -32,8 +34,11 @@ import { IEditorState } from './state/state.types';
     templateUrl: './editor.component.html',
     styleUrls: ['./editor.component.scss'],
 })
-export class EditorComponent implements OnInit, AfterViewInit {
-    @Input() stylesConfig: IStylesConfig;
+export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
+    @Input() defaultForm?: IDefaultForm;
+    @Input() stylesConfig?: IStylesConfig;
+    @Input() autosaveStorageKey = 'editor';
+    @Input() autosaveDelay = 0;
 
     public forms$: Observable<ReadonlyArray<IForm>>;
     public activeFormIndex$: Observable<number>;
@@ -71,12 +76,13 @@ export class EditorComponent implements OnInit, AfterViewInit {
     trackFormById: TrackByFunction<IForm> = (_, form: IForm) => form.id;
 
     ngOnInit(): void {
-        this.forms$ = this._store.select(selectForms).pipe(takeUntil(this._destroy$));
+        this._loadState();
+
+        this.forms$ = this._store.select(selectForms);
         this.activeFormIndex$ = this._store.select(selectActiveFormIndex).pipe(
-            takeUntil(this._destroy$),
             debounceTime(0) // allows tab header to render properly when non-zero index on startup
         );
-        this.activeField$ = this._store.select(selectActiveField).pipe(takeUntil(this._destroy$));
+        this.activeField$ = this._store.select(selectActiveField);
         this._store
             .select(selectActiveForm)
             .pipe(takeUntil(this._destroy$))
@@ -95,6 +101,11 @@ export class EditorComponent implements OnInit, AfterViewInit {
         setTimeout(() => {
             this.canShowMain = true;
         }, 250);
+    }
+
+    ngOnDestroy(): void {
+        this._destroy$.next();
+        this._destroy$.complete();
     }
 
     onAddForm(): void {
@@ -214,6 +225,24 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
     onResizeEnd(): void {
         this._resizeEnd$.next();
+    }
+
+    loadDefaultForm(): void {
+        this._editorService.addForm(this.defaultForm.name, this.defaultForm.fields, this.defaultForm.model);
+    }
+
+    private _loadState(): void {
+        const storedState = localStorage.getItem(this.autosaveStorageKey);
+        if (storedState) {
+            this._editorService.setState(JSON.parse(storedState));
+        } else {
+            this._editorService.setState(initialState);
+        }
+
+        this._store
+            .select(selectEditor)
+            .pipe(takeUntil(this._destroy$), debounceTime(this.autosaveDelay))
+            .subscribe(state => localStorage.setItem(this.autosaveStorageKey, JSON.stringify(state)));
     }
 
     private _getModelProperty(): IObjectProperty {

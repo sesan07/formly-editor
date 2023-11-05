@@ -47,6 +47,12 @@ export interface IForm {
     isEditMode: boolean;
 }
 
+export interface IDefaultForm {
+    name: string;
+    fields: FormlyFieldConfig[];
+    model: object;
+}
+
 export interface IEditorFieldService {
     getDefaultField: GetDefaultField;
     getProperties(type: string): IProperty[];
@@ -77,7 +83,6 @@ export interface FieldTypeChildrenConfig {
 
 export interface EditorConfig {
     options: FieldOption[];
-    autosaveDelay?: number;
     onDisplayFields?: (fields: IEditorFormlyField[], model: Record<string, any>) => IEditorFormlyField[];
 }
 

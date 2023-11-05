@@ -2,6 +2,11 @@ import { createAction, props } from '@ngrx/store';
 import { FieldTypeOption, GetDefaultField, IEditorFormlyField } from '../editor.types';
 import { IPropertyChange } from '../property/property.types';
 import { FormlyFieldConfig } from '@ngx-formly/core';
+import { IEditorState } from './state.types';
+
+export interface SetState {
+    state: IEditorState;
+}
 
 export interface AddForm {
     name: string;
@@ -66,6 +71,8 @@ export interface MoveField {
     sourceIndex: number;
     targetIndex?: number;
 }
+
+export const setState = createAction('[Editor] Set State', props<SetState>());
 
 export const addForm = createAction('[Editor] Add Form', props<AddForm>());
 export const removeForm = createAction('[Editor] Remove Form', props<RemoveForm>());

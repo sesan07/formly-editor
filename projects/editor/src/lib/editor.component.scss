@@ -42,6 +42,15 @@ editor-sidebar {
     &.right {
         width: 25%;
     }
+
+    &.left.hidden,
+    &.right.hidden {
+        width: 0 !important;
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    transition: 0.15s ease-out;
 }
 
 .section-header-content {
@@ -91,6 +100,10 @@ editor-sidebar {
     align-items: center;
     height: 100%;
     row-gap: 16px;
+}
+
+.empty-view-btn {
+    width: 180px;
 }
 
 .loading-view {

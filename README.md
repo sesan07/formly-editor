@@ -4,22 +4,52 @@ A configurable editor for ngx-formly forms.
 
 Demo: https://formly-editor.sesan.dev
 
-Sample formly material implementation: https://github.com/sesan07/formly-editor-app
-
-![Demo Screenshot](docs/img/screenshot.png 'Demo Screenshot')
-
 ## How to run
 
-The editor is published as an [NPM library](https://www.npmjs.com/package/@sesan07/ngx-formly-editor). So you can install and configure it like the [demo app](https://github.com/sesan07/formly-editor-app) does. The demo app is a really good starting point.
-
-If you want to make changes to the editor's core code, you can clone and run this repository instead.
-
--   Clone the demo repo: `git clone https://github.com/sesan07/formly-editor-app.git`
--   Or clone this repo: `git clone https://github.com/sesan07/formly-editor.git`
+-   Clone this repo: `git clone https://github.com/sesan07/formly-editor.git`
 -   Install dependencies: `npm i`
 -   Start app: `npm start`
 
+The editor is also published as an [NPM library](https://www.npmjs.com/package/@sesan07/ngx-formly-editor). If you don't need to make changes to the editor's core code, you can just install and use the npm package.
+
 ## Configuration
+
+### Editor Component
+
+The editor's component can be added your app like this (all inputs are optional):
+
+```typescript
+import { IDefaultForm, tailwindConfig } from '@sesan07/ngx-formly-editor';
+
+@Component({
+    selector: 'app-example',
+    template: `
+        <editor-main
+            [autosaveStorageKey]="'editor-local-storage-key'"
+            [autosaveDelay]="2000"
+            [defaultForm]="defaultForm"
+            [stylesConfig]="tailwindConfig"
+        >
+        </editor-main>
+    `,
+})
+export class ExampleComponent {
+    tailwindConfig = tailwindConfig;
+    defaultForm: IDefaultForm = {
+        ...
+    }
+}
+```
+
+Default form interface
+
+```typescript
+export interface IDefaultForm {
+    name: string;
+    fields: FormlyFieldConfig[];
+    model: object;
+}
+```
 
 ### Editor Module
 
@@ -133,7 +163,7 @@ export class AppModule {}
 
 ### Field type service
 
-The editor uses configured field services to get data. Here's an example
+The editor uses configured field services to get data for each field type. Here's an example
 
 ```typescript
 import { Injectable } from '@angular/core';

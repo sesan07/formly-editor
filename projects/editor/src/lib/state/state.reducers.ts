@@ -16,6 +16,7 @@ import {
     SetActiveFormId,
     SetActiveModel,
     SetEditMode,
+    SetState,
     addField,
     addForm,
     duplicateForm,
@@ -29,6 +30,7 @@ import {
     setActiveFormId,
     setActiveModel,
     setEditMode,
+    setState,
 } from './state.actions';
 import { IEditorState } from './state.types';
 import {
@@ -44,15 +46,12 @@ import {
     unsetPath,
 } from './state.utils';
 
-const getInitialState = () => {
-    const defaultInitialState: IEditorState = {
-        formMap: {},
-        activeFormId: null,
-    };
-
-    const storedState = localStorage.getItem('editor');
-    return storedState ? JSON.parse(storedState) : defaultInitialState;
+export const initialState: IEditorState = {
+    formMap: {},
+    activeFormId: null,
 };
+
+const processSetState = (_: IEditorState, { state: newState }: SetState): IEditorState => newState;
 
 const processAddForm = (
     state: IEditorState,
@@ -465,7 +464,8 @@ const processSetActiveModel = (state: IEditorState, { model }: SetActiveModel): 
 });
 
 const editorReducer = createReducer(
-    getInitialState(),
+    initialState,
+    on(setState, processSetState),
     on(addForm, processAddForm),
     on(removeForm, processRemoveForm),
     on(duplicateForm, processDuplicateForm),

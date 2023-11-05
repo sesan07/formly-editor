@@ -33,6 +33,7 @@ import {
     setActiveFormId,
     setActiveModel,
     setEditMode,
+    setState,
 } from './state/state.actions';
 import { selectActiveField, selectActiveFieldMap, selectEditor, selectForms } from './state/state.selectors';
 import { IEditorState } from './state/state.types';
@@ -56,9 +57,6 @@ export class EditorService {
         service: GenericFieldService,
     };
 
-    private readonly _stateStoragekey = 'editor';
-    private readonly _defaultAutosaveDelay = 5000;
-
     constructor(
         @Inject(EDITOR_CONFIG) config: EditorConfig,
         private _http: HttpClient,
@@ -73,10 +71,6 @@ export class EditorService {
         this._store.select(selectForms).subscribe(forms => (this._forms = forms));
         this._store.select(selectActiveField).subscribe(field => (this._activeField = field));
         this._store.select(selectActiveFieldMap).subscribe(fieldMap => (this._activeFieldMap = fieldMap));
-        this._store
-            .select(selectEditor)
-            .pipe(debounceTime(this.config.autosaveDelay ?? this._defaultAutosaveDelay))
-            .subscribe(state => this._saveState(state));
 
         this.fieldOptions = [...this.config.options, this._defaultTypeOption];
         const getTypeOptions = (options: FieldOption[]) =>
@@ -86,10 +80,10 @@ export class EditorService {
             );
         this._typeOptions = getTypeOptions(this.fieldOptions);
         this._fieldServiceMap = this._typeOptions.reduce((acc, o) => ({ ...acc, [o.type]: inject(o.service) }), {});
+    }
 
-        if (!this._forms.length) {
-            this._loadDefaultForm();
-        }
+    public setState(state: IEditorState): void {
+        this._store.dispatch(setState({ state }));
     }
 
     public addForm(name: string, sourceFields?: FormlyFieldConfig[], model?: object): void {
@@ -214,29 +208,5 @@ export class EditorService {
 
     private _getFieldService(type: string): IEditorFieldService {
         return this._fieldServiceMap[type] ?? this._fieldServiceMap[this._defaultTypeOption.type];
-    }
-
-    private _loadDefaultForm(): void {
-        forkJoin([
-            this._http.get<FormlyFieldConfig | FormlyFieldConfig[]>('assets/default.fields.json').pipe(
-                map(data => (Array.isArray(data) ? data : [data])),
-                catchError(() => {
-                    console.warn('Unable to load default fields');
-                    return of([]);
-                })
-            ),
-            this._http.get<Record<string, unknown>>('assets/default.model.json').pipe(
-                catchError(() => {
-                    console.warn('Unable to load default model');
-                    return of({});
-                })
-            ),
-        ]).subscribe(([fields, model]) => {
-            this.addForm('Form Zero', fields, model);
-        });
-    }
-
-    private _saveState(state: IEditorState): void {
-        localStorage.setItem(this._stateStoragekey, JSON.stringify(state));
     }
 }

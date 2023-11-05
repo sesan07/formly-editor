@@ -9,7 +9,7 @@
 <ng-container *ngIf="canShowMain">
     <editor-sidebar
         class="left editor-mat"
-        [hidden]="!showSidebars || !activeForm"
+        [class.hidden]="!showSidebars || !activeForm"
         [position]="typeOfSideBarPosition.LEFT"
         (resizeEnd)="onResizeEnd()"
     >
@@ -113,7 +113,7 @@
 
     <editor-sidebar
         class="right editor-mat"
-        [hidden]="!showSidebars || !activeForm"
+        [class.hidden]="!showSidebars || !activeForm"
         [position]="typeOfSideBarPosition.RIGHT"
         (resizeEnd)="onResizeEnd()"
     >
@@ -170,12 +170,21 @@
     <div class="empty-view">
         <h1>Formly Editor</h1>
         <button
-            class="add-form-btn"
+            class="empty-view-btn"
             mat-flat-button
             color="primary"
             (click)="onAddForm()"
         >
-            <mat-icon>add</mat-icon>Add Form
+            <mat-icon>add</mat-icon>Add New Form
+        </button>
+        <button
+            *ngIf="defaultForm"
+            class="empty-view-btn"
+            mat-flat-button
+            color="primary"
+            (click)="loadDefaultForm()"
+        >
+            <mat-icon>add</mat-icon>Load Default Form
         </button>
     </div>
 </ng-template>
