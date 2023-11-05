@@ -4,6 +4,8 @@ A configurable editor for ngx-formly forms.
 
 Demo: https://formly-editor.sesan.dev
 
+![Demo Screenshot](docs/img/screenshot.png 'Demo Screenshot')
+
 ## How to run
 
 -   Clone this repo: `git clone https://github.com/sesan07/formly-editor.git`
@@ -53,7 +55,7 @@ export interface IDefaultForm {
 
 ### Editor Module
 
-The `EditorModule` can be imported and configured in the app's root module using `EditorModule.forRoot({...})`
+The `EditorModule` can be imported and configured in your module using `EditorModule.forRoot({...})`
 
 The configuration interface
 
