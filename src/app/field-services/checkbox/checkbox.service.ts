@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 import { BaseFieldService, IProperty, PropertyType } from '@sesan07/ngx-formly-editor';
 
 import { AppFieldType, AppWrapperType } from '../field.types';
 import { ICheckboxProps } from './checkbox.types';
-import { FormlyFieldConfig } from '@ngx-formly/core';
 
 @Injectable({
     providedIn: 'root',

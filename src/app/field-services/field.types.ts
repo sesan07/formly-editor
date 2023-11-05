@@ -5,6 +5,7 @@ export enum AppFieldType {
     NUMBER = 'number',
     INTEGER = 'integer',
     RADIO = 'radio',
+    REPEATING_SECTION = 'repeating-section',
     SELECT = 'select',
     TEXTAREA = 'textarea',
 }

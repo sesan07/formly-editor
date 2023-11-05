@@ -57,77 +57,87 @@ export class MaterialComponent {
                                 className: 'tw-col-span-2',
                             },
                         ],
-                        className: 'tw-col-span-2',
                         fieldGroupClassName: 'tw-grid tw-grid-cols-2 tw-gap-2',
                         key: 'group2',
                     },
                     {
-                        type: 'radio',
-                        wrappers: ['form-field'],
-                        props: {
-                            label: 'Label',
-                            placeholder: 'Placeholder',
-                            description: 'Description',
-                            required: true,
-                            options: [
+                        type: 'repeating-section',
+                        templateOptions: {
+                            addText: 'Add Section',
+                        },
+                        fieldArray: {
+                            type: 'formly-group',
+                            fieldGroup: [
                                 {
-                                    value: 1,
-                                    label: 'Option 1',
+                                    type: 'radio',
+                                    wrappers: ['form-field'],
+                                    props: {
+                                        label: 'Label',
+                                        placeholder: 'Placeholder',
+                                        description: 'Description',
+                                        required: true,
+                                        options: [
+                                            {
+                                                value: 1,
+                                                label: 'Option 1',
+                                            },
+                                            {
+                                                value: 2,
+                                                label: 'Option 2',
+                                            },
+                                            {
+                                                value: 3,
+                                                label: 'Option 3',
+                                            },
+                                            {
+                                                value: 4,
+                                                label: 'Option 4',
+                                                disabled: true,
+                                            },
+                                        ],
+                                    },
+                                    key: 'radio',
                                 },
                                 {
-                                    value: 2,
-                                    label: 'Option 2',
-                                },
-                                {
-                                    value: 3,
-                                    label: 'Option 3',
-                                },
-                                {
-                                    value: 4,
-                                    label: 'Option 4',
-                                    disabled: true,
+                                    type: 'select',
+                                    wrappers: ['form-field'],
+                                    props: {
+                                        label: 'Label',
+                                        placeholder: 'Placeholder',
+                                        description: 'Description',
+                                        required: true,
+                                        multiple: true,
+                                        selectAllOption: 'Select All',
+                                        options: [
+                                            {
+                                                value: 1,
+                                                label: 'Option 1',
+                                            },
+                                            {
+                                                value: 2,
+                                                label: 'Option 2',
+                                            },
+                                            {
+                                                value: 3,
+                                                label: 'Option 3',
+                                            },
+                                            {
+                                                value: 4,
+                                                label: 'Option 4',
+                                                disabled: true,
+                                            },
+                                        ],
+                                    },
+                                    key: 'select',
                                 },
                             ],
+                            fieldGroupClassName: 'tw-grid tw-grid-cols-2 tw-gap-x-2',
                         },
-                        key: 'radio',
-                        className: 'tw-col-6',
-                    },
-                    {
-                        type: 'select',
-                        wrappers: ['form-field'],
-                        props: {
-                            label: 'Label',
-                            placeholder: 'Placeholder',
-                            description: 'Description',
-                            required: true,
-                            multiple: true,
-                            selectAllOption: 'Select All',
-                            options: [
-                                {
-                                    value: 1,
-                                    label: 'Option 1',
-                                },
-                                {
-                                    value: 2,
-                                    label: 'Option 2',
-                                },
-                                {
-                                    value: 3,
-                                    label: 'Option 3',
-                                },
-                                {
-                                    value: 4,
-                                    label: 'Option 4',
-                                    disabled: true,
-                                },
-                            ],
-                        },
-                        key: 'select',
-                        className: 'tw-col-6',
+                        key: 'repeat',
                     },
                 ],
                 key: 'group',
-                fieldGroupClassName: 'tw-grid tw-grid-cols-2 tw-gap-2',
+                fieldGroupClassName: 'tw-flex tw-flex-col tw-gap-y-2',
             },
             {
                 type: 'checkbox',
@@ -154,8 +164,16 @@ export class MaterialComponent {
                     num: 321,
                     textarea: 'Bye!',
                 },
-                radio: 1,
-                select: [2, 3],
+                repeat: [
+                    {
+                        radio: 2,
+                        select: [1, 3],
+                    },
+                    {
+                        radio: 1,
+                        select: [2],
+                    },
+                ],
             },
             checkbox: true,
         },
