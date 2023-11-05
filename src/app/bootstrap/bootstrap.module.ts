@@ -7,7 +7,7 @@ import { EditorModule } from '@sesan07/ngx-formly-editor';
 
 import { CheckboxService } from '../field-services/checkbox/checkbox.service';
 import { AppFieldType } from '../field-services/field.types';
-import { FormlyGroupService } from '../field-services/formly-group/formly-group.service';
+import { FormlyGroupService } from './field-services/formly-group/formly-group.service';
 import { InputService } from '../field-services/input/input.service';
 import { RadioService } from '../field-services/radio/radio.service';
 import { SelectService } from '../field-services/select/select.service';

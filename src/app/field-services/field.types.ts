@@ -12,4 +12,5 @@ export enum AppFieldType {
 
 export enum AppWrapperType {
     FORM_FIELD = 'form-field',
+    CARD = 'card',
 }

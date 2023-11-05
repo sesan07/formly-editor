@@ -58,7 +58,11 @@ export class MaterialComponent {
                             },
                         ],
                         fieldGroupClassName: 'tw-grid tw-grid-cols-2 tw-gap-2',
-                        key: 'group2',
+                        key: 'card',
+                        wrappers: ['card'],
+                        props: {
+                            cardTitle: 'Card!',
+                        },
                     },
                     {
                         type: 'repeating-section',
@@ -159,7 +163,7 @@ export class MaterialComponent {
         ],
         model: {
             group: {
-                group2: {
+                card: {
                     input: 'Hello!',
                     num: 321,
                     textarea: 'Bye!',
