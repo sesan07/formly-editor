@@ -82,7 +82,7 @@ const fieldLayout: IStyleOptionCategory = {
             hasBreakpoints: true,
             dependsOnParent: {
                 property: ClassProperty.FIELD_GROUP_CLASS_NAME,
-                value: 'grid',
+                value: 'tw-grid',
             },
         },
         {
@@ -92,7 +92,7 @@ const fieldLayout: IStyleOptionCategory = {
             hasBreakpoints: true,
             dependsOnParent: {
                 property: ClassProperty.FIELD_GROUP_CLASS_NAME,
-                value: 'grid',
+                value: 'tw-grid',
             },
         },
         {
@@ -102,7 +102,7 @@ const fieldLayout: IStyleOptionCategory = {
             hasBreakpoints: true,
             dependsOnParent: {
                 property: ClassProperty.FIELD_GROUP_CLASS_NAME,
-                value: 'grid',
+                value: 'tw-grid',
             },
         },
         {
@@ -112,7 +112,7 @@ const fieldLayout: IStyleOptionCategory = {
             hasBreakpoints: true,
             dependsOnParent: {
                 property: ClassProperty.FIELD_GROUP_CLASS_NAME,
-                value: 'grid',
+                value: 'tw-grid',
             },
         },
     ],
@@ -199,8 +199,9 @@ const fieldGroupLayout: IStyleOptionCategory = {
             variants: ['col', 'col-reverse', 'row', 'row-reverse'],
             dependsOn: {
                 property: ClassProperty.FIELD_GROUP_CLASS_NAME,
-                value: 'flex',
+                value: 'tw-flex',
             },
+            spanWidth: true,
             hasBreakpoints: true,
         },
         {
@@ -209,7 +210,7 @@ const fieldGroupLayout: IStyleOptionCategory = {
             variants: ['1', '2', '3'],
             dependsOn: {
                 property: ClassProperty.FIELD_GROUP_CLASS_NAME,
-                value: 'grid',
+                value: 'tw-grid',
             },
             hasBreakpoints: true,
         },
@@ -219,7 +220,7 @@ const fieldGroupLayout: IStyleOptionCategory = {
             variants: ['1', '2', '3'],
             dependsOn: {
                 property: ClassProperty.FIELD_GROUP_CLASS_NAME,
-                value: 'grid',
+                value: 'tw-grid',
             },
             hasBreakpoints: true,
         },
