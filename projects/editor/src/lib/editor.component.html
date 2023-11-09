@@ -19,14 +19,17 @@
                 headerContent
             >
                 <span>Fields</span>
-                <button
-                    mat-icon-button
-                    [matMenuTriggerFor]="fieldOptionsMenu"
-                    [matMenuTriggerData]="{ options: fieldOptions }"
-                    (click)="$event.stopPropagation()"
-                >
-                    <mat-icon>add</mat-icon>
-                </button>
+                <span class="editor-action-buttons">
+                    <button
+                        mat-icon-button
+                        title="Add Root Field"
+                        [matMenuTriggerFor]="fieldOptionsMenu"
+                        [matMenuTriggerData]="{ options: fieldOptions }"
+                        (click)="$event.stopPropagation()"
+                    >
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </span>
             </div>
             <div
                 *ngIf="activeForm?.fields.length"
@@ -140,13 +143,22 @@
                 headerContent
             >
                 <span>Model</span>
-                <button
-                    mat-icon-button
-                    [matMenuTriggerFor]="modelOptionsMenu"
-                    (click)="$event.stopPropagation()"
-                >
-                    <mat-icon>more_vert</mat-icon>
-                </button>
+                <span class="editor-action-buttons">
+                    <button
+                        mat-icon-button
+                        title="Import"
+                        (click)="onImportModel(); $event.stopPropagation()"
+                    >
+                        <mat-icon>file_upload</mat-icon>
+                    </button>
+                    <button
+                        mat-icon-button
+                        title="Export"
+                        (click)="onExportModel(); $event.stopPropagation()"
+                    >
+                        <mat-icon>file_download</mat-icon>
+                    </button>
+                </span>
             </div>
 
             <div
