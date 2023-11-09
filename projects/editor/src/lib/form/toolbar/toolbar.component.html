@@ -21,43 +21,30 @@
     >
     <button
         mat-icon-button
-        [matMenuTriggerFor]="optionsMenu"
-    >
-        <mat-icon>more_vert</mat-icon>
-    </button>
-</div>
-
-<mat-menu #optionsMenu="matMenu">
-    <button
-        class="editor-mat-menu-item"
-        mat-menu-item
+        title="Reset"
         (click)="resetModel.emit()"
     >
         <mat-icon>restart_alt</mat-icon>
-        Reset Form
     </button>
     <button
-        class="editor-mat-menu-item"
-        mat-menu-item
+        mat-icon-button
+        title="Duplicate"
         (click)="duplicateForm.emit()"
     >
         <mat-icon>content_copy</mat-icon>
-        Duplicate Form
     </button>
     <button
-        class="editor-mat-menu-item"
-        mat-menu-item
+        mat-icon-button
+        title="Export"
         (click)="exportForm.emit()"
     >
-        <mat-icon>file_upload</mat-icon>
-        Export Form
+        <mat-icon>file_download</mat-icon>
     </button>
     <button
-        class="editor-mat-menu-item"
-        mat-menu-item
+        mat-icon-button
+        title="Toggle Sidebars"
         (click)="isExpanded = !isExpanded; toggleSidebars.emit(isExpanded)"
     >
         <mat-icon class="toggle-sidebars-icon">{{ isExpanded ? 'unfold_more' : 'unfold_less' }}</mat-icon>
-        Toggle sidebars
     </button>
-</mat-menu>
+</div>
