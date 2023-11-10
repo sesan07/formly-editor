@@ -64,7 +64,7 @@ export class FieldService {
                 type: PropertyType.CHIP_LIST,
                 options: this._wrappers,
             },
-            ...this._getWrapperProperties(field),
+            ...this._getWrapperProperties(field.wrappers as string[]),
             {
                 name: 'Classes',
                 key: 'className',
@@ -91,10 +91,7 @@ export class FieldService {
         return this._fieldPropertiesMap[type] ?? this._config.genericTypeOption.properties ?? [];
     }
 
-    private _getWrapperProperties(field: FormlyFieldConfig): IProperty[] {
-        return (field.wrappers ?? []).reduce(
-            (acc, wrapper) => [...acc, ...this._wrapperPropertiesMap[wrapper as string]],
-            []
-        );
+    private _getWrapperProperties(wrappers: string[] = []): IProperty[] {
+        return wrappers.reduce((acc, wrapper) => [...acc, ...this._wrapperPropertiesMap[wrapper as string]], []);
     }
 }

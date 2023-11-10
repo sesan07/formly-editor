@@ -2,9 +2,10 @@ import {
     EditorConfig,
     FieldTypeOption,
     FieldWrapperOption,
-    IArrayProperty,
-    IObjectProperty,
-    PropertyType,
+    createArrayProperty,
+    createBooleanProperty,
+    createObjectProperty,
+    createTextProperty,
 } from '@sesan07/ngx-formly-editor';
 
 export const inputTypeConfig: FieldTypeOption = {
@@ -21,39 +22,26 @@ export const inputTypeConfig: FieldTypeOption = {
         },
     },
     properties: [
-        {
+        createTextProperty({
             name: 'Type',
             key: 'props.type',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Label',
-            key: 'props.label',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Placeholder',
-            key: 'props.placeholder',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Description',
-            key: 'props.description',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Required',
-            key: 'props.required',
-            type: PropertyType.BOOLEAN,
-        },
+        }),
     ],
 };
 
 export const numberTypeConfig: FieldTypeOption = {
-    ...inputTypeConfig,
+    displayName: 'Number',
+    name: 'number',
+    keyGenerationPrefix: 'num',
     defaultConfig: {
-        type: 'number',
-        ...inputTypeConfig.defaultConfig,
+        wrappers: ['form-field'],
+        props: {
+            type: 'number',
+            label: 'Label',
+            placeholder: 'Placeholder',
+            description: 'Description',
+            required: true,
+        },
     },
 };
 
@@ -76,26 +64,10 @@ export const checkboxTypeConfig: FieldTypeOption = {
         },
     },
     properties: [
-        {
-            name: 'Label',
-            key: 'props.label',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Description',
-            key: 'props.description',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Required',
-            key: 'props.required',
-            type: PropertyType.BOOLEAN,
-        },
-        {
+        createTextProperty({
             name: 'Pattern',
             key: 'props.pattern',
-            type: PropertyType.TEXT,
-        },
+        }),
     ],
 };
 
@@ -119,54 +91,29 @@ export const radioTypeConfig: FieldTypeOption = {
         },
     },
     properties: [
-        {
-            name: 'Label',
-            key: 'props.label',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Placeholder',
-            key: 'props.placeholder',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Description',
-            key: 'props.description',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Required',
-            key: 'props.required',
-            type: PropertyType.BOOLEAN,
-        },
-        {
+        createArrayProperty({
             name: 'Options',
             key: 'props.options',
-            type: PropertyType.ARRAY,
             canAdd: true,
-            childProperty: {
-                type: PropertyType.OBJECT,
+            childProperty: createObjectProperty({
                 isRemovable: true,
                 childProperties: [
-                    {
+                    createTextProperty({
                         name: 'Label',
                         key: 'label',
-                        type: PropertyType.TEXT,
-                    },
-                    {
+                    }),
+                    createTextProperty({
                         name: 'Value',
                         key: 'value',
-                        type: PropertyType.TEXT,
                         outputRawValue: true,
-                    },
-                    {
+                    }),
+                    createBooleanProperty({
                         name: 'Disabled',
                         key: 'disabled',
-                        type: PropertyType.BOOLEAN,
-                    },
+                    }),
                 ],
-            } as IObjectProperty,
-        } as IArrayProperty,
+            }),
+        }),
     ],
 };
 
@@ -192,64 +139,37 @@ export const selectTypeConfig: FieldTypeOption = {
         },
     },
     properties: [
-        {
-            name: 'Label',
-            key: 'props.label',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Placeholder',
-            key: 'props.placeholder',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Description',
-            key: 'props.description',
-            type: PropertyType.TEXT,
-        },
-        {
+        createTextProperty({
             name: 'Select all options label',
             key: 'props.selectAllOption',
-            type: PropertyType.TEXT,
-        },
-        {
+        }),
+        createBooleanProperty({
             name: 'Multiple selections',
             key: 'props.multiple',
-            type: PropertyType.BOOLEAN,
-        },
-        {
-            name: 'Required',
-            key: 'props.required',
-            type: PropertyType.BOOLEAN,
-        },
-        {
+        }),
+        createArrayProperty({
             name: 'Options',
             key: 'props.options',
-            type: PropertyType.ARRAY,
             canAdd: true,
-            childProperty: {
-                type: PropertyType.OBJECT,
+            childProperty: createObjectProperty({
                 isRemovable: true,
                 childProperties: [
-                    {
+                    createTextProperty({
                         name: 'Label',
                         key: 'label',
-                        type: PropertyType.TEXT,
-                    },
-                    {
+                    }),
+                    createTextProperty({
                         name: 'Value',
                         key: 'value',
-                        type: PropertyType.TEXT,
                         outputRawValue: true,
-                    },
-                    {
+                    }),
+                    createBooleanProperty({
                         name: 'Disabled',
                         key: 'disabled',
-                        type: PropertyType.BOOLEAN,
-                    },
+                    }),
                 ],
-            } as IObjectProperty,
-        } as IArrayProperty,
+            }),
+        }),
     ],
 };
 
@@ -266,28 +186,6 @@ export const textareaTypeConfig: FieldTypeOption = {
             required: true,
         },
     },
-    properties: [
-        {
-            name: 'Label',
-            key: 'props.label',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Placeholder',
-            key: 'props.placeholder',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Description',
-            key: 'props.description',
-            type: PropertyType.TEXT,
-        },
-        {
-            name: 'Required',
-            key: 'props.required',
-            type: PropertyType.BOOLEAN,
-        },
-    ],
 };
 
 export const groupTypeConfig: FieldTypeOption = {
@@ -302,7 +200,7 @@ export const groupTypeConfig: FieldTypeOption = {
     },
 };
 
-export const repeatTypeConfig: FieldTypeOption = {
+const repeatTypeConfig: FieldTypeOption = {
     displayName: 'Repeating Section',
     name: 'repeating-section',
     keyGenerationPrefix: 'rep',
@@ -311,7 +209,7 @@ export const repeatTypeConfig: FieldTypeOption = {
         isObject: true,
     },
     defaultConfig: {
-        templateOptions: {
+        props: {
             addText: 'Add Section',
         },
         fieldArray: {
@@ -319,22 +217,42 @@ export const repeatTypeConfig: FieldTypeOption = {
         },
     },
     properties: [
-        {
-            name: 'Add Text',
+        createTextProperty({
+            name: 'Add Button Text',
             key: 'props.addText',
-            type: PropertyType.TEXT,
-        },
+        }),
     ],
 };
 
 const cardWrapperConfig: FieldWrapperOption = {
     name: 'card',
     properties: [
-        {
+        createTextProperty({
             name: 'Card Title',
             key: 'props.cardTitle',
-            type: PropertyType.TEXT,
-        },
+        }),
+    ],
+};
+
+export const formFieldWrapperConfig: FieldWrapperOption = {
+    name: 'form-field',
+    properties: [
+        createTextProperty({
+            name: 'Label',
+            key: 'props.label',
+        }),
+        createTextProperty({
+            name: 'Placeholder',
+            key: 'props.placeholder',
+        }),
+        createTextProperty({
+            name: 'Description',
+            key: 'props.description',
+        }),
+        createBooleanProperty({
+            name: 'Required',
+            key: 'props.required',
+        }),
     ],
 };
 
@@ -351,10 +269,5 @@ export const materialEditorConfig: EditorConfig = {
         groupTypeConfig,
         repeatTypeConfig,
     ],
-    wrapperOptions: [
-        cardWrapperConfig,
-        {
-            name: 'form-field',
-        },
-    ],
+    wrapperOptions: [cardWrapperConfig, formFieldWrapperConfig],
 };

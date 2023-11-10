@@ -2,12 +2,11 @@
  * Public API Surface of editor
  */
 
-export { IBooleanProperty } from './lib/property/boolean-property/boolean-property.types';
-export { IInputProperty } from './lib/property/input-property/input-property.types';
-export { IArrayProperty } from './lib/property/object-array-properties/array-property.types';
-export { IObjectProperty } from './lib/property/object-array-properties/object-property.types';
-export { IBaseProperty, IProperty, PropertyType } from './lib/property/property.types';
-export { ITextareaProperty } from './lib/property/textarea-property/textarea-property.types';
+export { createBooleanProperty, IBooleanProperty } from './lib/property/boolean-property/boolean-property.types';
+export { createTextProperty, IInputProperty } from './lib/property/input-property/input-property.types';
+export { createArrayProperty, IArrayProperty } from './lib/property/object-array-properties/array-property.types';
+export { createObjectProperty, IObjectProperty } from './lib/property/object-array-properties/object-property.types';
+export { IBaseProperty, IProperty } from './lib/property/property.types';
 
 export { bootstrapConfig } from './lib/edit-field/styles/styles-config/bootstrap.styles-config';
 export { tailwindConfig } from './lib/edit-field/styles/styles-config/tailwind.styles-config';

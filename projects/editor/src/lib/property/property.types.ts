@@ -43,3 +43,5 @@ export type IProperty =
     | IObjectProperty
     | IInputProperty
     | IExpressionPropertiesProperty;
+
+export type PropertyCreator<T extends IBaseProperty> = (property: Omit<T, 'type'>) => T;

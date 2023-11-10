@@ -1,6 +1,7 @@
 import { EditorConfig } from '@sesan07/ngx-formly-editor';
 import {
     checkboxTypeConfig,
+    formFieldWrapperConfig,
     groupTypeConfig,
     inputTypeConfig,
     numberTypeConfig,
@@ -21,9 +22,5 @@ export const bootstrapEditorConfig: EditorConfig = {
         textareaTypeConfig,
         groupTypeConfig,
     ],
-    wrapperOptions: [
-        {
-            name: 'form-field',
-        },
-    ],
+    wrapperOptions: [formFieldWrapperConfig],
 };
