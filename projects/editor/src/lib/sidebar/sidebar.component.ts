@@ -5,6 +5,7 @@ import {
     ContentChildren,
     ElementRef,
     EventEmitter,
+    HostBinding,
     Input,
     Output,
     QueryList,
@@ -27,6 +28,8 @@ export class SidebarComponent implements AfterContentInit {
 
     @ContentChildren(SidebarSectionComponent)
     sections: QueryList<SidebarSectionComponent>;
+
+    @HostBinding('class.editor-resizing') isResizing: boolean;
 
     public typeOfSideBarPosition: typeof SideBarPosition = SideBarPosition;
 
@@ -54,9 +57,9 @@ export class SidebarComponent implements AfterContentInit {
     }
 
     onSidebarMouseDown(event: MouseEvent): void {
+        this.isResizing = true;
         this._prevResizeX = event.clientX;
         this._totalResizeDeltaX = 0;
-
         this._sidebarStartWidth = this._elementRef.nativeElement.clientWidth;
 
         this._stopMouseMoveListener = this._renderer.listen('window', 'mousemove', (e: MouseEvent) => {
@@ -64,6 +67,7 @@ export class SidebarComponent implements AfterContentInit {
             e.preventDefault();
         });
         this._stopMouseUpListener = this._renderer.listen('window', 'mouseup', () => {
+            this.isResizing = false;
             this._stopMouseMoveListener();
             this._stopMouseUpListener();
             this.resizeEnd.emit();
@@ -95,7 +99,7 @@ export class SidebarComponent implements AfterContentInit {
                     ? Number.MAX_SAFE_INTEGER
                     : s.height;
 
-            this._renderer.addClass(s.element, 'resizing');
+            this._renderer.addClass(s.element, 'editor-resizing');
         });
 
         this._stopMouseMoveListener = this._renderer.listen('window', 'mousemove', (e: MouseEvent) => {
@@ -108,7 +112,7 @@ export class SidebarComponent implements AfterContentInit {
 
             this.sections.forEach(s => {
                 s.maxHeight = null;
-                this._renderer.removeClass(s.element, 'resizing');
+                this._renderer.removeClass(s.element, 'editor-resizing');
             });
 
             this._stopMouseMoveListener();

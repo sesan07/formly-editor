@@ -1,6 +1,6 @@
 :host {
     flex-shrink: 0;
-	display: flex;
+    display: flex;
     height: 100%;
 }
 
@@ -11,24 +11,24 @@
 }
 
 .sidebar-divider {
-	position: relative;
+    position: relative;
     height: 100%;
     width: 4px;
     flex-shrink: 0;
-    background-color: rgba(0,0,0,0.12);
-	cursor: ew-resize;
+    background-color: rgba(0, 0, 0, 0.12);
+    cursor: ew-resize;
 }
 
 .sidebar-divider::after {
-	position: absolute;
-	content: '';
-	height: 100%;
-	width: 4px;
-	left: 0;
+    position: absolute;
+    content: '';
+    height: 100%;
+    width: 4px;
+    left: 0;
 }
 
 .sidebar-divider:hover::after {
-	width: 16px;
-	left: -6px;
-    background-color: rgba(0,0,0,0.2);
+    width: 16px;
+    left: -6px;
+    background-color: rgba(0, 0, 0, 0.2);
 }
