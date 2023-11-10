@@ -257,22 +257,3 @@
         {{ displayName }}
     </button>
 </ng-template>
-
-<mat-menu #modelOptionsMenu="matMenu">
-    <button
-        class="editor-mat-menu-item"
-        mat-menu-item
-        (click)="onImportModel()"
-    >
-        <mat-icon>file_download</mat-icon>
-        <span>Import</span>
-    </button>
-    <button
-        class="editor-mat-menu-item"
-        mat-menu-item
-        (click)="onExportModel()"
-    >
-        <mat-icon>file_upload</mat-icon>
-        <span>Export</span>
-    </button>
-</mat-menu>
