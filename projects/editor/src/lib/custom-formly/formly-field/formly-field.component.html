@@ -17,63 +17,52 @@
             [class.visible]="isMouseInside"
         >
             <button
+                *ngIf="fieldInfo.childrenConfig"
                 mat-icon-button
-                [matMenuTriggerFor]="optionsMenu"
+                title="Add Field"
+                [matMenuTriggerFor]="fieldOptionsMenu"
+                [matMenuTriggerData]="{ options: fieldOptions, selected: addField }"
             >
-                <mat-icon>more_vert</mat-icon>
+                <mat-icon>add</mat-icon>
+            </button>
+
+            <button
+                *ngIf="fieldOptions.length"
+                mat-icon-button
+                title="Replace"
+                [matMenuTriggerFor]="fieldOptionsMenu"
+                [matMenuTriggerData]="{ options: fieldOptions, selected: replaceField }"
+            >
+                <mat-icon>sync</mat-icon>
             </button>
 
             <button
                 mat-icon-button
+                title="Move Up"
+                [disabled]="isFirstChild"
+                (click)="onMoveUp()"
+            >
+                <mat-icon>arrow_upward</mat-icon>
+            </button>
+
+            <button
+                mat-icon-button
+                title="Move Down"
+                [disabled]="isLastChild"
+                (click)="onMoveDown()"
+            >
+                <mat-icon>arrow_downward</mat-icon>
+            </button>
+
+            <button
+                class="delete-btn"
+                mat-icon-button
+                title="Remove"
                 (click)="onRemove(); $event.stopPropagation()"
             >
                 <mat-icon>delete</mat-icon>
             </button>
         </div>
-
-        <mat-menu #optionsMenu="matMenu">
-            <button
-                *ngIf="fieldInfo.childrenConfig"
-                class="editor-mat-menu-item"
-                mat-menu-item
-                [matMenuTriggerFor]="fieldOptionsMenu"
-                [matMenuTriggerData]="{ options: fieldOptions, selected: addField }"
-            >
-                <mat-icon>add</mat-icon>
-                <span>Add</span>
-            </button>
-
-            <button
-                *ngIf="fieldOptions.length"
-                class="editor-mat-menu-item"
-                mat-menu-item
-                [matMenuTriggerFor]="fieldOptionsMenu"
-                [matMenuTriggerData]="{ options: fieldOptions, selected: replaceField }"
-            >
-                <mat-icon>sync</mat-icon>
-                <span>Replace</span>
-            </button>
-
-            <button
-                class="editor-mat-menu-item"
-                mat-menu-item
-                [disabled]="isFirstChild"
-                (click)="onMoveUp()"
-            >
-                <mat-icon>arrow_upward</mat-icon>
-                <span>Move Up</span>
-            </button>
-
-            <button
-                class="editor-mat-menu-item"
-                mat-menu-item
-                [disabled]="isLastChild"
-                (click)="onMoveDown()"
-            >
-                <mat-icon>arrow_downward</mat-icon>
-                <span>Move Down</span>
-            </button>
-        </mat-menu>
     </header>
 
     <div

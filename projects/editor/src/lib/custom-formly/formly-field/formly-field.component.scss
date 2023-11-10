@@ -24,6 +24,10 @@
     border-color: rgba(0, 0, 0, 0.4);
 }
 
+.editor-field-content.edit-mode {
+    padding: 2px;
+}
+
 header {
     display: flex;
     user-select: none;
@@ -66,6 +70,6 @@ header {
     }
 }
 
-.editor-field-content.edit-mode {
-    padding: 2px;
+.delete-btn {
+    margin-left: 8px;
 }
