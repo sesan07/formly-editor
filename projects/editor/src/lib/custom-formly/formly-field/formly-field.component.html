@@ -5,10 +5,7 @@
     [dragPreview]="dnd.dragSource"
     [dropTarget]="dnd.dropTarget"
 >
-    <header
-        *ngIf="isEditMode$ | async"
-        class="editor-mat"
-    >
+    <header *ngIf="isEditMode$ | async">
         <div
             class="header-title"
             [dragSource]="dnd.dragSource"
