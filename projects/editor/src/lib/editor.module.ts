@@ -16,9 +16,8 @@ import { FormlyGroupComponent } from './custom-formly/formly-group/formly-group.
 import { EditFieldModule } from './edit-field/edit-field.module';
 import { EditorComponent } from './editor.component';
 import { EditorService } from './editor.service';
-import { EDITOR_CONFIG, EditorConfig, EditorFieldType } from './editor.types';
+import { EDITOR_CONFIG, EditorConfig, EditorFieldType, FieldTypeOption } from './editor.types';
 import { FieldNameModule } from './field-name/field-name.module';
-import { GenericFieldService } from './field-service/generic/generic-field.service';
 import { FieldTreeItemModule } from './field-tree-item/field-tree-item.module';
 import { FormModule } from './form/form.module';
 import { JSONDialogModule } from './json-dialog/json-dialog.module';
@@ -31,9 +30,17 @@ import 'codemirror/addon/fold/brace-fold';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/selection/active-line';
 import 'codemirror/mode/javascript/javascript';
+import { FieldService } from './field-service/field.service';
 
 const defaultConfig: EditorConfig = {
-    options: [],
+    fieldOptions: [],
+};
+
+const defaultGenericTypeOption: FieldTypeOption = {
+    displayName: 'Generic',
+    name: EditorFieldType.GENERIC,
+    disableKeyGeneration: true,
+    defaultConfig: {},
 };
 
 const metaReducerFactory =
@@ -66,7 +73,6 @@ const metaReducerFactory =
     ],
     exports: [EditorComponent],
     providers: [
-        GenericFieldService,
         FileService,
         {
             provide: MAT_DIALOG_DEFAULT_OPTIONS,
@@ -101,6 +107,8 @@ export class EditorModule {
     }
 
     static forRoot(config: EditorConfig = defaultConfig): ModuleWithProviders<EditorModule> {
+        config.genericTypeOption = config.genericTypeOption ?? defaultGenericTypeOption;
+
         return {
             ngModule: EditorModule,
             providers: [
@@ -109,6 +117,7 @@ export class EditorModule {
                     useValue: config,
                 },
                 EditorService,
+                FieldService,
             ],
         };
     }

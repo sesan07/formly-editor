@@ -1,23 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, inject } from '@angular/core';
-import { get, set } from 'lodash-es';
-import { forkJoin, of } from 'rxjs';
-import { catchError, debounceTime, map } from 'rxjs/operators';
+import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FormlyFieldConfig } from '@ngx-formly/core';
+import { get, set } from 'lodash-es';
 
-import {
-    EDITOR_CONFIG,
-    EditorConfig,
-    EditorFieldType,
-    FieldOption,
-    FieldTypeOption,
-    IEditorFieldService,
-    IEditorFormlyField,
-    IForm,
-} from './editor.types';
+import { EDITOR_CONFIG, EditorConfig, FieldOption, FieldTypeOption, IEditorFormlyField, IForm } from './editor.types';
 import { isCategoryOption } from './editor.utils';
-import { GenericFieldService } from './field-service/generic/generic-field.service';
+import { FieldService } from './field-service/field.service';
 import { IProperty, IPropertyChange } from './property/property.types';
 import {
     addField,
@@ -35,7 +23,7 @@ import {
     setEditMode,
     setState,
 } from './state/state.actions';
-import { selectActiveField, selectActiveFieldMap, selectEditor, selectForms } from './state/state.selectors';
+import { selectActiveField, selectActiveFieldMap, selectForms } from './state/state.selectors';
 import { IEditorState } from './state/state.types';
 
 @Injectable()
@@ -48,18 +36,10 @@ export class EditorService {
     private _activeFieldMap: Record<string, IEditorFormlyField>;
     private _keyPathMap: Record<string, string> = {}; // Record<formId.fieldId, keyPath>
     private _typeOptions: FieldTypeOption[];
-    private _fieldServiceMap: Record<string, IEditorFieldService> = {}; // Record<type, service>
-
-    private readonly _defaultTypeOption: FieldTypeOption = {
-        displayName: 'Generic',
-        type: EditorFieldType.GENERIC,
-        disableKeyGeneration: true,
-        service: GenericFieldService,
-    };
 
     constructor(
         @Inject(EDITOR_CONFIG) config: EditorConfig,
-        private _http: HttpClient,
+        private _fieldService: FieldService,
         private _store: Store<IEditorState>
     ) {
         this.setup(config);
@@ -72,14 +52,13 @@ export class EditorService {
         this._store.select(selectActiveField).subscribe(field => (this._activeField = field));
         this._store.select(selectActiveFieldMap).subscribe(fieldMap => (this._activeFieldMap = fieldMap));
 
-        this.fieldOptions = [...this.config.options, this._defaultTypeOption];
+        this.fieldOptions = [...this.config.fieldOptions, config.genericTypeOption];
         const getTypeOptions = (options: FieldOption[]) =>
             options.reduce<FieldTypeOption[]>(
                 (a, b): FieldTypeOption[] => [...a, ...(isCategoryOption(b) ? getTypeOptions(b.children) : [b])],
                 []
             );
         this._typeOptions = getTypeOptions(this.fieldOptions);
-        this._fieldServiceMap = this._typeOptions.reduce((acc, o) => ({ ...acc, [o.type]: inject(o.service) }), {});
     }
 
     public setState(state: IEditorState): void {
@@ -93,8 +72,8 @@ export class EditorService {
                 sourceFields,
                 model,
                 typeOptions: this._typeOptions,
-                defaultTypeOption: this._defaultTypeOption,
-                getDefaultField: (type: string) => this._getFieldService(type).getDefaultField(type),
+                defaultTypeOption: this.config.genericTypeOption,
+                getDefaultField: (type: string) => this._fieldService.getDefaultField(type),
             })
         );
     }
@@ -123,7 +102,7 @@ export class EditorService {
                 parent,
                 index,
                 typeOptions: this._typeOptions,
-                defaultTypeOption: this._defaultTypeOption,
+                defaultTypeOption: this.config.genericTypeOption,
                 getDefaultField: type => this.getDefaultField(type),
             })
         );
@@ -167,7 +146,7 @@ export class EditorService {
                 parent,
                 newFieldType,
                 typeOptions: this._typeOptions,
-                defaultTypeOption: this._defaultTypeOption,
+                defaultTypeOption: this.config.genericTypeOption,
                 keyPath: this._getKeyPath(field),
                 getDefaultField: type => this.getDefaultField(type),
             })
@@ -187,11 +166,11 @@ export class EditorService {
     }
 
     public getDefaultField(type: string): FormlyFieldConfig {
-        return this._getFieldService(type).getDefaultField(type);
+        return this._fieldService.getDefaultField(type);
     }
 
-    public getFieldProperties(type: string): IProperty[] {
-        return this._getFieldService(type).getProperties(type);
+    public getFieldProperties(field: FormlyFieldConfig): IProperty[] {
+        return this._fieldService.getProperties(field);
     }
 
     public registerKeyPath({ _info: { formId, fieldId } }: IEditorFormlyField, keyPath: string): void {
@@ -204,9 +183,5 @@ export class EditorService {
 
     private _getKeyPath({ _info: { formId, fieldId } }: IEditorFormlyField): string | undefined {
         return get(this._keyPathMap, [`${formId}.${fieldId}`]);
-    }
-
-    private _getFieldService(type: string): IEditorFieldService {
-        return this._fieldServiceMap[type] ?? this._fieldServiceMap[this._defaultTypeOption.type];
     }
 }

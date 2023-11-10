@@ -247,12 +247,12 @@
 <ng-template
     #fieldTypeOption
     let-displayName="displayName"
-    let-type="type"
+    let-name="name"
 >
     <button
         class="editor-mat-menu-item"
         mat-menu-item
-        (click)="onAddField(type)"
+        (click)="onAddField(name)"
     >
         {{ displayName }}
     </button>

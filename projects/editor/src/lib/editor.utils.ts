@@ -7,7 +7,7 @@ export const trackByFieldId: TrackByFunction<IEditorFormlyField> = (_, field) =>
 export const trackByDisplayName: TrackByFunction<FieldOption> = (_, opt) => opt.displayName;
 
 export const isCategoryOption = (x: FieldOption): x is FieldCategoryOption => !!(x as FieldCategoryOption).children;
-export const isTypeOption = (x: FieldOption): x is FieldTypeOption => !!(x as FieldTypeOption).type;
+export const isTypeOption = (x: FieldOption): x is FieldTypeOption => !!(x as FieldTypeOption).name;
 
 export const getKeyPath = (control: AbstractControl): string => {
     const path: string[] = [];

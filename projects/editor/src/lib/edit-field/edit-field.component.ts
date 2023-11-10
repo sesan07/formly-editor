@@ -59,7 +59,8 @@ export class EditFieldComponent implements OnInit, OnDestroy {
                     this._cachedProperty = this._getProperty(null);
                 } else if (
                     field._info.formId !== this._cachedField?._info.formId ||
-                    field._info.fieldId !== this._cachedField?._info.fieldId
+                    field._info.fieldId !== this._cachedField?._info.fieldId ||
+                    field.wrappers !== this._cachedField?.wrappers
                 ) {
                     this._cachedProperty = this._getProperty(field);
                 }
@@ -85,7 +86,7 @@ export class EditFieldComponent implements OnInit, OnDestroy {
 
     private _getProperty(field: IEditorFormlyField | null): IObjectProperty {
         const property = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
-        const childProperties = this._editorService.getFieldProperties(field?.type as string);
+        const childProperties = field ? this._editorService.getFieldProperties(field) : [];
         initRootProperty(property, true, childProperties);
         return property;
     }

@@ -35,7 +35,7 @@ export const convertToEditorField = (
 
     // Merge with default properties
     const typeOption: FieldTypeOption =
-        typeOptions.find(option => option.type === sourceField.type) ?? defaultTypeOption;
+        typeOptions.find(option => option.name === sourceField.type) ?? defaultTypeOption;
     const baseField: FormlyFieldConfig = getDefaultField(sourceField.type as string);
     merge(baseField, sourceField);
 

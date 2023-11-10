@@ -37,7 +37,7 @@ export class AddFieldTreeItemComponent implements OnChanges, OnDestroy {
                 this.isCategoryOption = true;
                 this.childOptions = this.fieldOption.children;
             } else if (isTypeOption(this.fieldOption)) {
-                this._field = this._editorService.getDefaultField(this.fieldOption.type) as IEditorFormlyField;
+                this._field = this._editorService.getDefaultField(this.fieldOption.name) as IEditorFormlyField;
                 this.dnd.setup(this._field);
             }
         }

@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormlyModule } from '@ngx-formly/core';
 
-import { AppFieldType } from '../../../field-services/field.types';
 import { RepeatingSectionTypeComponent } from './repeating-section-type.component';
 
 @NgModule({
@@ -16,7 +15,7 @@ import { RepeatingSectionTypeComponent } from './repeating-section-type.componen
         FormlyModule.forChild({
             types: [
                 {
-                    name: AppFieldType.REPEATING_SECTION,
+                    name: 'repeating-section',
                     component: RepeatingSectionTypeComponent,
                 },
             ],

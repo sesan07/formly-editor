@@ -4,7 +4,6 @@ import { MatCardModule } from '@angular/material/card';
 import { FormlyModule } from '@ngx-formly/core';
 
 import { CardWrapperComponent } from './card-wrapper.component';
-import { AppWrapperType } from '../../../field-services/field.types';
 
 @NgModule({
     declarations: [CardWrapperComponent],
@@ -14,7 +13,7 @@ import { AppWrapperType } from '../../../field-services/field.types';
         FormlyModule.forChild({
             wrappers: [
                 {
-                    name: AppWrapperType.CARD,
+                    name: 'card',
                     component: CardWrapperComponent,
                 },
             ],

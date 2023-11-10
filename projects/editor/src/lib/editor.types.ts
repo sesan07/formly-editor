@@ -1,10 +1,8 @@
-import { InjectionToken, Type } from '@angular/core';
-import { FormlyFieldConfig, FormlyFieldProps } from '@ngx-formly/core';
+import { InjectionToken } from '@angular/core';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 
 import { FormlyFieldConfigCache } from './custom-formly/fieldconfig.cache';
-import { BaseFieldService } from './field-service/base-field.service';
 import { IProperty } from './property/property.types';
-import { IStylesConfig } from './edit-field/styles/styles.types';
 
 export enum EditorFieldType {
     FORMLY_GROUP = 'formly-group',
@@ -53,11 +51,6 @@ export interface IDefaultForm {
     model: object;
 }
 
-export interface IEditorFieldService {
-    getDefaultField: GetDefaultField;
-    getProperties(type: string): IProperty[];
-}
-
 export type IEditorFormlyFieldConfigCache = IEditorFormlyField & FormlyFieldConfigCache;
 
 export type FieldOption = FieldCategoryOption | FieldTypeOption;
@@ -68,12 +61,13 @@ export interface FieldCategoryOption {
 }
 
 export interface FieldTypeOption {
-    type: string;
+    name: string;
     displayName: string;
     keyGenerationPrefix?: string;
     disableKeyGeneration?: boolean; // Prevent auto generating keys
     childrenConfig?: FieldTypeChildrenConfig;
-    service: Type<BaseFieldService<FormlyFieldProps>>;
+    defaultConfig: FormlyFieldConfig;
+    properties?: IProperty[];
 }
 
 export interface FieldTypeChildrenConfig {
@@ -81,8 +75,15 @@ export interface FieldTypeChildrenConfig {
     isObject?: boolean; // Whether child is a single object instead of a list of children
 }
 
+export interface FieldWrapperOption {
+    name: string;
+    properties?: IProperty[];
+}
+
 export interface EditorConfig {
-    options: FieldOption[];
+    fieldOptions: FieldOption[];
+    wrapperOptions?: FieldWrapperOption[];
+    genericTypeOption?: FieldTypeOption;
     onDisplayFields?: (fields: IEditorFormlyField[], model: Record<string, any>) => IEditorFormlyField[];
 }
 
