@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
 import { cloneDeep } from 'lodash-es';
 import { Observable, Subject } from 'rxjs';
@@ -32,7 +32,7 @@ export class FormComponent implements OnInit, OnDestroy {
     public formFields$: Observable<IEditorFormlyField[]>;
     public model$: Observable<Record<string, any>>;
     public formFieldsJSON$: Observable<string>;
-    public formGroup: FormGroup = new FormGroup({});
+    public formGroup: UntypedFormGroup = new UntypedFormGroup({});
     public options: FormlyFormOptions = {};
 
     trackByFieldId = trackByFieldId;
@@ -65,7 +65,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
         this.formFields$ = activeFields$.pipe(
             tap(() => {
-                this.formGroup = new FormGroup({});
+                this.formGroup = new UntypedFormGroup({});
                 this.options = {};
             }),
             map(fields => this._editorService.onDisplayFields(cloneDeep(fields), this._cachedModel))
