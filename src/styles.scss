@@ -1,11 +1,10 @@
 @import 'bootstrap/scss/bootstrap';
 
 // Generated tailwind styles for the editor's styling system (styling tab)
-@import './projects/editor/assets/styles/tailwind.scss';
+@import './projects/editor/assets/styles/tailwind';
 
 // Styles required by the editor
-// TODO use theming mixing
-@import './projects/editor/assets/styles/styles.scss';
+@import './projects/editor/assets/styles/styles';
 
 // Angular material theme
 @import './theme';

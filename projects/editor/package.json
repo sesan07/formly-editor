@@ -23,5 +23,13 @@
   },
   "dependencies": {
     "tslib": "^2.0.0"
+  },
+  "exports": {
+    "./styles": {
+      "sass": "./assets/styles/styles.scss"
+    },
+    "./tailwind": {
+      "sass": "./assets/styles/tailwind.scss"
+    }
   }
 }
