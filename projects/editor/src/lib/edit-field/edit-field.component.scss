@@ -2,6 +2,19 @@
     .mat-tab-body-wrapper {
         height: 100%;
     }
+
+    .mat-expansion-panel {
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        box-shadow: none !important;
+    }
+
+    .mat-form-field-wrapper {
+        margin-bottom: -1.25em;
+    }
+
+    .mat-form-field-infix {
+        width: unset;
+    }
 }
 
 mat-tab-group {

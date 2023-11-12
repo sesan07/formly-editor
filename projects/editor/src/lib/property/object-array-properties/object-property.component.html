@@ -132,10 +132,12 @@
     </ng-container>
 </ng-template>
 
-<mat-menu #optionsMenu="matMenu">
+<mat-menu
+    #optionsMenu="matMenu"
+    class="editor-mat"
+>
     <button
         *ngIf="canAdd"
-        class="editor-mat-menu-item"
         mat-menu-item
         [matMenuTriggerFor]="addMenu"
     >
@@ -144,7 +146,6 @@
     </button>
     <button
         *ngIf="property?.isRemovable"
-        class="editor-mat-menu-item"
         mat-menu-item
         color="warn"
         (click)="remove.emit()"
@@ -157,7 +158,6 @@
 <mat-menu #addMenu="matMenu">
     <button
         *ngFor="let option of addOptions"
-        class="editor-mat-menu-item"
         mat-menu-item
         (click)="onAddChild(option)"
     >

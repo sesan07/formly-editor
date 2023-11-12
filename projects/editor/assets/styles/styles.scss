@@ -2,24 +2,13 @@
 @import 'codemirror/theme/elegant';
 @import 'codemirror/addon/fold/foldgutter';
 
-:root {
-    --editor-header-height: 48px;
-    --editor-tree-item-height: 32px;
+.CodeMirror {
+    border-radius: 4px;
 }
 
-editor-edit-field {
-    .mat-expansion-panel {
-        border: 1px solid rgba(0, 0, 0, 0.12);
-        box-shadow: none !important;
-    }
-
-    .mat-form-field-wrapper {
-        margin-bottom: -1.25em;
-    }
-
-    .mat-form-field-infix {
-        width: unset;
-    }
+.CodeMirror-foldmarker {
+    color: black;
+    text-shadow: none;
 }
 
 .editor-mat {
@@ -77,29 +66,20 @@ editor-edit-field {
         width: var(--button-size) !important;
         line-height: var(--button-size) !important;
     }
-}
 
-.editor-mat-option,
-.editor-mat-menu-item {
-    line-height: 40px !important;
-    height: 40px !important;
-}
-
-.editor-resizing {
-    transition: none !important;
-}
-
-.CodeMirror {
-    border-radius: 4px;
-}
-
-.CodeMirror-foldmarker {
-    color: black;
-    text-shadow: none;
+    .mat-option,
+    .mat-menu-item {
+        line-height: 40px !important;
+        height: 40px !important;
+    }
 }
 
 formly-field {
     display: block;
+}
+
+.editor-resizing {
+    transition: none !important;
 }
 
 .tree-container {
@@ -119,10 +99,6 @@ formly-field {
 
 .cursor-pointer {
     cursor: pointer;
-}
-
-.cursor-grab {
-    cursor: grab;
 }
 
 .expand-icon {

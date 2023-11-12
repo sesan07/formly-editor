@@ -1,7 +1,10 @@
 :host {
+    --editor-header-height: 48px;
+    --editor-tree-item-height: 32px;
+
     --add-form-btn-width: 120px;
-    // add-btn + spacing
     --add-form-width: calc(var(--add-form-btn-width) + 16px);
+
     display: flex;
     height: 100%;
 

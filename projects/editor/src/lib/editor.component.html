@@ -201,7 +201,10 @@
     </div>
 </ng-template>
 
-<mat-menu #fieldOptionsMenu="matMenu">
+<mat-menu
+    #fieldOptionsMenu="matMenu"
+    class="editor-mat"
+>
     <ng-template
         matMenuContent
         let-options="options"
@@ -209,7 +212,6 @@
         <ng-container *ngFor="let option of options">
             <button
                 *ngIf="isCategoryOption(option)"
-                class="editor-mat-menu-item"
                 mat-menu-item
                 [matMenuTriggerFor]="fieldCategoryOptionsMenu"
                 [matMenuTriggerData]="{ children: option.children }"
@@ -228,7 +230,10 @@
     </ng-template>
 </mat-menu>
 
-<mat-menu #fieldCategoryOptionsMenu="matMenu">
+<mat-menu
+    #fieldCategoryOptionsMenu="matMenu"
+    class="editor-mat"
+>
     <ng-template
         matMenuContent
         let-children="children"
@@ -250,7 +255,6 @@
     let-name="name"
 >
     <button
-        class="editor-mat-menu-item"
         mat-menu-item
         (click)="onAddField(name)"
     >

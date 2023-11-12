@@ -34,10 +34,12 @@
 >
 </editor-field-drop-overlay>
 
-<mat-menu #optionsMenu="matMenu">
+<mat-menu
+    #optionsMenu="matMenu"
+    class="editor-mat"
+>
     <button
         *ngIf="fieldInfo.childrenConfig"
-        class="editor-mat-menu-item"
         mat-menu-item
         [matMenuTriggerFor]="fieldOptionsMenu"
         [matMenuTriggerData]="{ options: fieldOptions, selected: addField }"
@@ -47,7 +49,6 @@
     </button>
     <button
         *ngIf="fieldOptions.length"
-        class="editor-mat-menu-item"
         mat-menu-item
         [matMenuTriggerFor]="fieldOptionsMenu"
         [matMenuTriggerData]="{ options: fieldOptions, selected: replaceField }"
@@ -56,7 +57,6 @@
         <span>Replace</span>
     </button>
     <button
-        class="editor-mat-menu-item"
         mat-menu-item
         (click)="onRemove()"
     >
@@ -65,7 +65,10 @@
     </button>
 </mat-menu>
 
-<mat-menu #fieldOptionsMenu="matMenu">
+<mat-menu
+    #fieldOptionsMenu="matMenu"
+    class="editor-mat"
+>
     <ng-template
         matMenuContent
         let-options="options"
@@ -74,7 +77,6 @@
         <ng-container *ngFor="let option of options">
             <button
                 *ngIf="isCategoryOption(option)"
-                class="editor-mat-menu-item"
                 mat-menu-item
                 [matMenuTriggerFor]="fieldCategoryOptionsMenu"
                 [matMenuTriggerData]="{ children: option.children, selected }"
@@ -93,7 +95,10 @@
     </ng-template>
 </mat-menu>
 
-<mat-menu #fieldCategoryOptionsMenu="matMenu">
+<mat-menu
+    #fieldCategoryOptionsMenu="matMenu"
+    class="editor-mat"
+>
     <ng-template
         matMenuContent
         let-children="children"
@@ -116,7 +121,6 @@
     let-selected="selected"
 >
     <button
-        class="editor-mat-menu-item"
         mat-menu-item
         (click)="selected(option.name)"
     >
