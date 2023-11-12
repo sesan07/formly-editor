@@ -10,12 +10,13 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "noImplicitOverride": true,
-    "target": "es2020",
+    "target": "ES2022",
     "module": "es2020",
     "lib": ["es2020", "dom"],
     "paths": {
       "@sesan07/ngx-formly-editor": ["projects/editor/src/public-api"]
-    }
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "strictTemplates": true
