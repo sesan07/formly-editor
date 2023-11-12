@@ -1,6 +1,6 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { BehaviorSubject, Subject, isObservable } from 'rxjs';
@@ -18,7 +18,7 @@ import { IChipListProperty } from './chip-list-property.types';
 export class ChipListPropertyComponent extends BasePropertyDirective<IChipListProperty, string | string[]> {
     @ViewChild('input') inputElementRef: ElementRef<HTMLInputElement>;
 
-    public formControl: FormControl = new FormControl();
+    public formControl: UntypedFormControl = new UntypedFormControl();
     public separatorKeysCodes: number[] = [ENTER, COMMA];
     public selectedOptions$: BehaviorSubject<string[]> = new BehaviorSubject([]);
     public selectableOptions: string[];
