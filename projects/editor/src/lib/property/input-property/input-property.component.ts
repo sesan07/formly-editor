@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnChanges, SimpleChanges } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
-import { get, isNil } from 'lodash-es';
-import { IEditorFormlyField } from '../../editor.types';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 import { BasePropertyDirective } from '../base-property.component';
 import { PropertyType } from '../property.types';
@@ -14,7 +12,7 @@ import { IInputProperty } from './input-property.types';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputPropertyComponent extends BasePropertyDirective<IInputProperty, string | number | boolean> {
-    public formControl: UntypedFormControl;
+    public formControl: FormControl<string>;
     public hasOptions: boolean;
     public isInArray: boolean;
 
@@ -22,19 +20,19 @@ export class InputPropertyComponent extends BasePropertyDirective<IInputProperty
 
     protected _onChanged(isFirstChange: boolean): void {
         if (isFirstChange) {
-            this.formControl = new UntypedFormControl(this.currentValue);
+            this.formControl = new FormControl(this.currentValue?.toString());
             this.formControl.valueChanges.subscribe(val => this._updateValue(val));
         }
 
         this.hasOptions = this.property.isRemovable;
-        this.formControl.setValue(this.currentValue, {
+        this.formControl.setValue(this.currentValue?.toString(), {
             emitEvent: false,
         });
     }
 
     private _updateValue(value: string): void {
         if (this.property.type === PropertyType.NUMBER && isNaN(Number(value))) {
-            this.formControl.setValue(this.currentValue, {
+            this.formControl.setValue(this.currentValue?.toString(), {
                 emitEvent: false,
             });
 
