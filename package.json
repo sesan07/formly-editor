@@ -14,7 +14,7 @@
     "lint:app": "ng lint formly-editor --fix",
     "lint:editor": "ng lint editor --fix",
     "pretty": "prettier --write \"./**/*.{ts,js,json,html}\"",
-    "build-tailwind-css": "tailwindcss -c ./projects/editor/tailwind.config.js -o ./projects/editor/assets/styles/tailwind.scss"
+    "build-tailwind-css": "tailwindcss -c ./projects/editor/tailwind.lib.config.js -o ./projects/editor/assets/styles/tailwind.scss"
   },
   "private": true,
   "dependencies": {
