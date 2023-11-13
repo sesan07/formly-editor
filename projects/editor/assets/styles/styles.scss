@@ -1,3 +1,7 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use '@material/textfield';
+
 @import 'codemirror/lib/codemirror';
 @import 'codemirror/theme/elegant';
 @import 'codemirror/addon/fold/foldgutter';
@@ -12,32 +16,24 @@
 }
 
 .editor-mat {
+    // Reduce form-field size
+    // Workaround for bug - https://github.com/angular/components/issues/26579
+    textfield.$minimum-height-for-filled-label: 10px;
+    @include mat.form-field-density(-2);
+
+    $typography: mat.define-typography-config();
+    $typography: map.set($typography, body-1, font-size, 14px);
+    @include mat.all-component-typographies($typography);
+
     .mat-form-field-appearance-outline {
-        .mat-form-field-wrapper {
-            margin: 0 !important;
-            padding-bottom: 0 !important;
+        .mat-mdc-text-field-wrapper {
+            padding: 0 8px;
         }
 
-        .mat-form-field-infix {
-            padding: 0.5em 0 !important;
-            border-top: none;
-        }
-
-        .mat-form-field-outline {
-            top: 0 !important;
-        }
-
-        .mat-form-field-flex {
-            margin-top: 0 !important;
-        }
-
-        .mat-form-field-label-wrapper {
-            top: -1.25em;
-            padding-top: 1.25em;
-        }
-
-        .mat-form-field-subscript-wrapper {
-            display: none;
+        .mat-mdc-form-field-infix {
+            padding: 0.4em 0 !important;
+            min-height: 0;
+            line-height: 1;
         }
     }
 
@@ -56,21 +52,14 @@
         }
     }
 
-    .mat-button .mat-icon {
-        margin-right: 4px;
+    @include mat.icon-button-density(-4);
+    .mat-mdc-icon-button {
+        line-height: normal;
     }
 
-    button.mat-icon-button {
-        --button-size: 28px;
-        height: var(--button-size) !important;
-        width: var(--button-size) !important;
-        line-height: var(--button-size) !important;
-    }
-
-    .mat-option,
-    .mat-menu-item {
-        line-height: 40px !important;
-        height: 40px !important;
+    .mat-mdc-option,
+    .mat-mdc-menu-item {
+        min-height: 40px;
     }
 }
 

@@ -23,19 +23,16 @@
     <div class="tree-item-header-content">
         <ng-content select="[headerContent]"></ng-content>
     </div>
-    <div
+    <button
         *ngIf="hasOptions"
         class="tree-item-header-options"
         [class.visible]="isMouseInside"
+        mat-icon-button
+        [matMenuTriggerFor]="optionsMenu"
+        (click)="$event.stopPropagation()"
     >
-        <button
-            mat-icon-button
-            [matMenuTriggerFor]="optionsMenu"
-            (click)="$event.stopPropagation()"
-        >
-            <mat-icon>more_vert</mat-icon>
-        </button>
-    </div>
+        <mat-icon>more_vert</mat-icon>
+    </button>
 </div>
 <div
     *ngIf="isExpandable"

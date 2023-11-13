@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 :host {
     --editor-header-height: 48px;
     --editor-tree-item-height: 32px;
@@ -9,26 +11,19 @@
     height: 100%;
 
     ::ng-deep {
-        .form-tab-group > .mat-tab-header {
+        .form-tab-group > .mat-mdc-tab-header {
+            @include mat.icon-button-density(-4);
+            .mat-mdc-icon-button {
+                line-height: normal;
+            }
+
             margin-right: var(--add-form-width);
-
-            .mat-tab-label {
-                padding: 0;
-            }
-
-            .mat-tab-label-content,
-            .inner-tab-label-content {
-                height: 100%;
-                width: 100%;
-            }
+            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 
             .inner-tab-label-content {
                 display: inline-flex;
-                justify-content: space-between;
                 align-items: center;
-                column-gap: 8px;
-                padding: 0 16px;
-                box-sizing: border-box;
+                column-gap: 16px;
             }
         }
     }
@@ -74,7 +69,7 @@ editor-sidebar {
     width: 100%;
 }
 
-.mat-tab-group {
+.mat-mdc-tab-group {
     height: 100%;
 }
 
@@ -106,7 +101,7 @@ editor-sidebar {
 }
 
 .empty-view-btn {
-    width: 180px;
+    width: 220px;
 }
 
 .loading-view {
