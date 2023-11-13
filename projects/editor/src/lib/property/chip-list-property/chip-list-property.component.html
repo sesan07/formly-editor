@@ -36,17 +36,18 @@
     <mat-form-field
         [appearance]="appearance"
         [class.simplified]="!treeMode"
+        subscriptSizing="dynamic"
     >
         <mat-label *ngIf="showLabel">{{ property.name ? property.name : property.key }}</mat-label>
-        <mat-chip-list #chipList>
+        <mat-chip-grid #chipList>
             <ng-container *ngFor="let option of selectedOptions$ | async">
-                <mat-chip
+                <mat-chip-row
                     selectable
                     (removed)="onRemove(option)"
                 >
                     {{ option }}
                     <mat-icon matChipRemove>cancel</mat-icon>
-                </mat-chip>
+                </mat-chip-row>
             </ng-container>
             <input
                 #input
@@ -58,9 +59,10 @@
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 (matChipInputTokenEnd)="onAdd($event)"
             />
-        </mat-chip-list>
+        </mat-chip-grid>
         <mat-autocomplete
             #autoComplete="matAutocomplete"
+            class="editor-mat"
             (optionSelected)="onSelected($event)"
         >
             <mat-option

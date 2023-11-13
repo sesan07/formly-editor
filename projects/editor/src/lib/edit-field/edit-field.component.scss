@@ -1,19 +1,15 @@
 :host ::ng-deep {
-    .mat-tab-body-wrapper {
+    .mat-mdc-tab-header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .mat-mdc-tab-body-wrapper {
         height: 100%;
     }
 
     .mat-expansion-panel {
         border: 1px solid rgba(0, 0, 0, 0.12);
         box-shadow: none !important;
-    }
-
-    .mat-form-field-wrapper {
-        margin-bottom: -1.25em;
-    }
-
-    .mat-form-field-infix {
-        width: unset;
     }
 }
 

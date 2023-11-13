@@ -1,4 +1,6 @@
 <mat-card>
-    <mat-card-title *ngIf="to.cardTitle">{{ to.cardTitle }}</mat-card-title>
-    <ng-container #fieldComponent></ng-container>
+    <mat-card-header>
+        <mat-card-title *ngIf="to.cardTitle">{{ to.cardTitle }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content><ng-container #fieldComponent></ng-container></mat-card-content>
 </mat-card>

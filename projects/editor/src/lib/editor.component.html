@@ -70,8 +70,9 @@
     <div class="form-view">
         <ng-container *ngIf="forms$ | async as forms">
             <mat-tab-group
-                class="form-tab-group"
                 *ngIf="forms.length; else emptyView"
+                class="form-tab-group"
+                mat-stretch-tabs="false"
                 [selectedIndex]="activeFormIndex$ | async"
                 (selectedIndexChange)="onTabChange($event)"
             >

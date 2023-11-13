@@ -20,12 +20,6 @@ import { MaterialComponent } from './material.component';
         CardWrapperModule,
         FormlyMaterialModule,
         FormlyModule.forRoot({
-            types: [
-                { name: 'input', defaultOptions: { props: { appearance: 'fill' } } },
-                { name: 'radio', defaultOptions: { props: { appearance: 'fill' } } },
-                { name: 'select', defaultOptions: { props: { appearance: 'fill' } } },
-                { name: 'textarea', defaultOptions: { props: { appearance: 'fill' } } },
-            ],
             validationMessages: [{ name: 'required', message: 'This field is required' }],
         }),
         EditorModule.forRoot(materialEditorConfig),

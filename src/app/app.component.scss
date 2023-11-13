@@ -3,20 +3,6 @@ $app-header-height: 64px;
 :host {
     display: block;
     height: 100%;
-
-    ::ng-deep .app-header {
-        .mat-form-field-wrapper {
-            padding: 0;
-        }
-
-        .mat-form-field-subscript-wrapper {
-            display: none;
-        }
-
-        .mat-form-field-underline {
-            bottom: 0;
-        }
-    }
 }
 
 .app-header {

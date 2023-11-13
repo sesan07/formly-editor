@@ -4,11 +4,11 @@
     height: 100%;
 }
 
-.mat-dialog-content {
+.mat-mdc-dialog-content {
     flex-grow: 1;
 }
 
-.mat-dialog-title {
+.mat-mdc-dialog-title {
     margin: 0;
 }
 
@@ -20,7 +20,6 @@
 }
 
 .json-field {
-    display: block;
     flex-grow: 1;
 }
 
@@ -40,7 +39,7 @@ form {
 }
 
 :host ::ng-deep {
-    .mat-tab-body-content {
+    .mat-mdc-tab-body-content {
         display: flex;
         flex-direction: column;
         padding: 8px;
@@ -48,15 +47,12 @@ form {
     }
 
     .json-field {
-        .mat-form-field-wrapper,
-        .mat-form-field-infix,
-        .mat-form-field-flex {
+        .mat-mdc-form-field-flex,
+        .mat-mdc-form-field-infix {
             height: 100%;
         }
-
-        .mat-form-field-wrapper,
-        .mat-form-field-infix {
-            box-sizing: border-box;
+        .mat-mdc-form-field-infix {
+            padding-bottom: 20px;
         }
     }
 }

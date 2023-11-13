@@ -1,9 +1,10 @@
 <mat-form-field
     *ngIf="!breakpoint.value || option.hasBreakpoints"
-    appearance="fill"
+    subscriptSizing="dynamic"
 >
     <mat-label>{{ option.name }}</mat-label>
     <mat-select
+        panelClass="editor-mat"
         [value]="selectedVariant"
         (selectionChange)="onVariantSelected($event.value)"
     >
