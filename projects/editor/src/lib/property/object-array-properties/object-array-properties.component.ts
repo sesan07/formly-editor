@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, Directive, Input, OnInit, TrackByFunction } from '@angular/core';
-import { cloneDeep } from 'lodash-es';
 
 import { BasePropertyDirective } from '../base-property.component';
 import { PropertyService } from '../property.service';
@@ -83,7 +82,7 @@ export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayP
         this.childProperties = this.currentValue.map((childValue, index) => {
             let childProperty: IProperty;
             if (this.property.childProperty) {
-                childProperty = cloneDeep(this.property.childProperty);
+                childProperty = structuredClone(this.property.childProperty);
             } else {
                 childProperty = this.propertyService.getDefaultPropertyFromValue(childValue ?? '');
             }

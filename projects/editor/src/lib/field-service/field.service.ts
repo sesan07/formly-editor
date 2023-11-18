@@ -1,8 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 
-import { cloneDeep } from 'lodash-es';
-
 import { StylesService } from '../edit-field/styles/styles.service';
 import { EDITOR_CONFIG, EditorConfig } from '../editor.types';
 import { IProperty, PropertyType } from '../property/property.types';
@@ -36,7 +34,7 @@ export class FieldService {
     }
 
     public getDefaultField(type: string): FormlyFieldConfig {
-        return cloneDeep(this._fieldConfigMap[type] ?? this._config.genericTypeOption.defaultConfig);
+        return structuredClone(this._fieldConfigMap[type] ?? this._config.genericTypeOption.defaultConfig);
     }
 
     public getProperties(field: FormlyFieldConfig): IProperty[] {

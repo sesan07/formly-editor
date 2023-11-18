@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions } from '@ngx-formly/core';
-import { cloneDeep } from 'lodash-es';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, filter, map, shareReplay, takeUntil, tap } from 'rxjs/operators';
 
@@ -68,12 +67,12 @@ export class FormComponent implements OnInit, OnDestroy {
                 this.formGroup = new UntypedFormGroup({});
                 this.options = {};
             }),
-            map(fields => this._editorService.onDisplayFields(cloneDeep(fields), this._cachedModel))
+            map(fields => this._editorService.onDisplayFields(structuredClone(fields), this._cachedModel))
         );
 
         this.formFieldsJSON$ = activeFields$.pipe(
             map(fields => {
-                const fieldsClone: IEditorFormlyField[] = cloneDeep(fields);
+                const fieldsClone: IEditorFormlyField[] = structuredClone(fields);
                 fieldsClone.forEach(field => cleanField(field, true, true));
                 return JSON.stringify(fieldsClone, null, 2);
             })
@@ -83,7 +82,7 @@ export class FormComponent implements OnInit, OnDestroy {
             filter(form => form.model !== this._cachedModel),
             map(form => {
                 this._cachedModel = form.model;
-                return cloneDeep(this._cachedModel);
+                return structuredClone(this._cachedModel);
             })
         );
     }

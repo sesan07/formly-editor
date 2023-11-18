@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { cloneDeep } from 'lodash-es';
 import { Observable, Subject, debounceTime, takeUntil } from 'rxjs';
 
 import { StylesService } from './edit-field/styles/styles.service';
@@ -148,7 +147,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     onExportForm(): void {
-        const fieldsClone: IEditorFormlyField[] = cloneDeep(this.activeForm.fields);
+        const fieldsClone: IEditorFormlyField[] = structuredClone(this.activeForm.fields);
         fieldsClone.forEach(field => cleanField(field, true, true));
 
         const dialogRef = this._dialog.open<JSONDialogComponent, ImportJSONData, ImportJSONValue>(JSONDialogComponent, {
