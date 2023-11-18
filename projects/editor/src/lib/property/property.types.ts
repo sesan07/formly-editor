@@ -9,11 +9,12 @@ export enum PropertyType {
     ARRAY = 'Array',
     BOOLEAN = 'Boolean',
     CHIP_LIST = 'Chip List',
+    EXPRESSION_PROPERTIES = 'Expression Properties',
     OBJECT = 'Object',
     NUMBER = 'Number',
+    SELECT = 'Select',
     TEXT = 'Text',
     TEXTAREA = 'Textarea',
-    EXPRESSION_PROPERTIES = 'Expression Properties',
 }
 
 export enum PropertyChangeType {

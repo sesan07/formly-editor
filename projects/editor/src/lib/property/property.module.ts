@@ -8,6 +8,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSelectModule } from '@angular/material/select';
 
 import { BooleanPropertyComponent } from './boolean-property/boolean-property.component';
 import { ChipListPropertyComponent } from './chip-list-property/chip-list-property.component';
@@ -22,6 +23,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ExpressionPropertiesPropertyComponent } from './expression-properties-property/expression-properties-property.component';
 import { TextEditorModule } from '../text-editor/text-editor.module';
 import { PropertyKeyComponent } from './property-key/property-key.component';
+import { SelectPropertyComponent } from './select-property/select-property.component';
 
 @NgModule({
     declarations: [
@@ -33,6 +35,7 @@ import { PropertyKeyComponent } from './property-key/property-key.component';
         TextareaPropertyComponent,
         ExpressionPropertiesPropertyComponent,
         PropertyKeyComponent,
+        SelectPropertyComponent,
     ],
     imports: [
         CommonModule,
@@ -47,6 +50,7 @@ import { PropertyKeyComponent } from './property-key/property-key.component';
         MatChipsModule,
         MatAutocompleteModule,
         MatExpansionModule,
+        MatSelectModule,
     ],
     exports: [
         ObjectPropertyComponent,

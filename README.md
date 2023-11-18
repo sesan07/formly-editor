@@ -75,6 +75,7 @@ These helper functions can be used to create properties
 -   `createArrayProperty({...})`
 -   `createBooleanProperty({...})`
 -   `createObjectProperty({...})`
+-   `createSelectProperty({...})`
 -   `createTextProperty({...})`
 
 ### Import the EditorModule

@@ -2,19 +2,23 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { BasePropertyDirective } from '../base-property.component';
-import { ITextareaProperty } from './textarea-property.types';
+import { ISelectProperty } from './select-property.types';
 
 @Component({
-    selector: 'editor-textarea-property',
-    templateUrl: './textarea-property.component.html',
-    styleUrls: ['./textarea-property.component.scss'],
+    selector: 'editor-select-property',
+    templateUrl: './select-property.component.html',
+    styleUrls: ['./select-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextareaPropertyComponent extends BasePropertyDirective<ITextareaProperty, string> {
-    public formControl: FormControl<string>;
+export class SelectPropertyComponent extends BasePropertyDirective<ISelectProperty, string | number> {
+    public formControl: FormControl<string | number>;
     public hasOptions: boolean;
 
-    protected defaultValue = '';
+    protected defaultValue = undefined;
+
+    onClear(): void {
+        this.formControl.setValue(undefined);
+    }
 
     protected _onChanged(isFirstChange: boolean): void {
         if (isFirstChange) {

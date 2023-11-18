@@ -7,6 +7,7 @@ import { IArrayProperty } from './object-array-properties/array-property.types';
 import { IObjectProperty } from './object-array-properties/object-property.types';
 import { PropertyType, IProperty, IBaseProperty } from './property.types';
 import { ITextareaProperty } from './textarea-property/textarea-property.types';
+import { ISelectProperty } from './select-property/select-property.types';
 
 @Injectable({
     providedIn: 'root',
@@ -22,6 +23,10 @@ export class PropertyService {
 
     public getAsInputProperty(property: IProperty): IInputProperty {
         return property as IInputProperty;
+    }
+
+    public getAsSelectProperty(property: IProperty): ISelectProperty {
+        return property as ISelectProperty;
     }
 
     public getAsTextareaProperty(property: IProperty): ITextareaProperty {

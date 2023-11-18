@@ -2,10 +2,11 @@
  * Public API Surface of editor
  */
 
-export { createBooleanProperty, IBooleanProperty } from './lib/property/boolean-property/boolean-property.types';
-export { createTextProperty, IInputProperty } from './lib/property/input-property/input-property.types';
-export { createArrayProperty, IArrayProperty } from './lib/property/object-array-properties/array-property.types';
-export { createObjectProperty, IObjectProperty } from './lib/property/object-array-properties/object-property.types';
+export * from './lib/property/boolean-property/boolean-property.types';
+export * from './lib/property/input-property/input-property.types';
+export * from './lib/property/object-array-properties/array-property.types';
+export * from './lib/property/object-array-properties/object-property.types';
+export * from './lib/property/select-property/select-property.types';
 export { IBaseProperty, IProperty } from './lib/property/property.types';
 
 export { bootstrapConfig } from './lib/edit-field/styles/styles-config/bootstrap.styles-config';
