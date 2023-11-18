@@ -5,6 +5,7 @@ import {
     createArrayProperty,
     createBooleanProperty,
     createObjectProperty,
+    createSelectProperty,
     createTextProperty,
 } from '@sesan07/ngx-formly-editor';
 
@@ -22,9 +23,19 @@ export const inputTypeConfig: FieldTypeOption = {
         },
     },
     properties: [
-        createTextProperty({
+        createSelectProperty({
             name: 'Type',
             key: 'props.type',
+            options: [
+                {
+                    label: 'Number',
+                    value: 'number',
+                },
+                {
+                    label: 'Text',
+                    value: 'text',
+                },
+            ],
         }),
     ],
 };
