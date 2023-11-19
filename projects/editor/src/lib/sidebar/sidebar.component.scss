@@ -25,6 +25,8 @@
     height: 100%;
     width: 4px;
     left: 0;
+    background-color: transparent;
+    transition: 0.15s ease-out;
 }
 
 .sidebar-divider:hover::after {

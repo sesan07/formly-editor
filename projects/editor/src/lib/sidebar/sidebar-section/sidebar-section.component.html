@@ -4,19 +4,24 @@
     (mousedown)="onSectionMouseDown($event)"
 ></div>
 <div
-    class="sidebar-header"
-    (click)="onToggleExpansionClicked()"
+    class="sidebar-section-wrapper"
+    [class.first]="index === 0"
 >
-    <mat-icon
-        class="expand-icon"
-        [class.expanded-90]="!isCollapsed"
-        >chevron_right</mat-icon
+    <div
+        class="sidebar-header"
+        (click)="onToggleExpansionClicked()"
     >
-    <ng-content select="[headerContent]"></ng-content>
-</div>
-<div
-    class="sidebar-section-content"
-    [style.height.px]="height - headerHeight"
->
-    <ng-content select="[mainContent]"></ng-content>
+        <mat-icon
+            class="expand-icon"
+            [class.expanded-90]="!isCollapsed"
+            >chevron_right</mat-icon
+        >
+        <ng-content select="[headerContent]"></ng-content>
+    </div>
+    <div
+        class="sidebar-section-content"
+        [style.height.px]="height - headerHeight"
+    >
+        <ng-content select="[mainContent]"></ng-content>
+    </div>
 </div>

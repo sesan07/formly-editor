@@ -1,7 +1,6 @@
 :host {
     display: block;
-    transition: height 0.2s ease-out;
-    overflow: hidden;
+    transition: height 0.15s ease-out;
 }
 
 .sidebar-divider {
@@ -10,6 +9,7 @@
     height: 4px;
     background-color: rgba(0, 0, 0, 0.12);
     cursor: ns-resize;
+    z-index: 1;
 }
 
 .sidebar-divider::after {
@@ -17,13 +17,24 @@
     content: '';
     height: 4px;
     width: 100%;
-    left: 0;
+    top: 0;
+    background-color: transparent;
+    transition: 0.15s ease-out;
 }
 
 .sidebar-divider:hover::after {
     height: 16px;
     top: -6px;
     background-color: rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-section-wrapper {
+    overflow: hidden;
+    height: calc(100% - 4px);
+
+    &.first {
+        height: 100%;
+    }
 }
 
 .sidebar-header {
