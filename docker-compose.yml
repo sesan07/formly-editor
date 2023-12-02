@@ -1,0 +1,11 @@
+services:
+  formly-editor:
+    container_name: formly-editor
+    build:
+      context: .
+      dockerfile: local.Dockerfile
+    volumes:
+      - ./src:/app/src
+      - ./projects:/app/projects
+    ports:
+      - '4200:4200'
