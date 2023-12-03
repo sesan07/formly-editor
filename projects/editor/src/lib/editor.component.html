@@ -131,7 +131,7 @@
 
             <editor-edit-field
                 mainContent
-                [hidden]="!activeForm?.fields.length"
+                [attr.editor-hidden]="!activeForm?.fields.length"
                 [resizeTabHeader$]="resizeEnd$"
                 (fieldChanged)="onActiveFieldChanged($event)"
             >

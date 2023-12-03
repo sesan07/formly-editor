@@ -2,6 +2,7 @@ import {
     ChangeDetectionStrategy,
     Component,
     ElementRef,
+    HostBinding,
     HostListener,
     Input,
     NgZone,
@@ -71,6 +72,10 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     ) {
         super(config, renderer, elementRef, hostContainerRef, form);
         this.dnd = new FieldDragDrop(DropAction.MOVE, this._editorService, this._dndService, this._ngZone, elementRef);
+    }
+
+    @HostBinding('attr.editor-hidden') get isHidden(): boolean {
+        return !!this.field.props.hidden;
     }
 
     @HostListener('click', ['$event'])

@@ -2,3 +2,9 @@
     position: relative;
     display: block;
 }
+
+.header {
+    display: inline-flex;
+    align-items: center;
+    column-gap: 4px;
+}

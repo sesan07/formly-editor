@@ -114,6 +114,6 @@ formly-field {
     column-gap: 16px;
 }
 
-[hidden] {
+[editor-hidden='true'] {
     display: none !important;
 }
