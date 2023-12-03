@@ -8,7 +8,7 @@
     [optionsMenu]="optionsMenu"
     [dragSource]="dnd.dragSource"
     [dropTarget]="dnd.dropTarget"
-    (isExpandedChange)="onSelected()"
+    (isExpandedChange)="onSelected($event)"
 >
     <ng-container headerContent>
         <span class="header">
@@ -24,7 +24,6 @@
             [index]="index"
             [fieldOptions]="fieldOptions"
             [treeLevel]="treeLevel + 1"
-            (expandParent)="onExpandParent()"
         >
         </editor-field-tree-item>
     </ng-container>

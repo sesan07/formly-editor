@@ -11,6 +11,7 @@
         [style.margin-left.px]="treeLevelPadding"
         mat-icon-button
         [disabled]="!isExpandable"
+        (click)="onToggle($event)"
     >
         <mat-icon
             class="expand-icon"

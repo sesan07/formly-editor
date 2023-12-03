@@ -12,7 +12,7 @@ import {
     SimpleChanges,
 } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 
 import { DndService } from '@ng-dnd/core';
 import { Store } from '@ngrx/store';
@@ -90,15 +90,18 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.isActiveField$ = this._store.select(selectActiveField).pipe(
-            takeUntil(this._destroy$),
-            map(field => this.fieldInfo.fieldId === field?._info.fieldId),
-            tap(isActiveField => {
-                if (isActiveField) {
-                    this.expandParent.emit();
-                }
-            })
-        );
+        const activeField$ = this._store.select(selectActiveField).pipe(takeUntil(this._destroy$));
+
+        this.isActiveField$ = activeField$.pipe(map(field => this.fieldInfo.fieldId === field?._info.fieldId));
+
+        // Expand if field is within active field path
+        activeField$.pipe(filter(field => !!field)).subscribe(field => {
+            const activeFieldPath = field._info.fieldPath;
+            const index = activeFieldPath.indexOf(this.fieldInfo.fieldId);
+            if (index >= 0 && activeFieldPath.length - index > 1) {
+                this._isExpanded$.next(true);
+            }
+        });
     }
 
     ngOnDestroy(): void {
@@ -120,12 +123,8 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
         this._editorService.removeField(this.fieldInfo.fieldId, this.fieldInfo.parentFieldId);
     }
 
-    onSelected(): void {
+    onSelected(isExpanded: boolean): void {
+        this._isExpanded$.next(isExpanded);
         this._editorService.setActiveField(this.fieldInfo.fieldId);
-    }
-
-    onExpandParent(): void {
-        this._isExpanded$.next(true);
-        this.expandParent.emit();
     }
 }
