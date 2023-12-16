@@ -1,0 +1,19 @@
+:host {
+    display: block;
+}
+
+.simplified-header {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-right: 16px;
+    padding: 8px 0;
+    cursor: pointer;
+}
+
+.simplified-header-left {
+    flex-grow: 1;
+    display: inline-flex;
+    column-gap: 4px;
+}

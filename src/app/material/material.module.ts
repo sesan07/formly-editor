@@ -10,6 +10,7 @@ import { RepeatingSectionTypeModule } from './components/repeating-section-type/
 import { materialEditorConfig } from './material-editor.config';
 import { MaterialRoutingModule } from './material-routing.module';
 import { MaterialComponent } from './material.component';
+import { ipValidator, ipAsyncValidator, ipValidatorMessage } from './material.utils';
 
 @NgModule({
     declarations: [MaterialComponent],
@@ -20,7 +21,15 @@ import { MaterialComponent } from './material.component';
         CardWrapperModule,
         FormlyMaterialModule,
         FormlyModule.forRoot({
-            validationMessages: [{ name: 'required', message: 'This field is required' }],
+            validators: [
+                { name: 'ip', validation: ipValidator },
+                { name: 'ipAsync', validation: ipAsyncValidator },
+            ],
+            validationMessages: [
+                { name: 'ip', message: ipValidatorMessage },
+                { name: 'ipAsync', message: 'This is not a valid IP Address' },
+                { name: 'required', message: 'This field is required' },
+            ],
         }),
         EditorModule.forRoot(materialEditorConfig),
     ],

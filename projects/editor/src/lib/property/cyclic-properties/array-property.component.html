@@ -29,7 +29,8 @@
         <mat-expansion-panel-header>
             <span class="simplified-header">
                 <span class="simplified-header-left">
-                    {{ (property.name || property.key) + ' [ ' + childProperties.length + ' ]' }}
+                    <span>{{ property.name || property.key }}</span>
+                    <span>{{ '[ ' + childProperties.length + ' ]' }}</span>
                 </span>
                 <button
                     *ngIf="canAdd"
@@ -99,6 +100,7 @@
             [target]="target"
             [property]="propertyService.getAsObjectProperty(child)"
             [treeMode]="treeMode"
+            [useExpansionPanel]="false"
             (remove)="onRemoveChild(index)"
             (targetChanged)="targetChanged.emit($event)"
         >
@@ -191,7 +193,10 @@
     </button>
 </mat-menu>
 
-<mat-menu #addMenu="matMenu">
+<mat-menu
+    #addMenu="matMenu"
+    class="editor-mat"
+>
     <button
         *ngFor="let option of addOptions"
         mat-menu-item

@@ -4,8 +4,8 @@
 
 export * from './lib/property/boolean-property/boolean-property.types';
 export * from './lib/property/input-property/input-property.types';
-export * from './lib/property/object-array-properties/array-property.types';
-export * from './lib/property/object-array-properties/object-property.types';
+export * from './lib/property/cyclic-properties/array-property.types';
+export * from './lib/property/cyclic-properties/object-property.types';
 export * from './lib/property/select-property/select-property.types';
 export { IBaseProperty, IProperty } from './lib/property/property.types';
 
@@ -22,6 +22,7 @@ export {
     FieldTypeChildrenConfig,
     FieldTypeOption,
     FieldWrapperOption,
+    ValidatorOption,
     IDefaultForm,
     IEditorFormlyField,
 } from './lib/editor.types';

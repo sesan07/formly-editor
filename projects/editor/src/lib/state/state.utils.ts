@@ -9,7 +9,6 @@ import {
     IEditorFormlyField,
 } from '../editor.types';
 import { getFieldChildren, setFieldChildren } from '../form/form.utils';
-import { IPropertyChange } from '../property/property.types';
 
 import { nanoid } from 'nanoid';
 
@@ -223,25 +222,6 @@ export const getFieldMap = (field: IEditorFormlyField): Record<string, IEditorFo
 
     return fieldMap;
 };
-
-export const modifyKey = <T extends Record<string, any>>(target: T, { path, newPath }: IPropertyChange): T =>
-    produce(target, draft => {
-        if (newPath) {
-            set(draft, newPath, get(draft, path));
-
-            // Clear previous key if new path isn't empty
-            if (newPath.slice(-1)[0]) {
-                unset(draft, path);
-            }
-        } else {
-            unset(draft, path);
-        }
-    });
-
-export const modifyValue = <T extends Record<string, any>>(target: T, { path, value }: IPropertyChange): T =>
-    produce(target, draft => {
-        set(draft, path, value);
-    });
 
 export const unsetPath = (target: object, path: string) =>
     produce(target, draft => {

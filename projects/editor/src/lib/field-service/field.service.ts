@@ -50,11 +50,6 @@ export class FieldService {
                 type: PropertyType.TEXT,
                 outputRawValue: true,
             },
-            {
-                name: 'Hide',
-                key: 'hide',
-                type: PropertyType.BOOLEAN,
-            },
             ...this._getFieldProperties(field.type as string),
             {
                 name: 'Wrappers',
@@ -76,6 +71,26 @@ export class FieldService {
                 type: PropertyType.CHIP_LIST,
                 options: this._stylesService.fieldGroupClassNames,
                 outputString: true,
+            },
+            {
+                name: 'Hide',
+                key: 'hide',
+                type: PropertyType.BOOLEAN,
+            },
+            {
+                name: 'Always Show Validation',
+                key: 'validation.show',
+                type: PropertyType.BOOLEAN,
+            },
+            {
+                name: 'Validators',
+                key: 'validators',
+                type: PropertyType.VALIDATORS,
+            },
+            {
+                name: 'Async Validators',
+                key: 'asyncValidators',
+                type: PropertyType.VALIDATORS,
             },
             {
                 name: 'Expression Properties',

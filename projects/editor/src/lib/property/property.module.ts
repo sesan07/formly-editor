@@ -16,7 +16,8 @@ import { InputPropertyComponent } from './input-property/input-property.componen
 import {
     ObjectPropertyComponent,
     ArrayPropertyComponent,
-} from './object-array-properties/object-array-properties.component';
+    ValidatorsPropertyComponent,
+} from './cyclic-properties/cyclic-properties.component';
 import { TreeItemModule } from '../tree-item/tree-item.module';
 import { TextareaPropertyComponent } from './textarea-property/textarea-property.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,6 +37,7 @@ import { SelectPropertyComponent } from './select-property/select-property.compo
         ExpressionPropertiesPropertyComponent,
         PropertyKeyComponent,
         SelectPropertyComponent,
+        ValidatorsPropertyComponent,
     ],
     imports: [
         CommonModule,
@@ -52,13 +54,6 @@ import { SelectPropertyComponent } from './select-property/select-property.compo
         MatExpansionModule,
         MatSelectModule,
     ],
-    exports: [
-        ObjectPropertyComponent,
-        ArrayPropertyComponent,
-        InputPropertyComponent,
-        BooleanPropertyComponent,
-        ChipListPropertyComponent,
-        TextareaPropertyComponent,
-    ],
+    exports: [ObjectPropertyComponent, ChipListPropertyComponent],
 })
 export class PropertyModule {}

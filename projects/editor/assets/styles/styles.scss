@@ -25,6 +25,9 @@
     $typography: map.set($typography, body-1, font-size, 14px);
     @include mat.all-component-typographies($typography);
 
+    @include mat.icon-button-density(-4);
+    @include mat.checkbox-density(-2);
+
     .mat-form-field-appearance-outline {
         .mat-mdc-text-field-wrapper {
             padding: 0 8px;
@@ -52,7 +55,6 @@
         }
     }
 
-    @include mat.icon-button-density(-4);
     .mat-mdc-icon-button {
         line-height: normal;
     }

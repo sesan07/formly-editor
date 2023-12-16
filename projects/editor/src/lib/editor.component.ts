@@ -11,7 +11,7 @@ import { isCategoryOption, isTypeOption, trackByDisplayName, trackByFieldId } fr
 import { cleanField } from './form/form.utils';
 import { JSONDialogComponent } from './json-dialog/json-dialog.component';
 import { ImportJSONData, ImportJSONValue } from './json-dialog/json-dialog.types';
-import { IObjectProperty } from './property/object-array-properties/object-property.types';
+import { IObjectProperty } from './property/cyclic-properties/object-property.types';
 import { PropertyService } from './property/property.service';
 import { IPropertyChange, PropertyType } from './property/property.types';
 import { initRootProperty } from './property/utils';

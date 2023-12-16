@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { get, isEmpty, set } from 'lodash-es';
+import { get, isEmpty, set, unset } from 'lodash-es';
 
 import { IEditorFormlyField } from '../editor.types';
 
@@ -35,8 +35,8 @@ export const cleanField = (
 
 const _removeEmptyProperties = (field: IEditorFormlyField): void => {
     ['wrappers', 'templateOptions', 'props', 'expressionProperties', 'className', 'fieldGroupClassName'].forEach(p => {
-        if (isEmpty(field[p])) {
-            delete field[p];
+        if (isEmpty(get(field, p))) {
+            unset(field, p);
         }
     });
 };

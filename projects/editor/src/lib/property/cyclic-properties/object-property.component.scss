@@ -2,8 +2,10 @@
     display: block;
 }
 
-.simplified-panel {
-    flex-grow: 1;
+.simplified-properties {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
 }
 
 .simplified-header {
@@ -18,19 +20,6 @@
 
 .simplified-header-left {
     flex-grow: 1;
-}
-
-.line {
-    width: 1px;
-    background-color: rgba(0, 0, 0, 0.12);
-    margin: 0 14px;
-}
-
-.mat-accordion {
-    flex-grow: 1;
-    display: block;
-}
-
-.simple-remove-btn {
-    margin-right: 16px;
+    display: inline-flex;
+    column-gap: 4px;
 }

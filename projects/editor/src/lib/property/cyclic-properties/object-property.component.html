@@ -17,25 +17,75 @@
     </editor-property-key>
 
     <ng-container childrenContent>
-        <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
+        <ng-container
+            [ngTemplateOutlet]="childPropertiesView"
+            [ngTemplateOutletContext]="{
+                childrenTreeLevel: childrenTreeLevel,
+                childrenTreeMode: treeMode
+            }"
+        ></ng-container>
     </ng-container>
 </editor-tree-item>
 
 <ng-template #simplifiedView>
-    <div class="simplified-properties">
-        <ng-container *ngTemplateOutlet="childPropertiesView"></ng-container>
-        <button
-            *ngIf="canAdd"
-            mat-button
-            [matMenuTriggerFor]="addMenu"
-        >
-            <mat-icon>add</mat-icon>
-            <span>Add</span>
-        </button>
-    </div>
+    <ng-container *ngIf="!useExpansionPanel">
+        <div class="simplified-properties">
+            <ng-container
+                [ngTemplateOutlet]="childPropertiesView"
+                [ngTemplateOutletContext]="{
+                    childrenTreeLevel: childrenTreeLevel,
+                    childrenTreeMode: childrenTreeMode
+                }"
+            ></ng-container>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="useExpansionPanel">
+        <mat-expansion-panel [(expanded)]="isExpanded">
+            <mat-expansion-panel-header>
+                <span class="simplified-header">
+                    <span class="simplified-header-left">
+                        <span>{{ property.name || property.key }}</span>
+                        <span *ngIf="showCount">{{ '{ ' + childProperties.length + ' }' }}</span>
+                    </span>
+                    <button
+                        *ngIf="canAdd"
+                        mat-icon-button
+                        [matMenuTriggerFor]="addMenu"
+                        (click)="$event.stopPropagation()"
+                    >
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <button
+                        *ngIf="property.isRemovable"
+                        class="simple-remove-btn"
+                        mat-icon-button
+                        color="warn"
+                        (click)="remove.emit(); $event.stopPropagation()"
+                    >
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                </span>
+            </mat-expansion-panel-header>
+
+            <div class="simplified-properties">
+                <ng-container
+                    [ngTemplateOutlet]="childPropertiesView"
+                    [ngTemplateOutletContext]="{
+                        childrenTreeLevel: 0,
+                        childrenTreeMode: childrenTreeMode
+                    }"
+                ></ng-container>
+            </div>
+        </mat-expansion-panel>
+    </ng-container>
 </ng-template>
 
-<ng-template #childPropertiesView>
+<ng-template
+    #childPropertiesView
+    let-childrenTreeLevel="childrenTreeLevel"
+    let-childrenTreeMode="childrenTreeMode"
+>
     <ng-container *ngFor="let child of childProperties; let i = index; trackBy: trackByPropertyKey">
         <ng-container [ngSwitch]="child.type">
             <editor-array-property
@@ -44,7 +94,7 @@
                 [path]="getChildPath(child.key)"
                 [target]="target"
                 [property]="propertyService.getAsArrayProperty(child)"
-                [treeMode]="treeMode"
+                [treeMode]="childrenTreeMode"
                 (remove)="onRemoveChild(i)"
                 (targetChanged)="targetChanged.emit($event)"
             >
@@ -56,7 +106,7 @@
                 [path]="getChildPath(child.key)"
                 [target]="target"
                 [property]="propertyService.getAsObjectProperty(child)"
-                [treeMode]="treeMode"
+                [treeMode]="childrenTreeMode"
                 (remove)="onRemoveChild(i)"
                 (targetChanged)="targetChanged.emit($event)"
             >
@@ -68,7 +118,7 @@
                 [path]="getChildPath(child.key)"
                 [property]="child"
                 [target]="target"
-                [treeMode]="treeMode"
+                [treeMode]="childrenTreeMode"
                 (remove)="onRemoveChild(i)"
                 (targetChanged)="targetChanged.emit($event)"
             >
@@ -80,7 +130,7 @@
                 [path]="getChildPath(child.key)"
                 [property]="propertyService.getAsChiplistProperty(child)"
                 [target]="target"
-                [treeMode]="treeMode"
+                [treeMode]="childrenTreeMode"
                 (remove)="onRemoveChild(i)"
                 (targetChanged)="targetChanged.emit($event)"
             >
@@ -92,7 +142,7 @@
                 [path]="getChildPath(child.key)"
                 [property]="propertyService.getAsSelectProperty(child)"
                 [target]="target"
-                [treeMode]="treeMode"
+                [treeMode]="childrenTreeMode"
                 (remove)="onRemoveChild(i)"
                 (targetChanged)="targetChanged.emit($event)"
             >
@@ -104,7 +154,7 @@
                 [path]="getChildPath(child.key)"
                 [property]="propertyService.getAsTextareaProperty(child)"
                 [target]="target"
-                [treeMode]="treeMode"
+                [treeMode]="childrenTreeMode"
                 (remove)="onRemoveChild(i)"
                 (targetChanged)="targetChanged.emit($event)"
             >
@@ -116,11 +166,23 @@
                 [path]="getChildPath(child.key)"
                 [property]="propertyService.getAsExpressionPropertiesProperty(child)"
                 [target]="target"
-                [treeMode]="treeMode"
+                [treeMode]="childrenTreeMode"
                 (remove)="onRemoveChild(i)"
                 (targetChanged)="targetChanged.emit($event)"
             >
             </editor-expression-properties-property>
+
+            <editor-validators-property
+                *ngSwitchCase="typeofProperty.VALIDATORS"
+                [treeLevel]="childrenTreeLevel"
+                [path]="getChildPath(child.key)"
+                [property]="propertyService.getAsValidatorsProperty(child)"
+                [target]="target"
+                [treeMode]="childrenTreeMode"
+                (remove)="onRemoveChild(i)"
+                (targetChanged)="targetChanged.emit($event)"
+            >
+            </editor-validators-property>
 
             <ng-container *ngSwitchCase="typeofProperty.NUMBER">
                 <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
@@ -134,7 +196,7 @@
                     [path]="getChildPath(child.key)"
                     [property]="propertyService.getAsInputProperty(child)"
                     [target]="target"
-                    [treeMode]="treeMode"
+                    [treeMode]="childrenTreeMode"
                     (remove)="onRemoveChild(i)"
                     (targetChanged)="targetChanged.emit($event)"
                 >
@@ -167,7 +229,10 @@
     </button>
 </mat-menu>
 
-<mat-menu #addMenu="matMenu">
+<mat-menu
+    #addMenu="matMenu"
+    class="editor-mat"
+>
     <button
         *ngFor="let option of addOptions"
         mat-menu-item

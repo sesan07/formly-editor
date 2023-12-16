@@ -15,7 +15,7 @@ import { map, shareReplay, takeUntil, tap } from 'rxjs/operators';
 import { EditorService } from '../editor.service';
 
 import { IEditorFormlyField } from '../editor.types';
-import { IObjectProperty } from '../property/object-array-properties/object-property.types';
+import { IObjectProperty } from '../property/cyclic-properties/object-property.types';
 import { PropertyService } from '../property/property.service';
 import { IPropertyChange, PropertyType } from '../property/property.types';
 import { initRootProperty } from '../property/utils';

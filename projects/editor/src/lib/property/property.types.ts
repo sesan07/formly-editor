@@ -1,9 +1,11 @@
 import { IBooleanProperty } from './boolean-property/boolean-property.types';
 import { IChipListProperty } from './chip-list-property/chip-list-property.types';
+import { IArrayProperty } from './cyclic-properties/array-property.types';
+import { IObjectProperty } from './cyclic-properties/object-property.types';
+import { IValidatorsProperty } from './cyclic-properties/validators-property.types';
 import { IExpressionPropertiesProperty } from './expression-properties-property/expression-properties-property.types';
 import { IInputProperty } from './input-property/input-property.types';
-import { IArrayProperty } from './object-array-properties/array-property.types';
-import { IObjectProperty } from './object-array-properties/object-property.types';
+import { ISelectProperty } from './select-property/select-property.types';
 
 export enum PropertyType {
     ARRAY = 'Array',
@@ -15,6 +17,7 @@ export enum PropertyType {
     SELECT = 'Select',
     TEXT = 'Text',
     TEXTAREA = 'Textarea',
+    VALIDATORS = 'Validators',
 }
 
 export enum PropertyChangeType {
@@ -43,6 +46,8 @@ export type IProperty =
     | IChipListProperty
     | IObjectProperty
     | IInputProperty
-    | IExpressionPropertiesProperty;
+    | ISelectProperty
+    | IExpressionPropertiesProperty
+    | IValidatorsProperty;
 
 export type PropertyCreator<T extends IBaseProperty> = (property: Omit<T, 'type'>) => T;

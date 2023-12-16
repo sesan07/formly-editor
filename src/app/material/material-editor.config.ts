@@ -2,6 +2,7 @@ import {
     EditorConfig,
     FieldTypeOption,
     FieldWrapperOption,
+    ValidatorOption,
     createArrayProperty,
     createBooleanProperty,
     createObjectProperty,
@@ -267,6 +268,19 @@ export const formFieldWrapperConfig: FieldWrapperOption = {
     ],
 };
 
+export const validatorOptions: ValidatorOption[] = [
+    {
+        name: 'Ip',
+        key: 'ip',
+    },
+];
+export const asyncValidatorOptions: ValidatorOption[] = [
+    {
+        name: 'Ip Async',
+        key: 'ipAsync',
+    },
+];
+
 export const materialEditorConfig: EditorConfig = {
     fieldOptions: [
         {
@@ -281,4 +295,6 @@ export const materialEditorConfig: EditorConfig = {
         repeatTypeConfig,
     ],
     wrapperOptions: [cardWrapperConfig, formFieldWrapperConfig],
+    validatorOptions,
+    asyncValidatorOptions,
 };

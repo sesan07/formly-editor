@@ -1,0 +1,38 @@
+:host {
+    display: block;
+}
+
+.simplified-panel {
+    flex-grow: 1;
+}
+
+.simplified-header {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-right: 16px;
+    padding: 8px 0;
+    cursor: pointer;
+}
+
+.simplified-header-left {
+    flex-grow: 1;
+    display: inline-flex;
+    column-gap: 4px;
+}
+
+.line {
+    width: 1px;
+    background-color: rgba(0, 0, 0, 0.12);
+    margin: 0 14px;
+}
+
+.mat-accordion {
+    flex-grow: 1;
+    display: block;
+}
+
+.simple-remove-btn {
+    margin-right: 16px;
+}

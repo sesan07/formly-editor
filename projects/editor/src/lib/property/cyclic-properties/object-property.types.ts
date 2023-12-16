@@ -4,6 +4,7 @@ export interface IObjectProperty extends IBaseProperty {
     canAdd?: boolean;
     childProperties: IProperty[];
     populateChildrenFromTarget?: boolean;
+    childrenTreeMode?: boolean;
 }
 
 export const createObjectProperty: PropertyCreator<IObjectProperty> = v => ({

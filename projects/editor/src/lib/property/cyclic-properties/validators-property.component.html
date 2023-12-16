@@ -1,0 +1,40 @@
+<mat-expansion-panel [(expanded)]="isExpanded">
+    <mat-expansion-panel-header>
+        <span class="simplified-header">
+            <span class="simplified-header-left">
+                <span>{{ property.name || property.key }}</span>
+                <span>{{ '{ ' + validationConfigs.length + ' }' }}</span>
+            </span>
+            <button
+                *ngIf="addOptions.length"
+                mat-icon-button
+                [matMenuTriggerFor]="addMenu"
+                (click)="$event.stopPropagation()"
+            >
+                <mat-icon>add</mat-icon>
+            </button>
+        </span>
+    </mat-expansion-panel-header>
+    <editor-object-property
+        *ngFor="let config of validationConfigs; let i = index; trackBy: trackByConfigName"
+        [target]="config.data"
+        [property]="config.property"
+        [showCount]="false"
+        (remove)="onRemoveChild(i)"
+        (targetChanged)="onChildChanged($event, i)"
+    >
+    </editor-object-property>
+</mat-expansion-panel>
+
+<mat-menu
+    #addMenu="matMenu"
+    class="editor-mat"
+>
+    <button
+        *ngFor="let option of addOptions"
+        mat-menu-item
+        (click)="onAddChild(option)"
+    >
+        {{ option.name }}
+    </button>
+</mat-menu>

@@ -56,6 +56,12 @@ const cardWrapperConfig: FieldWrapperOption = {
     ],
 };
 
+// Configure validator options that can be set
+export const validatorOptions: ValidatorOption[] = [{
+    name: 'Ip',
+    key: 'ip',
+}];
+
 export const editorConfig: EditorConfig = {
     fieldOptions: [ // Configs for fields or field categories
         { // A field category
@@ -67,6 +73,7 @@ export const editorConfig: EditorConfig = {
         ...
     ],
     wrapperOptions: [cardWrapperConfig], // configs for wrappers
+    validatorOptions: validatorOptions,
 };
 ```
 
@@ -93,6 +100,8 @@ import { editorConfig } from './editor.config';
         ...
         FormlyMaterialModule, // Can be replaced with other formly UI modules
         FormlyModule.forRoot({ // Configure formly
+            ...
+            validators: [{ name: 'ip', validation: ipValidator }],
             validationMessages: [{ name: 'required', message: 'This field is required' }],
         }),
         EditorModule.forRoot(editorConfig), // Configure the editor

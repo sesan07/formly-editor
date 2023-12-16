@@ -10,8 +10,7 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
-import { get, isNil } from 'lodash-es';
-import { IEditorFormlyField } from '../editor.types';
+import { get } from 'lodash-es';
 
 import { IBaseProperty, IPropertyChange, PropertyChangeType } from './property.types';
 import { isParentProperty } from './utils';

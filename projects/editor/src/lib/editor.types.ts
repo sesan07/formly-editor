@@ -71,7 +71,7 @@ export interface FieldTypeOption {
 }
 
 export interface FieldTypeChildrenConfig {
-    path: string; // Lodash path for children
+    path: string; // Dot separated lodash path for children
     isObject?: boolean; // Whether child is a single object instead of a list of children
 }
 
@@ -80,11 +80,18 @@ export interface FieldWrapperOption {
     properties?: IProperty[];
 }
 
+export interface ValidatorOption {
+    name: string;
+    key: string;
+}
+
 export interface EditorConfig {
     fieldOptions: FieldOption[];
     wrapperOptions?: FieldWrapperOption[];
     genericTypeOption?: FieldTypeOption;
+    validatorOptions?: ValidatorOption[];
+    asyncValidatorOptions?: ValidatorOption[];
     onDisplayFields?: (fields: IEditorFormlyField[], model: Record<string, any>) => IEditorFormlyField[];
 }
 
-export const EDITOR_CONFIG = new InjectionToken<EditorConfig[]>('EDITOR_CONFIG');
+export const EDITOR_CONFIG = new InjectionToken<EditorConfig>('EDITOR_CONFIG');
