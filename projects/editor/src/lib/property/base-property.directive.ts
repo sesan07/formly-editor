@@ -1,6 +1,7 @@
 import { Directive, EventEmitter, HostBinding, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { get } from 'lodash-es';
 
+import { IProperty } from 'dist/@sesan07/ngx-formly-editor';
 import { IBaseProperty, IPropertyChange, PropertyChangeType } from './property.types';
 import { isParentProperty } from './utils';
 
@@ -9,7 +10,6 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
     @Input() treeLevel = 0;
     @Input() path: string[] = [];
     @Input() target?: Record<string, any> | any[];
-    @Input() property?: P;
     @Input() treeMode: boolean;
 
     @Output() public remove: EventEmitter<void> = new EventEmitter();
@@ -17,10 +17,25 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
     @Output() public targetChanged: EventEmitter<IPropertyChange> = new EventEmitter();
 
     protected currentValue: V;
+
+    private _property: P;
+
     protected abstract defaultValue: V;
 
     @HostBinding('class.tree-item') get isTreeItem(): boolean {
         return this.treeMode;
+    }
+
+    get property(): P {
+        return this._property;
+    }
+
+    @Input() set property(v: IProperty) {
+        if (this._isValidProperty(v)) {
+            this._property = v;
+        } else {
+            throw new Error(`Invalid property config for ${this.constructor.name}`);
+        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -62,5 +77,10 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
         this.targetChanged.emit(change);
     }
 
+    protected _isBaseProperty(x: any): x is IBaseProperty {
+        return typeof x.type === 'string';
+    }
+
     protected abstract _onChanged(isFirstChange: boolean): void;
+    protected abstract _isValidProperty(x: any): x is P;
 }

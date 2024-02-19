@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { BasePropertyDirective } from '../base-property.directive';
-import { ISelectProperty } from './select-property.types';
+import { ISelectProperty, ISelectPropertyOption } from './select-property.types';
 
 @Component({
     selector: 'editor-select-property',
@@ -30,5 +30,13 @@ export class SelectPropertyComponent extends BasePropertyDirective<ISelectProper
         this.formControl.setValue(this.currentValue, {
             emitEvent: false,
         });
+    }
+
+    protected override _isValidProperty(x: any): x is ISelectProperty {
+        return Array.isArray(x.options) && x.options.every(this._isValidOption) && this._isBaseProperty(x);
+    }
+
+    private _isValidOption(x: any): x is ISelectPropertyOption {
+        return typeof x.label === 'string' && (typeof x.value === 'string' || typeof x.value === 'number');
     }
 }

@@ -84,6 +84,10 @@ export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayP
         this._modifyValue(newValue);
     }
 
+    protected override _isValidProperty(x: any): x is IArrayProperty {
+        return this._isBaseProperty(x);
+    }
+
     protected _populateChildren(): void {
         this.childProperties = this.currentValue.map((childValue, index) => {
             let childProperty: IProperty;
@@ -135,6 +139,10 @@ export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjec
         const newValue = { ...this.currentValue };
         delete newValue[childProperty.key];
         this._modifyValue(newValue);
+    }
+
+    protected override _isValidProperty(x: any): x is IObjectProperty {
+        return Array.isArray(x.childProperties) && this._isBaseProperty(x);
     }
 
     protected _populateChildren(): void {
@@ -225,6 +233,10 @@ export class ValidatorsPropertyComponent extends BasePropertyDirective<IValidato
         }
 
         this._populateChildrenFromTarget();
+    }
+
+    protected override _isValidProperty(x: any): x is IValidatorsProperty {
+        return this._isBaseProperty(x);
     }
 
     private _populateChildrenFromTarget() {

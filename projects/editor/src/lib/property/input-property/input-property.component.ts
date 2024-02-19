@@ -30,6 +30,10 @@ export class InputPropertyComponent extends BasePropertyDirective<IInputProperty
         });
     }
 
+    protected override _isValidProperty(x: any): x is IInputProperty {
+        return this._isBaseProperty(x);
+    }
+
     private _updateValue(value: string): void {
         if (this.property.type === PropertyType.NUMBER && isNaN(Number(value))) {
             this.formControl.setValue(this.currentValue?.toString(), {

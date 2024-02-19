@@ -42,6 +42,10 @@ export class ExpressionPropertiesPropertyComponent extends BasePropertyDirective
         this._populateChildrenFromTarget();
     }
 
+    protected override _isValidProperty(x: any): x is IExpressionPropertiesProperty {
+        return this._isBaseProperty(x);
+    }
+
     private _populateChildrenFromTarget() {
         this.childProperties = Object.entries(this.currentValue).map(([key, value], i) => ({ key, value }));
     }
