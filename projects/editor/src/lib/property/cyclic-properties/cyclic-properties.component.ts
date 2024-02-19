@@ -2,15 +2,15 @@ import { ChangeDetectionStrategy, Component, Directive, Input, OnInit, TrackByFu
 import { FormlyConfig } from '@ngx-formly/core';
 import { get, isEmpty, startCase } from 'lodash-es';
 
+import { EDITOR_CONFIG, ValidatorOption } from '../../editor.types';
 import { BasePropertyDirective } from '../base-property.component';
+import { createTextProperty } from '../input-property/input-property.types';
 import { PropertyService } from '../property.service';
-import { PropertyType, IProperty, IPropertyChange } from '../property.types';
+import { IProperty, IPropertyChange, PropertyType } from '../property.types';
+import { modifyPropertyTarget } from '../utils';
 import { IArrayProperty } from './array-property.types';
 import { IObjectProperty, createObjectProperty } from './object-property.types';
-import { ValidatorOption, EDITOR_CONFIG } from '../../editor.types';
-import { createTextProperty } from '../input-property/input-property.types';
-import { changePropertyTarget } from '../utils';
-import { IValidatorsProperty, IValidatorsValue, IValidationConfig, IValidationData } from './validators-property.types';
+import { IValidationConfig, IValidationData, IValidatorsProperty, IValidatorsValue } from './validators-property.types';
 
 @Directive()
 export abstract class ObjectArrayPropertyDirective<P extends IArrayProperty | IObjectProperty, V>
@@ -197,7 +197,7 @@ export class ValidatorsPropertyComponent extends BasePropertyDirective<IValidato
 
     onChildChanged(change: IPropertyChange, index: number): void {
         const newData: IValidationData[] = this.validationConfigs.map(({ data }, i) =>
-            i === index ? changePropertyTarget(this.validationConfigs[index].data, change) : data
+            i === index ? modifyPropertyTarget(this.validationConfigs[index].data, change) : data
         );
 
         this._updateValue(newData);

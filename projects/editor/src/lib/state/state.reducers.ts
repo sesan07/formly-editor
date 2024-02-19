@@ -2,7 +2,7 @@ import { createFeature, createReducer, on } from '@ngrx/store';
 import { IEditorFormlyField, IForm } from '../editor.types';
 import { getFieldChildren, setFieldChildren } from '../form/form.utils';
 import { PropertyChangeType } from '../property/property.types';
-import { changePropertyTarget, modifyKey, modifyValue } from '../property/utils';
+import { modifyPropertyTarget } from '../property/utils';
 import {
     AddField,
     AddForm,
@@ -213,7 +213,7 @@ const processSetEditMode = (state: IEditorState, { formId, isEditMode }: SetEdit
 
 const processModifyActiveField = (state: IEditorState, { activeField, change }: ModifyActiveField): IEditorState => {
     const activeForm = state.formMap[state.activeFormId];
-    activeField = changePropertyTarget(activeField, change);
+    activeField = modifyPropertyTarget(activeField, change);
     const baseFields = modifyFields(activeForm.baseFields, activeField);
     return {
         ...state,
@@ -423,10 +423,10 @@ const processModifyActiveModel = (state: IEditorState, { change }: ModifyActiveM
     let model: object = activeForm.model;
     switch (change.type) {
         case PropertyChangeType.KEY:
-            model = modifyKey(model, change);
+            model = modifyPropertyTarget(model, change);
             break;
         case PropertyChangeType.VALUE:
-            model = change.path.length ? modifyValue(model, change) : { ...change.value };
+            model = change.path.length ? modifyPropertyTarget(model, change) : { ...change.value };
             break;
     }
 
