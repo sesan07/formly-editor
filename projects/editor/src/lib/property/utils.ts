@@ -1,8 +1,8 @@
 import produce from 'immer';
 import { get, set, unset } from 'lodash-es';
-import { IExpressionPropertiesProperty } from './expression-properties-property/expression-properties-property.types';
 import { IArrayProperty } from './cyclic-properties/array-property.types';
 import { IObjectProperty } from './cyclic-properties/object-property.types';
+import { IExpressionPropertiesProperty } from './expression-properties-property/expression-properties-property.types';
 import { IBaseProperty, IProperty, IPropertyChange, PropertyChangeType, PropertyType } from './property.types';
 
 export const initRootProperty = (
@@ -30,7 +30,7 @@ export const isParentProperty = (
     property.type === PropertyType.ARRAY ||
     property.type === PropertyType.EXPRESSION_PROPERTIES;
 
-export const modifyKey = <T extends Record<string, any>>(
+const modifyTargetKey = <T extends Record<string, any>>(
     target: T,
     { path, newPath }: Omit<IPropertyChange, 'type'>
 ): T =>
@@ -47,7 +47,7 @@ export const modifyKey = <T extends Record<string, any>>(
         }
     });
 
-export const modifyValue = <T extends Record<string, any>>(
+const modifyTargetValue = <T extends Record<string, any>>(
     target: T,
     { path, value }: Omit<IPropertyChange, 'type'>
 ): T =>
@@ -55,14 +55,14 @@ export const modifyValue = <T extends Record<string, any>>(
         set(draft, path, value);
     });
 
-export const changePropertyTarget = <T extends Record<string, any>>(
+export const modifyPropertyTarget = <T extends Record<string, any>>(
     target: T,
     { type, ...change }: IPropertyChange
 ): T => {
     switch (type) {
         case PropertyChangeType.KEY:
-            return modifyKey(target, change);
+            return modifyTargetKey(target, change);
         case PropertyChangeType.VALUE:
-            return modifyValue(target, change);
+            return modifyTargetValue(target, change);
     }
 };
