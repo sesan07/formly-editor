@@ -1,8 +1,7 @@
 import { Directive, EventEmitter, HostBinding, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { get } from 'lodash-es';
 
-import { IProperty } from 'dist/@sesan07/ngx-formly-editor';
-import { IBaseProperty, IPropertyChange, PropertyChangeType } from './property.types';
+import { IBaseProperty, IProperty, IPropertyChange, PropertyChangeType } from './property.types';
 import { isParentProperty } from './property.utils';
 
 @Directive()
