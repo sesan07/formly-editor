@@ -2,7 +2,7 @@ import { createFeature, createReducer, on } from '@ngrx/store';
 import { IEditorFormlyField, IForm } from '../editor.types';
 import { getFieldChildren, setFieldChildren } from '../form/form.utils';
 import { PropertyChangeType } from '../property/property.types';
-import { modifyPropertyTarget } from '../property/utils';
+import { modifyPropertyTarget } from '../property/property.utils';
 import {
     AddField,
     AddForm,

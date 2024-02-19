@@ -3,7 +3,7 @@ import { get } from 'lodash-es';
 
 import { IProperty } from 'dist/@sesan07/ngx-formly-editor';
 import { IBaseProperty, IPropertyChange, PropertyChangeType } from './property.types';
-import { isParentProperty } from './utils';
+import { isParentProperty } from './property.utils';
 
 @Directive()
 export abstract class BasePropertyDirective<P extends IBaseProperty, V> implements OnChanges {

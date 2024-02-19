@@ -13,7 +13,7 @@ import { JSONDialogComponent } from './json-dialog/json-dialog.component';
 import { ImportJSONData, ImportJSONValue } from './json-dialog/json-dialog.types';
 import { IObjectProperty } from './property/cyclic-properties/object-property.types';
 import { IPropertyChange, PropertyType } from './property/property.types';
-import { getDefaultProperty, initRootProperty } from './property/utils';
+import { getDefaultProperty, initRootProperty } from './property/property.utils';
 import { FileService } from './shared/services/file-service/file.service';
 import { SideBarPosition } from './sidebar/sidebar.types';
 import { initialState } from './state/state.reducers';

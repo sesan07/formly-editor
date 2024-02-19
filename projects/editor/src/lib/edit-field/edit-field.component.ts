@@ -17,7 +17,7 @@ import { EditorService } from '../editor.service';
 import { IEditorFormlyField } from '../editor.types';
 import { IObjectProperty } from '../property/cyclic-properties/object-property.types';
 import { IPropertyChange, PropertyType } from '../property/property.types';
-import { getDefaultProperty, initRootProperty } from '../property/utils';
+import { getDefaultProperty, initRootProperty } from '../property/property.utils';
 import { selectActiveField } from '../state/state.selectors';
 import { IEditorState } from '../state/state.types';
 
