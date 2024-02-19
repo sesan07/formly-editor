@@ -6,7 +6,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { BehaviorSubject, Subject, isObservable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { BasePropertyDirective } from '../base-property.component';
+import { BasePropertyDirective } from '../base-property.directive';
 import { IChipListProperty } from './chip-list-property.types';
 
 @Component({

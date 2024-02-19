@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { trackByKey } from '../../editor.utils';
 
-import { BasePropertyDirective } from '../base-property.component';
+import { BasePropertyDirective } from '../base-property.directive';
 import { IExpressionPropertiesProperty, IExpressionProperty } from './expression-properties-property.types';
 
 @Component({

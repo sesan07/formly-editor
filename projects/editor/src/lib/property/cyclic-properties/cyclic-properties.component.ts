@@ -3,7 +3,7 @@ import { FormlyConfig } from '@ngx-formly/core';
 import { get, isEmpty, startCase } from 'lodash-es';
 
 import { EDITOR_CONFIG, ValidatorOption } from '../../editor.types';
-import { BasePropertyDirective } from '../base-property.component';
+import { BasePropertyDirective } from '../base-property.directive';
 import { createTextProperty } from '../input-property/input-property.types';
 import { PropertyService } from '../property.service';
 import { IProperty, IPropertyChange, PropertyType } from '../property.types';

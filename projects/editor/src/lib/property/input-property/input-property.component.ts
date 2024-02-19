@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { BasePropertyDirective } from '../base-property.component';
+import { BasePropertyDirective } from '../base-property.directive';
 import { PropertyType } from '../property.types';
 import { IInputProperty } from './input-property.types';
 
