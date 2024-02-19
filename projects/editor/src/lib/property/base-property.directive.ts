@@ -1,15 +1,4 @@
-import {
-    AfterViewInit,
-    Directive,
-    ElementRef,
-    EventEmitter,
-    HostBinding,
-    Input,
-    OnChanges,
-    Output,
-    SimpleChanges,
-    ViewChild,
-} from '@angular/core';
+import { Directive, EventEmitter, HostBinding, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { get } from 'lodash-es';
 
 import { IBaseProperty, IPropertyChange, PropertyChangeType } from './property.types';
