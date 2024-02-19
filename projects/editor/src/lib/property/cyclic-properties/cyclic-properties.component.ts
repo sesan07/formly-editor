@@ -6,7 +6,7 @@ import { EDITOR_CONFIG, ValidatorOption } from '../../editor.types';
 import { BasePropertyDirective } from '../base-property.directive';
 import { createTextProperty } from '../input-property/input-property.types';
 import { IProperty, IPropertyChange, PropertyType } from '../property.types';
-import { getDefaultPropertyFromValue, getDefaultPropertyValue, modifyPropertyTarget } from '../utils';
+import { getDefaultPropertyFromValue, getDefaultPropertyValue, modifyPropertyTarget } from '../property.utils';
 import { IArrayProperty } from './array-property.types';
 import { IObjectProperty, createObjectProperty } from './object-property.types';
 import { IValidationConfig, IValidationData, IValidatorsProperty, IValidatorsValue } from './validators-property.types';
