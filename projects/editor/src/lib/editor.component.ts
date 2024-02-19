@@ -12,9 +12,8 @@ import { cleanField } from './form/form.utils';
 import { JSONDialogComponent } from './json-dialog/json-dialog.component';
 import { ImportJSONData, ImportJSONValue } from './json-dialog/json-dialog.types';
 import { IObjectProperty } from './property/cyclic-properties/object-property.types';
-import { PropertyService } from './property/property.service';
 import { IPropertyChange, PropertyType } from './property/property.types';
-import { initRootProperty } from './property/utils';
+import { getDefaultProperty, initRootProperty } from './property/utils';
 import { FileService } from './shared/services/file-service/file.service';
 import { SideBarPosition } from './sidebar/sidebar.types';
 import { initialState } from './state/state.reducers';
@@ -68,7 +67,6 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
         private _store: Store<IEditorState>,
         private _dialog: MatDialog,
         private _fileService: FileService,
-        private _propertyService: PropertyService,
         private _stylesService: StylesService
     ) {}
 
@@ -245,7 +243,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private _getModelProperty(): IObjectProperty {
-        const property = this._propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
+        const property = getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
         initRootProperty(property);
         return property;
     }

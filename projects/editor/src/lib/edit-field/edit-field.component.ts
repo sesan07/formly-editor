@@ -16,9 +16,8 @@ import { EditorService } from '../editor.service';
 
 import { IEditorFormlyField } from '../editor.types';
 import { IObjectProperty } from '../property/cyclic-properties/object-property.types';
-import { PropertyService } from '../property/property.service';
 import { IPropertyChange, PropertyType } from '../property/property.types';
-import { initRootProperty } from '../property/utils';
+import { getDefaultProperty, initRootProperty } from '../property/utils';
 import { selectActiveField } from '../state/state.selectors';
 import { IEditorState } from '../state/state.types';
 
@@ -43,11 +42,7 @@ export class EditFieldComponent implements OnInit, OnDestroy {
     private _cachedField: IEditorFormlyField;
     private _cachedProperty: IObjectProperty;
 
-    constructor(
-        public propertyService: PropertyService,
-        private _editorService: EditorService,
-        private _store: Store<IEditorState>
-    ) {}
+    constructor(private _editorService: EditorService, private _store: Store<IEditorState>) {}
 
     ngOnInit(): void {
         const activeField$ = this._store.select(selectActiveField).pipe(takeUntil(this._destroy$), shareReplay());
@@ -85,7 +80,7 @@ export class EditFieldComponent implements OnInit, OnDestroy {
     }
 
     private _getProperty(field: IEditorFormlyField | null): IObjectProperty {
-        const property = this.propertyService.getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
+        const property = getDefaultProperty(PropertyType.OBJECT) as IObjectProperty;
         const childProperties = field ? this._editorService.getFieldProperties(field) : [];
         initRootProperty(property, true, childProperties);
         return property;

@@ -5,9 +5,8 @@ import { get, isEmpty, startCase } from 'lodash-es';
 import { EDITOR_CONFIG, ValidatorOption } from '../../editor.types';
 import { BasePropertyDirective } from '../base-property.directive';
 import { createTextProperty } from '../input-property/input-property.types';
-import { PropertyService } from '../property.service';
 import { IProperty, IPropertyChange, PropertyType } from '../property.types';
-import { modifyPropertyTarget } from '../utils';
+import { getDefaultPropertyFromValue, getDefaultPropertyValue, modifyPropertyTarget } from '../utils';
 import { IArrayProperty } from './array-property.types';
 import { IObjectProperty, createObjectProperty } from './object-property.types';
 import { IValidationConfig, IValidationData, IValidatorsProperty, IValidatorsValue } from './validators-property.types';
@@ -32,10 +31,6 @@ export abstract class ObjectArrayPropertyDirective<P extends IArrayProperty | IO
     public typeofProperty: typeof PropertyType = PropertyType;
     public childProperties: IProperty[] = [];
     public childrenTreeLevel: number;
-
-    constructor(public propertyService: PropertyService) {
-        super();
-    }
 
     protected abstract get _canAdd(): boolean;
 
@@ -72,7 +67,7 @@ export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayP
     }
 
     onAddChild(type: PropertyType): void {
-        const childValue: any = this.propertyService.getDefaultPropertyValue(type);
+        const childValue: any = getDefaultPropertyValue(type);
         const newValue = [...this.currentValue, childValue];
         this._modifyValue(newValue);
 
@@ -94,7 +89,7 @@ export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayP
             if (this.property.childProperty) {
                 childProperty = structuredClone(this.property.childProperty);
             } else {
-                childProperty = this.propertyService.getDefaultPropertyFromValue(childValue ?? '');
+                childProperty = getDefaultPropertyFromValue(childValue ?? '');
             }
             childProperty.key = index;
             childProperty.isKeyEditable = false;
@@ -123,7 +118,7 @@ export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjec
     }
 
     onAddChild(type: PropertyType): void {
-        const childValue: any = this.propertyService.getDefaultPropertyValue(type);
+        const childValue: any = getDefaultPropertyValue(type);
         const newValue = {
             ...this.currentValue,
             '': childValue,
@@ -162,7 +157,7 @@ export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjec
         this.childProperties = [];
 
         Object.entries(this.currentValue ?? {}).forEach(([key, value]) => {
-            const childProperty = this.propertyService.getDefaultPropertyFromValue(value, key);
+            const childProperty = getDefaultPropertyFromValue(value, key);
             if (childProperty) {
                 this.childProperties.push(childProperty);
             }
@@ -187,7 +182,6 @@ export class ValidatorsPropertyComponent extends BasePropertyDirective<IValidato
     private _formlyConfig = inject(FormlyConfig);
     private _editorConfig = inject(EDITOR_CONFIG);
     private _defaultMessages: Record<string, string>;
-    private _validatorNameMap: Record<string, string>;
 
     trackByConfigName: TrackByFunction<IValidationConfig> = (_, property: IValidationConfig) => property.data.name;
 
@@ -218,10 +212,6 @@ export class ValidatorsPropertyComponent extends BasePropertyDirective<IValidato
             } else if (this.property.key === 'asyncValidators') {
                 this.addOptions = this._editorConfig.asyncValidatorOptions ?? [];
             }
-            this._validatorNameMap = this.addOptions.reduce(
-                (acc, option) => ({ ...acc, [option.key]: option.name }),
-                {}
-            );
 
             this._defaultMessages = Object.entries(this._formlyConfig.messages).reduce(
                 (acc, [key, message]) => ({
