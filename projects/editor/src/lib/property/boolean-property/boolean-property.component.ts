@@ -28,4 +28,8 @@ export class BooleanPropertyComponent extends BasePropertyDirective<IBooleanProp
             emitEvent: false,
         });
     }
+
+    protected override _isValidProperty(x: any): x is IBooleanProperty {
+        return this._isBaseProperty(x);
+    }
 }

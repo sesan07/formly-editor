@@ -27,4 +27,8 @@ export class TextareaPropertyComponent extends BasePropertyDirective<ITextareaPr
             emitEvent: false,
         });
     }
+
+    protected override _isValidProperty(x: any): x is ITextareaProperty {
+        return this._isBaseProperty(x);
+    }
 }

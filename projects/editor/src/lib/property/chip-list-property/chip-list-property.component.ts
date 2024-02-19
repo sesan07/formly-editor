@@ -3,8 +3,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angu
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { BehaviorSubject, Subject, isObservable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 import { BasePropertyDirective } from '../base-property.directive';
 import { IChipListProperty } from './chip-list-property.types';
@@ -27,7 +26,6 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
 
     protected defaultValue = null;
 
-    private _unSubOptions$: Subject<void> = new Subject();
     private readonly _maxFilteredItems = 50;
 
     onAdd(event: MatChipInputEvent): void {
@@ -72,20 +70,13 @@ export class ChipListPropertyComponent extends BasePropertyDirective<IChipListPr
         }
 
         this.hasOptions = this.property.isRemovable;
-        this._setupSelectableOptions();
+        this.selectableOptions = [...this.property.options];
         this._updateSelectedOptions();
         this._updateFilteredOptions();
     }
 
-    private _setupSelectableOptions(): void {
-        if (isObservable(this.property.options)) {
-            this._unSubOptions$.next();
-            this.property.options
-                .pipe(takeUntil(this._unSubOptions$))
-                .subscribe(options => (this.selectableOptions = options));
-        } else {
-            this.selectableOptions = [...this.property.options];
-        }
+    protected override _isValidProperty(x: any): x is IChipListProperty {
+        return Array.isArray(x.options) && x.options.every(v => typeof v === 'string') && this._isBaseProperty(x);
     }
 
     private _updateSelectedOptions(): void {
