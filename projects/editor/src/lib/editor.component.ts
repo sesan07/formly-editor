@@ -3,18 +3,37 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, debounceTime, takeUntil } from 'rxjs';
 
+import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
+
+import 'codemirror/addon/fold/brace-fold';
+import 'codemirror/addon/fold/foldgutter';
+import 'codemirror/addon/selection/active-line';
+import 'codemirror/mode/javascript/javascript';
+
+import { AddFieldTreeItemComponent } from './add-field-tree-item/add-field-tree-item.component';
+import { EditFieldComponent } from './edit-field/edit-field.component';
 import { StylesService } from './edit-field/styles/styles.service';
 import { IStylesConfig } from './edit-field/styles/styles.types';
 import { EditorService } from './editor.service';
 import { FieldOption, IDefaultForm, IEditorFormlyField, IForm } from './editor.types';
 import { isCategoryOption, isTypeOption, trackByDisplayName, trackByFieldId } from './editor.utils';
+import { FieldNamePipe } from './field-name/field-name.pipe';
+import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
+import { saveFile } from './file/file.utils';
+import { FormComponent } from './form/form.component';
 import { cleanField } from './form/form.utils';
 import { JSONDialogComponent } from './json-dialog/json-dialog.component';
 import { ImportJSONData, ImportJSONValue } from './json-dialog/json-dialog.types';
+import { ObjectPropertyComponent } from './property/cyclic-properties/cyclic-properties.component';
 import { IObjectProperty } from './property/cyclic-properties/object-property.types';
 import { IPropertyChange, PropertyType } from './property/property.types';
 import { getDefaultProperty, initRootProperty } from './property/property.utils';
-import { FileService } from './shared/services/file-service/file.service';
+import { SidebarSectionComponent } from './sidebar/sidebar-section/sidebar-section.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 import { SideBarPosition } from './sidebar/sidebar.types';
 import { initialState } from './state/state.reducers';
 import {
@@ -26,19 +45,6 @@ import {
     selectForms,
 } from './state/state.selectors';
 import { IEditorState } from './state/state.types';
-import { FieldNamePipe } from './field-name/field-name.pipe';
-import { ObjectPropertyComponent } from './property/cyclic-properties/cyclic-properties.component';
-import { EditFieldComponent } from './edit-field/edit-field.component';
-import { FormComponent } from './form/form.component';
-import { MatTabGroup, MatTab, MatTabLabel } from '@angular/material/tabs';
-import { AddFieldTreeItemComponent } from './add-field-tree-item/add-field-tree-item.component';
-import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
-import { MatIcon } from '@angular/material/icon';
-import { MatMenuTrigger, MatMenu, MatMenuContent, MatMenuItem } from '@angular/material/menu';
-import { MatIconButton, MatButton } from '@angular/material/button';
-import { SidebarSectionComponent } from './sidebar/sidebar-section/sidebar-section.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'editor-main',
@@ -104,7 +110,6 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
         private _editorService: EditorService,
         private _store: Store<IEditorState>,
         private _dialog: MatDialog,
-        private _fileService: FileService,
         private _stylesService: StylesService
     ) {}
 
@@ -202,7 +207,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         dialogRef.afterClosed().subscribe(res => {
             if (res) {
-                this._fileService.saveFile(res.name, res.json);
+                saveFile(res.name, res.json);
             }
         });
     }
@@ -253,7 +258,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         dialogRef.afterClosed().subscribe(res => {
             if (res) {
-                this._fileService.saveFile(res.name, res.json);
+                saveFile(res.name, res.json);
             }
         });
     }

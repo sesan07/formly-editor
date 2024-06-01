@@ -1,17 +1,24 @@
 import { AfterViewInit, Component, ElementRef, Inject, ViewChild } from '@angular/core';
-import { NgForm, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
-
-import { ImportJSONData, ImportJSONValue } from './json-dialog.types';
-import { FileService } from '../shared/services/file-service/file.service';
-import { MatIcon } from '@angular/material/icon';
-import { MatButton } from '@angular/material/button';
-import { JSONValidatorDirective } from './json-validator/json-validator.directive';
-import { TextEditorComponent } from '../text-editor/text-editor.component';
-import { MatInput } from '@angular/material/input';
-import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
-import { NgIf } from '@angular/common';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
+import {
+    MAT_DIALOG_DATA,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogRef,
+    MatDialogTitle,
+} from '@angular/material/dialog';
 import { CdkScrollable } from '@angular/cdk/scrolling';
+import { NgIf } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+
+import { readFile } from '../file/file.utils';
+import { TextEditorComponent } from '../text-editor/text-editor.component';
+import { ImportJSONData, ImportJSONValue } from './json-dialog.types';
+import { JSONValidatorDirective } from './json-validator/json-validator.directive';
 
 @Component({
     templateUrl: './json-dialog.component.html',
@@ -45,8 +52,7 @@ export class JSONDialogComponent implements AfterViewInit {
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: ImportJSONData,
-        private _dialogRef: MatDialogRef<JSONDialogComponent, ImportJSONValue>,
-        private _fileService: FileService
+        private _dialogRef: MatDialogRef<JSONDialogComponent, ImportJSONValue>
     ) {}
 
     ngAfterViewInit(): void {
@@ -60,7 +66,7 @@ export class JSONDialogComponent implements AfterViewInit {
 
     onFileChanged(): void {
         const file: File = this.fileSelectElement.nativeElement.files.item(0);
-        this._fileService.readFile(file).subscribe(text => {
+        readFile(file).subscribe(text => {
             const jsonControl = this.form.controls.json;
             jsonControl.setValue(text);
             jsonControl.markAsTouched();
