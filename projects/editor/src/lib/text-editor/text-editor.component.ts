@@ -28,6 +28,7 @@ import { Subject } from 'rxjs';
         },
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
 })
 export class TextEditorComponent implements AfterViewInit {
     private static _nextId = 0;

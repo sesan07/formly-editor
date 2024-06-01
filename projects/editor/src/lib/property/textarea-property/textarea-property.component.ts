@@ -1,14 +1,36 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { BasePropertyDirective } from '../base-property.directive';
 import { ITextareaProperty } from './textarea-property.types';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem } from '@angular/material/menu';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { PropertyKeyComponent } from '../property-key/property-key.component';
+import { TreeItemComponent } from '../../tree-item/tree-item.component';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'editor-textarea-property',
     templateUrl: './textarea-property.component.html',
     styleUrls: ['./textarea-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        TreeItemComponent,
+        PropertyKeyComponent,
+        MatFormField,
+        MatInput,
+        CdkTextareaAutosize,
+        ReactiveFormsModule,
+        MatLabel,
+        MatMenu,
+        MatMenuItem,
+        MatIcon,
+    ],
 })
 export class TextareaPropertyComponent extends BasePropertyDirective<ITextareaProperty, string> {
     public formControl: FormControl<string>;

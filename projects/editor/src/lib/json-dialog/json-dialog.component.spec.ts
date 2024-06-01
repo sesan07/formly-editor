@@ -8,8 +8,8 @@ describe('ImportFormDialogComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [JSONDialogComponent],
-        }).compileComponents();
+    imports: [JSONDialogComponent],
+}).compileComponents();
     });
 
     beforeEach(() => {

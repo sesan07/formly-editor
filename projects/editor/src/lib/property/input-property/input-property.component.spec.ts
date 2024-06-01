@@ -8,8 +8,8 @@ describe('StringPropertyComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [InputPropertyComponent],
-        }).compileComponents();
+    imports: [InputPropertyComponent],
+}).compileComponents();
     });
 
     beforeEach(() => {

@@ -1,14 +1,32 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { BasePropertyDirective } from '../base-property.directive';
 import { ISelectProperty, ISelectPropertyOption } from './select-property.types';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
+import { MatOption } from '@angular/material/core';
+import { NgFor } from '@angular/common';
+import { MatSelect } from '@angular/material/select';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 
 @Component({
     selector: 'editor-select-property',
     templateUrl: './select-property.component.html',
     styleUrls: ['./select-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        ReactiveFormsModule,
+        NgFor,
+        MatOption,
+        MatIconButton,
+        MatSuffix,
+        MatIcon,
+    ],
 })
 export class SelectPropertyComponent extends BasePropertyDirective<ISelectProperty, string | number> {
     public formControl: FormControl<string | number>;

@@ -1,18 +1,47 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatChipInputEvent, MatChipGrid, MatChipRow, MatChipRemove, MatChipInput } from '@angular/material/chips';
 import { BehaviorSubject } from 'rxjs';
 
 import { BasePropertyDirective } from '../base-property.directive';
 import { IChipListProperty } from './chip-list-property.types';
+import { MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatOption } from '@angular/material/core';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { PropertyKeyComponent } from '../property-key/property-key.component';
+import { TreeItemComponent } from '../../tree-item/tree-item.component';
+import { NgIf, NgTemplateOutlet, NgFor, AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'editor-chip-list-property',
     templateUrl: './chip-list-property.component.html',
     styleUrls: ['./chip-list-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        TreeItemComponent,
+        PropertyKeyComponent,
+        NgTemplateOutlet,
+        MatFormField,
+        MatLabel,
+        MatChipGrid,
+        NgFor,
+        MatChipRow,
+        MatIcon,
+        MatChipRemove,
+        ReactiveFormsModule,
+        MatAutocompleteTrigger,
+        MatChipInput,
+        MatAutocomplete,
+        MatOption,
+        MatMenu,
+        MatMenuItem,
+        AsyncPipe,
+    ],
 })
 export class ChipListPropertyComponent extends BasePropertyDirective<IChipListProperty, string | string[]> {
     @ViewChild('input') inputElementRef: ElementRef<HTMLInputElement>;

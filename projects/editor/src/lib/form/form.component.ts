@@ -11,12 +11,39 @@ import { isCategoryOption, isTypeOption, trackByFieldId } from '../editor.utils'
 import { selectActiveForm, selectActiveFormId } from '../state/state.selectors';
 import { Store } from '@ngrx/store';
 import { IEditorState } from '../state/state.types';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuTrigger, MatMenu, MatMenuContent, MatMenuItem } from '@angular/material/menu';
+import { MatButton } from '@angular/material/button';
+import { TextEditorComponent } from '../text-editor/text-editor.component';
+import { FormlyFormComponent } from '../custom-formly/formly-form/formly-form.component';
+import { MatTabGroup, MatTab, MatTabContent } from '@angular/material/tabs';
+import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @Component({
     selector: 'editor-form',
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        ToolbarComponent,
+        NgIf,
+        MatTabGroup,
+        MatTab,
+        FormlyFormComponent,
+        MatTabContent,
+        TextEditorComponent,
+        MatButton,
+        MatMenuTrigger,
+        MatIcon,
+        MatMenu,
+        MatMenuContent,
+        NgFor,
+        MatMenuItem,
+        NgTemplateOutlet,
+        AsyncPipe,
+    ],
 })
 export class FormComponent implements OnInit, OnDestroy {
     @Input() form: IForm;

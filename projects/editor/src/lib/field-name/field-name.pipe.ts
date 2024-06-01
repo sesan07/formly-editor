@@ -3,6 +3,7 @@ import { IEditorFormlyField } from '../editor.types';
 
 @Pipe({
     name: 'fieldName',
+    standalone: true,
 })
 export class FieldNamePipe implements PipeTransform {
     transform(name: string, key?: string | number | (string | number)[]): string {

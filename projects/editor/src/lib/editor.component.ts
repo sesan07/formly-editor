@@ -26,11 +26,49 @@ import {
     selectForms,
 } from './state/state.selectors';
 import { IEditorState } from './state/state.types';
+import { FieldNamePipe } from './field-name/field-name.pipe';
+import { ObjectPropertyComponent } from './property/cyclic-properties/cyclic-properties.component';
+import { EditFieldComponent } from './edit-field/edit-field.component';
+import { FormComponent } from './form/form.component';
+import { MatTabGroup, MatTab, MatTabLabel } from '@angular/material/tabs';
+import { AddFieldTreeItemComponent } from './add-field-tree-item/add-field-tree-item.component';
+import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuTrigger, MatMenu, MatMenuContent, MatMenuItem } from '@angular/material/menu';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { SidebarSectionComponent } from './sidebar/sidebar-section/sidebar-section.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'editor-main',
     templateUrl: './editor.component.html',
     styleUrls: ['./editor.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        SidebarComponent,
+        SidebarSectionComponent,
+        MatIconButton,
+        MatMenuTrigger,
+        MatIcon,
+        NgFor,
+        FieldTreeItemComponent,
+        AddFieldTreeItemComponent,
+        MatTabGroup,
+        MatTab,
+        MatTabLabel,
+        FormComponent,
+        MatButton,
+        EditFieldComponent,
+        ObjectPropertyComponent,
+        MatMenu,
+        MatMenuContent,
+        MatMenuItem,
+        NgTemplateOutlet,
+        AsyncPipe,
+        FieldNamePipe,
+    ],
 })
 export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() defaultForm?: IDefaultForm;

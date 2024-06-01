@@ -12,7 +12,7 @@ import {
     Renderer2,
     ViewContainerRef,
 } from '@angular/core';
-import { DndService } from '@ng-dnd/core';
+import { DndService, DndModule } from '@ng-dnd/core';
 import { Store } from '@ngrx/store';
 import { FormlyConfig, FormlyField } from '@ngx-formly/core';
 import { Observable, Subject, filter, map, takeUntil } from 'rxjs';
@@ -24,11 +24,18 @@ import { FieldDragDrop } from '../../field-drag-drop/field-drag-drop';
 import { selectActiveForm } from '../../state/state.selectors';
 import { IEditorState } from '../../state/state.types';
 import { FormlyFieldTemplates } from '../formly.template';
+import { FieldNamePipe } from '../../field-name/field-name.pipe';
+import { FieldDropOverlayComponent } from '../../field-drag-drop/field-drop-overlay/field-drop-overlay.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuTrigger, MatMenu, MatMenuContent, MatMenuItem } from '@angular/material/menu';
+import { MatIconButton } from '@angular/material/button';
+import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'editor-root-formly-field',
     template: '<ng-template #container></ng-template>',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
 })
 export class RootFormlyFieldComponent extends FormlyField {}
 
@@ -37,6 +44,22 @@ export class RootFormlyFieldComponent extends FormlyField {}
     templateUrl: './formly-field.component.html',
     styleUrls: ['./formly-field.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        DndModule,
+        NgIf,
+        MatIconButton,
+        MatMenuTrigger,
+        MatIcon,
+        FieldDropOverlayComponent,
+        MatMenu,
+        MatMenuContent,
+        NgFor,
+        MatMenuItem,
+        NgTemplateOutlet,
+        AsyncPipe,
+        FieldNamePipe,
+    ],
 })
 export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestroy {
     @Input() override field: IEditorFormlyField;

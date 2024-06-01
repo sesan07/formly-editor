@@ -8,8 +8,8 @@ describe('FieldDropOverlayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FieldDropOverlayComponent ]
-    })
+    imports: [FieldDropOverlayComponent]
+})
     .compileComponents();
   });
 

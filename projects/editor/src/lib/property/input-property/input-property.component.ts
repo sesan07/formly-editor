@@ -1,15 +1,36 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { BasePropertyDirective } from '../base-property.directive';
 import { PropertyType } from '../property.types';
 import { IInputProperty } from './input-property.types';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { PropertyKeyComponent } from '../property-key/property-key.component';
+import { TreeItemComponent } from '../../tree-item/tree-item.component';
+import { NgIf, LowerCasePipe } from '@angular/common';
 
 @Component({
     selector: 'editor-input-property',
     templateUrl: './input-property.component.html',
     styleUrls: ['./input-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        TreeItemComponent,
+        PropertyKeyComponent,
+        MatFormField,
+        MatInput,
+        ReactiveFormsModule,
+        MatLabel,
+        MatMenu,
+        MatMenuItem,
+        MatIcon,
+        LowerCasePipe,
+    ],
 })
 export class InputPropertyComponent extends BasePropertyDirective<IInputProperty, string | number | boolean> {
     public formControl: FormControl<string>;

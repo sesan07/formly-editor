@@ -10,20 +10,20 @@ import { HTML5Backend } from '@ng-dnd/multi-backend';
 import { ActionReducer, META_REDUCERS, StoreModule } from '@ngrx/store';
 import { FormlyConfig } from '@ngx-formly/core';
 
-import { AddFieldTreeItemModule } from './add-field-tree-item/add-field-tree-item.module';
-import { CustomFormlyModule } from './custom-formly/custom-formly.module';
+
+
 import { FormlyGroupComponent } from './custom-formly/formly-group/formly-group.component';
-import { EditFieldModule } from './edit-field/edit-field.module';
+
 import { EditorComponent } from './editor.component';
 import { EditorService } from './editor.service';
 import { EDITOR_CONFIG, EditorConfig, EditorFieldType, FieldTypeOption } from './editor.types';
-import { FieldNameModule } from './field-name/field-name.module';
-import { FieldTreeItemModule } from './field-tree-item/field-tree-item.module';
-import { FormModule } from './form/form.module';
-import { JSONDialogModule } from './json-dialog/json-dialog.module';
-import { PropertyModule } from './property/property.module';
+
+
+
+
+
 import { FileService } from './shared/services/file-service/file.service';
-import { SidebarModule } from './sidebar/sidebar.module';
+
 import { editorFeature } from './state/state.reducers';
 
 import 'codemirror/addon/fold/brace-fold';
@@ -52,25 +52,16 @@ const metaReducerFactory =
     };
 
 @NgModule({
-    declarations: [EditorComponent],
     imports: [
-        CommonModule,
-        FormModule,
-        MatButtonModule,
-        MatIconModule,
-        MatTabsModule,
-        MatMenuModule,
-        SidebarModule,
-        FieldNameModule,
-        EditFieldModule,
-        AddFieldTreeItemModule,
-        FieldTreeItemModule,
-        PropertyModule,
-        JSONDialogModule,
-        CustomFormlyModule,
-        StoreModule.forFeature(editorFeature),
-        DndModule.forRoot({ backend: HTML5Backend }),
-    ],
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTabsModule,
+    MatMenuModule,
+    StoreModule.forFeature(editorFeature),
+    DndModule.forRoot({ backend: HTML5Backend }),
+    EditorComponent,
+],
     exports: [EditorComponent],
     providers: [
         FileService,
