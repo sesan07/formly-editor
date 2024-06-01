@@ -10,7 +10,6 @@ import { BootstrapComponent } from './bootstrap.component';
 import { bootstrapEditorConfig } from './bootstrap-editor.config';
 
 @NgModule({
-    declarations: [BootstrapComponent],
     imports: [
         CommonModule,
         BootstrapRoutingModule,
@@ -19,6 +18,7 @@ import { bootstrapEditorConfig } from './bootstrap-editor.config';
             validationMessages: [{ name: 'required', message: 'This field is required' }],
         }),
         EditorModule.forRoot(bootstrapEditorConfig),
+        BootstrapComponent,
     ],
 })
 export class BootstrapModule {}
