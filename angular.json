@@ -75,15 +75,15 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "formly-editor:build",
-            "host": "0.0.0.0"
+            "host": "0.0.0.0",
+            "buildTarget": "formly-editor:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "formly-editor:build:production"
+              "buildTarget": "formly-editor:build:production"
             },
             "development": {
-              "browserTarget": "formly-editor:build:development"
+              "buildTarget": "formly-editor:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -91,7 +91,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "formly-editor:build"
+            "buildTarget": "formly-editor:build"
           }
         },
         "test": {
