@@ -31,7 +31,6 @@
     "@angular/router": "16.2.12",
     "@ng-dnd/core": "^2.0.2",
     "@ng-dnd/multi-backend": "^2.0.2",
-    "@ngrx/store": "^15.4.0",
     "@ngx-formly/core": "6.2.2",
     "@ngx-formly/material": "6.2.2",
     "@ngx-formly/bootstrap": "6.2.2",
