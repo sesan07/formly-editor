@@ -7,7 +7,6 @@ import { FormlyModule } from '@ngx-formly/core';
 import { RepeatingSectionTypeComponent } from './repeating-section-type.component';
 
 @NgModule({
-    declarations: [RepeatingSectionTypeComponent],
     imports: [
         CommonModule,
         MatButtonModule,
@@ -20,6 +19,7 @@ import { RepeatingSectionTypeComponent } from './repeating-section-type.componen
                 },
             ],
         }),
+        RepeatingSectionTypeComponent,
     ],
     exports: [RepeatingSectionTypeComponent],
 })

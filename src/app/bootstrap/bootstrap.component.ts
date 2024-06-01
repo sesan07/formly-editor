@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IDefaultForm, IStylesConfig, bootstrapConfig } from '@sesan07/ngx-formly-editor';
+import { EditorModule } from '../../../projects/editor/src/lib/editor.module';
 
 @Component({
     selector: 'app-bootstrap',
@@ -11,6 +12,8 @@ import { IDefaultForm, IStylesConfig, bootstrapConfig } from '@sesan07/ngx-forml
         >
         </editor-main>
     `,
+    standalone: true,
+    imports: [EditorModule],
 })
 export class BootstrapComponent {
     bootstrapConfig: IStylesConfig = bootstrapConfig;

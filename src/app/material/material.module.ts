@@ -13,7 +13,6 @@ import { MaterialComponent } from './material.component';
 import { ipValidator, ipAsyncValidator, ipValidatorMessage } from './material.utils';
 
 @NgModule({
-    declarations: [MaterialComponent],
     imports: [
         CommonModule,
         MaterialRoutingModule,
@@ -32,6 +31,7 @@ import { ipValidator, ipAsyncValidator, ipValidatorMessage } from './material.ut
             ],
         }),
         EditorModule.forRoot(materialEditorConfig),
+        MaterialComponent,
     ],
 })
 export class MaterialModule {}

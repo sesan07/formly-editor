@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IDefaultForm } from '@sesan07/ngx-formly-editor';
+import { EditorModule } from '../../../projects/editor/src/lib/editor.module';
 
 @Component({
     selector: 'app-material',
@@ -10,6 +11,8 @@ import { IDefaultForm } from '@sesan07/ngx-formly-editor';
         >
         </editor-main>
     `,
+    standalone: true,
+    imports: [EditorModule],
 })
 export class MaterialComponent {
     defaultForm: IDefaultForm = {

@@ -6,7 +6,6 @@ import { FormlyModule } from '@ngx-formly/core';
 import { CardWrapperComponent } from './card-wrapper.component';
 
 @NgModule({
-    declarations: [CardWrapperComponent],
     imports: [
         CommonModule,
         MatCardModule,
@@ -18,6 +17,7 @@ import { CardWrapperComponent } from './card-wrapper.component';
                 },
             ],
         }),
+        CardWrapperComponent,
     ],
 })
 export class CardWrapperModule {}
