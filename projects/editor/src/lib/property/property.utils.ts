@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 import { get, set, unset } from 'lodash-es';
 import { IArrayProperty } from './cyclic-properties/array-property.types';
 import { IObjectProperty } from './cyclic-properties/object-property.types';
