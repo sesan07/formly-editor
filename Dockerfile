@@ -1,10 +1,11 @@
-FROM node:18.18-alpine as build-env
+FROM node:18.20-alpine as build-env
 
 WORKDIR /app
 
 COPY ./package.json .
 COPY ./package-lock.json .
-RUN npm ci
+# temporarily use '--legacy-peer-deps' until ngrx supports Angular 18
+RUN npm ci --legacy-peer-deps
 
 COPY ./projects/ ./projects
 COPY ./src ./src
