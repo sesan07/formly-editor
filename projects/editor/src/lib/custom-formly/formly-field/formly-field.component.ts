@@ -12,7 +12,7 @@ import {
     Renderer2,
     ViewContainerRef,
 } from '@angular/core';
-import { DndService, DndModule } from '@ng-dnd/core';
+import { DndService, DragPreviewDirective, DragSourceDirective, DropTargetDirective } from '@ng-dnd/core';
 import { Store } from '@ngrx/store';
 import { FormlyConfig, FormlyField } from '@ngx-formly/core';
 import { Observable, Subject, filter, map, takeUntil } from 'rxjs';
@@ -46,7 +46,9 @@ export class RootFormlyFieldComponent extends FormlyField {}
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
-        DndModule,
+        DragPreviewDirective,
+        DragSourceDirective,
+        DropTargetDirective,
         NgIf,
         MatIconButton,
         MatMenuTrigger,

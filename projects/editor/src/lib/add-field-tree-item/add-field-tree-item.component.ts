@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { DndService, DndModule } from '@ng-dnd/core';
+import { DndService, DragSourceDirective } from '@ng-dnd/core';
 import { BehaviorSubject } from 'rxjs';
 import { EditorService } from '../editor.service';
 import { DropAction, FieldOption, IEditorFormlyField } from '../editor.types';
@@ -15,13 +15,7 @@ import { NgIf, NgFor, AsyncPipe } from '@angular/common';
     styleUrls: ['./add-field-tree-item.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [
-    NgIf,
-    TreeItemComponent,
-    NgFor,
-    DndModule,
-    AsyncPipe,
-],
+    imports: [NgIf, TreeItemComponent, NgFor, DragSourceDirective, AsyncPipe],
 })
 export class AddFieldTreeItemComponent implements OnChanges, OnDestroy {
     @Input() public fieldOption: FieldOption;

@@ -14,7 +14,7 @@ import {
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 
-import { DndService, DndModule } from '@ng-dnd/core';
+import { DndService, DragSourceDirective, DropTargetDirective } from '@ng-dnd/core';
 import { Store } from '@ngrx/store';
 import { EditorService } from '../editor.service';
 import { DropAction, FieldOption, IEditorFieldInfo, IEditorFormlyField } from '../editor.types';
@@ -38,20 +38,21 @@ import { TreeItemComponent } from '../tree-item/tree-item.component';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
-    TreeItemComponent,
-    DndModule,
-    NgIf,
-    MatIcon,
-    NgFor,
-    FieldDropOverlayComponent,
-    MatMenu,
-    MatMenuItem,
-    MatMenuTrigger,
-    MatMenuContent,
-    NgTemplateOutlet,
-    AsyncPipe,
-    FieldNamePipe,
-],
+        TreeItemComponent,
+        DragSourceDirective,
+        DropTargetDirective,
+        NgIf,
+        MatIcon,
+        NgFor,
+        FieldDropOverlayComponent,
+        MatMenu,
+        MatMenuItem,
+        MatMenuTrigger,
+        MatMenuContent,
+        NgTemplateOutlet,
+        AsyncPipe,
+        FieldNamePipe,
+    ],
 })
 export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public field: IEditorFormlyField;

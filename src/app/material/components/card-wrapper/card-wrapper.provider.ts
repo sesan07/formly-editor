@@ -1,14 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
+import { importProvidersFrom } from '@angular/core';
 import { FormlyModule } from '@ngx-formly/core';
 
 import { CardWrapperComponent } from './card-wrapper.component';
 
-@NgModule({
-    imports: [
-        CommonModule,
-        MatCardModule,
+export function provideCardWrapper() {
+    return importProvidersFrom([
         FormlyModule.forChild({
             wrappers: [
                 {
@@ -17,7 +13,5 @@ import { CardWrapperComponent } from './card-wrapper.component';
                 },
             ],
         }),
-        CardWrapperComponent,
-    ],
-})
-export class CardWrapperModule {}
+    ]);
+}

@@ -7,6 +7,7 @@ import { FormlyFieldTemplates } from '../formly.template';
 import { RootFormlyFieldComponent } from '../formly-field/formly-field.component';
 import { MatIcon } from '@angular/material/icon';
 import { NgIf, AsyncPipe } from '@angular/common';
+import { FormlyGroupComponent } from '../formly-group/formly-group.component';
 
 @Component({
     selector: 'editor-formly-form',
@@ -15,12 +16,7 @@ import { NgIf, AsyncPipe } from '@angular/common';
     providers: [FormlyFormBuilder, FormlyFieldTemplates],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [
-        NgIf,
-        MatIcon,
-        RootFormlyFieldComponent,
-        AsyncPipe,
-    ],
+    imports: [NgIf, MatIcon, RootFormlyFieldComponent, AsyncPipe],
 })
 export class FormlyFormComponent extends FormlyForm {
     public override field: IEditorFormlyFieldConfigCache = {
@@ -42,6 +38,12 @@ export class FormlyFormComponent extends FormlyForm {
         fieldTemplates: FormlyFieldTemplates
     ) {
         super(builder, config, ngZone, fieldTemplates);
+
+        // Use the editor's formly-group component
+        config.setType({
+            name: EditorFieldType.FORMLY_GROUP,
+            component: FormlyGroupComponent,
+        });
     }
 
     override ngOnChanges(changes: SimpleChanges): void {
