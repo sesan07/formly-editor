@@ -21,7 +21,7 @@
     textfield.$minimum-height-for-filled-label: 10px;
     @include mat.form-field-density(-2);
 
-    $typography: mat.define-typography-config();
+    $typography: mat.m2-define-typography-config();
     $typography: map.set($typography, body-1, font-size, 14px);
     @include mat.all-component-typographies($typography);
 
