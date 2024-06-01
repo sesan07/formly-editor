@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 import { get, isEmpty, set, unset } from 'lodash-es';
 
 import { IEditorFormlyField } from '../editor.types';

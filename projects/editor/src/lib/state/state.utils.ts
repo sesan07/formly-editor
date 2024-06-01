@@ -1,5 +1,5 @@
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import produce from 'immer';
+import { produce } from 'immer';
 import { get, merge, set, unset } from 'lodash-es';
 import {
     EditorFieldType,
