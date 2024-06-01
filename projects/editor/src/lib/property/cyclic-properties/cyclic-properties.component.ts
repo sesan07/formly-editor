@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Directive, Input, OnInit, TrackByFunction, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, Input, OnInit, TrackByFunction, inject, forwardRef } from '@angular/core';
 import { FormlyConfig } from '@ngx-formly/core';
 import { get, isEmpty, startCase } from 'lodash-es';
 
@@ -10,6 +10,20 @@ import { getDefaultPropertyFromValue, getDefaultPropertyValue, modifyPropertyTar
 import { IArrayProperty } from './array-property.types';
 import { IObjectProperty, createObjectProperty } from './object-property.types';
 import { IValidationConfig, IValidationData, IValidatorsProperty, IValidatorsValue } from './validators-property.types';
+import { InputPropertyComponent } from '../input-property/input-property.component';
+import { ExpressionPropertiesPropertyComponent } from '../expression-properties-property/expression-properties-property.component';
+import { TextareaPropertyComponent } from '../textarea-property/textarea-property.component';
+import { SelectPropertyComponent } from '../select-property/select-property.component';
+import { ChipListPropertyComponent } from '../chip-list-property/chip-list-property.component';
+import { BooleanPropertyComponent } from '../boolean-property/boolean-property.component';
+
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIconButton } from '@angular/material/button';
+import { MatExpansionPanel, MatExpansionPanelHeader, MatAccordion, MatExpansionPanelTitle } from '@angular/material/expansion';
+import { PropertyKeyComponent } from '../property-key/property-key.component';
+import { TreeItemComponent } from '../../tree-item/tree-item.component';
+import { NgIf, NgTemplateOutlet, NgFor, NgSwitch, NgSwitchCase } from '@angular/common';
 
 @Directive()
 export abstract class ObjectArrayPropertyDirective<P extends IArrayProperty | IObjectProperty, V>
@@ -58,6 +72,30 @@ export abstract class ObjectArrayPropertyDirective<P extends IArrayProperty | IO
     templateUrl: './array-property.component.html',
     styleUrls: ['./array-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        TreeItemComponent,
+        PropertyKeyComponent,
+        NgTemplateOutlet,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatIconButton,
+        MatIcon,
+        MatAccordion,
+        NgFor,
+        MatExpansionPanelTitle,
+        NgSwitch,
+        NgSwitchCase,
+        forwardRef(() => ObjectPropertyComponent),
+        BooleanPropertyComponent,
+        ChipListPropertyComponent,
+        TextareaPropertyComponent,
+        InputPropertyComponent,
+        MatMenu,
+        MatMenuItem,
+        MatMenuTrigger,
+    ],
 })
 export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayProperty, unknown[]> {
     protected defaultValue = [];
@@ -104,6 +142,31 @@ export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayP
     templateUrl: './object-property.component.html',
     styleUrls: ['./object-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+    NgIf,
+    TreeItemComponent,
+    PropertyKeyComponent,
+    NgTemplateOutlet,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatIconButton,
+    MatMenuTrigger,
+    MatIcon,
+    NgFor,
+    NgSwitch,
+    NgSwitchCase,
+    ArrayPropertyComponent,
+    BooleanPropertyComponent,
+    ChipListPropertyComponent,
+    SelectPropertyComponent,
+    TextareaPropertyComponent,
+    ExpressionPropertiesPropertyComponent,
+    forwardRef(() => ValidatorsPropertyComponent),
+    InputPropertyComponent,
+    MatMenu,
+    MatMenuItem,
+],
 })
 export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjectProperty, Record<string, unknown>> {
     @Input() useExpansionPanel = true;
@@ -170,6 +233,19 @@ export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjec
     templateUrl: './validators-property.component.html',
     styleUrls: ['./validators-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        NgIf,
+        MatIconButton,
+        MatMenuTrigger,
+        MatIcon,
+        NgFor,
+        ObjectPropertyComponent,
+        MatMenu,
+        MatMenuItem,
+    ],
 })
 export class ValidatorsPropertyComponent extends BasePropertyDirective<IValidatorsProperty, IValidatorsValue> {
     public isExpanded: boolean;

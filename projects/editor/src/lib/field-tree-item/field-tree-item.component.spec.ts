@@ -8,8 +8,8 @@ describe('FieldTreeItemComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [FieldTreeItemComponent],
-        }).compileComponents();
+    imports: [FieldTreeItemComponent],
+}).compileComponents();
     });
 
     beforeEach(() => {

@@ -4,6 +4,9 @@ import { BehaviorSubject } from 'rxjs';
 
 import { EditorFieldType, IEditorFormlyFieldConfigCache } from '../../editor.types';
 import { FormlyFieldTemplates } from '../formly.template';
+import { RootFormlyFieldComponent } from '../formly-field/formly-field.component';
+import { MatIcon } from '@angular/material/icon';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'editor-formly-form',
@@ -11,6 +14,13 @@ import { FormlyFieldTemplates } from '../formly.template';
     styleUrls: ['./formly-form.component.scss'],
     providers: [FormlyFormBuilder, FormlyFieldTemplates],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        MatIcon,
+        RootFormlyFieldComponent,
+        AsyncPipe,
+    ],
 })
 export class FormlyFormComponent extends FormlyForm {
     public override field: IEditorFormlyFieldConfigCache = {

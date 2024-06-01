@@ -11,12 +11,29 @@ import { IEditorFormlyField } from '../../../editor.types';
 import { IPropertyChange, PropertyChangeType } from '../../../property/property.types';
 import { BreakpointAffix, ClassProperty, IBreakpoint, IStyleOption, IStyleOptionCategory } from '../styles.types';
 import { findVariant, formatVariant } from '../styles.utils';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
     selector: 'editor-style-option',
     templateUrl: './style-option.component.html',
     styleUrls: ['./style-option.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        NgFor,
+        MatOption,
+        MatIconButton,
+        MatIcon,
+    ],
 })
 export class StyleOptionComponent implements OnChanges {
     @Input() field: IEditorFormlyField;

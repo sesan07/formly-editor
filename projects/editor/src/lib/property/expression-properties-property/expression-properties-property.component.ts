@@ -3,12 +3,30 @@ import { trackByKey } from '../../editor.utils';
 
 import { BasePropertyDirective } from '../base-property.directive';
 import { IExpressionPropertiesProperty, IExpressionProperty } from './expression-properties-property.types';
+import { TextEditorComponent } from '../../text-editor/text-editor.component';
+import { PropertyKeyComponent } from '../property-key/property-key.component';
+import { NgFor } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
+import { MatExpansionPanel, MatExpansionPanelHeader, MatAccordion, MatExpansionPanelTitle } from '@angular/material/expansion';
 
 @Component({
     selector: 'editor-expression-properties-property',
     templateUrl: './expression-properties-property.component.html',
     styleUrls: ['./expression-properties-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatIconButton,
+        MatIcon,
+        MatAccordion,
+        NgFor,
+        MatExpansionPanelTitle,
+        PropertyKeyComponent,
+        TextEditorComponent,
+    ],
 })
 export class ExpressionPropertiesPropertyComponent extends BasePropertyDirective<
     IExpressionPropertiesProperty,

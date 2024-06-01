@@ -8,8 +8,8 @@ describe('StyleOptionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StyleOptionComponent ]
-    })
+    imports: [StyleOptionComponent]
+})
     .compileComponents();
   });
 

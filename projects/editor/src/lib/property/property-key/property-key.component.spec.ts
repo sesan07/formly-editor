@@ -8,8 +8,8 @@ describe('PropertyKeyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PropertyKeyComponent ]
-    })
+    imports: [PropertyKeyComponent]
+})
     .compileComponents();
   });
 

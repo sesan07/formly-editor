@@ -10,12 +10,16 @@ import {
 } from '@angular/core';
 
 import { SidebarComponent } from '../sidebar.component';
+import { MatIcon } from '@angular/material/icon';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'editor-sidebar-section',
     templateUrl: './sidebar-section.component.html',
     styleUrls: ['./sidebar-section.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [NgIf, MatIcon],
 })
 export class SidebarSectionComponent implements OnChanges {
     @Input() isCollapsed: boolean;

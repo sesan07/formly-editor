@@ -8,8 +8,8 @@ describe('BooleanPropertyComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [BooleanPropertyComponent],
-        }).compileComponents();
+    imports: [BooleanPropertyComponent],
+}).compileComponents();
     });
 
     beforeEach(() => {

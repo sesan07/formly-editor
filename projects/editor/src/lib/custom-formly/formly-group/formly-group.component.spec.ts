@@ -8,8 +8,8 @@ describe('FormlyGroupComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [FormlyGroupComponent],
-        }).compileComponents();
+    imports: [FormlyGroupComponent],
+}).compileComponents();
     });
 
     beforeEach(() => {

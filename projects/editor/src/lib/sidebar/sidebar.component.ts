@@ -14,12 +14,15 @@ import {
 
 import { SidebarSectionComponent } from './sidebar-section/sidebar-section.component';
 import { SideBarPosition } from './sidebar.types';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'editor-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [NgIf],
 })
 export class SidebarComponent implements AfterContentInit {
     @Input() position: SideBarPosition;

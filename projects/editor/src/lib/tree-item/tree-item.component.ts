@@ -9,7 +9,10 @@ import {
     Output,
 } from '@angular/core';
 import { matExpansionAnimations, MatExpansionPanelState } from '@angular/material/expansion';
-import { MatMenuPanel } from '@angular/material/menu';
+import { MatMenuPanel, MatMenuTrigger } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
+import { NgFor, NgIf } from '@angular/common';
 
 @Component({
     selector: 'editor-tree-item',
@@ -17,6 +20,14 @@ import { MatMenuPanel } from '@angular/material/menu';
     styleUrls: ['./tree-item.component.scss'],
     animations: [matExpansionAnimations.bodyExpansion],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgFor,
+        MatIconButton,
+        NgIf,
+        MatIcon,
+        MatMenuTrigger,
+    ],
 })
 export class TreeItemComponent implements OnInit {
     @Input() treeLevel = 0;

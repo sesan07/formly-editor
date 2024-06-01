@@ -8,8 +8,8 @@ describe('SelectPropertyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SelectPropertyComponent ]
-    })
+    imports: [SelectPropertyComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(SelectPropertyComponent);

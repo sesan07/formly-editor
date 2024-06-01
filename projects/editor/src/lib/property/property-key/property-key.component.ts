@@ -10,11 +10,14 @@ import {
     ViewChild,
 } from '@angular/core';
 import { isNil } from 'lodash-es';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'editor-property-key',
     templateUrl: './property-key.component.html',
     styleUrls: ['./property-key.component.scss'],
+    standalone: true,
+    imports: [NgClass],
 })
 export class PropertyKeyComponent implements OnChanges, AfterViewInit {
     @Input() isEditable: boolean;

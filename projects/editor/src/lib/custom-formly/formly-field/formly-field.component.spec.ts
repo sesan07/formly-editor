@@ -8,8 +8,8 @@ describe('FormlyFieldComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [FormlyFieldComponent],
-        }).compileComponents();
+    imports: [FormlyFieldComponent],
+}).compileComponents();
     });
 
     beforeEach(() => {

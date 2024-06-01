@@ -14,7 +14,7 @@ import {
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 
-import { DndService } from '@ng-dnd/core';
+import { DndService, DndModule } from '@ng-dnd/core';
 import { Store } from '@ngrx/store';
 import { EditorService } from '../editor.service';
 import { DropAction, FieldOption, IEditorFieldInfo, IEditorFormlyField } from '../editor.types';
@@ -23,12 +23,35 @@ import { FieldDragDrop } from '../field-drag-drop/field-drag-drop';
 import { getFieldChildren } from '../form/form.utils';
 import { selectActiveField } from '../state/state.selectors';
 import { IEditorState } from '../state/state.types';
+import { FieldNamePipe } from '../field-name/field-name.pipe';
+import { MatMenu, MatMenuItem, MatMenuTrigger, MatMenuContent } from '@angular/material/menu';
+import { FieldDropOverlayComponent } from '../field-drag-drop/field-drop-overlay/field-drop-overlay.component';
+
+import { MatIcon } from '@angular/material/icon';
+import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { TreeItemComponent } from '../tree-item/tree-item.component';
 
 @Component({
     selector: 'editor-field-tree-item',
     templateUrl: './field-tree-item.component.html',
     styleUrls: ['./field-tree-item.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+    TreeItemComponent,
+    DndModule,
+    NgIf,
+    MatIcon,
+    NgFor,
+    FieldDropOverlayComponent,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger,
+    MatMenuContent,
+    NgTemplateOutlet,
+    AsyncPipe,
+    FieldNamePipe,
+],
 })
 export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public field: IEditorFormlyField;
