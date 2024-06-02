@@ -32,7 +32,10 @@ export class AddFieldTreeItemComponent implements OnChanges, OnDestroy {
 
     private _field: IEditorFormlyField;
 
-    constructor(private _editorService: EditorService, private _dndService: DndService) {
+    constructor(
+        private _editorService: EditorService,
+        private _dndService: DndService
+    ) {
         this.dnd = new FieldDragDrop(DropAction.COPY, this._editorService, this._dndService);
     }
 

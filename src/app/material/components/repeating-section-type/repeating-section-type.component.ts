@@ -8,13 +8,6 @@ import { NgIf, NgFor } from '@angular/common';
     selector: 'app-repeating-section-type',
     templateUrl: './repeating-section-type.component.html',
     standalone: true,
-    imports: [
-        NgIf,
-        NgFor,
-        FormlyModule,
-        MatIconButton,
-        MatIcon,
-        MatButton,
-    ],
+    imports: [NgIf, NgFor, FormlyModule, MatIconButton, MatIcon, MatButton],
 })
 export class RepeatingSectionTypeComponent extends FieldArrayType {}

@@ -49,7 +49,10 @@ export class SidebarComponent implements AfterContentInit {
     private _stopMouseMoveListener: () => void;
     private _stopMouseUpListener: () => void;
 
-    constructor(private _renderer: Renderer2, private _elementRef: ElementRef<HTMLElement>) {}
+    constructor(
+        private _renderer: Renderer2,
+        private _elementRef: ElementRef<HTMLElement>
+    ) {}
 
     ngAfterContentInit(): void {
         if (this.sections.length === 0) {

@@ -7,12 +7,6 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/m
     selector: 'app-card-wrapper',
     templateUrl: './card-wrapper.component.html',
     standalone: true,
-    imports: [
-        MatCard,
-        MatCardHeader,
-        NgIf,
-        MatCardTitle,
-        MatCardContent,
-    ],
+    imports: [MatCard, MatCardHeader, NgIf, MatCardTitle, MatCardContent],
 })
 export class CardWrapperComponent extends FieldWrapper {}

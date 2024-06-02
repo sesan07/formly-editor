@@ -121,8 +121,8 @@ export class FieldDragDrop {
             this._hoverPosition$.value === 'center'
                 ? undefined
                 : this._hoverPosition$.value === 'left'
-                ? this._index
-                : this._index + 1;
+                  ? this._index
+                  : this._index + 1;
 
         this._ngZone.run(() => {
             switch (sourceData.action) {
@@ -159,8 +159,8 @@ export class FieldDragDrop {
             xPercent <= this.dropWidth.left
                 ? 'left'
                 : this._field._info.childrenConfig && xPercent <= this.dropWidth.left + this.dropWidth.center
-                ? 'center'
-                : 'right';
+                  ? 'center'
+                  : 'right';
         this._hoverPosition$.next(position);
     }
 }

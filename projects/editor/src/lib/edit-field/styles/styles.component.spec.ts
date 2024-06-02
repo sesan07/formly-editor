@@ -8,8 +8,8 @@ describe('StylesComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-    imports: [StylesComponent],
-}).compileComponents();
+            imports: [StylesComponent],
+        }).compileComponents();
     });
 
     beforeEach(() => {
