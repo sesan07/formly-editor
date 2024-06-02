@@ -5,65 +5,65 @@
     [dragPreview]="dnd.dragSource"
     [dropTarget]="dnd.dropTarget"
 >
-    <header *ngIf="isEditMode$ | async">
-        <div
-            class="header-title"
-            [dragSource]="dnd.dragSource"
-        >
-            <span>{{ fieldInfo.name | fieldName: field.key }}</span>
-        </div>
-        <div
-            class="options"
-            [class.visible]="isMouseInside"
-        >
-            <button
-                *ngIf="fieldInfo.childrenConfig"
-                mat-icon-button
-                title="Add Field"
-                [matMenuTriggerFor]="fieldOptionsMenu"
-                [matMenuTriggerData]="{ options: fieldOptions, selected: addField }"
+    @if (isEditMode$ | async) {
+        <header>
+            <div
+                class="header-title"
+                [dragSource]="dnd.dragSource"
             >
-                <mat-icon>add</mat-icon>
-            </button>
-
-            <button
-                *ngIf="fieldOptions.length"
-                mat-icon-button
-                title="Replace"
-                [matMenuTriggerFor]="fieldOptionsMenu"
-                [matMenuTriggerData]="{ options: fieldOptions, selected: replaceField }"
+                <span>{{ fieldInfo.name | fieldName: field.key }}</span>
+            </div>
+            <div
+                class="options"
+                [class.visible]="isMouseInside"
             >
-                <mat-icon>sync</mat-icon>
-            </button>
-
-            <button
-                mat-icon-button
-                title="Move Up"
-                [disabled]="isFirstChild"
-                (click)="onMoveUp()"
-            >
-                <mat-icon>arrow_upward</mat-icon>
-            </button>
-
-            <button
-                mat-icon-button
-                title="Move Down"
-                [disabled]="isLastChild"
-                (click)="onMoveDown()"
-            >
-                <mat-icon>arrow_downward</mat-icon>
-            </button>
-
-            <button
-                class="delete-btn"
-                mat-icon-button
-                title="Remove"
-                (click)="onRemove(); $event.stopPropagation()"
-            >
-                <mat-icon>delete</mat-icon>
-            </button>
-        </div>
-    </header>
+                @if (fieldInfo.childrenConfig) {
+                    <button
+                        mat-icon-button
+                        title="Add Field"
+                        [matMenuTriggerFor]="fieldOptionsMenu"
+                        [matMenuTriggerData]="{ options: fieldOptions, selected: addField }"
+                    >
+                        <mat-icon>add</mat-icon>
+                    </button>
+                }
+                @if (fieldOptions.length) {
+                    <button
+                        mat-icon-button
+                        title="Replace"
+                        [matMenuTriggerFor]="fieldOptionsMenu"
+                        [matMenuTriggerData]="{ options: fieldOptions, selected: replaceField }"
+                    >
+                        <mat-icon>sync</mat-icon>
+                    </button>
+                }
+                <button
+                    mat-icon-button
+                    title="Move Up"
+                    [disabled]="isFirstChild"
+                    (click)="onMoveUp()"
+                >
+                    <mat-icon>arrow_upward</mat-icon>
+                </button>
+                <button
+                    mat-icon-button
+                    title="Move Down"
+                    [disabled]="isLastChild"
+                    (click)="onMoveDown()"
+                >
+                    <mat-icon>arrow_downward</mat-icon>
+                </button>
+                <button
+                    class="delete-btn"
+                    mat-icon-button
+                    title="Remove"
+                    (click)="onRemove(); $event.stopPropagation()"
+                >
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </header>
+    }
 
     <div
         class="editor-field-content"
@@ -89,24 +89,25 @@
         let-options="options"
         let-selected="selected"
     >
-        <ng-container *ngFor="let option of options">
-            <button
-                *ngIf="isCategoryOption(option)"
-                mat-menu-item
-                [matMenuTriggerFor]="fieldCategoryOptionsMenu"
-                [matMenuTriggerData]="{ children: option.children, selected }"
-                menu
-            >
-                {{ option.displayName }}
-            </button>
-
-            <ng-container
-                *ngIf="isTypeOption(option)"
-                [ngTemplateOutlet]="fieldTypeOption"
-                [ngTemplateOutletContext]="{ option, selected }"
-            >
-            </ng-container>
-        </ng-container>
+        @for (option of options; track option.displayName) {
+            @if (isCategoryOption(option)) {
+                <button
+                    mat-menu-item
+                    [matMenuTriggerFor]="fieldCategoryOptionsMenu"
+                    [matMenuTriggerData]="{ children: option.children, selected }"
+                    menu
+                >
+                    {{ option.displayName }}
+                </button>
+            }
+            @if (isTypeOption(option)) {
+                <ng-container
+                    [ngTemplateOutlet]="fieldTypeOption"
+                    [ngTemplateOutletContext]="{ option, selected }"
+                >
+                </ng-container>
+            }
+        }
     </ng-template>
 </mat-menu>
 
@@ -119,14 +120,15 @@
         let-children="children"
         let-selected="selected"
     >
-        <ng-container *ngFor="let child of children">
-            <ng-container
-                *ngIf="isTypeOption(child)"
-                [ngTemplateOutlet]="fieldTypeOption"
-                [ngTemplateOutletContext]="{ option: child, selected }"
-            >
-            </ng-container>
-        </ng-container>
+        @for (child of children; track child.name) {
+            @if (isTypeOption(child)) {
+                <ng-container
+                    [ngTemplateOutlet]="fieldTypeOption"
+                    [ngTemplateOutletContext]="{ option: child, selected }"
+                >
+                </ng-container>
+            }
+        }
     </ng-template>
 </mat-menu>
 

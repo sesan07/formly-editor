@@ -1,5 +1,5 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
@@ -22,14 +22,12 @@ import { IChipListProperty } from './chip-list-property.types';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
-        NgIf,
         TreeItemComponent,
         PropertyKeyComponent,
         NgTemplateOutlet,
         MatFormField,
         MatLabel,
         MatChipGrid,
-        NgFor,
         MatChipRow,
         MatIcon,
         MatChipRemove,

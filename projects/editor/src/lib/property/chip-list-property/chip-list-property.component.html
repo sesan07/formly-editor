@@ -1,32 +1,31 @@
-<editor-tree-item
-    *ngIf="treeMode; else simplifiedView"
-    [treeLevel]="treeLevel"
-    [hasOptions]="hasOptions"
-    [optionsMenu]="optionsMenu"
->
-    <ng-container headerContent>
-        <editor-property-key
-            [key]="property.key"
-            [isEditable]="property.isKeyEditable"
-            (keyChange)="onKeyChanged($event)"
-        >
-            <span>:</span>
-        </editor-property-key>
-        <span class="property-field">
-            <ng-container
-                [ngTemplateOutlet]="formField"
-                [ngTemplateOutletContext]="{ appearance: 'outline' }"
-            ></ng-container>
-        </span>
-    </ng-container>
-</editor-tree-item>
-
-<ng-template #simplifiedView>
+@if (treeMode) {
+    <editor-tree-item
+        [treeLevel]="treeLevel"
+        [hasOptions]="hasOptions"
+        [optionsMenu]="optionsMenu"
+    >
+        <ng-container headerContent>
+            <editor-property-key
+                [key]="property.key"
+                [isEditable]="property.isKeyEditable"
+                (keyChange)="onKeyChanged($event)"
+            >
+                <span>:</span>
+            </editor-property-key>
+            <span class="property-field">
+                <ng-container
+                    [ngTemplateOutlet]="formField"
+                    [ngTemplateOutletContext]="{ appearance: 'outline' }"
+                ></ng-container>
+            </span>
+        </ng-container>
+    </editor-tree-item>
+} @else {
     <ng-container
         [ngTemplateOutlet]="formField"
         [ngTemplateOutletContext]="{ appearance: 'fill', showLabel: true }"
     ></ng-container>
-</ng-template>
+}
 
 <ng-template
     #formField
@@ -38,9 +37,11 @@
         [class.simplified]="!treeMode"
         subscriptSizing="dynamic"
     >
-        <mat-label *ngIf="showLabel">{{ property.name ? property.name : property.key }}</mat-label>
+        @if (showLabel) {
+            <mat-label>{{ property.name ? property.name : property.key }}</mat-label>
+        }
         <mat-chip-grid #chipList>
-            <ng-container *ngFor="let option of selectedOptions$ | async">
+            @for (option of selectedOptions$ | async; track option) {
                 <mat-chip-row
                     selectable
                     (removed)="onRemove(option)"
@@ -48,7 +49,7 @@
                     {{ option }}
                     <mat-icon matChipRemove>cancel</mat-icon>
                 </mat-chip-row>
-            </ng-container>
+            }
             <input
                 #input
                 #autocompleteTrigger="matAutocompleteTrigger"
@@ -65,12 +66,11 @@
             class="editor-mat"
             (optionSelected)="onSelected($event)"
         >
-            <mat-option
-                *ngFor="let option of filteredOptions$ | async"
-                [value]="option"
-            >
-                {{ option }}
-            </mat-option>
+            @for (option of filteredOptions$ | async; track option) {
+                <mat-option [value]="option">
+                    {{ option }}
+                </mat-option>
+            }
         </mat-autocomplete>
     </mat-form-field>
 </ng-template>
@@ -79,13 +79,14 @@
     #optionsMenu="matMenu"
     class="editor-mat"
 >
-    <button
-        *ngIf="property.isRemovable"
-        mat-menu-item
-        color="warn"
-        (click)="remove.emit()"
-    >
-        <mat-icon>remove</mat-icon>
-        <span>Remove</span>
-    </button>
+    @if (property.isRemovable) {
+        <button
+            mat-menu-item
+            color="warn"
+            (click)="remove.emit()"
+        >
+            <mat-icon>remove</mat-icon>
+            <span>Remove</span>
+        </button>
+    }
 </mat-menu>

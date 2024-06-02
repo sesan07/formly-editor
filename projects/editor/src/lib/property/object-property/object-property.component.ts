@@ -1,4 +1,4 @@
-import { NgFor, NgIf, NgSwitch, NgSwitchCase, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
@@ -27,7 +27,6 @@ import { IObjectProperty } from './object-property.types';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
-        NgIf,
         TreeItemComponent,
         PropertyKeyComponent,
         NgTemplateOutlet,
@@ -36,9 +35,6 @@ import { IObjectProperty } from './object-property.types';
         MatIconButton,
         MatMenuTrigger,
         MatIcon,
-        NgFor,
-        NgSwitch,
-        NgSwitchCase,
         ArrayPropertyComponent,
         BooleanPropertyComponent,
         ChipListPropertyComponent,

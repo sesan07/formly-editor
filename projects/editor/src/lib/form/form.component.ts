@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
@@ -13,7 +13,7 @@ import { debounceTime, filter, map, shareReplay, takeUntil, tap } from 'rxjs/ope
 import { FormlyFormComponent } from '../custom-formly/formly-form/formly-form.component';
 import { EditorService } from '../editor.service';
 import { FieldOption, IEditorFormlyField, IForm } from '../editor.types';
-import { isCategoryOption, isTypeOption, trackByFieldId } from '../editor.utils';
+import { isCategoryOption, isTypeOption } from '../editor.utils';
 import { selectActiveForm } from '../state/state.selectors';
 import { IEditorState } from '../state/state.types';
 import { TextEditorComponent } from '../text-editor/text-editor.component';
@@ -28,7 +28,6 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     standalone: true,
     imports: [
         ToolbarComponent,
-        NgIf,
         MatTabGroup,
         MatTab,
         FormlyFormComponent,
@@ -39,7 +38,6 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
         MatIcon,
         MatMenu,
         MatMenuContent,
-        NgFor,
         MatMenuItem,
         NgTemplateOutlet,
         AsyncPipe,
@@ -61,7 +59,6 @@ export class FormComponent implements OnInit, OnDestroy {
     public formGroup: UntypedFormGroup = new UntypedFormGroup({});
     public options: FormlyFormOptions = {};
 
-    trackByFieldId = trackByFieldId;
     isCategoryOption = isCategoryOption;
     isTypeOption = isTypeOption;
 

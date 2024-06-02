@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import {
     AfterContentInit,
     ChangeDetectionStrategy,
@@ -22,7 +21,7 @@ import { SideBarPosition } from './sidebar.types';
     styleUrls: ['./sidebar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [NgIf],
+    imports: [],
 })
 export class SidebarComponent implements AfterContentInit {
     @Input() position: SideBarPosition;

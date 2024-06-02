@@ -1,8 +1,9 @@
-<div
-    class="sidebar-divider"
-    *ngIf="index !== 0"
-    (mousedown)="onSectionMouseDown($event)"
-></div>
+@if (index !== 0) {
+    <div
+        class="sidebar-divider"
+        (mousedown)="onSectionMouseDown($event)"
+    ></div>
+}
 <div
     class="sidebar-section-wrapper"
     [class.first]="index === 0"

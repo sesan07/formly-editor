@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, debounceTime, takeUntil } from 'rxjs';
 
-import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
@@ -20,7 +20,7 @@ import { StylesService } from './edit-field/styles/styles.service';
 import { IStylesConfig } from './edit-field/styles/styles.types';
 import { EditorService } from './editor.service';
 import { FieldOption, IDefaultForm, IEditorFormlyField, IForm } from './editor.types';
-import { isCategoryOption, isTypeOption, trackByDisplayName, trackByFieldId } from './editor.utils';
+import { isCategoryOption, isTypeOption } from './editor.utils';
 import { FieldNamePipe } from './field-name/field-name.pipe';
 import { FieldTreeItemComponent } from './field-tree-item/field-tree-item.component';
 import { saveFile } from './file/file.utils';
@@ -52,13 +52,11 @@ import { IEditorState } from './state/state.types';
     styleUrls: ['./editor.component.scss'],
     standalone: true,
     imports: [
-        NgIf,
         SidebarComponent,
         SidebarSectionComponent,
         MatIconButton,
         MatMenuTrigger,
         MatIcon,
-        NgFor,
         FieldTreeItemComponent,
         AddFieldTreeItemComponent,
         MatTabGroup,
@@ -98,8 +96,6 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public canShowMain = false;
 
-    trackByFieldId = trackByFieldId;
-    trackByDisplayName = trackByDisplayName;
     isCategoryOption = isCategoryOption;
     isTypeOption = isTypeOption;
 
@@ -112,8 +108,6 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
         private _dialog: MatDialog,
         private _stylesService: StylesService
     ) {}
-
-    trackFormById: TrackByFunction<IForm> = (_, form: IForm) => form.id;
 
     ngOnInit(): void {
         this._loadState();

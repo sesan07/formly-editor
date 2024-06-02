@@ -44,48 +44,47 @@
     let-classProperty="classProperty"
     let-categories="categories"
 >
-    <mat-accordion *ngIf="categories">
-        <mat-expansion-panel
-            *ngFor="let breakpoint of stylesConfig.breakpoints"
-            [expanded]="!breakpoint.value"
-        >
-            <mat-expansion-panel-header>
-                <mat-panel-title [title]="breakpoint.description">{{ breakpoint.name }}</mat-panel-title>
-            </mat-expansion-panel-header>
-            <mat-accordion>
-                <ng-container *ngFor="let category of categories[breakpoint.value]; trackBy: trackByName">
-                    <mat-expansion-panel
-                        class="category-panel"
-                        *ngIf="category.options.length"
+    @if (categories) {
+        <mat-accordion>
+            @for (breakpoint of stylesConfig.breakpoints; track breakpoint.name) {
+                <mat-expansion-panel [expanded]="!breakpoint.value">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title [title]="breakpoint.description">{{ breakpoint.name }}</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-accordion>
+                        @for (category of categories[breakpoint.value]; track category.name) {
+                            @if (category.options.length) {
+                                <mat-expansion-panel class="category-panel">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>{{ category.name }}</mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    @for (option of category.options; track option.name) {
+                                        <editor-style-option
+                                            [class.col-span-2]="option.spanWidth"
+                                            [field]="editField"
+                                            [option]="option"
+                                            [propertyPath]="classProperty"
+                                            [breakpointAffix]="stylesConfig.breakpointAffix"
+                                            [breakpoint]="breakpoint"
+                                            [allBreakpoints]="stylesConfig.breakpoints"
+                                            [classNameCategories]="allClassNameCategories"
+                                            [fieldGroupClassNameCategories]="allFieldGroupClassNameCategories"
+                                            (optionChanged)="fieldChanged.emit($event)"
+                                        ></editor-style-option>
+                                    }
+                                </mat-expansion-panel>
+                            }
+                        }
+                    </mat-accordion>
+                    <editor-chip-list-property
+                        [target]="editField"
+                        [property]="getChipListProperty(classProperty, breakpoint)"
+                        [path]="[classProperty]"
+                        (targetChanged)="fieldChanged.emit($event)"
                     >
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>{{ category.name }}</mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <ng-container *ngFor="let option of category.options; trackBy: trackByOptionName">
-                            <editor-style-option
-                                [class.col-span-2]="option.spanWidth"
-                                [field]="editField"
-                                [option]="option"
-                                [propertyPath]="classProperty"
-                                [breakpointAffix]="stylesConfig.breakpointAffix"
-                                [breakpoint]="breakpoint"
-                                [allBreakpoints]="stylesConfig.breakpoints"
-                                [classNameCategories]="allClassNameCategories"
-                                [fieldGroupClassNameCategories]="allFieldGroupClassNameCategories"
-                                (optionChanged)="fieldChanged.emit($event)"
-                            ></editor-style-option>
-                        </ng-container>
-                    </mat-expansion-panel>
-                </ng-container>
-            </mat-accordion>
-
-            <editor-chip-list-property
-                [target]="editField"
-                [property]="getChipListProperty(classProperty, breakpoint)"
-                [path]="[classProperty]"
-                (targetChanged)="fieldChanged.emit($event)"
-            >
-            </editor-chip-list-property>
-        </mat-expansion-panel>
-    </mat-accordion>
+                    </editor-chip-list-property>
+                </mat-expansion-panel>
+            }
+        </mat-accordion>
+    }
 </ng-template>

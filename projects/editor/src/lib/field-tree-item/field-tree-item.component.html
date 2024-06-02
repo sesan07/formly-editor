@@ -12,20 +12,23 @@
 >
     <ng-container headerContent>
         <span class="header">
-            <mat-icon *ngIf="this.field.hide">visibility_off</mat-icon>
+            @if (this.field.hide) {
+                <mat-icon>visibility_off</mat-icon>
+            }
             <span>{{ fieldInfo.name | fieldName: field.key }}</span>
         </span>
     </ng-container>
 
     <ng-container childrenContent>
-        <editor-field-tree-item
-            *ngFor="let child of childFields; let index = index; trackBy: trackByFieldId"
-            [field]="child"
-            [index]="index"
-            [fieldOptions]="fieldOptions"
-            [treeLevel]="treeLevel + 1"
-        >
-        </editor-field-tree-item>
+        @for (child of childFields; track child._info.fieldId; let index = $index) {
+            <editor-field-tree-item
+                [field]="child"
+                [index]="index"
+                [fieldOptions]="fieldOptions"
+                [treeLevel]="treeLevel + 1"
+            >
+            </editor-field-tree-item>
+        }
     </ng-container>
 </editor-tree-item>
 
@@ -40,24 +43,26 @@
     #optionsMenu="matMenu"
     class="editor-mat"
 >
-    <button
-        *ngIf="fieldInfo.childrenConfig"
-        mat-menu-item
-        [matMenuTriggerFor]="fieldOptionsMenu"
-        [matMenuTriggerData]="{ options: fieldOptions, selected: addField }"
-    >
-        <mat-icon>add</mat-icon>
-        <span>Add</span>
-    </button>
-    <button
-        *ngIf="fieldOptions.length"
-        mat-menu-item
-        [matMenuTriggerFor]="fieldOptionsMenu"
-        [matMenuTriggerData]="{ options: fieldOptions, selected: replaceField }"
-    >
-        <mat-icon>sync</mat-icon>
-        <span>Replace</span>
-    </button>
+    @if (fieldInfo.childrenConfig) {
+        <button
+            mat-menu-item
+            [matMenuTriggerFor]="fieldOptionsMenu"
+            [matMenuTriggerData]="{ options: fieldOptions, selected: addField }"
+        >
+            <mat-icon>add</mat-icon>
+            <span>Add</span>
+        </button>
+    }
+    @if (fieldOptions.length) {
+        <button
+            mat-menu-item
+            [matMenuTriggerFor]="fieldOptionsMenu"
+            [matMenuTriggerData]="{ options: fieldOptions, selected: replaceField }"
+        >
+            <mat-icon>sync</mat-icon>
+            <span>Replace</span>
+        </button>
+    }
     <button
         mat-menu-item
         (click)="onRemove()"
@@ -76,24 +81,25 @@
         let-options="options"
         let-selected="selected"
     >
-        <ng-container *ngFor="let option of options">
-            <button
-                *ngIf="isCategoryOption(option)"
-                mat-menu-item
-                [matMenuTriggerFor]="fieldCategoryOptionsMenu"
-                [matMenuTriggerData]="{ children: option.children, selected }"
-                menu
-            >
-                {{ option.displayName }}
-            </button>
-
-            <ng-container
-                *ngIf="isTypeOption(option)"
-                [ngTemplateOutlet]="fieldTypeOption"
-                [ngTemplateOutletContext]="{ option, selected }"
-            >
-            </ng-container>
-        </ng-container>
+        @for (option of options; track option.displayName) {
+            @if (isCategoryOption(option)) {
+                <button
+                    mat-menu-item
+                    [matMenuTriggerFor]="fieldCategoryOptionsMenu"
+                    [matMenuTriggerData]="{ children: option.children, selected }"
+                    menu
+                >
+                    {{ option.displayName }}
+                </button>
+            }
+            @if (isTypeOption(option)) {
+                <ng-container
+                    [ngTemplateOutlet]="fieldTypeOption"
+                    [ngTemplateOutletContext]="{ option, selected }"
+                >
+                </ng-container>
+            }
+        }
     </ng-template>
 </mat-menu>
 
@@ -106,14 +112,15 @@
         let-children="children"
         let-selected="selected"
     >
-        <ng-container *ngFor="let child of children">
-            <ng-container
-                *ngIf="isTypeOption(child)"
-                [ngTemplateOutlet]="fieldTypeOption"
-                [ngTemplateOutletContext]="{ option: child, selected }"
-            >
-            </ng-container>
-        </ng-container>
+        @for (child of children; track child.displayName) {
+            @if (isTypeOption(child)) {
+                <ng-container
+                    [ngTemplateOutlet]="fieldTypeOption"
+                    [ngTemplateOutletContext]="{ option: child, selected }"
+                >
+                </ng-container>
+            }
+        }
     </ng-template>
 </mat-menu>
 

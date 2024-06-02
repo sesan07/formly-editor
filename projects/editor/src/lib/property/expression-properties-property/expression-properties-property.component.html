@@ -19,32 +19,34 @@
 
     <div class="simplified-wrapper">
         <mat-accordion>
-            <mat-expansion-panel *ngFor="let child of childProperties; let index = index; trackBy: trackByKey">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <editor-property-key
-                            [key]="child.key"
-                            [isEditable]="true"
-                            (keyChange)="onChildKeyChanged(child.key, $event)"
+            @for (child of childProperties; track child.key; let index = $index) {
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <editor-property-key
+                                [key]="child.key"
+                                [isEditable]="true"
+                                (keyChange)="onChildKeyChanged(child.key, $event)"
+                            >
+                            </editor-property-key>
+                        </mat-panel-title>
+                        <button
+                            class="simple-remove-btn"
+                            mat-icon-button
+                            color="warn"
+                            (click)="onRemoveChild(child.key)"
                         >
-                        </editor-property-key>
-                    </mat-panel-title>
-                    <button
-                        class="simple-remove-btn"
-                        mat-icon-button
-                        color="warn"
-                        (click)="onRemoveChild(child.key)"
-                    >
-                        <mat-icon>remove</mat-icon>
-                    </button>
-                </mat-expansion-panel-header>
-                <editor-text-editor
-                    [value]="child.value"
-                    [mode]="'application/javascript'"
-                    [updateOn]="'blur'"
-                    (valueChange)="onChildValueChanged(child.key, $event)"
-                ></editor-text-editor>
-            </mat-expansion-panel>
+                            <mat-icon>remove</mat-icon>
+                        </button>
+                    </mat-expansion-panel-header>
+                    <editor-text-editor
+                        [value]="child.value"
+                        [mode]="'application/javascript'"
+                        [updateOn]="'blur'"
+                        (valueChange)="onChildValueChanged(child.key, $event)"
+                    ></editor-text-editor>
+                </mat-expansion-panel>
+            }
         </mat-accordion>
     </div>
 </mat-expansion-panel>

@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -16,16 +15,7 @@ import { IBooleanProperty } from './boolean-property.types';
     styleUrls: ['./boolean-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [
-        NgIf,
-        TreeItemComponent,
-        PropertyKeyComponent,
-        MatCheckbox,
-        ReactiveFormsModule,
-        MatMenu,
-        MatMenuItem,
-        MatIcon,
-    ],
+    imports: [TreeItemComponent, PropertyKeyComponent, MatCheckbox, ReactiveFormsModule, MatMenu, MatMenuItem, MatIcon],
 })
 export class BooleanPropertyComponent extends BasePropertyDirective<IBooleanProperty, boolean> {
     public formControl: FormControl<boolean>;

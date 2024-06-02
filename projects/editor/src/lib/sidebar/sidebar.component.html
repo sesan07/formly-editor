@@ -1,13 +1,15 @@
-<div
-    class="sidebar-divider"
-    *ngIf="position === typeOfSideBarPosition.RIGHT"
-    (mousedown)="onSidebarMouseDown($event)"
-></div>
+@if (position === typeOfSideBarPosition.RIGHT) {
+    <div
+        class="sidebar-divider"
+        (mousedown)="onSidebarMouseDown($event)"
+    ></div>
+}
 <div class="sidebar-content">
     <ng-content></ng-content>
 </div>
-<div
-    class="sidebar-divider"
-    *ngIf="position === typeOfSideBarPosition.LEFT"
-    (mousedown)="onSidebarMouseDown($event)"
-></div>
+@if (position === typeOfSideBarPosition.LEFT) {
+    <div
+        class="sidebar-divider"
+        (mousedown)="onSidebarMouseDown($event)"
+    ></div>
+}

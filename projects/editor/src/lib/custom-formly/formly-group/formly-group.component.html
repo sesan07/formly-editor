@@ -1,22 +1,23 @@
-<div
-    *ngIf="field._info; else basicField"
-    [id]="field._info.fieldId"
-    [class]="this.field.fieldGroupClassName || ''"
->
-    <editor-formly-field
-        *ngFor="let f of field.fieldGroup; let index = index; let first = first; let last = last"
-        [field]="f"
-        [index]="index"
-        [isFirstChild]="first"
-        [isLastChild]="last"
-    >
-    </editor-formly-field>
-</div>
-
-<ng-template #basicField>
-    <formly-field
-        *ngFor="let f of field.fieldGroup"
+@if (field._info) {
+    <div
+        [id]="field._info.fieldId"
         [class]="this.field.fieldGroupClassName || ''"
-        [field]="f"
-    ></formly-field>
-</ng-template>
+    >
+        @for (f of field.fieldGroup; track f._info.fieldId; let index = $index; let first = $first; let last = $last) {
+            <editor-formly-field
+                [field]="f"
+                [index]="index"
+                [isFirstChild]="first"
+                [isLastChild]="last"
+            >
+            </editor-formly-field>
+        }
+    </div>
+} @else {
+    @for (f of field.fieldGroup; track f) {
+        <formly-field
+            [class]="this.field.fieldGroupClassName || ''"
+            [field]="f"
+        ></formly-field>
+    }
+}

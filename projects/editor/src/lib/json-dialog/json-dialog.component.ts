@@ -1,5 +1,5 @@
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { NgIf } from '@angular/common';
+
 import { AfterViewInit, Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
@@ -30,7 +30,6 @@ import { JSONValidatorDirective } from './json-validator/json-validator.directiv
         MatDialogContent,
         ReactiveFormsModule,
         FormsModule,
-        NgIf,
         MatFormField,
         MatLabel,
         MatInput,

@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgZone, OnChanges, SimpleChanges } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { FormlyConfig, FormlyForm, FormlyFormBuilder } from '@ngx-formly/core';
@@ -16,7 +16,7 @@ import { FormlyFieldTemplates } from '../formly.template';
     providers: [FormlyFormBuilder, FormlyFieldTemplates],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [NgIf, MatIcon, RootFormlyFieldComponent, AsyncPipe],
+    imports: [MatIcon, RootFormlyFieldComponent, AsyncPipe],
 })
 export class FormlyFormComponent extends FormlyForm implements OnChanges {
     public override field: IEditorFormlyFieldConfigCache = {

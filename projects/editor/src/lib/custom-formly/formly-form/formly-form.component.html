@@ -1,10 +1,8 @@
-<div
-    *ngIf="formError$ | async as formError; else rootField"
-    class="form-error"
->
-    <mat-icon color="warn">error</mat-icon>
-    <span>{{ formError }}</span>
-</div>
-<ng-template #rootField>
+@if (formError$ | async; as formError) {
+    <div class="form-error">
+        <mat-icon color="warn">error</mat-icon>
+        <span>{{ formError }}</span>
+    </div>
+} @else {
     <editor-root-formly-field [field]="field"></editor-root-formly-field>
-</ng-template>
+}

@@ -1,35 +1,34 @@
-<editor-tree-item
-    *ngIf="treeMode; else simplifiedView"
-    [treeLevel]="treeLevel"
-    [hasOptions]="hasOptions"
-    [optionsMenu]="optionsMenu"
->
-    <ng-container headerContent>
-        <editor-property-key
-            [key]="property.key"
-            [isEditable]="property.isKeyEditable"
-            (keyChange)="onKeyChanged($event)"
-        >
-            <span>:</span>
-        </editor-property-key>
-        <mat-form-field
-            class="property-field"
-            appearance="outline"
-            subscriptSizing="dynamic"
-        >
-            <textarea
-                matInput
-                cdkTextareaAutosize
-                [cdkAutosizeMaxRows]="property.maxRows"
-                [cdkAutosizeMinRows]="property.minRows"
-                [formControl]="formControl"
+@if (treeMode) {
+    <editor-tree-item
+        [treeLevel]="treeLevel"
+        [hasOptions]="hasOptions"
+        [optionsMenu]="optionsMenu"
+    >
+        <ng-container headerContent>
+            <editor-property-key
+                [key]="property.key"
+                [isEditable]="property.isKeyEditable"
+                (keyChange)="onKeyChanged($event)"
             >
-            </textarea>
-        </mat-form-field>
-    </ng-container>
-</editor-tree-item>
-
-<ng-template #simplifiedView>
+                <span>:</span>
+            </editor-property-key>
+            <mat-form-field
+                class="property-field"
+                appearance="outline"
+                subscriptSizing="dynamic"
+            >
+                <textarea
+                    matInput
+                    cdkTextareaAutosize
+                    [cdkAutosizeMaxRows]="property.maxRows"
+                    [cdkAutosizeMinRows]="property.minRows"
+                    [formControl]="formControl"
+                >
+                </textarea>
+            </mat-form-field>
+        </ng-container>
+    </editor-tree-item>
+} @else {
     <mat-form-field subscriptSizing="dynamic">
         <mat-label>{{ property.name ? property.name : property.key }}</mat-label>
         <textarea
@@ -41,19 +40,20 @@
         >
         </textarea>
     </mat-form-field>
-</ng-template>
+}
 
 <mat-menu
     #optionsMenu="matMenu"
     class="editor-mat"
 >
-    <button
-        *ngIf="property.isRemovable"
-        mat-menu-item
-        color="warn"
-        (click)="remove.emit()"
-    >
-        <mat-icon>remove</mat-icon>
-        <span>Remove</span>
-    </button>
+    @if (property.isRemovable) {
+        <button
+            mat-menu-item
+            color="warn"
+            (click)="remove.emit()"
+        >
+            <mat-icon>remove</mat-icon>
+            <span>Remove</span>
+        </button>
+    }
 </mat-menu>
