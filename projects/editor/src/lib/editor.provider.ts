@@ -29,8 +29,9 @@ const defaultGenericTypeOption: FieldTypeOption = {
     defaultConfig: {},
 };
 
-export function provideEditor(): EnvironmentProviders {
+export function provideEditor(configProviders?: EnvironmentProviders): EnvironmentProviders {
     return makeEnvironmentProviders([
+        ...(configProviders ? [configProviders] : []),
         {
             provide: MAT_DIALOG_DEFAULT_OPTIONS,
             useValue: {
