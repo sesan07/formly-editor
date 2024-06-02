@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IEditorFormlyField } from '../editor.types';
 
 @Pipe({
     name: 'fieldName',

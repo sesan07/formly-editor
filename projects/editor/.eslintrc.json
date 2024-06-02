@@ -8,8 +8,9 @@
         "createDefaultProgram": true
       },
       "extends": [
-        "plugin:@angular-eslint/ng-cli-compat",
-        "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
@@ -29,6 +30,7 @@
             "style": "camelCase"
           }
         ],
+        "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/naming-convention": [
           "error",
           {

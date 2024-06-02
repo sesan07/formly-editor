@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, Directive, Input, OnInit, TrackByFunction, inject, forwardRef } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Directive,
+    Input,
+    OnInit,
+    TrackByFunction,
+    inject,
+    forwardRef,
+} from '@angular/core';
 import { FormlyConfig } from '@ngx-formly/core';
 import { get, isEmpty, startCase } from 'lodash-es';
 
@@ -20,7 +29,12 @@ import { BooleanPropertyComponent } from '../boolean-property/boolean-property.c
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatIconButton } from '@angular/material/button';
-import { MatExpansionPanel, MatExpansionPanelHeader, MatAccordion, MatExpansionPanelTitle } from '@angular/material/expansion';
+import {
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatAccordion,
+    MatExpansionPanelTitle,
+} from '@angular/material/expansion';
 import { PropertyKeyComponent } from '../property-key/property-key.component';
 import { TreeItemComponent } from '../../tree-item/tree-item.component';
 import { NgIf, NgTemplateOutlet, NgFor, NgSwitch, NgSwitchCase } from '@angular/common';
@@ -144,29 +158,29 @@ export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayP
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
-    NgIf,
-    TreeItemComponent,
-    PropertyKeyComponent,
-    NgTemplateOutlet,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    MatIconButton,
-    MatMenuTrigger,
-    MatIcon,
-    NgFor,
-    NgSwitch,
-    NgSwitchCase,
-    ArrayPropertyComponent,
-    BooleanPropertyComponent,
-    ChipListPropertyComponent,
-    SelectPropertyComponent,
-    TextareaPropertyComponent,
-    ExpressionPropertiesPropertyComponent,
-    forwardRef(() => ValidatorsPropertyComponent),
-    InputPropertyComponent,
-    MatMenu,
-    MatMenuItem,
-],
+        NgIf,
+        TreeItemComponent,
+        PropertyKeyComponent,
+        NgTemplateOutlet,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatIconButton,
+        MatMenuTrigger,
+        MatIcon,
+        NgFor,
+        NgSwitch,
+        NgSwitchCase,
+        ArrayPropertyComponent,
+        BooleanPropertyComponent,
+        ChipListPropertyComponent,
+        SelectPropertyComponent,
+        TextareaPropertyComponent,
+        ExpressionPropertiesPropertyComponent,
+        forwardRef(() => ValidatorsPropertyComponent),
+        InputPropertyComponent,
+        MatMenu,
+        MatMenuItem,
+    ],
 })
 export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjectProperty, Record<string, unknown>> {
     @Input() useExpansionPanel = true;
@@ -184,6 +198,7 @@ export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjec
         const childValue: any = getDefaultPropertyValue(type);
         const newValue = {
             ...this.currentValue,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             '': childValue,
         };
         this._modifyValue(newValue);
@@ -321,7 +336,7 @@ export class ValidatorsPropertyComponent extends BasePropertyDirective<IValidato
         const validation: string[] = [];
         const validationObjects: Record<string, IValidationData> = {};
         const messages = this._getCurrentMessages();
-        data.forEach(({ name, options, message }, i) => {
+        data.forEach(({ name, options, message }) => {
             if (isEmpty(options)) {
                 validation.push(name);
             } else {

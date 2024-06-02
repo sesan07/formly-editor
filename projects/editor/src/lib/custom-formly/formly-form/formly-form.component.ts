@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, NgZone, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgZone, SimpleChanges, OnChanges } from '@angular/core';
 import { FormlyConfig, FormlyForm, FormlyFormBuilder } from '@ngx-formly/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -18,7 +18,7 @@ import { FormlyGroupComponent } from '../formly-group/formly-group.component';
     standalone: true,
     imports: [NgIf, MatIcon, RootFormlyFieldComponent, AsyncPipe],
 })
-export class FormlyFormComponent extends FormlyForm {
+export class FormlyFormComponent extends FormlyForm implements OnChanges {
     public override field: IEditorFormlyFieldConfigCache = {
         _info: {
             name: undefined,

@@ -8,7 +8,12 @@ import { PropertyKeyComponent } from '../property-key/property-key.component';
 import { NgFor } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
-import { MatExpansionPanel, MatExpansionPanelHeader, MatAccordion, MatExpansionPanelTitle } from '@angular/material/expansion';
+import {
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatAccordion,
+    MatExpansionPanelTitle,
+} from '@angular/material/expansion';
 
 @Component({
     selector: 'editor-expression-properties-property',
@@ -56,7 +61,7 @@ export class ExpressionPropertiesPropertyComponent extends BasePropertyDirective
         this._modifyValue(value, [...this.path, key]);
     }
 
-    protected _onChanged(isFirstChange: boolean): void {
+    protected _onChanged(): void {
         this._populateChildrenFromTarget();
     }
 
@@ -65,6 +70,6 @@ export class ExpressionPropertiesPropertyComponent extends BasePropertyDirective
     }
 
     private _populateChildrenFromTarget() {
-        this.childProperties = Object.entries(this.currentValue).map(([key, value], i) => ({ key, value }));
+        this.childProperties = Object.entries(this.currentValue).map(([key, value]) => ({ key, value }));
     }
 }
