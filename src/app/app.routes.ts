@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { provideEditorConfig } from '@sesan07/ngx-formly-editor';
 
-import { bootstrapEditorConfig } from './bootstrap/bootstrap-editor.config';
+import { bootstrapEditorConfig } from './bootstrap/bootstrap.config';
 import { provideBootstrap } from './bootstrap/bootstrap.provider';
-import { materialEditorConfig } from './material/material-editor.config';
+import { materialEditorConfig } from './material/material.config';
 import { provideMaterial } from './material/material.provider';
 
 export const routes: Routes = [

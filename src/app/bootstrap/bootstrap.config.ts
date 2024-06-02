@@ -9,7 +9,7 @@ import {
     radioTypeConfig,
     selectTypeConfig,
     textareaTypeConfig,
-} from '../material/material-editor.config';
+} from '../material/material.config';
 import { defaultForm } from './bootstrap.form';
 
 export const bootstrapEditorConfig: EditorConfig = {
