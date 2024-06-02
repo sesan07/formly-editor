@@ -35,7 +35,10 @@ export class SidebarSectionComponent implements OnChanges {
     private readonly _dividerHeight = 4;
     private _height: number;
 
-    constructor(private _cdRef: ChangeDetectorRef, elementRef: ElementRef<HTMLElement>) {
+    constructor(
+        private _cdRef: ChangeDetectorRef,
+        elementRef: ElementRef<HTMLElement>
+    ) {
         this.element = elementRef.nativeElement;
     }
 

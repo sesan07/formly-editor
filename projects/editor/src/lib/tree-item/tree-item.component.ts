@@ -21,13 +21,7 @@ import { NgFor, NgIf } from '@angular/common';
     animations: [matExpansionAnimations.bodyExpansion],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [
-        NgFor,
-        MatIconButton,
-        NgIf,
-        MatIcon,
-        MatMenuTrigger,
-    ],
+    imports: [NgFor, MatIconButton, NgIf, MatIcon, MatMenuTrigger],
 })
 export class TreeItemComponent implements OnInit {
     @Input() treeLevel = 0;

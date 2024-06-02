@@ -8,8 +8,8 @@ describe('ChipListPropertyComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-    imports: [ChipListPropertyComponent],
-}).compileComponents();
+            imports: [ChipListPropertyComponent],
+        }).compileComponents();
     });
 
     beforeEach(() => {

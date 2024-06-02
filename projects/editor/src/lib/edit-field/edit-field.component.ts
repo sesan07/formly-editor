@@ -30,13 +30,7 @@ import { ObjectPropertyComponent } from '../property/cyclic-properties/cyclic-pr
     styleUrls: ['./edit-field.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [
-        MatTabGroup,
-        MatTab,
-        ObjectPropertyComponent,
-        StylesComponent,
-        AsyncPipe,
-    ],
+    imports: [MatTabGroup, MatTab, ObjectPropertyComponent, StylesComponent, AsyncPipe],
 })
 export class EditFieldComponent implements OnInit, OnDestroy {
     @Input() resizeTabHeader$: Observable<void>;
@@ -53,7 +47,10 @@ export class EditFieldComponent implements OnInit, OnDestroy {
     private _cachedField: IEditorFormlyField;
     private _cachedProperty: IObjectProperty;
 
-    constructor(private _editorService: EditorService, private _store: Store<IEditorState>) {}
+    constructor(
+        private _editorService: EditorService,
+        private _store: Store<IEditorState>
+    ) {}
 
     ngOnInit(): void {
         const activeField$ = this._store.select(selectActiveField).pipe(takeUntil(this._destroy$), shareReplay());

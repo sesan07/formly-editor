@@ -24,16 +24,7 @@ import { NgIf, NgFor } from '@angular/common';
     styleUrls: ['./style-option.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [
-        NgIf,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        NgFor,
-        MatOption,
-        MatIconButton,
-        MatIcon,
-    ],
+    imports: [NgIf, MatFormField, MatLabel, MatSelect, NgFor, MatOption, MatIconButton, MatIcon],
 })
 export class StyleOptionComponent implements OnChanges {
     @Input() field: IEditorFormlyField;

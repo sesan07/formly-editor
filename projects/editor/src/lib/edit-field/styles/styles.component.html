@@ -22,7 +22,7 @@
             [ngTemplateOutlet]="breakpoints"
             [ngTemplateOutletContext]="{
                 classProperty: typeOfClassProperty.CLASS_NAME,
-                categories: this.classNameCategories
+                categories: this.classNameCategories,
             }"
         >
         </ng-container>
@@ -32,7 +32,7 @@
             [ngTemplateOutlet]="breakpoints"
             [ngTemplateOutletContext]="{
                 classProperty: typeOfClassProperty.FIELD_GROUP_CLASS_NAME,
-                categories: this.fieldGroupClassNameCategories
+                categories: this.fieldGroupClassNameCategories,
             }"
         >
         </ng-container>

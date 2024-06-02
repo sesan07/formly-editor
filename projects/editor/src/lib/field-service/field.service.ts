@@ -14,7 +14,10 @@ export class FieldService {
     private _wrappers: string[];
     private _wrapperPropertiesMap: Record<string, IProperty[]>;
 
-    constructor(@Inject(EDITOR_CONFIG) private _config: EditorConfig, private _stylesService: StylesService) {
+    constructor(
+        @Inject(EDITOR_CONFIG) private _config: EditorConfig,
+        private _stylesService: StylesService
+    ) {
         const typeOptions = getTypeOptions(_config.fieldOptions);
         this._fieldConfigMap = typeOptions.reduce(
             (acc, option) => ({

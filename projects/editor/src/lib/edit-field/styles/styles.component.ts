@@ -17,7 +17,12 @@ import { StylesService } from './styles.service';
 import { IStylesConfig, ClassProperty, IBreakpoint, IStyleOptionCategory, IStyleOption } from './styles.types';
 import { ChipListPropertyComponent } from '../../property/chip-list-property/chip-list-property.component';
 import { StyleOptionComponent } from './style-option/style-option.component';
-import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import {
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+} from '@angular/material/expansion';
 import { NgTemplateOutlet, NgIf, NgFor } from '@angular/common';
 import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';

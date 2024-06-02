@@ -21,7 +21,7 @@
             [ngTemplateOutlet]="childPropertiesView"
             [ngTemplateOutletContext]="{
                 childrenTreeLevel: childrenTreeLevel,
-                childrenTreeMode: treeMode
+                childrenTreeMode: treeMode,
             }"
         ></ng-container>
     </ng-container>
@@ -34,7 +34,7 @@
                 [ngTemplateOutlet]="childPropertiesView"
                 [ngTemplateOutletContext]="{
                     childrenTreeLevel: childrenTreeLevel,
-                    childrenTreeMode: childrenTreeMode
+                    childrenTreeMode: childrenTreeMode,
                 }"
             ></ng-container>
         </div>
@@ -73,7 +73,7 @@
                     [ngTemplateOutlet]="childPropertiesView"
                     [ngTemplateOutletContext]="{
                         childrenTreeLevel: 0,
-                        childrenTreeMode: childrenTreeMode
+                        childrenTreeMode: childrenTreeMode,
                     }"
                 ></ng-container>
             </div>

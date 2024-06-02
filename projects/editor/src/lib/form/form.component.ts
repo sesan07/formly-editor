@@ -71,7 +71,10 @@ export class FormComponent implements OnInit, OnDestroy {
 
     private readonly _debounceTime: number = 100;
 
-    constructor(private _editorService: EditorService, private _store: Store<IEditorState>) {}
+    constructor(
+        private _editorService: EditorService,
+        private _store: Store<IEditorState>
+    ) {}
 
     public ngOnInit(): void {
         this.fieldOptions = this._editorService.fieldOptions;
