@@ -2,10 +2,10 @@
  * Public API Surface of editor
  */
 
+export * from './lib/property/array-property/array-property.types';
 export * from './lib/property/boolean-property/boolean-property.types';
-export * from './lib/property/cyclic-properties/array-property.types';
-export * from './lib/property/cyclic-properties/object-property.types';
 export * from './lib/property/input-property/input-property.types';
+export * from './lib/property/object-property/object-property.types';
 export { IBaseProperty, IProperty } from './lib/property/property.types';
 export * from './lib/property/select-property/select-property.types';
 

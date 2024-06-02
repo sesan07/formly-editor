@@ -1,9 +1,9 @@
 import { produce } from 'immer';
 import { get, set, unset } from 'lodash-es';
-import { IArrayProperty } from './cyclic-properties/array-property.types';
-import { IObjectProperty } from './cyclic-properties/object-property.types';
+import { IArrayProperty } from './array-property/array-property.types';
 import { IExpressionPropertiesProperty } from './expression-properties-property/expression-properties-property.types';
 import { IInputProperty } from './input-property/input-property.types';
+import { IObjectProperty } from './object-property/object-property.types';
 import { IBaseProperty, IProperty, IPropertyChange, PropertyChangeType, PropertyType } from './property.types';
 import { ITextareaProperty } from './textarea-property/textarea-property.types';
 
