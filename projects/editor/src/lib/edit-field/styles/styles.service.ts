@@ -1,19 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 
 import { tailwindConfig } from './styles-config/tailwind.styles-config';
 import { ClassProperty, IBreakpoint, IStyleOption, IStyleOptionCategory, IStylesConfig } from './styles.types';
 import { formatVariant } from './styles.utils';
+import { EDITOR_CONFIG, EditorConfig } from '../../editor.types';
 
-@Injectable({
-    providedIn: 'root',
-})
+@Injectable()
 export class StylesService {
     stylesConfig: IStylesConfig;
     classNames: string[];
     fieldGroupClassNames: string[];
 
-    setup(stylesConfig?: IStylesConfig): void {
-        this.stylesConfig = stylesConfig ?? tailwindConfig;
+    constructor(@Inject(EDITOR_CONFIG) editorConfig: EditorConfig) {
+        this.stylesConfig = editorConfig.stylesConfig ?? tailwindConfig;
         this.classNames = this._getPropertyClasses(ClassProperty.CLASS_NAME);
         this.fieldGroupClassNames = this._getPropertyClasses(ClassProperty.FIELD_GROUP_CLASS_NAME);
     }

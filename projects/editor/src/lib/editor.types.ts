@@ -2,6 +2,7 @@ import { InjectionToken } from '@angular/core';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 
 import { FormlyFieldConfigCache } from './custom-formly/fieldconfig.cache';
+import { IStylesConfig } from './edit-field/styles/styles.types';
 import { IProperty } from './property/property.types';
 
 export enum EditorFieldType {
@@ -91,6 +92,8 @@ export interface EditorConfig {
     genericTypeOption?: FieldTypeOption;
     validatorOptions?: ValidatorOption[];
     asyncValidatorOptions?: ValidatorOption[];
+    defaultForm?: IDefaultForm;
+    stylesConfig?: IStylesConfig;
     onDisplayFields?: (fields: IEditorFormlyField[], model: Record<string, any>) => IEditorFormlyField[];
 }
 
