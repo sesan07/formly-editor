@@ -1,19 +1,19 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
-import { MatChipInputEvent, MatChipGrid, MatChipRow, MatChipRemove, MatChipInput } from '@angular/material/chips';
+import { MatAutocomplete, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatChipGrid, MatChipInput, MatChipInputEvent, MatChipRemove, MatChipRow } from '@angular/material/chips';
+import { MatOption } from '@angular/material/core';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem } from '@angular/material/menu';
 import { BehaviorSubject } from 'rxjs';
 
-import { BasePropertyDirective } from '../base-property.directive';
-import { IChipListProperty } from './chip-list-property.types';
-import { MatMenu, MatMenuItem } from '@angular/material/menu';
-import { MatOption } from '@angular/material/core';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { PropertyKeyComponent } from '../property-key/property-key.component';
 import { TreeItemComponent } from '../../tree-item/tree-item.component';
-import { NgIf, NgTemplateOutlet, NgFor, AsyncPipe } from '@angular/common';
+import { BasePropertyDirective } from '../base-property.directive';
+import { PropertyKeyComponent } from '../property-key/property-key.component';
+import { IChipListProperty } from './chip-list-property.types';
 
 @Component({
     selector: 'editor-chip-list-property',

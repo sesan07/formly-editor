@@ -1,16 +1,16 @@
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-
-import { BasePropertyDirective } from '../base-property.directive';
-import { ITextareaProperty } from './textarea-property.types';
-import { MatIcon } from '@angular/material/icon';
-import { MatMenu, MatMenuItem } from '@angular/material/menu';
-import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { PropertyKeyComponent } from '../property-key/property-key.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatMenu, MatMenuItem } from '@angular/material/menu';
+
 import { TreeItemComponent } from '../../tree-item/tree-item.component';
-import { NgIf } from '@angular/common';
+import { BasePropertyDirective } from '../base-property.directive';
+import { PropertyKeyComponent } from '../property-key/property-key.component';
+import { ITextareaProperty } from './textarea-property.types';
 
 @Component({
     selector: 'editor-textarea-property',

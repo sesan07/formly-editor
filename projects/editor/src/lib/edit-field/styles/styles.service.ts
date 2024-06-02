@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
+import { tailwindConfig } from './styles-config/tailwind.styles-config';
 import { ClassProperty, IBreakpoint, IStyleOption, IStyleOptionCategory, IStylesConfig } from './styles.types';
 import { formatVariant } from './styles.utils';
-import { tailwindConfig } from './styles-config/tailwind.styles-config';
 
 @Injectable({
     providedIn: 'root',

@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
@@ -8,10 +9,9 @@ import {
     OnChanges,
     SimpleChanges,
 } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 
 import { SidebarComponent } from '../sidebar.component';
-import { MatIcon } from '@angular/material/icon';
-import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'editor-sidebar-section',

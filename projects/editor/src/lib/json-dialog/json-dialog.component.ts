@@ -1,5 +1,8 @@
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { NgIf } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
 import {
     MAT_DIALOG_DATA,
     MatDialogActions,
@@ -8,9 +11,6 @@ import {
     MatDialogRef,
     MatDialogTitle,
 } from '@angular/material/dialog';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { NgIf } from '@angular/common';
-import { MatButton } from '@angular/material/button';
 import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';

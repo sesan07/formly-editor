@@ -1,7 +1,8 @@
 import { createAction, props } from '@ngrx/store';
+import { FormlyFieldConfig } from '@ngx-formly/core';
+
 import { FieldTypeOption, GetDefaultField, IEditorFormlyField } from '../editor.types';
 import { IPropertyChange } from '../property/property.types';
-import { FormlyFieldConfig } from '@ngx-formly/core';
 import { IEditorState } from './state.types';
 
 export interface SetState {

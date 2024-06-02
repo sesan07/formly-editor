@@ -11,24 +11,24 @@ import {
     Output,
     SimpleChanges,
 } from '@angular/core';
+import { MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { DndService, DragSourceDirective, DropTargetDirective } from '@ng-dnd/core';
+import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 
-import { DndService, DragSourceDirective, DropTargetDirective } from '@ng-dnd/core';
-import { Store } from '@ngrx/store';
 import { EditorService } from '../editor.service';
 import { DropAction, FieldOption, IEditorFieldInfo, IEditorFormlyField } from '../editor.types';
 import { isCategoryOption, isTypeOption, trackByFieldId } from '../editor.utils';
 import { FieldDragDrop } from '../field-drag-drop/field-drag-drop';
+import { FieldDropOverlayComponent } from '../field-drag-drop/field-drop-overlay/field-drop-overlay.component';
+import { FieldNamePipe } from '../field-name/field-name.pipe';
 import { getFieldChildren } from '../form/form.utils';
 import { selectActiveField } from '../state/state.selectors';
 import { IEditorState } from '../state/state.types';
-import { FieldNamePipe } from '../field-name/field-name.pipe';
-import { MatMenu, MatMenuItem, MatMenuTrigger, MatMenuContent } from '@angular/material/menu';
-import { FieldDropOverlayComponent } from '../field-drag-drop/field-drop-overlay/field-drop-overlay.component';
 
+import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
-import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from '@angular/common';
 import { TreeItemComponent } from '../tree-item/tree-item.component';
 
 @Component({

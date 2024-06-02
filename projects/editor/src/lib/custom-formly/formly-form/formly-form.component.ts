@@ -1,13 +1,13 @@
-import { ChangeDetectionStrategy, Component, NgZone, SimpleChanges, OnChanges } from '@angular/core';
+import { AsyncPipe, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, Component, NgZone, OnChanges, SimpleChanges } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 import { FormlyConfig, FormlyForm, FormlyFormBuilder } from '@ngx-formly/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { EditorFieldType, IEditorFormlyFieldConfigCache } from '../../editor.types';
-import { FormlyFieldTemplates } from '../formly.template';
 import { RootFormlyFieldComponent } from '../formly-field/formly-field.component';
-import { MatIcon } from '@angular/material/icon';
-import { NgIf, AsyncPipe } from '@angular/common';
 import { FormlyGroupComponent } from '../formly-group/formly-group.component';
+import { FormlyFieldTemplates } from '../formly.template';
 
 @Component({
     selector: 'editor-formly-form',

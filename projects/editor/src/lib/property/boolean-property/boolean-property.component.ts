@@ -1,14 +1,14 @@
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-
-import { BasePropertyDirective } from '../base-property.directive';
-import { IBooleanProperty } from './boolean-property.types';
+import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem } from '@angular/material/menu';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { PropertyKeyComponent } from '../property-key/property-key.component';
+
 import { TreeItemComponent } from '../../tree-item/tree-item.component';
-import { NgIf } from '@angular/common';
+import { BasePropertyDirective } from '../base-property.directive';
+import { PropertyKeyComponent } from '../property-key/property-key.component';
+import { IBooleanProperty } from './boolean-property.types';
 
 @Component({
     selector: 'editor-boolean-property',

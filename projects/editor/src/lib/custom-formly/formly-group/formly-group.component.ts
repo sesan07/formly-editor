@@ -1,8 +1,9 @@
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FieldType, FormlyModule } from '@ngx-formly/core';
+
 import { IEditorFormlyField } from '../../editor.types';
 import { FormlyFieldComponent } from '../formly-field/formly-field.component';
-import { NgIf, NgFor } from '@angular/common';
 
 @Component({
     selector: 'editor-formly-group',

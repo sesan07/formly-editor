@@ -10,23 +10,24 @@ import {
     TrackByFunction,
 } from '@angular/core';
 
-import { IEditorFormlyField } from '../../editor.types';
-import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
-import { IPropertyChange, PropertyType } from '../../property/property.types';
-import { StylesService } from './styles.service';
-import { IStylesConfig, ClassProperty, IBreakpoint, IStyleOptionCategory, IStyleOption } from './styles.types';
-import { ChipListPropertyComponent } from '../../property/chip-list-property/chip-list-property.component';
-import { StyleOptionComponent } from './style-option/style-option.component';
+import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import {
     MatAccordion,
     MatExpansionPanel,
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
 } from '@angular/material/expansion';
-import { NgTemplateOutlet, NgIf, NgFor } from '@angular/common';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
-import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+
+import { IEditorFormlyField } from '../../editor.types';
+import { ChipListPropertyComponent } from '../../property/chip-list-property/chip-list-property.component';
+import { IChipListProperty } from '../../property/chip-list-property/chip-list-property.types';
+import { IPropertyChange, PropertyType } from '../../property/property.types';
+import { StyleOptionComponent } from './style-option/style-option.component';
+import { StylesService } from './styles.service';
+import { ClassProperty, IBreakpoint, IStyleOption, IStyleOptionCategory, IStylesConfig } from './styles.types';
 
 @Component({
     selector: 'editor-styles',

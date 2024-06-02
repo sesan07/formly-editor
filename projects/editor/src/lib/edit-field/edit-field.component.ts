@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -8,21 +9,20 @@ import {
     Output,
     ViewChild,
 } from '@angular/core';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
+
 import { map, shareReplay, takeUntil, tap } from 'rxjs/operators';
 import { EditorService } from '../editor.service';
-
 import { IEditorFormlyField } from '../editor.types';
+import { ObjectPropertyComponent } from '../property/cyclic-properties/cyclic-properties.component';
 import { IObjectProperty } from '../property/cyclic-properties/object-property.types';
 import { IPropertyChange, PropertyType } from '../property/property.types';
 import { getDefaultProperty, initRootProperty } from '../property/property.utils';
 import { selectActiveField } from '../state/state.selectors';
 import { IEditorState } from '../state/state.types';
-import { AsyncPipe } from '@angular/common';
 import { StylesComponent } from './styles/styles.component';
-import { ObjectPropertyComponent } from '../property/cyclic-properties/cyclic-properties.component';
 
 @Component({
     selector: 'editor-edit-field',
