@@ -1,3 +1,4 @@
+import { NgFor, NgIf } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -7,16 +8,16 @@ import {
     Output,
     SimpleChanges,
 } from '@angular/core';
+import { MatIconButton } from '@angular/material/button';
+import { MatOption } from '@angular/material/core';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatSelect } from '@angular/material/select';
+
 import { IEditorFormlyField } from '../../../editor.types';
 import { IPropertyChange, PropertyChangeType } from '../../../property/property.types';
 import { BreakpointAffix, ClassProperty, IBreakpoint, IStyleOption, IStyleOptionCategory } from '../styles.types';
 import { findVariant, formatVariant } from '../styles.utils';
-import { MatIcon } from '@angular/material/icon';
-import { MatIconButton } from '@angular/material/button';
-import { MatOption } from '@angular/material/core';
-import { MatSelect } from '@angular/material/select';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { NgIf, NgFor } from '@angular/common';
 
 @Component({
     selector: 'editor-style-option',

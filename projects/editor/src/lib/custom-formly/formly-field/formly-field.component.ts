@@ -1,3 +1,4 @@
+import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -12,6 +13,9 @@ import {
     Renderer2,
     ViewContainerRef,
 } from '@angular/core';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { DndService, DragPreviewDirective, DragSourceDirective, DropTargetDirective } from '@ng-dnd/core';
 import { Store } from '@ngrx/store';
 import { FormlyConfig, FormlyField } from '@ngx-formly/core';
@@ -21,15 +25,11 @@ import { EditorService } from '../../editor.service';
 import { DropAction, FieldOption, IEditorFieldInfo, IEditorFormlyField } from '../../editor.types';
 import { getKeyPath, isCategoryOption, isTypeOption } from '../../editor.utils';
 import { FieldDragDrop } from '../../field-drag-drop/field-drag-drop';
+import { FieldDropOverlayComponent } from '../../field-drag-drop/field-drop-overlay/field-drop-overlay.component';
+import { FieldNamePipe } from '../../field-name/field-name.pipe';
 import { selectActiveForm } from '../../state/state.selectors';
 import { IEditorState } from '../../state/state.types';
 import { FormlyFieldTemplates } from '../formly.template';
-import { FieldNamePipe } from '../../field-name/field-name.pipe';
-import { FieldDropOverlayComponent } from '../../field-drag-drop/field-drop-overlay/field-drop-overlay.component';
-import { MatIcon } from '@angular/material/icon';
-import { MatMenuTrigger, MatMenu, MatMenuContent, MatMenuItem } from '@angular/material/menu';
-import { MatIconButton } from '@angular/material/button';
-import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'editor-root-formly-field',

@@ -1,8 +1,8 @@
+import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
-import { FieldArrayType, FormlyModule } from '@ngx-formly/core';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatIconButton, MatButton } from '@angular/material/button';
-import { NgIf, NgFor } from '@angular/common';
+import { FieldArrayType, FormlyModule } from '@ngx-formly/core';
 
 @Component({
     selector: 'app-repeating-section-type',

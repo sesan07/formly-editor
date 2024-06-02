@@ -1,14 +1,14 @@
+import { NgFor } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatIconButton } from '@angular/material/button';
+import { MatOption } from '@angular/material/core';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatSelect } from '@angular/material/select';
 
 import { BasePropertyDirective } from '../base-property.directive';
 import { ISelectProperty, ISelectPropertyOption } from './select-property.types';
-import { MatIcon } from '@angular/material/icon';
-import { MatIconButton } from '@angular/material/button';
-import { MatOption } from '@angular/material/core';
-import { NgFor } from '@angular/common';
-import { MatSelect } from '@angular/material/select';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 
 @Component({
     selector: 'editor-select-property',

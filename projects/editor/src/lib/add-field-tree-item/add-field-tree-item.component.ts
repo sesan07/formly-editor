@@ -1,13 +1,13 @@
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { DndService, DragSourceDirective } from '@ng-dnd/core';
 import { BehaviorSubject } from 'rxjs';
+
 import { EditorService } from '../editor.service';
 import { DropAction, FieldOption, IEditorFormlyField } from '../editor.types';
 import { isCategoryOption, isTypeOption, trackByDisplayName } from '../editor.utils';
 import { FieldDragDrop } from '../field-drag-drop/field-drag-drop';
-
 import { TreeItemComponent } from '../tree-item/tree-item.component';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'editor-add-field-tree-item',

@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import {
     AfterContentInit,
     ChangeDetectionStrategy,
@@ -14,7 +15,6 @@ import {
 
 import { SidebarSectionComponent } from './sidebar-section/sidebar-section.component';
 import { SideBarPosition } from './sidebar.types';
-import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'editor-sidebar',

@@ -1,6 +1,6 @@
+import { NgIf } from '@angular/common';
 import { Component, HostBinding, Input } from '@angular/core';
 import { FieldDropPosition, FieldDropWidth } from '../field-drag-drop.types';
-import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'editor-field-drop-overlay',

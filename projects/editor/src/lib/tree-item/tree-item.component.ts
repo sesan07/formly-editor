@@ -1,3 +1,4 @@
+import { NgFor, NgIf } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -8,11 +9,10 @@ import {
     OnInit,
     Output,
 } from '@angular/core';
-import { matExpansionAnimations, MatExpansionPanelState } from '@angular/material/expansion';
-import { MatMenuPanel, MatMenuTrigger } from '@angular/material/menu';
-import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
-import { NgFor, NgIf } from '@angular/common';
+import { MatExpansionPanelState, matExpansionAnimations } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuPanel, MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'editor-tree-item',

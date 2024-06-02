@@ -5,39 +5,39 @@ import {
     Input,
     OnInit,
     TrackByFunction,
-    inject,
     forwardRef,
+    inject,
 } from '@angular/core';
 import { FormlyConfig } from '@ngx-formly/core';
 import { get, isEmpty, startCase } from 'lodash-es';
 
+import { NgFor, NgIf, NgSwitch, NgSwitchCase, NgTemplateOutlet } from '@angular/common';
+import { MatIconButton } from '@angular/material/button';
+import {
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+} from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+
 import { EDITOR_CONFIG, ValidatorOption } from '../../editor.types';
+import { TreeItemComponent } from '../../tree-item/tree-item.component';
 import { BasePropertyDirective } from '../base-property.directive';
+import { BooleanPropertyComponent } from '../boolean-property/boolean-property.component';
+import { ChipListPropertyComponent } from '../chip-list-property/chip-list-property.component';
+import { ExpressionPropertiesPropertyComponent } from '../expression-properties-property/expression-properties-property.component';
+import { InputPropertyComponent } from '../input-property/input-property.component';
 import { createTextProperty } from '../input-property/input-property.types';
+import { PropertyKeyComponent } from '../property-key/property-key.component';
 import { IProperty, IPropertyChange, PropertyType } from '../property.types';
 import { getDefaultPropertyFromValue, getDefaultPropertyValue, modifyPropertyTarget } from '../property.utils';
+import { SelectPropertyComponent } from '../select-property/select-property.component';
+import { TextareaPropertyComponent } from '../textarea-property/textarea-property.component';
 import { IArrayProperty } from './array-property.types';
 import { IObjectProperty, createObjectProperty } from './object-property.types';
 import { IValidationConfig, IValidationData, IValidatorsProperty, IValidatorsValue } from './validators-property.types';
-import { InputPropertyComponent } from '../input-property/input-property.component';
-import { ExpressionPropertiesPropertyComponent } from '../expression-properties-property/expression-properties-property.component';
-import { TextareaPropertyComponent } from '../textarea-property/textarea-property.component';
-import { SelectPropertyComponent } from '../select-property/select-property.component';
-import { ChipListPropertyComponent } from '../chip-list-property/chip-list-property.component';
-import { BooleanPropertyComponent } from '../boolean-property/boolean-property.component';
-
-import { MatIcon } from '@angular/material/icon';
-import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
-import { MatIconButton } from '@angular/material/button';
-import {
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    MatAccordion,
-    MatExpansionPanelTitle,
-} from '@angular/material/expansion';
-import { PropertyKeyComponent } from '../property-key/property-key.component';
-import { TreeItemComponent } from '../../tree-item/tree-item.component';
-import { NgIf, NgTemplateOutlet, NgFor, NgSwitch, NgSwitchCase } from '@angular/common';
 
 @Directive()
 export abstract class ObjectArrayPropertyDirective<P extends IArrayProperty | IObjectProperty, V>

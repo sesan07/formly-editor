@@ -1,5 +1,5 @@
-import { IObjectProperty } from './object-property.types';
 import { IBaseProperty } from '../property.types';
+import { IObjectProperty } from './object-property.types';
 
 export type IValidatorsProperty = IBaseProperty;
 

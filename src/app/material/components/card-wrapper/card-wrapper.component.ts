@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { FieldWrapper } from '@ngx-formly/core';
 import { NgIf } from '@angular/common';
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { Component } from '@angular/core';
+import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { FieldWrapper } from '@ngx-formly/core';
 
 @Component({
     selector: 'app-card-wrapper',

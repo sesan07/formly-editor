@@ -1,19 +1,19 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { trackByKey } from '../../editor.utils';
-
-import { BasePropertyDirective } from '../base-property.directive';
-import { IExpressionPropertiesProperty, IExpressionProperty } from './expression-properties-property.types';
-import { TextEditorComponent } from '../../text-editor/text-editor.component';
-import { PropertyKeyComponent } from '../property-key/property-key.component';
 import { NgFor } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import {
+    MatAccordion,
     MatExpansionPanel,
     MatExpansionPanelHeader,
-    MatAccordion,
     MatExpansionPanelTitle,
 } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+
+import { trackByKey } from '../../editor.utils';
+import { TextEditorComponent } from '../../text-editor/text-editor.component';
+import { BasePropertyDirective } from '../base-property.directive';
+import { PropertyKeyComponent } from '../property-key/property-key.component';
+import { IExpressionPropertiesProperty, IExpressionProperty } from './expression-properties-property.types';
 
 @Component({
     selector: 'editor-expression-properties-property',

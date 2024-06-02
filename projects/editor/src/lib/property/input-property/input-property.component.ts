@@ -1,16 +1,16 @@
+import { LowerCasePipe, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatMenu, MatMenuItem } from '@angular/material/menu';
 
+import { TreeItemComponent } from '../../tree-item/tree-item.component';
 import { BasePropertyDirective } from '../base-property.directive';
+import { PropertyKeyComponent } from '../property-key/property-key.component';
 import { PropertyType } from '../property.types';
 import { IInputProperty } from './input-property.types';
-import { MatIcon } from '@angular/material/icon';
-import { MatMenu, MatMenuItem } from '@angular/material/menu';
-import { MatInput } from '@angular/material/input';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { PropertyKeyComponent } from '../property-key/property-key.component';
-import { TreeItemComponent } from '../../tree-item/tree-item.component';
-import { NgIf, LowerCasePipe } from '@angular/common';
 
 @Component({
     selector: 'editor-input-property',

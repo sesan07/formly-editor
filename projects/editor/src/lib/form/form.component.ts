@@ -1,23 +1,23 @@
+import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatTab, MatTabContent, MatTabGroup } from '@angular/material/tabs';
+import { Store } from '@ngrx/store';
 import { FormlyFormOptions } from '@ngx-formly/core';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, filter, map, shareReplay, takeUntil, tap } from 'rxjs/operators';
 
+import { FormlyFormComponent } from '../custom-formly/formly-form/formly-form.component';
 import { EditorService } from '../editor.service';
 import { FieldOption, IEditorFormlyField, IForm } from '../editor.types';
-import { cleanField } from './form.utils';
 import { isCategoryOption, isTypeOption, trackByFieldId } from '../editor.utils';
 import { selectActiveForm } from '../state/state.selectors';
-import { Store } from '@ngrx/store';
 import { IEditorState } from '../state/state.types';
-import { MatIcon } from '@angular/material/icon';
-import { MatMenuTrigger, MatMenu, MatMenuContent, MatMenuItem } from '@angular/material/menu';
-import { MatButton } from '@angular/material/button';
 import { TextEditorComponent } from '../text-editor/text-editor.component';
-import { FormlyFormComponent } from '../custom-formly/formly-form/formly-form.component';
-import { MatTabGroup, MatTab, MatTabContent } from '@angular/material/tabs';
-import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { cleanField } from './form.utils';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @Component({

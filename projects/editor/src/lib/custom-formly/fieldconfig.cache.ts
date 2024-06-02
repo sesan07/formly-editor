@@ -1,6 +1,6 @@
 import { ComponentRef, ElementRef, EmbeddedViewRef, Injector, ViewContainerRef } from '@angular/core';
-import { AsyncValidatorFn, ValidatorFn, UntypedFormArray, UntypedFormGroup, AbstractControl } from '@angular/forms';
-import { FormlyFieldConfig, FieldType, FormlyExtension, FormlyFormOptions } from '@ngx-formly/core';
+import { AbstractControl, AsyncValidatorFn, UntypedFormArray, UntypedFormGroup, ValidatorFn } from '@angular/forms';
+import { FieldType, FormlyExtension, FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { Observable, Subscription } from 'rxjs';
 
 export interface FormlyFieldConfigCache extends FormlyFieldConfig {

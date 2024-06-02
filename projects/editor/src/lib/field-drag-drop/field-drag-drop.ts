@@ -3,7 +3,7 @@ import { DndService, DragSource, DropTarget, DropTargetMonitor } from '@ng-dnd/c
 import { BehaviorSubject, Observable, Subject, distinctUntilChanged, takeUntil } from 'rxjs';
 
 import { EditorService } from '../editor.service';
-import { DropAction, DragType, IEditorFormlyField } from '../editor.types';
+import { DragType, DropAction, IEditorFormlyField } from '../editor.types';
 import { FieldDropPosition, FieldDropWidth, IFieldDragData } from './field-drag-drop.types';
 
 export class FieldDragDrop {

@@ -1,3 +1,4 @@
+import { NgClass } from '@angular/common';
 import {
     AfterViewInit,
     Component,
@@ -10,7 +11,6 @@ import {
     ViewChild,
 } from '@angular/core';
 import { isNil } from 'lodash-es';
-import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'editor-property-key',
