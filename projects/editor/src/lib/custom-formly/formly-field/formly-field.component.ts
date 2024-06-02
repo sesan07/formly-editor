@@ -19,7 +19,7 @@ import { MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger } from '@angular/m
 import { DndService, DragPreviewDirective, DragSourceDirective, DropTargetDirective } from '@ng-dnd/core';
 import { Store } from '@ngrx/store';
 import { FormlyConfig, FormlyField } from '@ngx-formly/core';
-import { Observable, Subject, filter, map, takeUntil } from 'rxjs';
+import { Observable, Subject, filter, map } from 'rxjs';
 
 import { EditorService } from '../../editor.service';
 import { DropAction, FieldOption, IEditorFieldInfo, IEditorFormlyField } from '../../editor.types';
@@ -130,10 +130,9 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
             this._editorService.registerKeyPath(this.field, getKeyPath(this.field.formControl));
         }
 
-        const activeForm$ = this._store.select(selectActiveForm).pipe(
-            takeUntil(this._destroy$),
-            filter(form => form?.id === this.fieldInfo.formId)
-        );
+        const activeForm$ = this._store
+            .select(selectActiveForm)
+            .pipe(filter(form => form?.id === this.fieldInfo.formId));
         this.isEditMode$ = activeForm$.pipe(map(form => form.isEditMode));
         this.isActiveField$ = activeForm$.pipe(map(form => form.activeFieldId === this.fieldInfo.fieldId));
 
