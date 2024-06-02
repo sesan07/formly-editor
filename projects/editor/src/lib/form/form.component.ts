@@ -8,7 +8,7 @@ import { EditorService } from '../editor.service';
 import { FieldOption, IEditorFormlyField, IForm } from '../editor.types';
 import { cleanField } from './form.utils';
 import { isCategoryOption, isTypeOption, trackByFieldId } from '../editor.utils';
-import { selectActiveForm, selectActiveFormId } from '../state/state.selectors';
+import { selectActiveForm } from '../state/state.selectors';
 import { Store } from '@ngrx/store';
 import { IEditorState } from '../state/state.types';
 import { MatIcon } from '@angular/material/icon';

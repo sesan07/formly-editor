@@ -200,7 +200,7 @@ const processRemoveField = (state: IEditorState, { fieldId, parent, keyPath }: R
     };
 };
 
-const processSetEditMode = (state: IEditorState, { formId, isEditMode }: SetEditMode): IEditorState => ({
+const processSetEditMode = (state: IEditorState, { isEditMode }: SetEditMode): IEditorState => ({
     ...state,
     formMap: {
         ...state.formMap,

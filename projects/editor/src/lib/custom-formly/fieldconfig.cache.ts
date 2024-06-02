@@ -6,9 +6,9 @@ import { Observable, Subscription } from 'rxjs';
 export interface FormlyFieldConfigCache extends FormlyFieldConfig {
     form?: UntypedFormGroup | UntypedFormArray;
     model?: any;
-    // eslint-disable-next-line @typescript-eslint/ban-types
     formControl?: AbstractControl & {
         _fields?: FormlyFieldConfigCache[];
+        // eslint-disable-next-line @typescript-eslint/ban-types
         _childrenErrors?: { [id: string]: Function };
     };
     parent?: FormlyFieldConfigCache;

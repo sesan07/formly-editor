@@ -146,9 +146,9 @@ export class TextEditorComponent implements AfterViewInit {
         this._onTouch = fn;
     }
 
-    setDescribedByIds(ids: string[]) {}
+    setDescribedByIds() {}
 
-    onContainerClick(event: MouseEvent) {
+    onContainerClick() {
         this.editorInstance.focus();
     }
 
