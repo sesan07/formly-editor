@@ -1,4 +1,5 @@
-import { EditorConfig } from '@sesan07/ngx-formly-editor';
+import { EditorConfig, bootstrapConfig as stylesConfig } from '@sesan07/ngx-formly-editor';
+
 import {
     checkboxTypeConfig,
     formFieldWrapperConfig,
@@ -9,6 +10,7 @@ import {
     selectTypeConfig,
     textareaTypeConfig,
 } from '../material/material-editor.config';
+import { defaultForm } from './bootstrap.form';
 
 export const bootstrapEditorConfig: EditorConfig = {
     fieldOptions: [
@@ -23,4 +25,6 @@ export const bootstrapEditorConfig: EditorConfig = {
         groupTypeConfig,
     ],
     wrapperOptions: [formFieldWrapperConfig],
+    defaultForm,
+    stylesConfig,
 };

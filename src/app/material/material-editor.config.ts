@@ -10,6 +10,8 @@ import {
     createTextProperty,
 } from '@sesan07/ngx-formly-editor';
 
+import { defaultForm } from './material.form';
+
 export const inputTypeConfig: FieldTypeOption = {
     displayName: 'Input',
     name: 'input',
@@ -297,4 +299,5 @@ export const materialEditorConfig: EditorConfig = {
     wrapperOptions: [cardWrapperConfig, formFieldWrapperConfig],
     validatorOptions,
     asyncValidatorOptions,
+    defaultForm,
 };

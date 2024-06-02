@@ -16,8 +16,6 @@ import 'codemirror/mode/javascript/javascript';
 
 import { AddFieldTreeItemComponent } from './add-field-tree-item/add-field-tree-item.component';
 import { EditFieldComponent } from './edit-field/edit-field.component';
-import { StylesService } from './edit-field/styles/styles.service';
-import { IStylesConfig } from './edit-field/styles/styles.types';
 import { EditorService } from './editor.service';
 import { FieldOption, IDefaultForm, IEditorFormlyField, IForm } from './editor.types';
 import { isCategoryOption, isTypeOption } from './editor.utils';
@@ -75,8 +73,6 @@ import { IEditorState } from './state/state.types';
     ],
 })
 export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
-    @Input() defaultForm?: IDefaultForm;
-    @Input() stylesConfig?: IStylesConfig;
     @Input() autosaveStorageKey = 'editor';
     @Input() autosaveDelay = 0;
 
@@ -89,6 +85,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
     public showSidebars = true;
     public toolbarTabIndex: 0 | 1 = 0;
 
+    public defaultForm?: IDefaultForm;
     public activeForm: IForm;
     public activeModel: object;
     public modelProperty: IObjectProperty;
@@ -105,11 +102,11 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         private _editorService: EditorService,
         private _store: Store<IEditorState>,
-        private _dialog: MatDialog,
-        private _stylesService: StylesService
+        private _dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
+        this.defaultForm = this._editorService.config.defaultForm;
         this._loadState();
 
         this.forms$ = this._store.select(selectForms);
@@ -127,8 +124,6 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe(model => (this.activeModel = model));
         this.modelProperty = this._getModelProperty();
         this.fieldOptions = this._editorService.fieldOptions;
-
-        this._stylesService.setup(this.stylesConfig);
     }
 
     ngAfterViewInit(): void {

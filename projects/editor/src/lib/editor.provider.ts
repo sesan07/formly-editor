@@ -5,6 +5,7 @@ import { DndService, provideDnd } from '@ng-dnd/core';
 import { HTML5Backend } from '@ng-dnd/multi-backend';
 import { ActionReducer, META_REDUCERS, provideState, provideStore } from '@ngrx/store';
 
+import { StylesService } from './edit-field/styles/styles.service';
 import { EditorService } from './editor.service';
 import { EDITOR_CONFIG, EditorConfig, EditorFieldType, FieldTypeOption } from './editor.types';
 import { FieldService } from './field-service/field.service';
@@ -74,5 +75,6 @@ export function withConfig(config: EditorConfig): EnvironmentProviders {
         },
         EditorService,
         FieldService,
+        StylesService,
     ]);
 }
