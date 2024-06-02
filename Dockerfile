@@ -2,6 +2,8 @@ FROM node:18.20-alpine as build-env
 
 WORKDIR /app
 
+# temporarily patch ngx-formly until it supports standalone components
+COPY ./patches ./patches
 COPY ./package.json .
 COPY ./package-lock.json .
 # temporarily use '--legacy-peer-deps' until ngrx supports Angular 18
