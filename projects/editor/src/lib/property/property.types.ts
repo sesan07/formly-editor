@@ -1,11 +1,11 @@
+import { IArrayProperty } from './array-property/array-property.types';
 import { IBooleanProperty } from './boolean-property/boolean-property.types';
 import { IChipListProperty } from './chip-list-property/chip-list-property.types';
-import { IArrayProperty } from './cyclic-properties/array-property.types';
-import { IObjectProperty } from './cyclic-properties/object-property.types';
-import { IValidatorsProperty } from './cyclic-properties/validators-property.types';
 import { IExpressionPropertiesProperty } from './expression-properties-property/expression-properties-property.types';
 import { IInputProperty } from './input-property/input-property.types';
+import { IObjectProperty } from './object-property/object-property.types';
 import { ISelectProperty } from './select-property/select-property.types';
+import { IValidatorsProperty } from './validators-property/validators-property.types';
 
 export enum PropertyType {
     ARRAY = 'Array',
