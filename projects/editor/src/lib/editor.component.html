@@ -1,12 +1,11 @@
-<div
-    class="loading-view"
-    *ngIf="!canShowMain"
->
-    <h1>Formly Editor</h1>
-    <div class="lds-dual-ring"></div>
-</div>
+@if (!canShowMain) {
+    <div class="loading-view">
+        <h1>Formly Editor</h1>
+        <div class="lds-dual-ring"></div>
+    </div>
+}
 
-<ng-container *ngIf="canShowMain">
+@if (canShowMain) {
     <editor-sidebar
         class="left editor-mat"
         [class.hidden]="!showSidebars || !activeForm"
@@ -31,20 +30,22 @@
                     </button>
                 </span>
             </div>
-            <div
-                *ngIf="activeForm?.fields.length"
-                mainContent
-                class="tree-container"
-            >
-                <editor-field-tree-item
-                    *ngFor="let field of activeForm.fields; let index = index; trackBy: trackByFieldId"
-                    [field]="field"
-                    [index]="index"
-                    [fieldOptions]="fieldOptions"
-                    [isExpanded]="true"
+            @if (activeForm?.fields.length) {
+                <div
+                    mainContent
+                    class="tree-container"
                 >
-                </editor-field-tree-item>
-            </div>
+                    @for (field of activeForm.fields; track field._info.fieldId; let index = $index) {
+                        <editor-field-tree-item
+                            [field]="field"
+                            [index]="index"
+                            [fieldOptions]="fieldOptions"
+                            [isExpanded]="true"
+                        >
+                        </editor-field-tree-item>
+                    }
+                </div>
+            }
         </editor-sidebar-section>
         <editor-sidebar-section>
             <div
@@ -57,64 +58,87 @@
                 mainContent
                 class="tree-container"
             >
-                <editor-add-field-tree-item
-                    *ngFor="let option of fieldOptions; let index = index; trackBy: trackByDisplayName"
-                    [fieldOption]="option"
-                    [isExpanded]="true"
-                >
-                </editor-add-field-tree-item>
+                @for (option of fieldOptions; track option.displayName; let index = $index) {
+                    <editor-add-field-tree-item
+                        [fieldOption]="option"
+                        [isExpanded]="true"
+                    >
+                    </editor-add-field-tree-item>
+                }
             </div>
         </editor-sidebar-section>
     </editor-sidebar>
-
     <div class="form-view">
-        <ng-container *ngIf="forms$ | async as forms">
-            <mat-tab-group
-                *ngIf="forms.length; else emptyView"
-                class="form-tab-group"
-                mat-stretch-tabs="false"
-                [selectedIndex]="activeFormIndex$ | async"
-                (selectedIndexChange)="onTabChange($event)"
-            >
-                <mat-tab *ngFor="let form of forms; let i = index; trackBy: trackFormById">
-                    <ng-template mat-tab-label>
-                        <div
-                            class="inner-tab-label-content"
-                            (mousedown)="onTabLabelMouseDown($event, i)"
-                        >
-                            <span>{{ form.name }}</span>
-                            <button
-                                class="close-btn"
-                                mat-icon-button
-                                (click)="onRemoveForm(i)"
-                            >
-                                <mat-icon>close</mat-icon>
-                            </button>
-                        </div>
-                    </ng-template>
-                    <editor-form
-                        [form]="form"
-                        (duplicateForm)="onDuplicateForm()"
-                        (exportForm)="onExportForm()"
-                        (toggleSidebars)="showSidebars = !showSidebars"
-                    ></editor-form>
-                </mat-tab>
-            </mat-tab-group>
-            <div
-                class="add-form-btn-wrapper"
-                *ngIf="forms.length"
-            >
-                <button
-                    mat-flat-button
-                    color="primary"
-                    (click)="onAddForm()"
+        @if (forms$ | async; as forms) {
+            @if (forms.length) {
+                <mat-tab-group
+                    class="form-tab-group"
+                    mat-stretch-tabs="false"
+                    [selectedIndex]="activeFormIndex$ | async"
+                    (selectedIndexChange)="onTabChange($event)"
                 >
-                    <mat-icon>add</mat-icon>Add Form
-                </button>
-            </div>
-        </ng-container>
+                    @for (form of forms; track form.id; let i = $index) {
+                        <mat-tab>
+                            <ng-template mat-tab-label>
+                                <div
+                                    class="inner-tab-label-content"
+                                    (mousedown)="onTabLabelMouseDown($event, i)"
+                                >
+                                    <span>{{ form.name }}</span>
+                                    <button
+                                        class="close-btn"
+                                        mat-icon-button
+                                        (click)="onRemoveForm(i)"
+                                    >
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                </div>
+                            </ng-template>
+                            <editor-form
+                                [form]="form"
+                                (duplicateForm)="onDuplicateForm()"
+                                (exportForm)="onExportForm()"
+                                (toggleSidebars)="showSidebars = !showSidebars"
+                            ></editor-form>
+                        </mat-tab>
+                    }
+                </mat-tab-group>
+            } @else {
+                <div class="empty-view">
+                    <h1>Formly Editor</h1>
+                    <button
+                        class="empty-view-btn"
+                        mat-flat-button
+                        color="primary"
+                        (click)="onAddForm()"
+                    >
+                        <mat-icon>add</mat-icon>Add New Form
+                    </button>
+                    @if (defaultForm) {
+                        <button
+                            class="empty-view-btn"
+                            mat-flat-button
+                            color="primary"
+                            (click)="loadDefaultForm()"
+                        >
+                            <mat-icon>add</mat-icon>Load Default Form
+                        </button>
+                    }
+                </div>
+            }
+            @if (forms.length) {
+                <div class="add-form-btn-wrapper">
+                    <button
+                        mat-flat-button
+                        color="primary"
+                        (click)="onAddForm()"
+                    >
+                        <mat-icon>add</mat-icon>Add Form
+                    </button>
+                </div>
+            }
+        }
     </div>
-
     <editor-sidebar
         class="right editor-mat"
         [class.hidden]="!showSidebars || !activeForm"
@@ -124,11 +148,10 @@
         <editor-sidebar-section class="active-field-section">
             <span headerContent>
                 Active Field
-                <span *ngIf="activeField$ | async as activeField">
-                    - {{ activeField._info.name | fieldName: activeField.key }}
-                </span>
+                @if (activeField$ | async; as activeField) {
+                    <span> - {{ activeField._info.name | fieldName: activeField.key }} </span>
+                }
             </span>
-
             <editor-edit-field
                 mainContent
                 [attr.editor-hidden]="!activeForm?.fields.length"
@@ -137,7 +160,6 @@
             >
             </editor-edit-field>
         </editor-sidebar-section>
-
         <editor-sidebar-section [isCollapsed]="true">
             <div
                 class="section-header-content"
@@ -161,7 +183,6 @@
                     </button>
                 </span>
             </div>
-
             <div
                 class="tree-container"
                 mainContent
@@ -177,30 +198,7 @@
             </div>
         </editor-sidebar-section>
     </editor-sidebar>
-</ng-container>
-
-<ng-template #emptyView>
-    <div class="empty-view">
-        <h1>Formly Editor</h1>
-        <button
-            class="empty-view-btn"
-            mat-flat-button
-            color="primary"
-            (click)="onAddForm()"
-        >
-            <mat-icon>add</mat-icon>Add New Form
-        </button>
-        <button
-            *ngIf="defaultForm"
-            class="empty-view-btn"
-            mat-flat-button
-            color="primary"
-            (click)="loadDefaultForm()"
-        >
-            <mat-icon>add</mat-icon>Load Default Form
-        </button>
-    </div>
-</ng-template>
+}
 
 <mat-menu
     #fieldOptionsMenu="matMenu"
@@ -210,24 +208,25 @@
         matMenuContent
         let-options="options"
     >
-        <ng-container *ngFor="let option of options">
-            <button
-                *ngIf="isCategoryOption(option)"
-                mat-menu-item
-                [matMenuTriggerFor]="fieldCategoryOptionsMenu"
-                [matMenuTriggerData]="{ children: option.children }"
-                menu
-            >
-                {{ option.displayName }}
-            </button>
-
-            <ng-container
-                *ngIf="isTypeOption(option)"
-                [ngTemplateOutlet]="fieldTypeOption"
-                [ngTemplateOutletContext]="option"
-            >
-            </ng-container>
-        </ng-container>
+        @for (option of options; track option.displayName) {
+            @if (isCategoryOption(option)) {
+                <button
+                    mat-menu-item
+                    [matMenuTriggerFor]="fieldCategoryOptionsMenu"
+                    [matMenuTriggerData]="{ children: option.children }"
+                    menu
+                >
+                    {{ option.displayName }}
+                </button>
+            }
+            @if (isTypeOption(option)) {
+                <ng-container
+                    [ngTemplateOutlet]="fieldTypeOption"
+                    [ngTemplateOutletContext]="option"
+                >
+                </ng-container>
+            }
+        }
     </ng-template>
 </mat-menu>
 
@@ -239,14 +238,15 @@
         matMenuContent
         let-children="children"
     >
-        <ng-container *ngFor="let child of children">
-            <ng-container
-                *ngIf="isTypeOption(child)"
-                [ngTemplateOutlet]="fieldTypeOption"
-                [ngTemplateOutletContext]="child"
-            >
-            </ng-container>
-        </ng-container>
+        @for (child of children; track child.displayName) {
+            @if (isTypeOption(child)) {
+                <ng-container
+                    [ngTemplateOutlet]="fieldTypeOption"
+                    [ngTemplateOutletContext]="child"
+                >
+                </ng-container>
+            }
+        }
     </ng-template>
 </mat-menu>
 

@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { FieldWrapper } from '@ngx-formly/core';
@@ -7,6 +6,6 @@ import { FieldWrapper } from '@ngx-formly/core';
     selector: 'app-card-wrapper',
     templateUrl: './card-wrapper.component.html',
     standalone: true,
-    imports: [MatCard, MatCardHeader, NgIf, MatCardTitle, MatCardContent],
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent],
 })
 export class CardWrapperComponent extends FieldWrapper {}

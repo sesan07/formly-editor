@@ -1,22 +1,25 @@
-<legend *ngIf="props.label">{{ props.label }}</legend>
-<p *ngIf="props.description">{{ props.description }}</p>
+@if (props.label) {
+    <legend>{{ props.label }}</legend>
+}
+@if (props.description) {
+    <p>{{ props.description }}</p>
+}
 
-<div
-    *ngFor="let field of field.fieldGroup; let i = index"
-    style="display: flex; align-items: baseline"
->
-    <formly-field
-        style="flex-grow: 1"
-        [field]="field"
-    ></formly-field>
-    <button
-        mat-icon-button
-        color="warn"
-        (click)="remove(i)"
-    >
-        <mat-icon>remove</mat-icon>
-    </button>
-</div>
+@for (field of field.fieldGroup; track field; let i = $index) {
+    <div style="display: flex; align-items: baseline">
+        <formly-field
+            style="flex-grow: 1"
+            [field]="field"
+        ></formly-field>
+        <button
+            mat-icon-button
+            color="warn"
+            (click)="remove(i)"
+        >
+            <mat-icon>remove</mat-icon>
+        </button>
+    </div>
+}
 <div style="margin: 16px 0">
     <button
         mat-flat-button

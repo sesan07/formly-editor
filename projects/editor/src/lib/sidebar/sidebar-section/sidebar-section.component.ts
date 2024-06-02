@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
@@ -19,7 +18,7 @@ import { SidebarComponent } from '../sidebar.component';
     styleUrls: ['./sidebar-section.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [NgIf, MatIcon],
+    imports: [MatIcon],
 })
 export class SidebarSectionComponent implements OnChanges {
     @Input() isCollapsed: boolean;

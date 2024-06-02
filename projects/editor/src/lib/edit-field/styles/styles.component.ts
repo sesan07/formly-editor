@@ -7,10 +7,9 @@ import {
     OnInit,
     Output,
     SimpleChanges,
-    TrackByFunction,
 } from '@angular/core';
 
-import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import {
     MatAccordion,
@@ -42,9 +41,7 @@ import { ClassProperty, IBreakpoint, IStyleOption, IStyleOptionCategory, IStyles
         MatTabGroup,
         MatTab,
         NgTemplateOutlet,
-        NgIf,
         MatAccordion,
-        NgFor,
         MatExpansionPanel,
         MatExpansionPanelHeader,
         MatExpansionPanelTitle,
@@ -73,9 +70,6 @@ export class StylesComponent implements OnChanges, OnInit {
     allFieldGroupClassNameCategories: IStyleOptionCategory[];
 
     constructor(private _stylesService: StylesService) {}
-
-    trackByName: TrackByFunction<IStyleOptionCategory> = (_, category) => category.name;
-    trackByOptionName: TrackByFunction<IStyleOption> = (_, option) => option.name;
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.editField && !changes.editField.firstChange) {

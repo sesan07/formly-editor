@@ -1,4 +1,4 @@
-import { LowerCasePipe, NgIf } from '@angular/common';
+import { LowerCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -19,7 +19,6 @@ import { IInputProperty } from './input-property.types';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
-        NgIf,
         TreeItemComponent,
         PropertyKeyComponent,
         MatFormField,

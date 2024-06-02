@@ -1,27 +1,25 @@
-<editor-tree-item
-    class="cursor-pointer"
-    *ngIf="treeMode; else simplifiedView"
-    [treeLevel]="treeLevel"
-    [(isExpanded)]="isExpanded"
-    [isExpandable]="true"
-    [hasOptions]="hasOptions"
-    [optionsMenu]="optionsMenu"
->
-    <editor-property-key
-        headerContent
-        [key]="property.key"
-        [isEditable]="property.isKeyEditable"
-        (keyChange)="onKeyChanged($event)"
+@if (treeMode) {
+    <editor-tree-item
+        class="cursor-pointer"
+        [treeLevel]="treeLevel"
+        [(isExpanded)]="isExpanded"
+        [isExpandable]="true"
+        [hasOptions]="hasOptions"
+        [optionsMenu]="optionsMenu"
     >
-        <span>{{ '[ ' + childProperties.length + ' ]' }}</span>
-    </editor-property-key>
-
-    <ng-container childrenContent>
-        <ng-container *ngTemplateOutlet="childPropertiesContainer"></ng-container>
-    </ng-container>
-</editor-tree-item>
-
-<ng-template #simplifiedView>
+        <editor-property-key
+            headerContent
+            [key]="property.key"
+            [isEditable]="property.isKeyEditable"
+            (keyChange)="onKeyChanged($event)"
+        >
+            <span>{{ '[ ' + childProperties.length + ' ]' }}</span>
+        </editor-property-key>
+        <ng-container childrenContent>
+            <ng-container *ngTemplateOutlet="childPropertiesContainer"></ng-container>
+        </ng-container>
+    </editor-tree-item>
+} @else {
     <mat-expansion-panel
         class="simplified-panel"
         [(expanded)]="isExpanded"
@@ -32,47 +30,51 @@
                     <span>{{ property.name || property.key }}</span>
                     <span>{{ '[ ' + childProperties.length + ' ]' }}</span>
                 </span>
-                <button
-                    *ngIf="canAdd"
-                    mat-icon-button
-                    (click)="onAddChild(property.childProperty.type); $event.stopPropagation()"
-                >
-                    <mat-icon>add</mat-icon>
-                </button>
+                @if (canAdd) {
+                    <button
+                        mat-icon-button
+                        (click)="onAddChild(property.childProperty.type); $event.stopPropagation()"
+                    >
+                        <mat-icon>add</mat-icon>
+                    </button>
+                }
             </span>
         </mat-expansion-panel-header>
         <mat-accordion>
-            <mat-expansion-panel *ngFor="let child of childProperties; let index = index; trackBy: trackByPropertyKey">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>Item {{ index + 1 }}</mat-panel-title>
-                    <button
-                        *ngIf="child.isRemovable"
-                        class="simple-remove-btn"
-                        mat-icon-button
-                        color="warn"
-                        (click)="onRemoveChild(index)"
+            @for (child of childProperties; track trackByPropertyKey(index, child); let index = $index) {
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>Item {{ index + 1 }}</mat-panel-title>
+                        @if (child.isRemovable) {
+                            <button
+                                class="simple-remove-btn"
+                                mat-icon-button
+                                color="warn"
+                                (click)="onRemoveChild(index)"
+                            >
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                        }
+                    </mat-expansion-panel-header>
+                    <ng-container
+                        [ngTemplateOutlet]="childProperty"
+                        [ngTemplateOutletContext]="{ child, index }"
                     >
-                        <mat-icon>remove</mat-icon>
-                    </button>
-                </mat-expansion-panel-header>
-                <ng-container
-                    [ngTemplateOutlet]="childProperty"
-                    [ngTemplateOutletContext]="{ child, index }"
-                >
-                </ng-container>
-            </mat-expansion-panel>
+                    </ng-container>
+                </mat-expansion-panel>
+            }
         </mat-accordion>
     </mat-expansion-panel>
-</ng-template>
+}
 
 <ng-template #childPropertiesContainer>
-    <ng-container *ngFor="let child of childProperties; let index = index; trackBy: trackByPropertyKey">
+    @for (child of childProperties; track trackByPropertyKey(index, child); let index = $index) {
         <ng-container
             [ngTemplateOutlet]="childProperty"
             [ngTemplateOutletContext]="{ child, index }"
         >
         </ng-container>
-    </ng-container>
+    }
 </ng-template>
 
 <ng-template
@@ -80,76 +82,34 @@
     let-child="child"
     let-index="index"
 >
-    <ng-container [ngSwitch]="child.type">
-        <editor-array-property
-            *ngSwitchCase="typeofProperty.ARRAY"
-            [treeLevel]="childrenTreeLevel"
-            [path]="getChildPath(child.key)"
-            [target]="target"
-            [property]="child"
-            [treeMode]="treeMode"
-            (remove)="onRemoveChild(index)"
-            (targetChanged)="targetChanged.emit($event)"
-        >
-        </editor-array-property>
-
-        <editor-object-property
-            *ngSwitchCase="typeofProperty.OBJECT"
-            [treeLevel]="childrenTreeLevel"
-            [path]="getChildPath(child.key)"
-            [target]="target"
-            [property]="child"
-            [treeMode]="treeMode"
-            [useExpansionPanel]="false"
-            (remove)="onRemoveChild(index)"
-            (targetChanged)="targetChanged.emit($event)"
-        >
-        </editor-object-property>
-
-        <editor-boolean-property
-            *ngSwitchCase="typeofProperty.BOOLEAN"
-            [treeLevel]="childrenTreeLevel"
-            [path]="getChildPath(child.key)"
-            [property]="child"
-            [target]="target"
-            [treeMode]="treeMode"
-            (remove)="onRemoveChild(index)"
-            (targetChanged)="targetChanged.emit($event)"
-        >
-        </editor-boolean-property>
-
-        <editor-chip-list-property
-            *ngSwitchCase="typeofProperty.CHIP_LIST"
-            [treeLevel]="childrenTreeLevel"
-            [path]="getChildPath(child.key)"
-            [property]="child"
-            [target]="target"
-            [treeMode]="treeMode"
-            (remove)="onRemoveChild(index)"
-            (targetChanged)="targetChanged.emit($event)"
-        >
-        </editor-chip-list-property>
-
-        <editor-textarea-property
-            *ngSwitchCase="typeofProperty.TEXTAREA"
-            [treeLevel]="childrenTreeLevel"
-            [path]="getChildPath(child.key)"
-            [property]="child"
-            [target]="target"
-            [treeMode]="treeMode"
-            (remove)="onRemoveChild(index)"
-            (targetChanged)="targetChanged.emit($event)"
-        >
-        </editor-textarea-property>
-
-        <ng-container *ngSwitchCase="typeofProperty.NUMBER">
-            <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
-        </ng-container>
-        <ng-container *ngSwitchCase="typeofProperty.TEXT">
-            <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
-        </ng-container>
-        <ng-template #inputProperty>
-            <editor-input-property
+    @switch (child.type) {
+        @case (typeofProperty.ARRAY) {
+            <editor-array-property
+                [treeLevel]="childrenTreeLevel"
+                [path]="getChildPath(child.key)"
+                [target]="target"
+                [property]="child"
+                [treeMode]="treeMode"
+                (remove)="onRemoveChild(index)"
+                (targetChanged)="targetChanged.emit($event)"
+            >
+            </editor-array-property>
+        }
+        @case (typeofProperty.OBJECT) {
+            <editor-object-property
+                [treeLevel]="childrenTreeLevel"
+                [path]="getChildPath(child.key)"
+                [target]="target"
+                [property]="child"
+                [treeMode]="treeMode"
+                [useExpansionPanel]="false"
+                (remove)="onRemoveChild(index)"
+                (targetChanged)="targetChanged.emit($event)"
+            >
+            </editor-object-property>
+        }
+        @case (typeofProperty.BOOLEAN) {
+            <editor-boolean-property
                 [treeLevel]="childrenTreeLevel"
                 [path]="getChildPath(child.key)"
                 [property]="child"
@@ -158,50 +118,96 @@
                 (remove)="onRemoveChild(index)"
                 (targetChanged)="targetChanged.emit($event)"
             >
-            </editor-input-property>
-        </ng-template>
-    </ng-container>
+            </editor-boolean-property>
+        }
+        @case (typeofProperty.CHIP_LIST) {
+            <editor-chip-list-property
+                [treeLevel]="childrenTreeLevel"
+                [path]="getChildPath(child.key)"
+                [property]="child"
+                [target]="target"
+                [treeMode]="treeMode"
+                (remove)="onRemoveChild(index)"
+                (targetChanged)="targetChanged.emit($event)"
+            >
+            </editor-chip-list-property>
+        }
+        @case (typeofProperty.TEXTAREA) {
+            <editor-textarea-property
+                [treeLevel]="childrenTreeLevel"
+                [path]="getChildPath(child.key)"
+                [property]="child"
+                [target]="target"
+                [treeMode]="treeMode"
+                (remove)="onRemoveChild(index)"
+                (targetChanged)="targetChanged.emit($event)"
+            >
+            </editor-textarea-property>
+        }
+        @case (typeofProperty.NUMBER) {
+            <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
+        }
+        @case (typeofProperty.TEXT) {
+            <ng-container *ngTemplateOutlet="inputProperty"></ng-container>
+        }
+    }
+    <ng-template #inputProperty>
+        <editor-input-property
+            [treeLevel]="childrenTreeLevel"
+            [path]="getChildPath(child.key)"
+            [property]="child"
+            [target]="target"
+            [treeMode]="treeMode"
+            (remove)="onRemoveChild(index)"
+            (targetChanged)="targetChanged.emit($event)"
+        >
+        </editor-input-property>
+    </ng-template>
 </ng-template>
 
 <mat-menu
     #optionsMenu="matMenu"
     class="editor-mat"
 >
-    <button
-        *ngIf="canAdd && property.childProperty"
-        mat-menu-item
-        (click)="onAddChild(property.childProperty.type)"
-    >
-        <mat-icon>add</mat-icon>
-        <span>Add {{ property.childProperty.type }}</span>
-    </button>
-    <button
-        *ngIf="canAdd && !property.childProperty"
-        mat-menu-item
-        [matMenuTriggerFor]="addMenu"
-    >
-        <mat-icon>add</mat-icon>
-        <span>Add</span>
-    </button>
-    <button
-        *ngIf="property.isRemovable"
-        mat-menu-item
-        (click)="remove.emit()"
-    >
-        <mat-icon>remove</mat-icon>
-        <span>Remove</span>
-    </button>
+    @if (canAdd && property.childProperty) {
+        <button
+            mat-menu-item
+            (click)="onAddChild(property.childProperty.type)"
+        >
+            <mat-icon>add</mat-icon>
+            <span>Add {{ property.childProperty.type }}</span>
+        </button>
+    }
+    @if (canAdd && !property.childProperty) {
+        <button
+            mat-menu-item
+            [matMenuTriggerFor]="addMenu"
+        >
+            <mat-icon>add</mat-icon>
+            <span>Add</span>
+        </button>
+    }
+    @if (property.isRemovable) {
+        <button
+            mat-menu-item
+            (click)="remove.emit()"
+        >
+            <mat-icon>remove</mat-icon>
+            <span>Remove</span>
+        </button>
+    }
 </mat-menu>
 
 <mat-menu
     #addMenu="matMenu"
     class="editor-mat"
 >
-    <button
-        *ngFor="let option of addOptions"
-        mat-menu-item
-        (click)="onAddChild(option)"
-    >
-        {{ option }}
-    </button>
+    @for (option of addOptions; track option) {
+        <button
+            mat-menu-item
+            (click)="onAddChild(option)"
+        >
+            {{ option }}
+        </button>
+    }
 </mat-menu>

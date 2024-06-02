@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FieldType, FormlyModule } from '@ngx-formly/core';
 
@@ -11,6 +10,6 @@ import { FormlyFieldComponent } from '../formly-field/formly-field.component';
     styleUrls: ['./formly-group.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [NgIf, NgFor, FormlyFieldComponent, FormlyModule],
+    imports: [FormlyFieldComponent, FormlyModule],
 })
 export class FormlyGroupComponent extends FieldType<IEditorFormlyField> {}

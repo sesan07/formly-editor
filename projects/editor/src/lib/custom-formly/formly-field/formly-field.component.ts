@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -49,14 +49,12 @@ export class RootFormlyFieldComponent extends FormlyField {}
         DragPreviewDirective,
         DragSourceDirective,
         DropTargetDirective,
-        NgIf,
         MatIconButton,
         MatMenuTrigger,
         MatIcon,
         FieldDropOverlayComponent,
         MatMenu,
         MatMenuContent,
-        NgFor,
         MatMenuItem,
         NgTemplateOutlet,
         AsyncPipe,

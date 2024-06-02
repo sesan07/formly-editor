@@ -1,11 +1,9 @@
 <mat-form-field subscriptSizing="dynamic">
     <mat-label>{{ property.name ? property.name : property.key }}</mat-label>
     <mat-select [formControl]="formControl">
-        <mat-option
-            *ngFor="let option of property.options"
-            [value]="option.value"
-            >{{ option.label }}</mat-option
-        >
+        @for (option of property.options; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
     </mat-select>
     <button
         mat-icon-button

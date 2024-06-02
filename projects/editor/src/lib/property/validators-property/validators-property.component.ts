@@ -1,5 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, TrackByFunction, forwardRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, inject } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
@@ -25,11 +24,9 @@ import { IValidationConfig, IValidationData, IValidatorsProperty, IValidatorsVal
     imports: [
         MatExpansionPanel,
         MatExpansionPanelHeader,
-        NgIf,
         MatIconButton,
         MatMenuTrigger,
         MatIcon,
-        NgFor,
         ObjectPropertyComponent,
         MatMenu,
         MatMenuItem,
@@ -47,8 +44,6 @@ export class ValidatorsPropertyComponent extends BasePropertyDirective<IValidato
     private _formlyConfig = inject(FormlyConfig);
     private _editorConfig = inject(EDITOR_CONFIG);
     private _defaultMessages: Record<string, string>;
-
-    trackByConfigName: TrackByFunction<IValidationConfig> = (_, property: IValidationConfig) => property.data.name;
 
     onAddChild(option: ValidatorOption): void {
         const newData: IValidationData[] = [...this.validationConfigs.map(v => v.data), { name: option.key }];

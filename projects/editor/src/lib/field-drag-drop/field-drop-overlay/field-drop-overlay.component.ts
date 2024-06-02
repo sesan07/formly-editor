@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component, HostBinding, Input } from '@angular/core';
 import { FieldDropPosition, FieldDropWidth } from '../field-drag-drop.types';
 
@@ -7,7 +6,7 @@ import { FieldDropPosition, FieldDropWidth } from '../field-drag-drop.types';
     templateUrl: './field-drop-overlay.component.html',
     styleUrls: ['./field-drop-overlay.component.scss'],
     standalone: true,
-    imports: [NgIf],
+    imports: [],
 })
 export class FieldDropOverlayComponent {
     @Input() @HostBinding('class.hovering') isHovering: boolean;

@@ -1,25 +1,24 @@
-<editor-tree-item
-    *ngIf="isCategoryOption; else typeOption"
-    class="cursor-pointer"
-    [treeLevel]="treeLevel"
-    [isExpanded]="isExpanded$ | async"
-    [isExpandable]="true"
->
-    <ng-container headerContent>
-        {{ fieldOption.displayName }}
-    </ng-container>
-
-    <ng-container childrenContent>
-        <editor-add-field-tree-item
-            *ngFor="let child of childOptions; let index = index; trackBy: trackByDisplayName"
-            [fieldOption]="child"
-            [treeLevel]="treeLevel + 1"
-        >
-        </editor-add-field-tree-item>
-    </ng-container>
-</editor-tree-item>
-
-<ng-template #typeOption>
+@if (isCategoryOption) {
+    <editor-tree-item
+        class="cursor-pointer"
+        [treeLevel]="treeLevel"
+        [isExpanded]="isExpanded$ | async"
+        [isExpandable]="true"
+    >
+        <ng-container headerContent>
+            {{ fieldOption.displayName }}
+        </ng-container>
+        <ng-container childrenContent>
+            @for (child of childOptions; track child.displayName; let index = $index) {
+                <editor-add-field-tree-item
+                    [fieldOption]="child"
+                    [treeLevel]="treeLevel + 1"
+                >
+                </editor-add-field-tree-item>
+            }
+        </ng-container>
+    </editor-tree-item>
+} @else {
     <editor-tree-item
         class="cursor-grab"
         [treeLevel]="treeLevel"
@@ -31,4 +30,4 @@
             {{ fieldOption.displayName }}
         </ng-container>
     </editor-tree-item>
-</ng-template>
+}

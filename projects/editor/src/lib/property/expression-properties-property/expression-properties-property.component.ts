@@ -1,4 +1,3 @@
-import { NgFor } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import {
@@ -9,7 +8,6 @@ import {
 } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 
-import { trackByKey } from '../../editor.utils';
 import { TextEditorComponent } from '../../text-editor/text-editor.component';
 import { BasePropertyDirective } from '../base-property.directive';
 import { PropertyKeyComponent } from '../property-key/property-key.component';
@@ -27,7 +25,6 @@ import { IExpressionPropertiesProperty, IExpressionProperty } from './expression
         MatIconButton,
         MatIcon,
         MatAccordion,
-        NgFor,
         MatExpansionPanelTitle,
         PropertyKeyComponent,
         TextEditorComponent,
@@ -39,8 +36,6 @@ export class ExpressionPropertiesPropertyComponent extends BasePropertyDirective
 > {
     public isExpanded: boolean;
     public childProperties: IExpressionProperty[] = [];
-
-    trackByKey = trackByKey;
 
     protected defaultValue = {};
 

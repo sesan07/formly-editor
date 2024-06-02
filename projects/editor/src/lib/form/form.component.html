@@ -9,48 +9,47 @@
     (toggleSidebars)="toggleSidebars.emit()"
 >
 </editor-toolbar>
-<ng-container *ngIf="formFields$ | async as fields">
-    <mat-tab-group
-        class="tab-group"
-        *ngIf="fields.length; else addFieldButton"
-        [selectedIndex]="toolbarTabIndex"
-    >
-        <mat-tab>
-            <editor-formly-form
-                [fields]="fields"
-                [model]="model$ | async"
-                [form]="formGroup"
-                [options]="options"
-                (modelChange)="onFormModelChanged($event)"
-            >
-            </editor-formly-form>
-        </mat-tab>
-        <mat-tab>
-            <ng-template matTabContent>
-                <editor-text-editor
-                    class="text-editor"
-                    [value]="formFieldsJSON$ | async"
-                    [mode]="'application/json'"
-                    readonly
-                ></editor-text-editor>
-            </ng-template>
-        </mat-tab>
-    </mat-tab-group>
-</ng-container>
-
-<ng-template #addFieldButton>
-    <div class="no-fields-wrapper">
-        <button
-            mat-flat-button
-            color="primary"
-            [matMenuTriggerFor]="fieldOptionsMenu"
-            [matMenuTriggerData]="{ options: fieldOptions }"
+@if (formFields$ | async; as fields) {
+    @if (fields.length) {
+        <mat-tab-group
+            class="tab-group"
+            [selectedIndex]="toolbarTabIndex"
         >
-            <mat-icon>add</mat-icon>
-            Add Field
-        </button>
-    </div>
-</ng-template>
+            <mat-tab>
+                <editor-formly-form
+                    [fields]="fields"
+                    [model]="model$ | async"
+                    [form]="formGroup"
+                    [options]="options"
+                    (modelChange)="onFormModelChanged($event)"
+                >
+                </editor-formly-form>
+            </mat-tab>
+            <mat-tab>
+                <ng-template matTabContent>
+                    <editor-text-editor
+                        class="text-editor"
+                        [value]="formFieldsJSON$ | async"
+                        [mode]="'application/json'"
+                        readonly
+                    ></editor-text-editor>
+                </ng-template>
+            </mat-tab>
+        </mat-tab-group>
+    } @else {
+        <div class="no-fields-wrapper">
+            <button
+                mat-flat-button
+                color="primary"
+                [matMenuTriggerFor]="fieldOptionsMenu"
+                [matMenuTriggerData]="{ options: fieldOptions }"
+            >
+                <mat-icon>add</mat-icon>
+                Add Field
+            </button>
+        </div>
+    }
+}
 
 <mat-menu
     #fieldOptionsMenu="matMenu"
@@ -60,24 +59,25 @@
         matMenuContent
         let-options="options"
     >
-        <ng-container *ngFor="let option of options">
-            <button
-                *ngIf="isCategoryOption(option)"
-                mat-menu-item
-                [matMenuTriggerFor]="fieldCategoryOptionsMenu"
-                [matMenuTriggerData]="{ children: option.children }"
-                menu
-            >
-                {{ option.displayName }}
-            </button>
-
-            <ng-container
-                *ngIf="isTypeOption(option)"
-                [ngTemplateOutlet]="fieldTypeOption"
-                [ngTemplateOutletContext]="option"
-            >
-            </ng-container>
-        </ng-container>
+        @for (option of options; track option.displayName) {
+            @if (isCategoryOption(option)) {
+                <button
+                    mat-menu-item
+                    [matMenuTriggerFor]="fieldCategoryOptionsMenu"
+                    [matMenuTriggerData]="{ children: option.children }"
+                    menu
+                >
+                    {{ option.displayName }}
+                </button>
+            }
+            @if (isTypeOption(option)) {
+                <ng-container
+                    [ngTemplateOutlet]="fieldTypeOption"
+                    [ngTemplateOutletContext]="option"
+                >
+                </ng-container>
+            }
+        }
     </ng-template>
 </mat-menu>
 
@@ -89,14 +89,15 @@
         matMenuContent
         let-children="children"
     >
-        <ng-container *ngFor="let child of children">
-            <ng-container
-                *ngIf="isTypeOption(child)"
-                [ngTemplateOutlet]="fieldTypeOption"
-                [ngTemplateOutletContext]="child"
-            >
-            </ng-container>
-        </ng-container>
+        @for (child of children; track child.displayName) {
+            @if (isTypeOption(child)) {
+                <ng-container
+                    [ngTemplateOutlet]="fieldTypeOption"
+                    [ngTemplateOutletContext]="child"
+                >
+                </ng-container>
+            }
+        }
     </ng-template>
 </mat-menu>
 

@@ -19,7 +19,7 @@ import { filter, map, takeUntil } from 'rxjs/operators';
 
 import { EditorService } from '../editor.service';
 import { DropAction, FieldOption, IEditorFieldInfo, IEditorFormlyField } from '../editor.types';
-import { isCategoryOption, isTypeOption, trackByFieldId } from '../editor.utils';
+import { isCategoryOption, isTypeOption } from '../editor.utils';
 import { FieldDragDrop } from '../field-drag-drop/field-drag-drop';
 import { FieldDropOverlayComponent } from '../field-drag-drop/field-drop-overlay/field-drop-overlay.component';
 import { FieldNamePipe } from '../field-name/field-name.pipe';
@@ -27,7 +27,7 @@ import { getFieldChildren } from '../form/form.utils';
 import { selectActiveField } from '../state/state.selectors';
 import { IEditorState } from '../state/state.types';
 
-import { AsyncPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { TreeItemComponent } from '../tree-item/tree-item.component';
 
@@ -41,9 +41,7 @@ import { TreeItemComponent } from '../tree-item/tree-item.component';
         TreeItemComponent,
         DragSourceDirective,
         DropTargetDirective,
-        NgIf,
         MatIcon,
-        NgFor,
         FieldDropOverlayComponent,
         MatMenu,
         MatMenuItem,
@@ -70,7 +68,6 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
 
     public dnd: FieldDragDrop;
 
-    trackByFieldId = trackByFieldId;
     isCategoryOption = isCategoryOption;
     isTypeOption = isTypeOption;
 

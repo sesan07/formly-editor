@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -25,7 +24,7 @@ import { findVariant, formatVariant } from '../styles.utils';
     styleUrls: ['./style-option.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [NgIf, MatFormField, MatLabel, MatSelect, NgFor, MatOption, MatIconButton, MatIcon],
+    imports: [MatFormField, MatLabel, MatSelect, MatOption, MatIconButton, MatIcon],
 })
 export class StyleOptionComponent implements OnChanges {
     @Input() field: IEditorFormlyField;

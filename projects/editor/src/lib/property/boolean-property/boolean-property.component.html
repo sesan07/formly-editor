@@ -1,44 +1,44 @@
-<editor-tree-item
-    *ngIf="treeMode; else simplifiedView"
-    [treeLevel]="treeLevel"
-    [hasOptions]="hasOptions"
-    [optionsMenu]="optionsMenu"
->
-    <ng-container headerContent>
-        <editor-property-key
-            [key]="property.key"
-            [isEditable]="property.isKeyEditable"
-            (keyChange)="onKeyChanged($event)"
-        >
-            <span>:</span>
-        </editor-property-key>
-        <mat-checkbox
-            class="property-field"
-            [formControl]="formControl"
-        ></mat-checkbox>
-    </ng-container>
-</editor-tree-item>
-
-<ng-template #simplifiedView>
+@if (treeMode) {
+    <editor-tree-item
+        [treeLevel]="treeLevel"
+        [hasOptions]="hasOptions"
+        [optionsMenu]="optionsMenu"
+    >
+        <ng-container headerContent>
+            <editor-property-key
+                [key]="property.key"
+                [isEditable]="property.isKeyEditable"
+                (keyChange)="onKeyChanged($event)"
+            >
+                <span>:</span>
+            </editor-property-key>
+            <mat-checkbox
+                class="property-field"
+                [formControl]="formControl"
+            ></mat-checkbox>
+        </ng-container>
+    </editor-tree-item>
+} @else {
     <mat-checkbox
         class="simple-checkbox"
         [formControl]="formControl"
     >
         {{ property.name ? property.name : property.key }}
     </mat-checkbox>
-</ng-template>
+}
 
 <mat-menu
     #optionsMenu="matMenu"
     class="editor-mat"
 >
-    <button
-        *ngIf="property.isRemovable"
-        mat-menu-item
-        color="warn"
-        (click)="remove.emit()"
-    >
-        <mat-icon>remove</mat-icon>
-        <span>Remove</span>
-    </button>
+    @if (property.isRemovable) {
+        <button
+            mat-menu-item
+            color="warn"
+            (click)="remove.emit()"
+        >
+            <mat-icon>remove</mat-icon>
+            <span>Remove</span>
+        </button>
+    }
 </mat-menu>

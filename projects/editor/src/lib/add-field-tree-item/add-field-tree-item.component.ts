@@ -1,11 +1,11 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { DndService, DragSourceDirective } from '@ng-dnd/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { EditorService } from '../editor.service';
 import { DropAction, FieldOption, IEditorFormlyField } from '../editor.types';
-import { isCategoryOption, isTypeOption, trackByDisplayName } from '../editor.utils';
+import { isCategoryOption, isTypeOption } from '../editor.utils';
 import { FieldDragDrop } from '../field-drag-drop/field-drag-drop';
 import { TreeItemComponent } from '../tree-item/tree-item.component';
 
@@ -15,7 +15,7 @@ import { TreeItemComponent } from '../tree-item/tree-item.component';
     styleUrls: ['./add-field-tree-item.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [NgIf, TreeItemComponent, NgFor, DragSourceDirective, AsyncPipe],
+    imports: [TreeItemComponent, DragSourceDirective, AsyncPipe],
 })
 export class AddFieldTreeItemComponent implements OnChanges, OnDestroy {
     @Input() public fieldOption: FieldOption;
@@ -27,8 +27,6 @@ export class AddFieldTreeItemComponent implements OnChanges, OnDestroy {
     public childOptions: FieldOption[] = [];
 
     public dnd: FieldDragDrop;
-
-    trackByDisplayName = trackByDisplayName;
 
     private _field: IEditorFormlyField;
 

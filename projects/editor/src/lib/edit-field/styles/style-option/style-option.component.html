@@ -1,25 +1,24 @@
-<mat-form-field
-    *ngIf="!breakpoint.value || option.hasBreakpoints"
-    subscriptSizing="dynamic"
->
-    <mat-label>{{ option.name }}</mat-label>
-    <mat-select
-        panelClass="editor-mat"
-        [value]="selectedVariant"
-        (selectionChange)="onVariantSelected($event.value)"
-    >
-        <mat-option
-            *ngFor="let variant of option.variants"
-            [value]="variant"
+@if (!breakpoint.value || option.hasBreakpoints) {
+    <mat-form-field subscriptSizing="dynamic">
+        <mat-label>{{ option.name }}</mat-label>
+        <mat-select
+            panelClass="editor-mat"
+            [value]="selectedVariant"
+            (selectionChange)="onVariantSelected($event.value)"
         >
-            {{ variant }}
-        </mat-option>
-    </mat-select>
-</mat-form-field>
-<button
-    *ngIf="selectedVariant"
-    mat-icon-button
-    (click)="onRemoveSelection()"
->
-    <mat-icon color="warn">remove</mat-icon>
-</button>
+            @for (variant of option.variants; track variant) {
+                <mat-option [value]="variant">
+                    {{ variant }}
+                </mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+}
+@if (selectedVariant) {
+    <button
+        mat-icon-button
+        (click)="onRemoveSelection()"
+    >
+        <mat-icon color="warn">remove</mat-icon>
+    </button>
+}
