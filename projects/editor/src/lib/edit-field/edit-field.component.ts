@@ -53,7 +53,7 @@ export class EditFieldComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
-        const activeField$ = this._store.select(selectActiveField).pipe(takeUntil(this._destroy$), shareReplay());
+        const activeField$ = this._store.select(selectActiveField).pipe(shareReplay());
         this.field$ = activeField$;
         this.parentField$ = activeField$.pipe(map(field => this._editorService.getField(field?._info.parentFieldId)));
         this.property$ = activeField$.pipe(

@@ -8,7 +8,7 @@ import { MatTab, MatTabContent, MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
 import { FormlyFormOptions } from '@ngx-formly/core';
 import { Observable, Subject } from 'rxjs';
-import { debounceTime, filter, map, shareReplay, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, filter, map, shareReplay, tap } from 'rxjs/operators';
 
 import { FormlyFormComponent } from '../custom-formly/formly-form/formly-form.component';
 import { EditorService } from '../editor.service';
@@ -76,11 +76,7 @@ export class FormComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.fieldOptions = this._editorService.fieldOptions;
 
-        const activeForm$ = this._store.select(selectActiveForm).pipe(
-            takeUntil(this._destroy$),
-            filter(form => form?.id === this.form.id)
-        );
-
+        const activeForm$ = this._store.select(selectActiveForm).pipe(filter(form => form?.id === this.form.id));
         const activeFields$ = activeForm$.pipe(
             debounceTime(this._debounceTime),
             filter(form => form.fields !== this._cachedFields),
