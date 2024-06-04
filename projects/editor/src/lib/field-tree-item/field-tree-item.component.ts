@@ -1,3 +1,4 @@
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -11,6 +12,7 @@ import {
     Output,
     SimpleChanges,
 } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { DndService, DragSourceDirective, DropTargetDirective } from '@ng-dnd/core';
 import { Store } from '@ngrx/store';
@@ -24,11 +26,6 @@ import { FieldDragDrop } from '../field-drag-drop/field-drag-drop';
 import { FieldDropOverlayComponent } from '../field-drag-drop/field-drop-overlay/field-drop-overlay.component';
 import { FieldNamePipe } from '../field-name/field-name.pipe';
 import { getFieldChildren } from '../form/form.utils';
-import { selectActiveField } from '../state/state.selectors';
-import { IEditorState } from '../state/state.types';
-
-import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
 import { TreeItemComponent } from '../tree-item/tree-item.component';
 
 @Component({
@@ -76,7 +73,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
 
     constructor(
         private _editorService: EditorService,
-        private _store: Store<IEditorState>,
+        private _store: Store,
         private _dndService: DndService,
         private _ngZone: NgZone,
         elementRef: ElementRef<HTMLElement>
@@ -111,7 +108,9 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnInit(): void {
-        const activeField$ = this._store.select(selectActiveField).pipe(takeUntil(this._destroy$));
+        const activeField$ = this._store
+            .select(this._editorService.feature.selectActiveField)
+            .pipe(takeUntil(this._destroy$));
 
         this.isActiveField$ = activeField$.pipe(map(field => this.fieldInfo.fieldId === field?._info.fieldId));
 

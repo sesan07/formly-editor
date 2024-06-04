@@ -20,8 +20,6 @@ import { ObjectPropertyComponent } from '../property/object-property/object-prop
 import { IObjectProperty } from '../property/object-property/object-property.types';
 import { IPropertyChange, PropertyType } from '../property/property.types';
 import { getDefaultProperty, initRootProperty } from '../property/property.utils';
-import { selectActiveField } from '../state/state.selectors';
-import { IEditorState } from '../state/state.types';
 import { StylesComponent } from './styles/styles.component';
 
 @Component({
@@ -49,11 +47,11 @@ export class EditFieldComponent implements OnInit, OnDestroy {
 
     constructor(
         private _editorService: EditorService,
-        private _store: Store<IEditorState>
+        private _store: Store
     ) {}
 
     ngOnInit(): void {
-        const activeField$ = this._store.select(selectActiveField).pipe(shareReplay());
+        const activeField$ = this._store.select(this._editorService.feature.selectActiveField).pipe(shareReplay());
         this.field$ = activeField$;
         this.parentField$ = activeField$.pipe(map(field => this._editorService.getField(field?._info.parentFieldId)));
         this.property$ = activeField$.pipe(

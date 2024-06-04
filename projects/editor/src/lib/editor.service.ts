@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, createFeatureSelector } from '@ngrx/store';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { get, set } from 'lodash-es';
+import { debounceTime } from 'rxjs';
 
 import { EDITOR_CONFIG, EditorConfig, FieldOption, FieldTypeOption, IEditorFormlyField, IForm } from './editor.types';
 import { isCategoryOption } from './editor.utils';
@@ -21,14 +22,11 @@ import {
     setActiveFormId,
     setActiveModel,
     setEditMode,
-    setState,
 } from './state/state.actions';
-import { selectActiveField, selectActiveFieldMap, selectForms } from './state/state.selectors';
-import { IEditorState } from './state/state.types';
+import { EDITOR_FEATURE, EditorFeature } from './state/state.types';
 
 @Injectable()
 export class EditorService {
-    public config: EditorConfig;
     public fieldOptions: FieldOption[];
 
     private _forms: IForm[] = [];
@@ -38,19 +36,22 @@ export class EditorService {
     private _typeOptions: FieldTypeOption[];
 
     constructor(
-        @Inject(EDITOR_CONFIG) config: EditorConfig,
+        @Inject(EDITOR_CONFIG) public config: EditorConfig,
+        @Inject(EDITOR_FEATURE) public feature: EditorFeature,
         private _fieldService: FieldService,
-        private _store: Store<IEditorState>
+        private _store: Store
     ) {
         this.setup(config);
     }
 
     setup(config: EditorConfig) {
-        this.config = config;
-
-        this._store.select(selectForms).subscribe(forms => (this._forms = forms));
-        this._store.select(selectActiveField).subscribe(field => (this._activeField = field));
-        this._store.select(selectActiveFieldMap).subscribe(fieldMap => (this._activeFieldMap = fieldMap));
+        this._store.select(this.feature.selectForms).subscribe(forms => (this._forms = forms));
+        this._store.select(this.feature.selectActiveField).subscribe(field => (this._activeField = field));
+        this._store.select(this.feature.selectActiveFieldMap).subscribe(fieldMap => (this._activeFieldMap = fieldMap));
+        this._store
+            .select(createFeatureSelector(config.id))
+            .pipe(debounceTime(config.autoSaveDelay ?? 0))
+            .subscribe(state => localStorage.setItem(this.config.id, JSON.stringify(state)));
 
         this.fieldOptions = [...this.config.fieldOptions, config.genericTypeOption];
         const getTypeOptions = (options: FieldOption[]) =>
@@ -61,13 +62,10 @@ export class EditorService {
         this._typeOptions = getTypeOptions(this.fieldOptions);
     }
 
-    public setState(state: IEditorState): void {
-        this._store.dispatch(setState({ state }));
-    }
-
     public addForm(name: string, sourceFields?: FormlyFieldConfig[], model?: object): void {
         this._store.dispatch(
             addForm({
+                editorId: this.config.id,
                 name,
                 sourceFields,
                 model,
@@ -79,25 +77,26 @@ export class EditorService {
     }
 
     public removeForm(index: number): void {
-        this._store.dispatch(removeForm({ formId: this._forms[index].id }));
+        this._store.dispatch(removeForm({ editorId: this.config.id, formId: this._forms[index].id }));
     }
 
     public duplicateForm(formId: string): void {
-        this._store.dispatch(duplicateForm({ formId }));
+        this._store.dispatch(duplicateForm({ editorId: this.config.id, formId }));
     }
 
     public setActiveForm(index: number): void {
-        this._store.dispatch(setActiveFormId({ activeFormId: this._forms[index].id }));
+        this._store.dispatch(setActiveFormId({ editorId: this.config.id, activeFormId: this._forms[index].id }));
     }
 
     public setEditMode(formId: string, isEditMode: boolean): void {
-        this._store.dispatch(setEditMode({ formId, isEditMode }));
+        this._store.dispatch(setEditMode({ editorId: this.config.id, formId, isEditMode }));
     }
 
     public addField(fieldType: string, parentId?: string, index?: number): void {
         const parent: IEditorFormlyField = this.getField(parentId);
         this._store.dispatch(
             addField({
+                editorId: this.config.id,
                 fieldType,
                 parent,
                 index,
@@ -111,7 +110,9 @@ export class EditorService {
     public removeField(fieldId: string, parentId?: string): void {
         const field = this.getField(fieldId);
         const parent = this.getField(parentId);
-        this._store.dispatch(removeField({ fieldId, parent, keyPath: this._getKeyPath(field) }));
+        this._store.dispatch(
+            removeField({ editorId: this.config.id, fieldId, parent, keyPath: this._getKeyPath(field) })
+        );
     }
 
     public modifyActiveField(change: IPropertyChange) {
@@ -119,11 +120,11 @@ export class EditorService {
             throw new Error('Path is missing from field change');
         }
 
-        this._store.dispatch(modifyActiveField({ activeField: this._activeField, change }));
+        this._store.dispatch(modifyActiveField({ editorId: this.config.id, activeField: this._activeField, change }));
     }
 
     public setActiveField(activeFieldId: string | null): void {
-        this._store.dispatch(setActiveField({ activeFieldId }));
+        this._store.dispatch(setActiveField({ editorId: this.config.id, activeFieldId }));
     }
 
     public moveField(
@@ -133,7 +134,9 @@ export class EditorService {
         sourceIndex: number,
         targetIndex: number | undefined
     ): void {
-        this._store.dispatch(moveField({ sourceField, sourceParent, targetParent, sourceIndex, targetIndex }));
+        this._store.dispatch(
+            moveField({ editorId: this.config.id, sourceField, sourceParent, targetParent, sourceIndex, targetIndex })
+        );
     }
 
     public replaceField(newFieldType: string, fieldId: string): void {
@@ -142,6 +145,7 @@ export class EditorService {
 
         this._store.dispatch(
             replaceField({
+                editorId: this.config.id,
                 field,
                 parent,
                 newFieldType,
@@ -154,11 +158,11 @@ export class EditorService {
     }
 
     public setActiveModel(model: Record<string, any>): void {
-        this._store.dispatch(setActiveModel({ model }));
+        this._store.dispatch(setActiveModel({ editorId: this.config.id, model }));
     }
 
     public modifyActiveModel(change: IPropertyChange): void {
-        this._store.dispatch(modifyActiveModel({ change }));
+        this._store.dispatch(modifyActiveModel({ editorId: this.config.id, change }));
     }
 
     public getField(fieldId: string): IEditorFormlyField | undefined {

@@ -284,6 +284,7 @@ export const asyncValidatorOptions: ValidatorOption[] = [
 ];
 
 export const materialEditorConfig: EditorConfig = {
+    id: 'editor-material',
     fieldOptions: [
         {
             displayName: 'Input',

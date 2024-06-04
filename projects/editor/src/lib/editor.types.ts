@@ -87,6 +87,7 @@ export interface ValidatorOption {
 }
 
 export interface EditorConfig {
+    id: string;
     fieldOptions: FieldOption[];
     wrapperOptions?: FieldWrapperOption[];
     genericTypeOption?: FieldTypeOption;
@@ -94,6 +95,7 @@ export interface EditorConfig {
     asyncValidatorOptions?: ValidatorOption[];
     defaultForm?: IDefaultForm;
     stylesConfig?: IStylesConfig;
+    autoSaveDelay?: number;
     onDisplayFields?: (fields: IEditorFormlyField[], model: Record<string, any>) => IEditorFormlyField[];
 }
 

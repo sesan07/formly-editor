@@ -9,7 +9,8 @@ import { StylesService } from './edit-field/styles/styles.service';
 import { EditorService } from './editor.service';
 import { EDITOR_CONFIG, EditorConfig, EditorFieldType, FieldTypeOption } from './editor.types';
 import { FieldService } from './field-service/field.service';
-import { editorFeature } from './state/state.reducers';
+import { createEditorFeature } from './state/state.reducers';
+import { EDITOR_FEATURE, EditorFeature } from './state/state.types';
 
 const metaReducerFactory =
     () =>
@@ -20,6 +21,7 @@ const metaReducerFactory =
     };
 
 const defaultConfig: EditorConfig = {
+    id: 'editor',
     fieldOptions: [],
 };
 
@@ -54,7 +56,6 @@ export function provideEditor(configProviders?: EnvironmentProviders): Environme
             useFactory: metaReducerFactory,
             multi: true,
         },
-        provideState(editorFeature),
         provideStore(),
         provideDnd({ backend: HTML5Backend }),
         DndService,
@@ -67,12 +68,18 @@ export function provideEditorConfig(config: EditorConfig = defaultConfig): Envir
 
 export function withConfig(config: EditorConfig): EnvironmentProviders {
     config.genericTypeOption = config.genericTypeOption ?? defaultGenericTypeOption;
+    const feature: EditorFeature = createEditorFeature(config.id);
 
     return makeEnvironmentProviders([
         {
             provide: EDITOR_CONFIG,
             useValue: config,
         },
+        {
+            provide: EDITOR_FEATURE,
+            useValue: feature,
+        },
+        provideState(feature),
         EditorService,
         FieldService,
         StylesService,

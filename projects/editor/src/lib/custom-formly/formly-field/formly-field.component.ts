@@ -27,8 +27,6 @@ import { getKeyPath, isCategoryOption, isTypeOption } from '../../editor.utils';
 import { FieldDragDrop } from '../../field-drag-drop/field-drag-drop';
 import { FieldDropOverlayComponent } from '../../field-drag-drop/field-drop-overlay/field-drop-overlay.component';
 import { FieldNamePipe } from '../../field-name/field-name.pipe';
-import { selectActiveForm } from '../../state/state.selectors';
-import { IEditorState } from '../../state/state.types';
 import { FormlyFieldTemplates } from '../formly.template';
 
 @Component({
@@ -84,7 +82,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
 
     constructor(
         private _editorService: EditorService,
-        private _store: Store<IEditorState>,
+        private _store: Store,
         private _dndService: DndService,
         private _ngZone: NgZone,
         config: FormlyConfig,
@@ -131,7 +129,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
         }
 
         const activeForm$ = this._store
-            .select(selectActiveForm)
+            .select(this._editorService.feature.selectActiveForm)
             .pipe(filter(form => form?.id === this.fieldInfo.formId));
         this.isEditMode$ = activeForm$.pipe(map(form => form.isEditMode));
         this.isActiveField$ = activeForm$.pipe(map(form => form.activeFieldId === this.fieldInfo.fieldId));
