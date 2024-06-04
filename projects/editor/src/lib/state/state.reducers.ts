@@ -1,4 +1,4 @@
-import { createFeature, createReducer, on } from '@ngrx/store';
+import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
 import { IEditorFormlyField, IForm } from '../editor.types';
 import { getFieldChildren, setFieldChildren } from '../form/form.utils';
 import { PropertyChangeType } from '../property/property.types';
@@ -7,6 +7,7 @@ import {
     AddField,
     AddForm,
     DuplicateForm,
+    EditorAction,
     ModifyActiveField,
     ModifyActiveModel,
     MoveField,
@@ -17,7 +18,6 @@ import {
     SetActiveFormId,
     SetActiveModel,
     SetEditMode,
-    SetState,
     addField,
     addForm,
     duplicateForm,
@@ -31,7 +31,6 @@ import {
     setActiveFormId,
     setActiveModel,
     setEditMode,
-    setState,
 } from './state.actions';
 import { IEditorState } from './state.types';
 import {
@@ -39,18 +38,17 @@ import {
     duplicateFields,
     generateFormId,
     getField,
+    getFieldMap,
     modifyField,
     modifyFields,
     moveFieldInArray,
     unsetPath,
 } from './state.utils';
 
-export const initialState: IEditorState = {
+export const defaultInitialState: IEditorState = {
     formMap: {},
     activeFormId: null,
 };
-
-const processSetState = (_: IEditorState, { state: newState }: SetState): IEditorState => newState;
 
 const processAddForm = (
     state: IEditorState,
@@ -453,25 +451,66 @@ const processSetActiveModel = (state: IEditorState, { model }: SetActiveModel): 
     },
 });
 
-const editorReducer = createReducer(
-    initialState,
-    on(setState, processSetState),
-    on(addForm, processAddForm),
-    on(removeForm, processRemoveForm),
-    on(duplicateForm, processDuplicateForm),
-    on(setActiveFormId, processSetActiveFormId),
-    on(addField, processAddField),
-    on(removeField, processRemoveField),
-    on(setEditMode, processSetEditMode),
-    on(modifyActiveField, processModifyActiveField),
-    on(setActiveField, processSetActiveField),
-    on(replaceField, processReplaceField),
-    on(moveField, processMoveField),
-    on(modifyActiveModel, processModifyActiveModel),
-    on(setActiveModel, processSetActiveModel)
-);
+const processAction = (editorId: string, processor: (s: IEditorState, a: EditorAction) => IEditorState) => {
+    return (state: IEditorState, action: EditorAction) => {
+        // Only process action for specified editor instance.
+        if (editorId !== action.editorId) {
+            return state;
+        }
+        return processor(state, action);
+    };
+};
 
-export const editorFeature = createFeature({
-    name: 'editor',
-    reducer: editorReducer,
-});
+export const createEditorFeature = (editorId: string) => {
+    const storedState: string = localStorage.getItem(editorId);
+    const initialState: IEditorState = storedState ? JSON.parse(storedState) : defaultInitialState;
+
+    return createFeature({
+        name: editorId,
+        reducer: createReducer(
+            initialState,
+            on(addForm, processAction(editorId, processAddForm)),
+            on(removeForm, processAction(editorId, processRemoveForm)),
+            on(duplicateForm, processAction(editorId, processDuplicateForm)),
+            on(setActiveFormId, processAction(editorId, processSetActiveFormId)),
+            on(addField, processAction(editorId, processAddField)),
+            on(removeField, processAction(editorId, processRemoveField)),
+            on(setEditMode, processAction(editorId, processSetEditMode)),
+            on(modifyActiveField, processAction(editorId, processModifyActiveField)),
+            on(setActiveField, processAction(editorId, processSetActiveField)),
+            on(replaceField, processAction(editorId, processReplaceField)),
+            on(moveField, processAction(editorId, processMoveField)),
+            on(modifyActiveModel, processAction(editorId, processModifyActiveModel)),
+            on(setActiveModel, processAction(editorId, processSetActiveModel))
+        ),
+        extraSelectors: ({ selectFormMap, selectActiveFormId }) => {
+            const selectForms = createSelector(selectFormMap, formMap => Object.values(formMap));
+            const selectActiveForm = createSelector(
+                selectFormMap,
+                selectActiveFormId,
+                (formMap, formId) => formMap[formId]
+            );
+            const selectActiveFormIndex = createSelector(selectFormMap, selectActiveFormId, (formMap, formId) =>
+                Object.keys(formMap).indexOf(formId)
+            );
+            const selectActiveFieldMap = createSelector(selectActiveForm, form =>
+                form?.fields?.reduce<Record<string, IEditorFormlyField>>((a, f) => ({ ...a, ...getFieldMap(f) }), {})
+            );
+            const selectActiveField = createSelector(
+                selectActiveForm,
+                selectActiveFieldMap,
+                (form, fieldMap) => fieldMap?.[form?.activeFieldId] ?? null
+            );
+            const selectActiveModel = createSelector(selectActiveForm, form => form?.model);
+
+            return {
+                selectForms,
+                selectActiveForm,
+                selectActiveFormIndex,
+                selectActiveFieldMap,
+                selectActiveField,
+                selectActiveModel,
+            };
+        },
+    });
+};

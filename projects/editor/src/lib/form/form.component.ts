@@ -14,8 +14,6 @@ import { FormlyFormComponent } from '../custom-formly/formly-form/formly-form.co
 import { EditorService } from '../editor.service';
 import { FieldOption, IEditorFormlyField, IForm } from '../editor.types';
 import { isCategoryOption, isTypeOption } from '../editor.utils';
-import { selectActiveForm } from '../state/state.selectors';
-import { IEditorState } from '../state/state.types';
 import { TextEditorComponent } from '../text-editor/text-editor.component';
 import { cleanField } from './form.utils';
 import { ToolbarComponent } from './toolbar/toolbar.component';
@@ -70,13 +68,15 @@ export class FormComponent implements OnInit, OnDestroy {
 
     constructor(
         private _editorService: EditorService,
-        private _store: Store<IEditorState>
+        private _store: Store
     ) {}
 
     public ngOnInit(): void {
         this.fieldOptions = this._editorService.fieldOptions;
 
-        const activeForm$ = this._store.select(selectActiveForm).pipe(filter(form => form?.id === this.form.id));
+        const activeForm$ = this._store
+            .select(this._editorService.feature.selectActiveForm)
+            .pipe(filter(form => form?.id === this.form.id));
         const activeFields$ = activeForm$.pipe(
             debounceTime(this._debounceTime),
             filter(form => form.fields !== this._cachedFields),

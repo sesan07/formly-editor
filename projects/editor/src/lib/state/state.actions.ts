@@ -3,13 +3,12 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 
 import { FieldTypeOption, GetDefaultField, IEditorFormlyField } from '../editor.types';
 import { IPropertyChange } from '../property/property.types';
-import { IEditorState } from './state.types';
 
-export interface SetState {
-    state: IEditorState;
+export interface EditorAction {
+    editorId: string;
 }
 
-export interface AddForm {
+export interface AddForm extends EditorAction {
     name: string;
     sourceFields?: FormlyFieldConfig[];
     model?: object;
@@ -17,16 +16,16 @@ export interface AddForm {
     defaultTypeOption: FieldTypeOption;
     getDefaultField: GetDefaultField;
 }
-export interface RemoveForm {
+export interface RemoveForm extends EditorAction {
     formId: string;
 }
-export interface DuplicateForm {
+export interface DuplicateForm extends EditorAction {
     formId: string;
 }
-export interface SetActiveFormId {
+export interface SetActiveFormId extends EditorAction {
     activeFormId: string;
 }
-export interface AddField {
+export interface AddField extends EditorAction {
     fieldType: string;
     parent?: IEditorFormlyField;
     index?: number;
@@ -34,29 +33,29 @@ export interface AddField {
     defaultTypeOption: FieldTypeOption;
     getDefaultField: GetDefaultField;
 }
-export interface RemoveField {
+export interface RemoveField extends EditorAction {
     fieldId: string;
     parent?: IEditorFormlyField;
     keyPath?: string;
 }
-export interface SetEditMode {
+export interface SetEditMode extends EditorAction {
     formId: string;
     isEditMode: boolean;
 }
-export interface ModifyActiveField {
+export interface ModifyActiveField extends EditorAction {
     activeField: IEditorFormlyField;
     change: IPropertyChange;
 }
-export interface SetActiveField {
+export interface SetActiveField extends EditorAction {
     activeFieldId: string;
 }
-export interface ModifyActiveModel {
+export interface ModifyActiveModel extends EditorAction {
     change: IPropertyChange;
 }
-export interface SetActiveModel {
+export interface SetActiveModel extends EditorAction {
     model: Record<string, unknown>;
 }
-export interface ReplaceField {
+export interface ReplaceField extends EditorAction {
     field: IEditorFormlyField;
     parent?: IEditorFormlyField;
     newFieldType: string;
@@ -65,15 +64,13 @@ export interface ReplaceField {
     keyPath?: string;
     getDefaultField: GetDefaultField;
 }
-export interface MoveField {
+export interface MoveField extends EditorAction {
     sourceField: IEditorFormlyField;
     sourceParent: IEditorFormlyField;
     targetParent?: IEditorFormlyField;
     sourceIndex: number;
     targetIndex?: number;
 }
-
-export const setState = createAction('[Editor] Set State', props<SetState>());
 
 export const addForm = createAction('[Editor] Add Form', props<AddForm>());
 export const removeForm = createAction('[Editor] Remove Form', props<RemoveForm>());

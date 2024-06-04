@@ -13,6 +13,7 @@ import {
 import { defaultForm } from './bootstrap.form';
 
 export const bootstrapEditorConfig: EditorConfig = {
+    id: 'editor-bootstrap',
     fieldOptions: [
         {
             displayName: 'Input',

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, debounceTime, takeUntil } from 'rxjs';
@@ -33,16 +33,6 @@ import { getDefaultProperty, initRootProperty } from './property/property.utils'
 import { SidebarSectionComponent } from './sidebar/sidebar-section/sidebar-section.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SideBarPosition } from './sidebar/sidebar.types';
-import { initialState } from './state/state.reducers';
-import {
-    selectActiveField,
-    selectActiveForm,
-    selectActiveFormIndex,
-    selectActiveModel,
-    selectEditor,
-    selectForms,
-} from './state/state.selectors';
-import { IEditorState } from './state/state.types';
 
 @Component({
     selector: 'editor-main',
@@ -73,9 +63,6 @@ import { IEditorState } from './state/state.types';
     ],
 })
 export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
-    @Input() autosaveStorageKey = 'editor';
-    @Input() autosaveDelay = 0;
-
     public forms$: Observable<ReadonlyArray<IForm>>;
     public activeFormIndex$: Observable<number>;
     public activeField$: Observable<IEditorFormlyField>;
@@ -101,14 +88,15 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
     constructor(
         private _editorService: EditorService,
-        private _store: Store<IEditorState>,
+        private _store: Store,
         private _dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
         this.defaultForm = this._editorService.config.defaultForm;
-        this._loadState();
 
+        const { selectForms, selectActiveFormIndex, selectActiveField, selectActiveForm, selectActiveModel } =
+            this._editorService.feature;
         this.forms$ = this._store.select(selectForms);
         this.activeFormIndex$ = this._store.select(selectActiveFormIndex).pipe(
             debounceTime(0) // allows tab header to render properly when non-zero index on startup
@@ -258,20 +246,6 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
     loadDefaultForm(): void {
         this._editorService.addForm(this.defaultForm.name, this.defaultForm.fields, this.defaultForm.model);
-    }
-
-    private _loadState(): void {
-        const storedState = localStorage.getItem(this.autosaveStorageKey);
-        if (storedState) {
-            this._editorService.setState(JSON.parse(storedState));
-        } else {
-            this._editorService.setState(initialState);
-        }
-
-        this._store
-            .select(selectEditor)
-            .pipe(takeUntil(this._destroy$), debounceTime(this.autosaveDelay))
-            .subscribe(state => localStorage.setItem(this.autosaveStorageKey, JSON.stringify(state)));
     }
 
     private _getModelProperty(): IObjectProperty {

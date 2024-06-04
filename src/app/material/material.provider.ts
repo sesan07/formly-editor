@@ -1,5 +1,6 @@
 import { EnvironmentProviders, importProvidersFrom, makeEnvironmentProviders } from '@angular/core';
 import { FormlyModule } from '@ngx-formly/core';
+import { FormlyMaterialModule } from '@ngx-formly/material';
 
 import { provideCardWrapper } from './components/card-wrapper/card-wrapper.provider';
 import { provideRepeatingSectionType } from './components/repeating-section-type/repeating-section-type.provider';
@@ -10,6 +11,7 @@ export function provideMaterial(): EnvironmentProviders {
         provideCardWrapper(),
         provideRepeatingSectionType(),
         importProvidersFrom([
+            FormlyMaterialModule,
             FormlyModule.forRoot({
                 validators: [
                     { name: 'ip', validation: ipValidator },
