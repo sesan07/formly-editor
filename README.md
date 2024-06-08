@@ -2,6 +2,8 @@
 
 A configurable editor for ngx-formly forms.
 
+This project uses standalone components.
+
 Demo: https://formly-editor.sesan.dev
 
 ![Demo Screenshot](docs/img/screenshot.png 'Demo Screenshot')
@@ -11,8 +13,6 @@ Demo: https://formly-editor.sesan.dev
 -   Clone this repo: `git clone https://github.com/sesan07/formly-editor.git`
 -   Install dependencies: `npm i`
 -   Start app: `npm start`
-
-The editor is also published as an [NPM library](https://www.npmjs.com/package/@sesan07/ngx-formly-editor). It can be installed with `npm i @sesan07/ngx-formly-editor`
 
 ## Setup
 
@@ -57,12 +57,16 @@ const cardWrapperConfig: FieldWrapperOption = {
 };
 
 // Configure validator options that can be set
-export const validatorOptions: ValidatorOption[] = [{
-    name: 'Ip',
-    key: 'ip',
-}];
+export const validatorOptions: ValidatorOption[] = [
+    {
+        name: 'Ip',
+        key: 'ip',
+    }
+    ...
+];
 
 export const editorConfig: EditorConfig = {
+    id: 'editor',
     fieldOptions: [ // Configs for fields or field categories
         { // A field category
             displayName: 'Input',
@@ -74,6 +78,11 @@ export const editorConfig: EditorConfig = {
     ],
     wrapperOptions: [cardWrapperConfig], // configs for wrappers
     validatorOptions: validatorOptions,
+    defaultForm: {
+        name: 'Form Zero',
+        fields: [...], // Formly field configs
+        model: {...}
+    },
 };
 ```
 
@@ -85,60 +94,70 @@ These helper functions can be used to create properties
 -   `createSelectProperty({...})`
 -   `createTextProperty({...})`
 
-### Import the EditorModule
+### Provide the Editor config
 
 ```typescript
-import { NgModule } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { FormlyModule } from '@ngx-formly/core';
-import { FormlyMaterialModule } from '@ngx-formly/material';
-import { EditorModule } from '@sesan07/ngx-formly-editor';
-import { editorConfig } from './editor.config';
 
-@NgModule({
-    ...
-    imports: [
+import { provideEditor, provideEditorConfig, withConfig } from '@sesan07/ngx-formly-editor';
+
+import { editorConfig1, editorConfig2 } from './editor.config';
+
+// Single route setup
+export const appConfig: ApplicationConfig = {
+    providers: [
         ...
-        FormlyMaterialModule, // Can be replaced with other formly UI modules
-        FormlyModule.forRoot({ // Configure formly
-            ...
-            validators: [{ name: 'ip', validation: ipValidator }],
-            validationMessages: [{ name: 'required', message: 'This field is required' }],
-        }),
-        EditorModule.forRoot(editorConfig), // Configure the editor
+        // Provide the editor and config
+        provideEditor(withConfig(editorConfig1)),
+        // Ngx-formly configuration
+        importProvidersFrom([
+            FormlyModule.forRoot({ ... }),
+        ]),
+        ...
     ],
-})
-export class MyModule {}
+};
+
+// Multi route setup
+export const appConfig: ApplicationConfig = {
+    providers: [
+        ...
+        // Provide the editor
+        provideEditor(),
+        provideRouter([
+            {
+                path: 'path1',
+                // Provide editorConfig1 for path1
+                providers: [provideEditorConfig(editorConfig1)],
+            },
+            {
+                path: 'path2',
+                // Provide editorConfig2 for path2
+                providers: [provideEditorConfig(editorConfig2)],
+            },
+        ])
+        // Ngx-formly configuration
+        importProvidersFrom([
+            FormlyModule.forRoot({ ... }),
+        ]),
+        ...
+    ],
+};
 ```
 
 ### Use the Editor Component
 
 ```typescript
 import { Component } from '@angular/core';
-import { IDefaultForm, IStylesConfig, tailwindConfig } from '@sesan07/ngx-formly-editor';
+import { EditorComponent } from '@sesan07/ngx-formly-editor';
 
 @Component({
     selector: 'app-example',
-    template: `
-        <!-- All inputs are optional -->
-        <editor-main
-            [autosaveStorageKey]="'editor-local-storage-key'"
-            [autosaveDelay]="2000"
-            [defaultForm]="defaultForm"
-            [stylesConfig]="tailwindConfig"
-        >
-        </editor-main>
-    `,
+    template: ` <editor-main></editor-main> `,
+    standalone: true,
+    imports: [EditorComponent],
 })
-export class ExampleComponent {
-    // Configuration for the editor's styling system (styling tab on UI) (defaults to tailwindConfig)
-    // A `bootstrapConfig` is also available, or you can create yours.
-    tailwindConfig: IStylesConfig = tailwindConfig;
-    defaultForm: IDefaultForm = {
-        name: 'Form Zero',
-        fields: [...], // Formly field configs
-        model: {...}
-    }
-}
+export class ExampleComponent {}
 ```
 
 ### Import the editor's styles into your app
