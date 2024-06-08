@@ -4,7 +4,9 @@ import { MAT_TABS_CONFIG } from '@angular/material/tabs';
 import { DndService, provideDnd } from '@ng-dnd/core';
 import { HTML5Backend } from '@ng-dnd/multi-backend';
 import { ActionReducer, META_REDUCERS, provideState, provideStore } from '@ngrx/store';
+import { ConfigOption, FORMLY_CONFIG } from '@ngx-formly/core';
 
+import { FormlyGroupComponent } from './custom-formly/formly-group/formly-group.component';
 import { StylesService } from './edit-field/styles/styles.service';
 import { EditorService } from './editor.service';
 import { EDITOR_CONFIG, EditorConfig, EditorFieldType, FieldTypeOption } from './editor.types';
@@ -69,6 +71,7 @@ export function provideEditorConfig(config: EditorConfig = defaultConfig): Envir
 export function withConfig(config: EditorConfig): EnvironmentProviders {
     config.genericTypeOption = config.genericTypeOption ?? defaultGenericTypeOption;
     const feature: EditorFeature = createEditorFeature(config.id);
+    const formlyConfig: ConfigOption = { types: [{ name: 'formly-group', component: FormlyGroupComponent }] };
 
     return makeEnvironmentProviders([
         {
@@ -78,6 +81,11 @@ export function withConfig(config: EditorConfig): EnvironmentProviders {
         {
             provide: EDITOR_FEATURE,
             useValue: feature,
+        },
+        {
+            provide: FORMLY_CONFIG,
+            useValue: formlyConfig,
+            multi: true,
         },
         provideState(feature),
         EditorService,
