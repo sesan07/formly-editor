@@ -1,7 +1,7 @@
 import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { MAT_TABS_CONFIG } from '@angular/material/tabs';
-import { DndService, provideDnd } from '@ng-dnd/core';
+import { provideDnd } from '@ng-dnd/core';
 import { HTML5Backend } from '@ng-dnd/multi-backend';
 import { ActionReducer, META_REDUCERS, provideState, provideStore } from '@ngrx/store';
 import { ConfigOption, FORMLY_CONFIG } from '@ngx-formly/core';
@@ -60,7 +60,6 @@ export function provideEditor(configProviders?: EnvironmentProviders): Environme
         },
         provideStore(),
         provideDnd({ backend: HTML5Backend }),
-        DndService,
     ]);
 }
 
