@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs';
 
 import { EditorFieldType, IEditorFormlyFieldConfigCache } from '../../editor.types';
 import { RootFormlyFieldComponent } from '../formly-field/formly-field.component';
-import { FormlyGroupComponent } from '../formly-group/formly-group.component';
 import { FormlyFieldTemplates } from '../formly.template';
 
 @Component({
@@ -38,12 +37,6 @@ export class FormlyFormComponent extends FormlyForm implements OnChanges {
         fieldTemplates: FormlyFieldTemplates
     ) {
         super(builder, config, ngZone, fieldTemplates);
-
-        // Use the editor's formly-group component
-        config.setType({
-            name: EditorFieldType.FORMLY_GROUP,
-            component: FormlyGroupComponent,
-        });
     }
 
     override ngOnChanges(changes: SimpleChanges): void {
