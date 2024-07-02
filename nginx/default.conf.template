@@ -4,6 +4,12 @@ server {
 
     server_name  localhost;
 
+    location = /health {
+        access_log off;
+        add_header 'Content-Type' 'application/json';
+        return 200 '{ "status": "OK!" }';
+    }
+
     location / {
         root   /usr/share/nginx/html;
         index  index.html;
