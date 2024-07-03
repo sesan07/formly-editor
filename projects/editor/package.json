@@ -1,25 +1,25 @@
 {
   "name": "@sesan07/ngx-formly-editor",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "A configurable editor for ngx-formly forms.",
   "author": "Samuel Esan <samuel.esan@proton.me> (https://sesan.dev)",
   "license": "MIT",
   "homepage": "https://github.com/sesan07/formly-editor#readme",
   "peerDependencies": {
-    "@angular/core": ">=15.0.0",
-    "@angular/material": ">=15.0.0",
-    "@ng-dnd/core": "^2.0.2",
-    "@ng-dnd/multi-backend": "^2.0.2",
-    "@ngrx/store": ">=15.0.0",
+    "@angular/core": ">=18.0.0",
+    "@angular/material": ">=18.0.0",
+    "@ng-dnd/core": "^3.0.0",
+    "@ng-dnd/multi-backend": "^3.0.0",
+    "@ngrx/store": ">=18.0.0",
     "@ngx-formly/core": "^6.0.0",
     "@types/codemirror": "^5.60.7",
     "@types/file-saver-es": "^2.0.1",
     "@types/lodash-es": "^4.17.5",
     "codemirror": "^5.65.11",
     "file-saver-es": "^2.0.5",
-    "immer": "^9.0.19",
+    "immer": "^10.1.1",
     "lodash-es": "^4.17.21",
-    "nanoid": "^4.0.2"
+    "nanoid": "^5.0.7"
   },
   "dependencies": {
     "tslib": "^2.0.0"
