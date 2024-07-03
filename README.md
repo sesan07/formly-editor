@@ -145,6 +145,8 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
+`EditorModule.forRoot(config?)` and `EditorModule.forChild(config)` are also available for non standalone apps.
+
 ### Use the Editor Component
 
 ```typescript

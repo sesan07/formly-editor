@@ -26,4 +26,5 @@ export {
     ValidatorOption,
 } from './lib/editor.types';
 
+export { EditorModule } from './lib/editor.module';
 export { provideEditor, provideEditorConfig, withConfig } from './lib/editor.provider';
