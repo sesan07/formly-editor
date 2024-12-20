@@ -11,19 +11,25 @@
     height: 100%;
 
     ::ng-deep {
-        .form-tab-group > .mat-mdc-tab-header {
-            @include mat.icon-button-density(-4);
-            .mat-mdc-icon-button {
-                line-height: normal;
+        .form-tab-group > {
+            & .mat-mdc-tab-header {
+                @include mat.icon-button-density(-4);
+                .mat-mdc-icon-button {
+                    line-height: normal;
+                }
+
+                margin-right: var(--add-form-width);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+                .inner-tab-label-content {
+                    display: inline-flex;
+                    align-items: center;
+                    column-gap: 16px;
+                }
             }
 
-            margin-right: var(--add-form-width);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-
-            .inner-tab-label-content {
-                display: inline-flex;
-                align-items: center;
-                column-gap: 16px;
+            & .mat-mdc-tab-body-wrapper {
+                height: 100%;
             }
         }
     }
