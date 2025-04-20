@@ -20,7 +20,6 @@ import { IValidationConfig, IValidationData, IValidatorsProperty, IValidatorsVal
     templateUrl: './validators-property.component.html',
     styleUrls: ['./validators-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         MatExpansionPanel,
         MatExpansionPanelHeader,
@@ -31,7 +30,7 @@ import { IValidationConfig, IValidationData, IValidatorsProperty, IValidatorsVal
         MatMenu,
         MatMenuItem,
         forwardRef(() => ObjectPropertyComponent),
-    ],
+    ]
 })
 export class ValidatorsPropertyComponent extends BasePropertyDirective<IValidatorsProperty, IValidatorsValue> {
     public isExpanded: boolean;

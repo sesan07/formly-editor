@@ -14,8 +14,7 @@ import { TreeItemComponent } from '../tree-item/tree-item.component';
     templateUrl: './add-field-tree-item.component.html',
     styleUrls: ['./add-field-tree-item.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [TreeItemComponent, DragSourceDirective, AsyncPipe],
+    imports: [TreeItemComponent, DragSourceDirective, AsyncPipe]
 })
 export class AddFieldTreeItemComponent implements OnChanges, OnDestroy {
     @Input() public fieldOption: FieldOption;

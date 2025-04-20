@@ -17,7 +17,6 @@ import { IInputProperty } from './input-property.types';
     templateUrl: './input-property.component.html',
     styleUrls: ['./input-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         TreeItemComponent,
         PropertyKeyComponent,
@@ -29,7 +28,7 @@ import { IInputProperty } from './input-property.types';
         MatMenuItem,
         MatIcon,
         LowerCasePipe,
-    ],
+    ]
 })
 export class InputPropertyComponent extends BasePropertyDirective<IInputProperty, string | number | boolean> {
     public formControl: FormControl<string>;

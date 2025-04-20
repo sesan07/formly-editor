@@ -16,8 +16,7 @@ import { isNil } from 'lodash-es';
     selector: 'editor-property-key',
     templateUrl: './property-key.component.html',
     styleUrls: ['./property-key.component.scss'],
-    standalone: true,
-    imports: [NgClass],
+    imports: [NgClass]
 })
 export class PropertyKeyComponent implements OnChanges, AfterViewInit {
     @Input() isEditable: boolean;

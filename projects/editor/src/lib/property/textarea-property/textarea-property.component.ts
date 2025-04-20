@@ -17,7 +17,6 @@ import { ITextareaProperty } from './textarea-property.types';
     templateUrl: './textarea-property.component.html',
     styleUrls: ['./textarea-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         TreeItemComponent,
         PropertyKeyComponent,
@@ -29,7 +28,7 @@ import { ITextareaProperty } from './textarea-property.types';
         MatMenu,
         MatMenuItem,
         MatIcon,
-    ],
+    ]
 })
 export class TextareaPropertyComponent extends BasePropertyDirective<ITextareaProperty, string> {
     public formControl: FormControl<string>;

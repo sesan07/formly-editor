@@ -23,8 +23,7 @@ import { findVariant, formatVariant } from '../styles.utils';
     templateUrl: './style-option.component.html',
     styleUrls: ['./style-option.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [MatFormField, MatLabel, MatSelect, MatOption, MatIconButton, MatIcon],
+    imports: [MatFormField, MatLabel, MatSelect, MatOption, MatIconButton, MatIcon]
 })
 export class StyleOptionComponent implements OnChanges {
     @Input() field: IEditorFormlyField;

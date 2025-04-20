@@ -14,8 +14,7 @@ import { ISelectProperty, ISelectPropertyOption } from './select-property.types'
     templateUrl: './select-property.component.html',
     styleUrls: ['./select-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [MatFormField, MatLabel, MatSelect, ReactiveFormsModule, MatOption, MatIconButton, MatSuffix, MatIcon],
+    imports: [MatFormField, MatLabel, MatSelect, ReactiveFormsModule, MatOption, MatIconButton, MatSuffix, MatIcon]
 })
 export class SelectPropertyComponent extends BasePropertyDirective<ISelectProperty, string | number> {
     public formControl: FormControl<string | number>;

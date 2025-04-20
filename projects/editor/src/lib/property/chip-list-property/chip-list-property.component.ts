@@ -20,7 +20,6 @@ import { IChipListProperty } from './chip-list-property.types';
     templateUrl: './chip-list-property.component.html',
     styleUrls: ['./chip-list-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         TreeItemComponent,
         PropertyKeyComponent,
@@ -39,7 +38,7 @@ import { IChipListProperty } from './chip-list-property.types';
         MatMenu,
         MatMenuItem,
         AsyncPipe,
-    ],
+    ]
 })
 export class ChipListPropertyComponent extends BasePropertyDirective<IChipListProperty, string | string[]> {
     @ViewChild('input') inputElementRef: ElementRef<HTMLInputElement>;

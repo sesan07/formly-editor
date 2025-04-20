@@ -27,7 +27,6 @@ import { IArrayProperty } from './array-property.types';
     templateUrl: './array-property.component.html',
     styleUrls: ['./array-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         TreeItemComponent,
         PropertyKeyComponent,
@@ -46,7 +45,7 @@ import { IArrayProperty } from './array-property.types';
         MatMenu,
         MatMenuItem,
         MatMenuTrigger,
-    ],
+    ]
 })
 export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayProperty, unknown[]> {
     protected defaultValue = [];

@@ -1,7 +1,10 @@
 import { Directive, Injectable, Input, OnChanges, QueryList, TemplateRef } from '@angular/core';
 
 // eslint-disable-next-line @angular-eslint/directive-selector
-@Directive({ selector: '[formlyTemplate]' })
+@Directive({
+    selector: '[formlyTemplate]',
+    standalone: false
+})
 // eslint-disable-next-line @angular-eslint/directive-class-suffix
 export class FormlyTemplate implements OnChanges {
     @Input('formlyTemplate') name: string;

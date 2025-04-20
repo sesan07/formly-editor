@@ -27,8 +27,7 @@ import { StylesComponent } from './styles/styles.component';
     templateUrl: './edit-field.component.html',
     styleUrls: ['./edit-field.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [MatTabGroup, MatTab, ObjectPropertyComponent, StylesComponent, AsyncPipe],
+    imports: [MatTabGroup, MatTab, ObjectPropertyComponent, StylesComponent, AsyncPipe]
 })
 export class EditFieldComponent implements OnInit, OnDestroy {
     @Input() resizeTabHeader$: Observable<void>;

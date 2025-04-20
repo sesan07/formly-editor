@@ -25,7 +25,6 @@ import { IObjectProperty } from './object-property.types';
     templateUrl: './object-property.component.html',
     styleUrls: ['./object-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         TreeItemComponent,
         PropertyKeyComponent,
@@ -45,7 +44,7 @@ import { IObjectProperty } from './object-property.types';
         MatMenu,
         MatMenuItem,
         ValidatorsPropertyComponent,
-    ],
+    ]
 })
 export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjectProperty, Record<string, unknown>> {
     @Input() useExpansionPanel = true;

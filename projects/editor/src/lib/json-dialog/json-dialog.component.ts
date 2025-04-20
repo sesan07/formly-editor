@@ -23,7 +23,6 @@ import { JSONValidatorDirective } from './json-validator/json-validator.directiv
 @Component({
     templateUrl: './json-dialog.component.html',
     styleUrls: ['./json-dialog.component.scss'],
-    standalone: true,
     imports: [
         MatDialogTitle,
         CdkScrollable,
@@ -40,7 +39,7 @@ import { JSONValidatorDirective } from './json-validator/json-validator.directiv
         MatIcon,
         MatDialogActions,
         MatDialogClose,
-    ],
+    ]
 })
 export class JSONDialogComponent implements AfterViewInit {
     @ViewChild('form', { read: NgForm })
