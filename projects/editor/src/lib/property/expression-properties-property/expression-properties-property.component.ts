@@ -18,7 +18,6 @@ import { IExpressionPropertiesProperty, IExpressionProperty } from './expression
     templateUrl: './expression-properties-property.component.html',
     styleUrls: ['./expression-properties-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         MatExpansionPanel,
         MatExpansionPanelHeader,
@@ -28,7 +27,7 @@ import { IExpressionPropertiesProperty, IExpressionProperty } from './expression
         MatExpansionPanelTitle,
         PropertyKeyComponent,
         TextEditorComponent,
-    ],
+    ]
 })
 export class ExpressionPropertiesPropertyComponent extends BasePropertyDirective<
     IExpressionPropertiesProperty,

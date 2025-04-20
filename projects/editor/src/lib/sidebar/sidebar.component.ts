@@ -20,8 +20,7 @@ import { SideBarPosition } from './sidebar.types';
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [],
+    imports: []
 })
 export class SidebarComponent implements AfterContentInit {
     @Input() position: SideBarPosition;

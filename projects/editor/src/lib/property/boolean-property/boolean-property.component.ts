@@ -14,8 +14,7 @@ import { IBooleanProperty } from './boolean-property.types';
     templateUrl: './boolean-property.component.html',
     styleUrls: ['./boolean-property.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [TreeItemComponent, PropertyKeyComponent, MatCheckbox, ReactiveFormsModule, MatMenu, MatMenuItem, MatIcon],
+    imports: [TreeItemComponent, PropertyKeyComponent, MatCheckbox, ReactiveFormsModule, MatMenu, MatMenuItem, MatIcon]
 })
 export class BooleanPropertyComponent extends BasePropertyDirective<IBooleanProperty, boolean> {
     public formControl: FormControl<boolean>;

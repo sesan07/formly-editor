@@ -42,7 +42,6 @@ export class RootFormlyFieldComponent extends FormlyField {}
     templateUrl: './formly-field.component.html',
     styleUrls: ['./formly-field.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         DragPreviewDirective,
         DragSourceDirective,
@@ -57,7 +56,7 @@ export class RootFormlyFieldComponent extends FormlyField {}
         NgTemplateOutlet,
         AsyncPipe,
         FieldNamePipe,
-    ],
+    ]
 })
 export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestroy {
     @Input() override field: IEditorFormlyField;

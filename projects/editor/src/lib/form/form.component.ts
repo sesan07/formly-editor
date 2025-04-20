@@ -23,7 +23,6 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         ToolbarComponent,
         MatTabGroup,
@@ -39,7 +38,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
         MatMenuItem,
         NgTemplateOutlet,
         AsyncPipe,
-    ],
+    ]
 })
 export class FormComponent implements OnInit, OnDestroy {
     @Input() form: IForm;

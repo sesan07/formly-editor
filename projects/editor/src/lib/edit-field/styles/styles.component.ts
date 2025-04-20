@@ -33,7 +33,6 @@ import { ClassProperty, IBreakpoint, IStyleOption, IStyleOptionCategory, IStyles
     templateUrl: './styles.component.html',
     styleUrls: ['./styles.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         MatButtonToggleGroup,
         MatButtonToggle,
@@ -47,7 +46,7 @@ import { ClassProperty, IBreakpoint, IStyleOption, IStyleOptionCategory, IStyles
         MatExpansionPanelTitle,
         StyleOptionComponent,
         ChipListPropertyComponent,
-    ],
+    ]
 })
 export class StylesComponent implements OnChanges, OnInit {
     @Input() editField: IEditorFormlyField;

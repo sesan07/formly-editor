@@ -33,7 +33,6 @@ import { TreeItemComponent } from '../tree-item/tree-item.component';
     templateUrl: './field-tree-item.component.html',
     styleUrls: ['./field-tree-item.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         TreeItemComponent,
         DragSourceDirective,
@@ -47,7 +46,7 @@ import { TreeItemComponent } from '../tree-item/tree-item.component';
         NgTemplateOutlet,
         AsyncPipe,
         FieldNamePipe,
-    ],
+    ]
 })
 export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public field: IEditorFormlyField;

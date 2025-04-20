@@ -12,7 +12,6 @@ import { EditorService } from '../../editor.service';
     templateUrl: './toolbar.component.html',
     styleUrls: ['./toolbar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
     imports: [
         MatButtonToggleGroup,
         MatButtonToggle,
@@ -21,7 +20,7 @@ import { EditorService } from '../../editor.service';
         ReactiveFormsModule,
         FormsModule,
         MatIconButton,
-    ],
+    ]
 })
 export class ToolbarComponent {
     @Input() tabIndex: 0 | 1;

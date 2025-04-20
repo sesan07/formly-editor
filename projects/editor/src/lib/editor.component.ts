@@ -38,7 +38,6 @@ import { SideBarPosition } from './sidebar/sidebar.types';
     selector: 'editor-main',
     templateUrl: './editor.component.html',
     styleUrls: ['./editor.component.scss'],
-    standalone: true,
     imports: [
         SidebarComponent,
         SidebarSectionComponent,
@@ -60,7 +59,7 @@ import { SideBarPosition } from './sidebar/sidebar.types';
         NgTemplateOutlet,
         AsyncPipe,
         FieldNamePipe,
-    ],
+    ]
 })
 export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
     public forms$: Observable<ReadonlyArray<IForm>>;
