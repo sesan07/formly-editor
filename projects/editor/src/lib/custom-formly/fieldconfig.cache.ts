@@ -17,12 +17,15 @@ export interface FormlyFieldConfigCache extends FormlyFieldConfig {
     index?: number;
     _localFields?: FormlyFieldConfigCache[];
     _elementRefs?: ElementRef[];
-    _expressions?: Record<string, {
+    _expressions?: Record<
+        string,
+        {
             callback?: (ingoreCache: boolean) => boolean;
             paths?: string[];
             subscription?: Subscription | null;
             value$?: Observable<any>;
-        }>;
+        }
+    >;
     _hide?: boolean;
     _validators?: ValidatorFn[];
     _asyncValidators?: AsyncValidatorFn[];

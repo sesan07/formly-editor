@@ -9,6 +9,6 @@ import { FormlyFieldComponent } from '../formly-field/formly-field.component';
     templateUrl: './formly-group.component.html',
     styleUrls: ['./formly-group.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [FormlyFieldComponent, FormlyModule]
+    imports: [FormlyFieldComponent, FormlyModule],
 })
 export class FormlyGroupComponent extends FieldType<IEditorFormlyField> {}

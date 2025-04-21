@@ -38,7 +38,7 @@ import { IChipListProperty } from './chip-list-property.types';
         MatMenu,
         MatMenuItem,
         AsyncPipe,
-    ]
+    ],
 })
 export class ChipListPropertyComponent extends BasePropertyDirective<IChipListProperty, string | string[]> {
     @ViewChild('input') inputElementRef: ElementRef<HTMLInputElement>;

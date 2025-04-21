@@ -46,7 +46,7 @@ import { ClassProperty, IBreakpoint, IStyleOption, IStyleOptionCategory, IStyles
         MatExpansionPanelTitle,
         StyleOptionComponent,
         ChipListPropertyComponent,
-    ]
+    ],
 })
 export class StylesComponent implements OnChanges, OnInit {
     @Input() editField: IEditorFormlyField;

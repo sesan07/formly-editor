@@ -59,7 +59,7 @@ import { SideBarPosition } from './sidebar/sidebar.types';
         NgTemplateOutlet,
         AsyncPipe,
         FieldNamePipe,
-    ]
+    ],
 })
 export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
     public forms$: Observable<readonly IForm[]>;

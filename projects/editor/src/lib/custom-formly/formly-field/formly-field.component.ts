@@ -56,7 +56,7 @@ export class RootFormlyFieldComponent extends FormlyField {}
         NgTemplateOutlet,
         AsyncPipe,
         FieldNamePipe,
-    ]
+    ],
 })
 export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestroy {
     @Input() override field: IEditorFormlyField;

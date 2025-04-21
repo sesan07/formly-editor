@@ -20,7 +20,7 @@ import { EditorService } from '../../editor.service';
         ReactiveFormsModule,
         FormsModule,
         MatIconButton,
-    ]
+    ],
 })
 export class ToolbarComponent {
     @Input() tabIndex: 0 | 1;

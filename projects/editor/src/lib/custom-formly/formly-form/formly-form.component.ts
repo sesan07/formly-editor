@@ -14,7 +14,7 @@ import { FormlyFieldTemplates } from '../formly.template';
     styleUrls: ['./formly-form.component.scss'],
     providers: [FormlyFormBuilder, FormlyFieldTemplates],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatIcon, RootFormlyFieldComponent, AsyncPipe]
+    imports: [MatIcon, RootFormlyFieldComponent, AsyncPipe],
 })
 export class FormlyFormComponent extends FormlyForm implements OnChanges {
     public override field: IEditorFormlyFieldConfigCache = {

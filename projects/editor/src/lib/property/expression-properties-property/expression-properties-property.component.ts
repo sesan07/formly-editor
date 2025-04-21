@@ -27,7 +27,7 @@ import { IExpressionPropertiesProperty, IExpressionProperty } from './expression
         MatExpansionPanelTitle,
         PropertyKeyComponent,
         TextEditorComponent,
-    ]
+    ],
 })
 export class ExpressionPropertiesPropertyComponent extends BasePropertyDirective<
     IExpressionPropertiesProperty,

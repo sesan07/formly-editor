@@ -11,11 +11,7 @@ export const setFieldChildren = <T extends IEditorFormlyField>(field: T, childre
         set(draft, field._info.childrenConfig.path, children);
     });
 
-export const cleanField = (
-    field: IEditorFormlyField,
-    cleanChildren = true,
-    removeEditorProperties?: boolean
-): void => {
+export const cleanField = (field: IEditorFormlyField, cleanChildren = true, removeEditorProperties?: boolean): void => {
     if (cleanChildren && field._info.childrenConfig) {
         const children: IEditorFormlyField | IEditorFormlyField[] = getFieldChildren(field);
         if (Array.isArray(children)) {

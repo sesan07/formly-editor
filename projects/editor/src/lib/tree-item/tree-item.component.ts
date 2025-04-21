@@ -19,7 +19,7 @@ import { MatMenuPanel, MatMenuTrigger } from '@angular/material/menu';
     styleUrls: ['./tree-item.component.scss'],
     animations: [matExpansionAnimations.bodyExpansion],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatIconButton, MatIcon, MatMenuTrigger]
+    imports: [MatIconButton, MatIcon, MatMenuTrigger],
 })
 export class TreeItemComponent implements OnInit {
     @Input() treeLevel = 0;

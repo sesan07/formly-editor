@@ -5,7 +5,7 @@ import { FieldDropPosition, FieldDropWidth } from '../field-drag-drop.types';
     selector: 'editor-field-drop-overlay',
     templateUrl: './field-drop-overlay.component.html',
     styleUrls: ['./field-drop-overlay.component.scss'],
-    imports: []
+    imports: [],
 })
 export class FieldDropOverlayComponent {
     @Input() @HostBinding('class.hovering') isHovering: boolean;

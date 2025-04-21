@@ -12,7 +12,7 @@ import { Observable, filter, map } from 'rxjs';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    imports: [MatFormField, MatLabel, MatSelect, MatOption, RouterLink, MatIcon, RouterOutlet, AsyncPipe]
+    imports: [MatFormField, MatLabel, MatSelect, MatOption, RouterLink, MatIcon, RouterOutlet, AsyncPipe],
 })
 export class AppComponent {
     currPath$: Observable<string>;
