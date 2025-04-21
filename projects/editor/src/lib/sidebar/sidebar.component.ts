@@ -25,7 +25,7 @@ import { SideBarPosition } from './sidebar.types';
 export class SidebarComponent implements AfterContentInit {
     @Input() position: SideBarPosition;
 
-    @Output() resizeEnd: EventEmitter<void> = new EventEmitter();
+    @Output() resizeEnd = new EventEmitter<void>();
 
     @ContentChildren(SidebarSectionComponent)
     sections: QueryList<SidebarSectionComponent>;

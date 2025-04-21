@@ -76,7 +76,7 @@ export class FormlyFieldComponent extends FormlyField implements OnInit, OnDestr
     isCategoryOption = isCategoryOption;
     isTypeOption = isTypeOption;
 
-    private _destroy$: Subject<void> = new Subject();
+    private _destroy$ = new Subject<void>();
     private _editorField: IEditorFormlyField;
 
     constructor(

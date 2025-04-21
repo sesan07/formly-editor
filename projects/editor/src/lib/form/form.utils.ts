@@ -13,7 +13,7 @@ export const setFieldChildren = <T extends IEditorFormlyField>(field: T, childre
 
 export const cleanField = (
     field: IEditorFormlyField,
-    cleanChildren: boolean = true,
+    cleanChildren = true,
     removeEditorProperties?: boolean
 ): void => {
     if (cleanChildren && field._info.childrenConfig) {

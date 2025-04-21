@@ -36,14 +36,14 @@ export class TextEditorComponent implements AfterViewInit {
     @Input() mode: 'application/javascript' | 'application/json';
     @Input() updateOn: 'blur' | 'change' = 'change';
 
-    @Output() valueChange: EventEmitter<string> = new EventEmitter();
+    @Output() valueChange = new EventEmitter<string>();
 
     @HostBinding() id = `editor-text-editor-${TextEditorComponent._nextId++}`;
 
-    @ViewChild('ref') ref: ElementRef<HTMLTextAreaElement>;
+    @ViewChild('ref') ref: ElementRef;
 
     editorInstance: EditorFromTextArea;
-    stateChanges: Subject<void> = new Subject();
+    stateChanges = new Subject<void>();
     placeholder = '';
     shouldLabelFloat = true;
     disabled = false;
@@ -74,7 +74,6 @@ export class TextEditorComponent implements AfterViewInit {
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     @Input()
     get required(): boolean {
         return this._required ?? this.ngControl?.control?.hasValidator(Validators.required) ?? false;
@@ -83,7 +82,6 @@ export class TextEditorComponent implements AfterViewInit {
         this._required = coerceBooleanProperty(value);
     }
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     @Input()
     get readonly(): boolean {
         return this._readonly;
@@ -92,11 +90,10 @@ export class TextEditorComponent implements AfterViewInit {
         this._readonly = coerceBooleanProperty(value);
     }
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     get empty() {
         return !this.value;
     }
-    // eslint-disable-next-line @typescript-eslint/member-ordering
+
     get errorState(): boolean {
         return this.touched && !!this.ngControl?.errors;
     }
@@ -145,8 +142,6 @@ export class TextEditorComponent implements AfterViewInit {
     registerOnTouched(fn: any): void {
         this._onTouch = fn;
     }
-
-    setDescribedByIds() {}
 
     onContainerClick() {
         this.editorInstance.focus();

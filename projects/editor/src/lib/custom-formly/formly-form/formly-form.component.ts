@@ -27,7 +27,7 @@ export class FormlyFormComponent extends FormlyForm implements OnChanges {
         type: EditorFieldType.FORMLY_GROUP,
     };
 
-    public formError$: BehaviorSubject<string> = new BehaviorSubject('');
+    public formError$ = new BehaviorSubject<string>('');
 
     constructor(
         builder: FormlyFormBuilder,

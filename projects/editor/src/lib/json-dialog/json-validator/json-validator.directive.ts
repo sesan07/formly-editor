@@ -13,14 +13,12 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@an
     standalone: true,
 })
 export class JSONValidatorDirective implements Validator {
-    constructor() {}
-
     validate(control: AbstractControl): ValidationErrors | null {
         if (control.value) {
             try {
                 JSON.parse(control.value);
                 return {};
-            } catch (e) {
+            } catch {
                 return { jsonFormat: true };
             }
         }

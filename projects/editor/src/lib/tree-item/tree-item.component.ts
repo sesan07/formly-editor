@@ -29,7 +29,7 @@ export class TreeItemComponent implements OnInit {
     @Input() optionsMenu: MatMenuPanel;
     @Input() @HostBinding('class.active') isActive: boolean;
 
-    @Output() isExpandedChange: EventEmitter<boolean> = new EventEmitter();
+    @Output() isExpandedChange = new EventEmitter<boolean>();
 
     public treeLevelPadding: number;
     public sideLinePositions: number[];

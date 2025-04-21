@@ -52,7 +52,7 @@ export class StylesComponent implements OnChanges, OnInit {
     @Input() editField: IEditorFormlyField;
     @Input() parentField: IEditorFormlyField;
 
-    @Output() fieldChanged: EventEmitter<IPropertyChange> = new EventEmitter();
+    @Output() fieldChanged = new EventEmitter<IPropertyChange>();
 
     tabIndex = 0;
 

@@ -21,7 +21,7 @@ export class AddFieldTreeItemComponent implements OnChanges, OnDestroy {
     @Input() public isExpanded = false;
     @Input() public treeLevel = 0;
 
-    public isExpanded$: BehaviorSubject<boolean> = new BehaviorSubject(this.isExpanded);
+    public isExpanded$ = new BehaviorSubject<boolean>(this.isExpanded);
     public isCategoryOption: boolean;
     public childOptions: FieldOption[] = [];
 

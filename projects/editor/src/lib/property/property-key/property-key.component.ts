@@ -16,18 +16,16 @@ import { isNil } from 'lodash-es';
     selector: 'editor-property-key',
     templateUrl: './property-key.component.html',
     styleUrls: ['./property-key.component.scss'],
-    imports: [NgClass]
+    imports: [NgClass],
 })
 export class PropertyKeyComponent implements OnChanges, AfterViewInit {
     @Input() isEditable: boolean;
 
-    @Output() keyChange: EventEmitter<string> = new EventEmitter();
+    @Output() keyChange = new EventEmitter<string>();
 
-    @ViewChild('keyElement') keyElementRef: ElementRef<HTMLElement>;
+    @ViewChild('keyElement') keyElementRef: ElementRef;
 
     private _key: string | number;
-
-    constructor() {}
 
     @Input()
     get key() {

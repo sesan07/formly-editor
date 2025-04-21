@@ -43,11 +43,11 @@ import { IChipListProperty } from './chip-list-property.types';
 export class ChipListPropertyComponent extends BasePropertyDirective<IChipListProperty, string | string[]> {
     @ViewChild('input') inputElementRef: ElementRef<HTMLInputElement>;
 
-    public formControl: FormControl<string> = new FormControl();
+    public formControl = new FormControl<string>();
     public separatorKeysCodes: number[] = [ENTER, COMMA];
-    public selectedOptions$: BehaviorSubject<string[]> = new BehaviorSubject([]);
+    public selectedOptions$ = new BehaviorSubject<string[]>([]);
     public selectableOptions: string[];
-    public filteredOptions$: BehaviorSubject<string[]> = new BehaviorSubject([]);
+    public filteredOptions$ = new BehaviorSubject<string[]>([]);
     public hasOptions: boolean;
 
     protected defaultValue = null;

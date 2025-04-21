@@ -62,7 +62,7 @@ import { SideBarPosition } from './sidebar/sidebar.types';
     ]
 })
 export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
-    public forms$: Observable<ReadonlyArray<IForm>>;
+    public forms$: Observable<readonly IForm[]>;
     public activeFormIndex$: Observable<number>;
     public activeField$: Observable<IEditorFormlyField>;
     public resizeEnd$: Observable<void>;
@@ -82,8 +82,8 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
     isCategoryOption = isCategoryOption;
     isTypeOption = isTypeOption;
 
-    private _destroy$: Subject<void> = new Subject();
-    private _resizeEnd$: Subject<void> = new Subject();
+    private _destroy$ = new Subject<void>();
+    private _resizeEnd$ = new Subject<void>();
 
     constructor(
         private _editorService: EditorService,
