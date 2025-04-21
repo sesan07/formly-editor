@@ -15,14 +15,31 @@
 }
 
 .editor-mat {
-    @include mat.form-field-density(-1);
-
-    $typography: mat.m2-define-typography-config();
-    $typography: map.set($typography, body-1, font-size, 14px);
-    @include mat.all-component-typographies($typography);
-
     @include mat.icon-button-density(-4);
+    @include mat.button-density(-1);
     @include mat.checkbox-density(-2);
+    @include mat.form-field-density(-1);
+    @include mat.form-field-overrides(
+        (
+            filled-label-text-size: var(--mat-sys-body-medium-size),
+            container-text-size: var(--mat-sys-body-medium-size),
+        )
+    );
+    @include mat.select-overrides(
+        (
+            trigger-text-size: var(--mat-sys-body-medium-size),
+        )
+    );
+    @include mat.expansion-overrides(
+        (
+            header-text-size: var(--mat-sys-body-medium-size),
+        )
+    );
+    @include mat.tabs-overrides(
+        (
+            divider-color: var(--mat-sys-outline-variant),
+        )
+    );
 
     .mat-form-field-appearance-outline {
         .mat-mdc-text-field-wrapper {
@@ -89,7 +106,7 @@ formly-field {
 }
 
 .expand-icon {
-    color: rgba(0, 0, 0, 0.54);
+    color: var(--mat-sys-on-surface-variant);
     transition: transform 0.15s ease-out;
 }
 

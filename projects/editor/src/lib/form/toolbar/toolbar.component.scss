@@ -4,7 +4,7 @@
     align-items: center;
     height: calc(var(--editor-header-height) + 1px);
     padding: 0 8px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
     box-sizing: border-box;
 }
 

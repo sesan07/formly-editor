@@ -127,7 +127,7 @@
                 </div>
             }
             @if (forms.length) {
-                <div class="add-form-btn-wrapper">
+                <div class="editor-mat add-form-btn-wrapper">
                     <button
                         mat-flat-button
                         color="primary"
@@ -145,7 +145,7 @@
         [position]="typeOfSideBarPosition.RIGHT"
         (resizeEnd)="onResizeEnd()"
     >
-        <editor-sidebar-section class="active-field-section">
+        <editor-sidebar-section>
             <span headerContent>
                 Active Field
                 @if (activeField$ | async; as activeField) {

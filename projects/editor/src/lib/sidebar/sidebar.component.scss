@@ -15,7 +15,7 @@
     height: 100%;
     width: 4px;
     flex-shrink: 0;
-    background-color: rgba(0, 0, 0, 0.12);
+    background-color: var(--mat-sys-outline-variant);
     cursor: ew-resize;
 }
 
@@ -32,5 +32,5 @@
 .sidebar-divider:hover::after {
     width: 16px;
     left: -6px;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: color-mix(in srgb, var(--mat-sys-outline-variant), rgb(0, 0, 0, 0.2));
 }
