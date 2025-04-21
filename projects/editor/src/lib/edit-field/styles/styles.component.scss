@@ -29,7 +29,7 @@
     flex-shrink: 0;
     padding: 8px;
     box-sizing: border-box;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
 .mat-mdc-tab-group {

@@ -29,7 +29,7 @@ export class SidebarSectionComponent implements OnChanges {
     public maxHeight = 0;
     public sideBar: SidebarComponent;
 
-    private readonly _headerHeight = 48;
+    private readonly _headerHeight = 44;
     private readonly _dividerHeight = 4;
     private _height: number;
 

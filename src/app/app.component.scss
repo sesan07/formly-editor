@@ -12,7 +12,7 @@ $app-header-height: 64px;
     align-items: center;
     padding: 0 16px;
     box-sizing: border-box;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
 .app-editor-container {

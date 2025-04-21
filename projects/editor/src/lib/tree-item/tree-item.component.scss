@@ -13,21 +13,23 @@
     border-radius: 4px;
 
     &:hover {
-        background-color: rgba(0, 0, 0, 0.06);
+        background-color: var(--mat-sys-surface-container-low);
     }
 
     &.active {
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: var(--mat-sys-surface-container);
         border-radius: 4px;
     }
 
     &.active:hover {
-        background-color: rgba(0, 0, 0, 0.16);
+        background-color: var(--mat-sys-surface-container-highest);
         border-radius: 4px;
     }
 }
 
 .tree-item-header-content {
+    font-size: var(--mat-sys-body-medium-size);
+    font-weight: var(--mat-sys-body-medium-weight);
     flex-grow: 1;
     display: flex;
     align-items: center;
@@ -37,7 +39,7 @@
 .tree-item-header-options {
     position: sticky;
     right: 4px;
-    background-color: white;
+    background-color: var(--mat-sys-surface-container-lowest);
     box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14),
         0px 1px 10px 0px rgba(0, 0, 0, 0.12);
     visibility: hidden;
@@ -50,7 +52,7 @@
 .tree-item-side-line {
     position: absolute;
     height: 100%;
-    border-left: 1px solid rgba(0, 0, 0, 0.12);
+    border-left: 1px solid var(--mat-sys-outline-variant);
 }
 
 .children-collapsed {

@@ -1,7 +1,7 @@
 @use '@angular/material' as mat;
 
 :host {
-    --editor-header-height: 48px;
+    --editor-header-height: 44px;
     --editor-tree-item-height: 32px;
 
     --add-form-btn-width: 120px;
@@ -19,7 +19,6 @@
                 }
 
                 margin-right: var(--add-form-width);
-                border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 
                 .inner-tab-label-content {
                     display: inline-flex;
@@ -89,7 +88,7 @@ editor-sidebar {
     column-gap: 8px;
     height: calc(var(--editor-header-height) + 1px);
     width: var(--add-form-width);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
     box-sizing: border-box;
 }
 
@@ -133,7 +132,7 @@ editor-sidebar {
     height: 100px;
     border-radius: 50%;
     border: 10px solid;
-    border-color: #3f51b5 transparent #3f51b580 transparent;
+    border-color: var(--mat-sys-primary) transparent var(--mat-sys-outline) transparent;
     animation: lds-dual-ring 1.2s linear infinite;
 }
 
