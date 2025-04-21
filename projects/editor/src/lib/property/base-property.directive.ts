@@ -11,9 +11,9 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
     @Input() target?: Record<string, any> | any[];
     @Input() treeMode: boolean;
 
-    @Output() public remove: EventEmitter<void> = new EventEmitter();
-    @Output() public keyChanged: EventEmitter<string> = new EventEmitter();
-    @Output() public targetChanged: EventEmitter<IPropertyChange> = new EventEmitter();
+    @Output() public remove = new EventEmitter<void>();
+    @Output() public keyChanged = new EventEmitter<string>();
+    @Output() public targetChanged = new EventEmitter<IPropertyChange>();
 
     protected currentValue: V;
 

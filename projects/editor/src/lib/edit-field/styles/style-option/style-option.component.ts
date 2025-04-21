@@ -36,7 +36,7 @@ export class StyleOptionComponent implements OnChanges {
     @Input() classNameCategories: IStyleOptionCategory[];
     @Input() fieldGroupClassNameCategories: IStyleOptionCategory[];
 
-    @Output() optionChanged: EventEmitter<IPropertyChange> = new EventEmitter();
+    @Output() optionChanged = new EventEmitter<IPropertyChange>();
 
     selectedVariant: string;
 

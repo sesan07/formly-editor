@@ -43,9 +43,9 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 export class FormComponent implements OnInit, OnDestroy {
     @Input() form: IForm;
 
-    @Output() duplicateForm: EventEmitter<void> = new EventEmitter();
-    @Output() exportForm: EventEmitter<void> = new EventEmitter();
-    @Output() toggleSidebars: EventEmitter<void> = new EventEmitter();
+    @Output() duplicateForm = new EventEmitter<void>();
+    @Output() exportForm = new EventEmitter<void>();
+    @Output() toggleSidebars = new EventEmitter<void>();
 
     public toolbarTabIndex: 0 | 1 = 0;
     public fieldOptions: FieldOption[];
@@ -59,7 +59,7 @@ export class FormComponent implements OnInit, OnDestroy {
     isCategoryOption = isCategoryOption;
     isTypeOption = isTypeOption;
 
-    private _destroy$: Subject<void> = new Subject();
+    private _destroy$ = new Subject<void>();
     private _cachedFields: IEditorFormlyField[] = [];
     private _cachedModel: Record<string, any> = {};
 

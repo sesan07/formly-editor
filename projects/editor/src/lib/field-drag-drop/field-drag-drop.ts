@@ -16,9 +16,9 @@ export class FieldDragDrop {
     private _field: IEditorFormlyField;
     private _index: number;
     private _isDropTarget: boolean;
-    private _destroy$: Subject<void> = new Subject();
+    private _destroy$ = new Subject<void>();
     private _boundingRect: DOMRect;
-    private _hoverPosition$: BehaviorSubject<FieldDropPosition> = new BehaviorSubject('left');
+    private _hoverPosition$ = new BehaviorSubject<FieldDropPosition>('left');
 
     constructor(
         private _action: DropAction,

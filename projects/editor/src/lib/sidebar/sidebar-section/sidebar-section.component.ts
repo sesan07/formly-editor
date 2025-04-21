@@ -48,7 +48,6 @@ export class SidebarSectionComponent implements OnChanges {
         return this.height - this.headerHeight - (this.isCollapsed ? 0 : this.minContentHeight);
     }
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     @HostBinding('style.height.px')
     public get height(): number {
         return this._height;

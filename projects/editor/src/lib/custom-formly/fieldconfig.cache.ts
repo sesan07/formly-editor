@@ -8,8 +8,8 @@ export interface FormlyFieldConfigCache extends FormlyFieldConfig {
     model?: any;
     formControl?: AbstractControl & {
         _fields?: FormlyFieldConfigCache[];
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        _childrenErrors?: { [id: string]: Function };
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+        _childrenErrors?: Record<string, Function>;
     };
     parent?: FormlyFieldConfigCache;
     options?: FormlyFormOptionsCache;
@@ -17,14 +17,12 @@ export interface FormlyFieldConfigCache extends FormlyFieldConfig {
     index?: number;
     _localFields?: FormlyFieldConfigCache[];
     _elementRefs?: ElementRef[];
-    _expressions?: {
-        [property: string]: {
+    _expressions?: Record<string, {
             callback?: (ingoreCache: boolean) => boolean;
             paths?: string[];
             subscription?: Subscription | null;
             value$?: Observable<any>;
-        };
-    };
+        }>;
     _hide?: boolean;
     _validators?: ValidatorFn[];
     _asyncValidators?: AsyncValidatorFn[];

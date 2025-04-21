@@ -32,7 +32,7 @@ import { StylesComponent } from './styles/styles.component';
 export class EditFieldComponent implements OnInit, OnDestroy {
     @Input() resizeTabHeader$: Observable<void>;
 
-    @Output() fieldChanged: EventEmitter<IPropertyChange> = new EventEmitter();
+    @Output() fieldChanged = new EventEmitter<IPropertyChange>();
 
     @ViewChild(MatTabGroup) matTabGroup: MatTabGroup;
 
@@ -40,7 +40,7 @@ export class EditFieldComponent implements OnInit, OnDestroy {
     public parentField$: Observable<IEditorFormlyField | null>;
     public property$: Observable<IObjectProperty>;
 
-    private _destroy$: Subject<void> = new Subject();
+    private _destroy$ = new Subject<void>();
     private _cachedField: IEditorFormlyField;
     private _cachedProperty: IObjectProperty;
 

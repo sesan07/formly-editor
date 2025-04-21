@@ -7,7 +7,7 @@ export const isTypeOption = (x: FieldOption): x is FieldTypeOption => !!(x as Fi
 export const getKeyPath = (control: AbstractControl): string => {
     const path: string[] = [];
     while (control?.parent) {
-        const siblings: { [key: string]: AbstractControl } | AbstractControl[] = control.parent.controls;
+        const siblings: Record<string, AbstractControl> | AbstractControl[] = control.parent.controls;
         const key: string | number = Object.keys(siblings).find(k => siblings[k] === control);
         if (key) {
             path.unshift(key);

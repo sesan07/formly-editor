@@ -55,7 +55,7 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isExpanded = false;
     @Input() public treeLevel = 0;
 
-    @Output() public expandParent: EventEmitter<void> = new EventEmitter();
+    @Output() public expandParent = new EventEmitter<void>();
 
     public isActiveField$: Observable<boolean>;
     public isExpanded$: Observable<boolean>;
@@ -67,8 +67,8 @@ export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     isCategoryOption = isCategoryOption;
     isTypeOption = isTypeOption;
 
-    private _destroy$: Subject<void> = new Subject();
-    private _isExpanded$: BehaviorSubject<boolean> = new BehaviorSubject(this.isExpanded);
+    private _destroy$ = new Subject<void>();
+    private _isExpanded$ = new BehaviorSubject<boolean>(this.isExpanded);
 
     constructor(
         private _editorService: EditorService,

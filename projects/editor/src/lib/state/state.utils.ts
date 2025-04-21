@@ -172,13 +172,13 @@ const duplicateFieldObject = (field: IEditorFormlyField, formId: string, parentF
 export const modifyFields = <T extends IEditorFormlyField | IEditorFormlyField[]>(
     fields: T,
     changedField: IEditorFormlyField,
-    level: number = 0
+    level = 0
 ): T =>
     Array.isArray(fields)
         ? (modifyFieldArray(fields, changedField, level) as T)
         : (modifyFieldObject(fields, changedField, level) as T);
 
-const modifyFieldArray = (fields: IEditorFormlyField[], changedField: IEditorFormlyField, level: number = 0) => {
+const modifyFieldArray = (fields: IEditorFormlyField[], changedField: IEditorFormlyField, level = 0) => {
     const fieldPath = changedField._info.fieldPath;
     const fieldId = fieldPath[level];
 
@@ -193,7 +193,7 @@ const modifyFieldArray = (fields: IEditorFormlyField[], changedField: IEditorFor
     );
 };
 
-const modifyFieldObject = (field: IEditorFormlyField, changedField: IEditorFormlyField, level: number = 0) => {
+const modifyFieldObject = (field: IEditorFormlyField, changedField: IEditorFormlyField, level = 0) => {
     const fieldPath = changedField._info.fieldPath;
     const fieldId = fieldPath[level];
 
