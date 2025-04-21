@@ -47,7 +47,7 @@ export class PropertyKeyComponent implements OnChanges, AfterViewInit {
             const text = this.keyElementRef.nativeElement.innerText;
             if (text !== this.key) {
                 this.key = text;
-                this.keyChange.emit(this.key);
+                this.keyChange.emit(this.key?.toString());
             }
         });
         this.keyElementRef.nativeElement.addEventListener('click', e => e.stopPropagation());
