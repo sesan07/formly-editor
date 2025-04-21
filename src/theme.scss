@@ -1,6 +1,5 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use '@material/textfield';
 
 @include mat.elevation-classes();
 @include mat.app-background();
@@ -23,8 +22,4 @@ $theme: mat.m2-define-light-theme(
 
 @include mat.all-component-themes($theme);
 @include mat.typography-hierarchy($theme);
-
-// Reduce form-field size
-// Workaround for bug - https://github.com/angular/components/issues/26579
-textfield.$minimum-height-for-filled-label: 10px;
-@include mat.form-field-density(-2);
+@include mat.form-field-density(-1);

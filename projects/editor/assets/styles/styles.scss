@@ -1,6 +1,5 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use '@material/textfield';
 
 @import 'codemirror/lib/codemirror';
 @import 'codemirror/theme/elegant';
@@ -16,10 +15,7 @@
 }
 
 .editor-mat {
-    // Reduce form-field size
-    // Workaround for bug - https://github.com/angular/components/issues/26579
-    textfield.$minimum-height-for-filled-label: 10px;
-    @include mat.form-field-density(-2);
+    @include mat.form-field-density(-1);
 
     $typography: mat.m2-define-typography-config();
     $typography: map.set($typography, body-1, font-size, 14px);
