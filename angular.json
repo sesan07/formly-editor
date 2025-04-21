@@ -108,7 +108,8 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"],
+            "eslintConfig": "eslint.config.js"
           }
         },
         "e2e": {
@@ -159,13 +160,15 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/editor/src/**/*.ts", "projects/editor/src/**/*.html"]
+            "lintFilePatterns": ["projects/editor/src/**/*.ts", "projects/editor/src/**/*.html"],
+            "eslintConfig": "projects/editor/eslint.config.js"
           }
         }
       }
     }
   },
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "schematicCollections": ["angular-eslint"]
   }
 }
