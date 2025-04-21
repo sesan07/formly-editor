@@ -44,7 +44,7 @@ import { IObjectProperty } from './object-property.types';
         MatMenu,
         MatMenuItem,
         ValidatorsPropertyComponent,
-    ]
+    ],
 })
 export class ObjectPropertyComponent extends ObjectArrayPropertyDirective<IObjectProperty, Record<string, unknown>> {
     @Input() useExpansionPanel = true;

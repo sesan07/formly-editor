@@ -17,7 +17,7 @@ import { SidebarComponent } from '../sidebar.component';
     templateUrl: './sidebar-section.component.html',
     styleUrls: ['./sidebar-section.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatIcon]
+    imports: [MatIcon],
 })
 export class SidebarSectionComponent implements OnChanges {
     @Input() isCollapsed: boolean;

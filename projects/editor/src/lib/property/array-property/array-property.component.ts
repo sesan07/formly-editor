@@ -45,7 +45,7 @@ import { IArrayProperty } from './array-property.types';
         MatMenu,
         MatMenuItem,
         MatMenuTrigger,
-    ]
+    ],
 })
 export class ArrayPropertyComponent extends ObjectArrayPropertyDirective<IArrayProperty, unknown[]> {
     protected defaultValue = [];

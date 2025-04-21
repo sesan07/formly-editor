@@ -42,7 +42,7 @@ export abstract class BasePropertyDirective<P extends IBaseProperty, V> implemen
             const isFirstChange = !!changes.target?.firstChange;
             const newValue: any = this.path.length
                 ? get(this.target, this.path, this.defaultValue)
-                : this.target ?? this.defaultValue;
+                : (this.target ?? this.defaultValue);
 
             const canChange: boolean =
                 isFirstChange || isParentProperty(this.property) || newValue !== this.currentValue;

@@ -46,7 +46,7 @@ import { TreeItemComponent } from '../tree-item/tree-item.component';
         NgTemplateOutlet,
         AsyncPipe,
         FieldNamePipe,
-    ]
+    ],
 })
 export class FieldTreeItemComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public field: IEditorFormlyField;

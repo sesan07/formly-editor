@@ -6,6 +6,6 @@ import { FieldArrayType, FormlyModule } from '@ngx-formly/core';
 @Component({
     selector: 'app-repeating-section-type',
     templateUrl: './repeating-section-type.component.html',
-    imports: [FormlyModule, MatIconButton, MatIcon, MatButton]
+    imports: [FormlyModule, MatIconButton, MatIcon, MatButton],
 })
 export class RepeatingSectionTypeComponent extends FieldArrayType {}

@@ -4,6 +4,6 @@ import { EditorComponent } from '@sesan07/ngx-formly-editor';
 @Component({
     selector: 'app-bootstrap',
     template: ` <editor-main></editor-main> `,
-    imports: [EditorComponent]
+    imports: [EditorComponent],
 })
 export class BootstrapComponent {}

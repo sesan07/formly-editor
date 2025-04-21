@@ -30,7 +30,7 @@ import { IValidationConfig, IValidationData, IValidatorsProperty, IValidatorsVal
         MatMenu,
         MatMenuItem,
         forwardRef(() => ObjectPropertyComponent),
-    ]
+    ],
 })
 export class ValidatorsPropertyComponent extends BasePropertyDirective<IValidatorsProperty, IValidatorsValue> {
     public isExpanded: boolean;

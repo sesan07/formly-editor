@@ -28,7 +28,7 @@ import { ITextareaProperty } from './textarea-property.types';
         MatMenu,
         MatMenuItem,
         MatIcon,
-    ]
+    ],
 })
 export class TextareaPropertyComponent extends BasePropertyDirective<ITextareaProperty, string> {
     public formControl: FormControl<string>;
