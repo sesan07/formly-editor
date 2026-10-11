@@ -23,6 +23,26 @@ describe('App', () => {
     expect(compiled.querySelector('h1')?.textContent).toContain('Formly Studio');
   });
 
+  it('renders a GitHub repository link in the header', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const root = fixture.nativeElement as HTMLElement;
+    const link = root.querySelector<HTMLAnchorElement>(
+      'app-header a[aria-label="Open Formly Editor GitHub repository"]',
+    );
+
+    expect(link?.getAttribute('href')).toBe('https://github.com/sesan07/formly-editor');
+    expect(link?.getAttribute('target')).toBe('_blank');
+    expect(link?.getAttribute('rel')).toBe('noopener');
+    expect(link?.getAttribute('title')).toBe('GitHub');
+    const icon = link?.querySelector('svg');
+    expect(icon?.getAttribute('viewBox')).toBe('0 0 98 96');
+    expect(icon?.getAttribute('fill')).toBe('currentColor');
+    expect(icon?.getAttribute('aria-hidden')).toBe('true');
+    expect(icon?.querySelector('path')?.getAttribute('d')).toBeTruthy();
+  });
+
   it('renders the header and routed home content directly in the root layout', async () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
