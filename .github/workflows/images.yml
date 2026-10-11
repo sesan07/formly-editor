@@ -1,0 +1,84 @@
+name: Release Images
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish release images to GHCR
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: formly-studio-image-release
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAMESPACE: ${{ github.repository }}
+
+jobs:
+  release-images:
+    name: Build and publish application images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build application artifacts
+        run: npm run build
+
+      - name: Build Studio image
+        run: docker build --tag apps-studio:latest --file apps/studio/Dockerfile .
+
+      - name: Build docs image
+        run: docker build --tag apps-docs:latest --file apps/docs/Dockerfile .
+
+      - name: Smoke test image metadata
+        run: docker image inspect apps-studio:latest apps-docs:latest
+
+      - name: Log in to GHCR
+        if: ${{ startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish) }}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag and push release images
+        if: ${{ startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish) }}
+        env:
+          RELEASE: ${{ github.ref_name }}
+          REF_TYPE: ${{ github.ref_type }}
+        run: |
+          namespace="${IMAGE_NAMESPACE,,}"
+          for app in studio docs; do
+            image="$REGISTRY/$namespace-$app"
+            docker tag "apps-$app:latest" "$image:$RELEASE"
+            docker push "$image:$RELEASE"
+            if [[ "$REF_TYPE" == tag ]]; then
+              docker tag "apps-$app:latest" "$image:latest"
+              docker push "$image:latest"
+            fi
+          done

@@ -1,0 +1,20 @@
+# Formly Editor robots.txt
+# Allow all search engine crawlers to index the site
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /*.json$
+Disallow: /*.ts$
+
+# Specific search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Specify sitemap location
+Sitemap: https://formlystudio.com/sitemap.xml

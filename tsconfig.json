@@ -1,24 +1,57 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "declaration": false,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "noImplicitOverride": true,
-    "target": "ES2022",
-    "module": "es2020",
-    "lib": ["es2020", "dom"],
     "paths": {
-      "@sesan07/ngx-formly-editor": ["projects/editor/src/public-api"]
+      "@formly-editor/core": ["./libs/core/src/public-api.ts"],
+      "@formly-editor/material": ["./libs/ui/material/src/public-api.ts"],
+      "@formly-editor/builder-material": ["./libs/ui/builder-material/src/public-api.ts"]
     },
-    "useDefineForClassFields": false
+    "lib": ["ES2023", "DOM"],
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve"
   },
   "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/studio/tsconfig.app.json"
+    },
+    {
+      "path": "./apps/studio/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/core/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/core/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/ui/material/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/ui/material/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/ui/builder-material/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/ui/builder-material/tsconfig.spec.json"
+    }
+  ]
 }

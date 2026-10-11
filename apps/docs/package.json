@@ -1,0 +1,27 @@
+{
+  "name": "@formly-editor/docs",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sesan07/formly-editor.git",
+    "directory": "apps/docs"
+  },
+  "homepage": "https://docs.formlystudio.com/",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0",
+    "build": "astro build",
+    "check": "astro check",
+    "preview": "astro preview --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/mdx": "7.0.8",
+    "@astrojs/starlight": "0.41.11",
+    "astro": "7.3.3",
+    "cookie": "2.0.1",
+    "sharp": "^0.35.3"
+  }
+}

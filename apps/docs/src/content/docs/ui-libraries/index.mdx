@@ -1,0 +1,30 @@
+---
+title: Demo UI Profiles
+description: Compare the UI-library configurations included in the Studio demo.
+---
+
+These profiles are the UI-library configurations included in Formly Studio, the Formly Editor
+project's demo application. They describe the demo's authoring support, not a universal limit on
+the editor framework or every capability in upstream ngx-formly.
+
+Choose the UI library that matches the consuming Angular application's design system. The choice
+controls available fields, properties, containers, and exported type names, and cannot be changed
+after the form is created.
+
+| Library                                           | Choose it when                                                                             | Coverage                                                                                         |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| [Studio Material](/ui-libraries/studio-material/) | You want the recommended Material experience and Studio-specific controls in Formly Studio | Material controls plus postal code, button group, markdown, cards, tabs, steppers, and repeaters |
+| [Material](/ui-libraries/material/)               | Your application uses the standard `@ngx-formly/material` field set                        | Standard Material controls and groups                                                            |
+| [Ng Zorro](/ui-libraries/ng-zorro/)               | Your application uses the standard `@ngx-formly/ng-zorro-antd` field set                   | Ng Zorro controls and groups                                                                     |
+| [Bootstrap](/ui-libraries/bootstrap/)             | Your application uses the standard `@ngx-formly/bootstrap` field set                       | Bootstrap controls and groups                                                                    |
+
+**Studio Material is the recommended default within Formly Studio** for new Material-based forms.
+It is not currently published as a standalone public package. Choose standard Material when the
+consuming application should depend only on the upstream Material package.
+
+Templates select their configured library automatically. For a blank form or import, select the
+library before creating the form. To use another library later, create a new form and manually
+rebuild or import a compatible configuration; Studio does not convert existing forms between
+libraries.
+
+Styling controls are documented in [Layout and styling](/guides/form-layout-and-styling/).

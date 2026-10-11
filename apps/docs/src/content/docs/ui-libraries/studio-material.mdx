@@ -1,0 +1,96 @@
+---
+title: Studio Material UI library
+description: Studio Material field types and properties configured in the Studio demo.
+---
+
+Studio Material is the recommended default within the Formly Studio demo for Material-based forms. It is
+not currently published as a standalone public package. It includes the standard Material field
+set and adds Formly Studio types for richer layouts, content, and common application controls. Standard controls use
+[`@ngx-formly/material`](https://formly.dev/docs/ui/material). Studio-specific types require the
+matching Studio Material configuration in the consuming application.
+
+## Form controls
+
+Studio Material includes all [Material form controls](/ui-libraries/material/), with the same type names and properties.
+
+### Button Group
+
+- Formly `type`: `button-group`
+- Use it for: A group of selectable buttons.
+- Properties: `Key`, `Default Value`, `Label`, `Description`, `Options`, `Hide`, `Expressions`.
+- Each option has a `Label`, `Value`, and `Disabled` setting.
+- Validation: `Required` and `Show Validation`.
+
+### Postal Code
+
+- Formly `type`: `postal-code`
+- Use it for: A formatted postal or ZIP code.
+- Properties: `Key`, `Default Value`, `Label`, `Placeholder`, `Description`, `Mask`, `Input Mode`, `Auto-capitalize`, `Store Raw Value`, `Autocomplete Context`, `Hide`, `Expressions`.
+- Validation: `Required`, `Show Validation`, and `Postal Code Pattern`.
+- Built-in presets: `US ZIP Code` and `Canada Postal Code`.
+
+## Display and content
+
+### Markdown
+
+- Formly `type`: `markdown`
+- Use it for: Markdown content displayed inside a form.
+- Properties: `Text`, `Hide`, and `Expressions`.
+
+### Divider
+
+- Formly `type`: `divider`
+- Use it for: A visual divider between sections.
+- Properties: `Vertical`, `Inset`, `Hide`, and `Expressions`.
+
+## Containers
+
+Studio Material includes the standard [Material Group](/ui-libraries/material/#group) plus these containers.
+
+### Card
+
+- Formly `type`: `card`
+- Use it for: A titled section containing related fields.
+- Properties: `Key`, `Card Title`, `Card Subtitle`, `Hide`, and `Expressions`.
+- Wrapper properties: `Card Title` and `Card Subtitle`.
+
+### Repeater
+
+- Formly `type`: `repeating-section`
+- Use it for: A repeated child field configuration such as multiple addresses.
+- Properties: `Key`, `Add Button Text`, `Hide`, and `Expressions`.
+- Wrapper properties: `Card Title` and `Card Subtitle`.
+
+### Tab
+
+- Formly `type`: `tab`
+- Use it for: One tab within a Tabs container.
+- Properties: `Key`, `Label`, `Disabled`, `Hide`, and `Expressions`.
+
+### Tabs
+
+- Formly `type`: `tabs`
+- Use it for: A tabbed group of fields.
+- Properties: `Key`, `Dynamic Height`, `Header Position`, `Tab Alignment`, `Disable Stretch Tabs`, `Fit Ink Bar to Content`, `Preserve Content`, `Hide`, and `Expressions`.
+
+### Step
+
+- Formly `type`: `step`
+- Use it for: One step within a Stepper container.
+- Properties: `Key`, `Label`, `Optional`, `Disable Edit`, `Previous Button Label`, `Next Button Label`, `Hide`, and `Expressions`.
+
+### Stepper
+
+- Formly `type`: `stepper`
+- Use it for: A multi-step form flow.
+- Properties: `Key`, `Linear`, `Orientation`, `Accessible Label`, `Hide`, and `Expressions`.
+
+### Group
+
+- Formly `type`: `formly-group`
+- Use it for: A section that contains related fields.
+- Properties: `Key`, `Hide`, and `Expressions`.
+- Wrapper properties: `Card Title` and `Card Subtitle`.
+
+See [Add and configure fields](/guides/add-and-configure-fields/) for fields and presets, and
+[Structure fields](/guides/organizing-fields/) for containers.

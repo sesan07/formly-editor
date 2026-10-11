@@ -1,0 +1,44 @@
+---
+title: Troubleshooting
+description: Resolve empty panels, missing local forms, and unexpected editor behavior.
+---
+
+The Form Editor shows a different empty state depending on what is missing. These messages usually indicate that you need to select a form, add a field, or change a filter.
+
+If a form is missing after changing browsers or clearing site data, Studio cannot recover it from
+the previous browser store. Import its downloaded JSON if you have a portable copy. See
+[Save, import, and export](/guides/save-import-and-export/).
+
+## No forms in the Workspace
+
+If **Workspace** has no forms yet, select **Create Form** and choose **Blank Form** or a starter template. After the form is created, it becomes the active form and the other editor panels can display its content.
+
+## No active form
+
+If the editor panels show no active form, return to **Workspace** and select an existing form. If there are no existing forms, create one first.
+
+## No fields in the form
+
+If **Fields** says that there are no fields, open **Add**, choose **Field** or **Preset**, and add an item to the canvas. A blank form has no field structure until you add one.
+
+## No field selected
+
+The **Field Edit** and **Styling** panels require a selection. Select a field in the canvas or in the **Fields** panel, then open the panel again. If the form has no fields, add one first.
+
+## No fields found
+
+If filtering **Fields** returns **No fields found**, the filter does not match any field currently visible in the form. Clear the filter or enter a shorter part of the field name, label, or key.
+
+The same approach applies to filtering fields and presets in **Add**: clear the filter when the list is empty, then browse the available options.
+
+## A form is not behaving as expected
+
+Use the editor modes to isolate the problem:
+
+- Return to **Builder** to confirm the field structure and settings.
+- Open **Field Edit** in the sidebar and check the selected field's properties.
+- Use **Preview** to test the form as a user would experience it.
+- Use **Model** to clear or change example values used during testing.
+
+For JSON validation and import errors, see [Inspect form JSON](/guides/working-with-json/) and
+[Save, import, and export](/guides/save-import-and-export/). Return to **Builder** to continue editing.

@@ -1,0 +1,30 @@
+---
+title: Developers
+description: Configure Studio for your ngx-formly components and use the generated forms in Angular.
+---
+
+Use Formly Editor to author and test configurations for the ngx-formly components you maintain.
+Start from a checkout of this repository and configure Studio with your application's field types,
+wrappers, defaults, and editable properties.
+
+## Editor configuration and runtime configuration
+
+ngx-formly renders a `FormlyFieldConfig[]` using registered Angular components. The editor adds a
+palette and property panels around those configurations. Registering a Formly type makes it
+renderable; adding editor metadata makes it available to authors.
+
+Studio demonstrates both layers: its Material profile uses standard Formly controls, while Studio
+Material adds custom types such as postal code, cards, and repeating sections.
+
+## Choose a starting point
+
+- **Configure your editor:** [Set up your editor](/developers/set-up-your-editor/), then
+  [configure a UI profile](/developers/configure-a-ui-profile/) and
+  [add custom components](/developers/add-custom-components/).
+- **Render an existing export:** [Use an exported form](/developers/use-an-exported-form/).
+
+These guides target Angular 21 and Formly 7.x. Editor libraries are internal source modules, not
+published npm packages. The documented workflow customizes Studio; embedding the editor in another
+application is not covered or verified.
+
+For component authoring and runtime APIs, use the [ngx-formly documentation](https://formly.dev/).

@@ -1,0 +1,115 @@
+---
+title: Use an exported form
+description: Render forms exported from the Studio demo in an Angular application.
+---
+
+The Formly Studio demo exports a top-level `FormlyFieldConfig[]`. Your Angular application must register the
+same UI library and any custom types used by the form.
+
+The field export is not a saved editor document: it does not include the profile's `libraryId`,
+the form model, or Angular code. Keep track of the runtime configuration it requires. Exported
+fields omit editor-only `_info` metadata and the editor's `core-field` wrapper.
+
+This example targets Angular 21, Formly 7.x, and a form created with the standard Material library.
+
+## Install the runtime packages
+
+```bash
+npm install @ngx-formly/core @ngx-formly/material @angular/material
+```
+
+Use the corresponding package for a Bootstrap or Ng Zorro form. Studio Material fields require the
+matching Studio Material types and configuration from the project's source to be available to your
+application. Studio Material is not published as a standalone public package.
+
+## Register Formly
+
+Add Formly and the matching UI configuration to your application providers:
+
+```ts title="app.config.ts"
+import { ApplicationConfig } from '@angular/core';
+import { provideFormlyCore } from '@ngx-formly/core';
+import { withFormlyMaterial } from '@ngx-formly/material';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideFormlyCore(withFormlyMaterial())],
+};
+```
+
+Some Material types, including datepicker, and toggle, require their additional Formly
+configuration. Follow the [Formly Material documentation](https://formly.dev/docs/ui/material) for
+the types used by your export.
+
+For a custom profile, reuse its runtime `configOptions` registrations in your consuming application,
+along with required services and styles. Do not register its editor-only `builderConfigOptions`.
+See [Add custom components](/developers/add-custom-components/) for the distinction. The profile's
+palette and property metadata are not required to render the exported form.
+
+## Add the exported fields
+
+Move the downloaded array into a TypeScript file and export it as a typed constant:
+
+```ts title="contact-form.fields.ts"
+import { FormlyFieldConfig } from '@ngx-formly/core';
+
+export const contactFormFields: FormlyFieldConfig[] = [
+  {
+    key: 'email',
+    type: 'input',
+    props: {
+      label: 'Email address',
+      required: true,
+    },
+  },
+];
+```
+
+The downloaded file contains JSON, so it does not include an export declaration or TypeScript type.
+You can also load it as JSON if your application's build and validation policy supports JSON imports.
+
+## Render the form
+
+```ts title="contact-form.component.ts"
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormlyForm } from '@ngx-formly/core';
+import { contactFormFields } from './contact-form.fields';
+
+@Component({
+  selector: 'app-contact-form',
+  imports: [ReactiveFormsModule, FormlyForm],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <formly-form [form]="form" [fields]="fields" [model]="model" />
+      <button type="submit" [disabled]="form.invalid">Submit</button>
+    </form>
+  `,
+})
+export class ContactFormComponent {
+  protected readonly form = new FormGroup({});
+  protected readonly fields = contactFormFields;
+  protected readonly model: Record<string, unknown> = {};
+
+  protected submit(): void {
+    if (this.form.valid) {
+      // Send this.model to your application service.
+    }
+  }
+}
+```
+
+## Verify the integration
+
+Confirm that:
+
+- Every exported `type` is registered by the selected UI library or your application.
+- Required fields and validation messages behave as they did in Studio Preview.
+- Nested groups and repeaters produce the expected model shape.
+- Submission uses the model rather than the field configuration.
+
+If Angular reports an unknown field type, register its package or custom type. Do not silently map it
+to another control: the replacement can change validation and model behavior.
+
+See [UI Libraries](/ui-libraries/) for Studio's authored field types and the
+[Formly core API](https://formly.dev/docs/api/core) for runtime configuration.

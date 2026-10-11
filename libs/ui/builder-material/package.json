@@ -1,0 +1,15 @@
+{
+  "name": "builder-material",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@formly-editor/core": "0.0.1",
+    "@formly-editor/material": "0.0.1",
+    "@ngx-formly/core": "^7.1.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

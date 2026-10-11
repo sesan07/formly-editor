@@ -1,0 +1,132 @@
+@import './tailwind-styling';
+
+@theme {
+  --color-content-background: var(--p-content-background);
+  --color-content-hover-background: var(--p-content-hover-background);
+  --color-button-text-danger: var(--p-button-text-danger-color);
+}
+
+.core-root {
+  --panel-header-height: 80px;
+  --sub-panel-header-height: 52px;
+
+  .cm-editor {
+    height: 100%;
+    width: 100%;
+    color: #801a1a;
+  }
+
+  .material-symbols-outlined {
+    font-size: 1.5rem;
+  }
+
+  /* TODO Hack since global PT didn't work in production build */
+  .p-panel {
+    border: none !important;
+  }
+
+  /* TODO Hack since global PT didn't work in production build */
+  .p-panel-header {
+    padding: 0.25rem 0 !important;
+    min-height: 3rem !important;
+  }
+
+  /* TODO Hack since global PT didn't work in production build */
+  .p-panel-content {
+    padding: '0 0 0.5rem 1.5rem' !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.25rem !important;
+  }
+
+  /* TODO Hack since global PT didn't work in production build */
+  .p-splitter {
+    border-radius: 0;
+  }
+
+  /* TODO Hack since global PT didn't work in production build */
+  .p-tablist {
+    background: none;
+  }
+
+  .panel {
+    @apply flex h-full min-h-0 min-w-0 grow flex-col overflow-hidden;
+  }
+
+  .panel-content {
+    @apply flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto px-4 pb-4;
+  }
+
+  .field-property-grid {
+    @apply grid grid-cols-2 gap-2;
+  }
+
+  .field-property-control {
+    /* @apply min-h-11 w-full min-w-24; */
+    @apply min-h-7 w-full min-w-24;
+  }
+
+  .model-property-key {
+    @apply inline-flex h-9 items-center;
+  }
+  .model-property-key.editable {
+    color: var(--p-form-field-color);
+    background: var(--p-form-field-background);
+    padding-block: var(--p-form-field-padding-y);
+    padding-inline: var(--p-form-field-padding-x);
+    border: 1px solid var(--p-form-field-border-color);
+    transition:
+      background var(--p-form-field-transition-duration),
+      color var(--p-form-field-transition-duration),
+      border-color var(--p-form-field-transition-duration),
+      outline-color var(--p-form-field-transition-duration),
+      box-shadow var(--p-form-field-transition-duration);
+    appearance: none;
+    border-radius: var(--p-form-field-border-radius);
+    outline-color: transparent;
+    box-shadow: var(--p-form-field-shadow);
+  }
+  .model-property-key.editable:hover {
+    border-color: var(--p-form-field-hover-border-color);
+  }
+  .model-property-key.editable:focus {
+    border-color: var(--p-form-field-focus-border-color);
+    box-shadow: var(--p-form-field-focus-ring-shadow);
+    outline: var(--p-form-field-focus-ring-width) var(--p-form-field-focus-ring-style)
+      var(--p-form-field-focus-ring-color);
+    outline-offset: var(--p-form-field-focus-ring-offset);
+  }
+
+  .add-field-tab-content {
+    @apply flex min-h-0 flex-1 flex-col overflow-hidden;
+
+    .content-list {
+      @apply flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-4 pb-4;
+    }
+  }
+
+  .animate-panel-pop {
+    animation-name: core-panel-pop;
+    animation-duration: 0.15s;
+    animation-iteration-count: 1;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .touch-actions-visible {
+    opacity: 1;
+  }
+}
+
+/* Panel pop animation */
+@keyframes core-panel-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

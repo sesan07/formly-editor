@@ -1,0 +1,2 @@
+--platform=ubuntu-latest=catthehacker/ubuntu:act-latest
+--artifact-server-path=tmp/act-artifacts
