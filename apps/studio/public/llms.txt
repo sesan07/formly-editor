@@ -1,0 +1,17 @@
+# Formly Editor
+
+> Formly Editor is a visual editor for creating ngx-formly forms in Angular.
+
+The main site is an interactive authoring application. Use the documentation site for product
+guides, exported configuration details, and Angular integration guidance.
+
+## Documentation
+
+- [Formly Editor documentation](https://docs.formlystudio.com/): Product guides and developer documentation.
+- [Developer integration guide](https://docs.formlystudio.com/developers/): Use exported Formly configuration in an Angular application.
+- [Form Editor quickstart](https://docs.formlystudio.com/guides/form-editor-quickstart/): Start building a form in the visual editor.
+
+## Source and ecosystem
+
+- [Formly Editor GitHub repository](https://github.com/sesan07/ngx-formly-studio): Source code, package documentation, and project setup.
+- [ngx-formly documentation](https://formly.dev/docs/): Angular dynamic forms runtime, field types, UI libraries, and APIs.

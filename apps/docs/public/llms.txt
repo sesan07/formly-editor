@@ -1,0 +1,53 @@
+# Formly Editor Documentation
+
+> Documentation for Formly Editor and its Studio demo, including configuring Studio for custom ngx-formly components and using exported forms in Angular.
+
+Formly Editor is an MIT-licensed, open-source editor framework for ngx-formly in Angular. Its editor
+libraries are internal source modules, not published npm packages. Formly Studio is the project's
+browser-local demo application. Its Form Editor exports `FormlyFieldConfig[]` structures for use in
+an Angular application. The documentation covers demo workflows, configuring Studio from a
+repository checkout, and consuming exported forms. It does not cover embedding the editor in
+another application or installing a published editor SDK. It assumes
+Angular 21 and Formly 7.x. Consult the upstream Formly documentation for runtime APIs, field types,
+validation, themes, and UI-library behavior.
+
+## Start here
+
+- [Project overview](https://docs.formlystudio.com/): Formly Editor and its Studio demo application.
+- [Form Editor quickstart](https://docs.formlystudio.com/guides/form-editor-quickstart/): Build and configure a form in the Studio demo.
+- [Demo UI profiles](https://docs.formlystudio.com/ui-libraries/): Compare configured demo libraries and review their supported fields.
+- [Developers](https://docs.formlystudio.com/developers/): Configure Studio for your application's Formly setup.
+- [Use an exported form](https://docs.formlystudio.com/developers/use-an-exported-form/): Render exported `FormlyFieldConfig[]` in Angular.
+
+## Studio demo guides
+
+- [Using the Studio demo](https://docs.formlystudio.com/guides/): Demo workflows and task-focused guides.
+
+- [Start a form](https://docs.formlystudio.com/guides/templates/): Choose a blank form or starter template.
+- [Editor tour](https://docs.formlystudio.com/guides/workspace-tour/): Locate the main Studio tools.
+- [Add and configure fields](https://docs.formlystudio.com/guides/add-and-configure-fields/): Configure fields, choices, validation, and presets.
+- [Structure fields](https://docs.formlystudio.com/guides/organizing-fields/): Arrange groups and repeating sections.
+- [Layout and styling](https://docs.formlystudio.com/guides/form-layout-and-styling/): Customize layout and presentation.
+- [Preview and test](https://docs.formlystudio.com/guides/previewing-and-testing/): Test validation and model values.
+- [Manage your workspace](https://docs.formlystudio.com/guides/manage-your-workspace/): Organize form documents and folders.
+- [Save, import, and export](https://docs.formlystudio.com/guides/save-import-and-export/): Protect local work and move forms.
+- [Inspect form JSON](https://docs.formlystudio.com/guides/working-with-json/): Inspect and work with the generated form configuration.
+- [Troubleshooting](https://docs.formlystudio.com/guides/empty-states-and-recovery/): Resolve empty panels and missing local forms.
+
+## Developers
+
+- [Developers](https://docs.formlystudio.com/developers/): Editor configuration, runtime configuration, and supported developer workflows.
+- [Set up your editor](https://docs.formlystudio.com/developers/set-up-your-editor/): Run a repository checkout and locate Studio's integration points.
+- [Configure a UI profile](https://docs.formlystudio.com/developers/configure-a-ui-profile/): Compose runtime registrations, palette metadata, and starter forms.
+- [Add custom components](https://docs.formlystudio.com/developers/add-custom-components/): Expose custom Formly types and their properties in the editor.
+- [Use an exported form](https://docs.formlystudio.com/developers/use-an-exported-form/): Install ngx-formly, register the UI library, and render forms exported from the demo.
+- The Studio demo is built for Angular 21 with Formly 7.x.
+
+## Upstream Formly resources
+
+- [Formly getting started](https://formly.dev/docs/guide/getting-started): Set up ngx-formly in an Angular application.
+- [Formly core API](https://formly.dev/docs/api/core): `FormlyFieldConfig` and core runtime APIs.
+- [Formly Material UI](https://formly.dev/docs/ui/material): Material field types and configuration.
+- [Formly Bootstrap UI](https://formly.dev/docs/ui/bootstrap): Bootstrap field types and configuration.
+- [Formly PrimeNG UI](https://formly.dev/docs/ui/primeng): PrimeNG field types and configuration.
+- [Formly Ng Zorro UI](https://formly.dev/docs/ui/zorro): Ng Zorro field types and configuration.

@@ -1,0 +1,19 @@
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name localhost;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location = /health {
+        access_log off;
+        default_type text/plain;
+        return 200 'Status: OK!\n';
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}

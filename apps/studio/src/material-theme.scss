@@ -1,0 +1,15 @@
+@use '@angular/material' as mat;
+@use './material-theme-colors' as custom-theme;
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        primary: custom-theme.$primary-palette,
+        tertiary: custom-theme.$tertiary-palette,
+      ),
+      typography: Roboto,
+      density: -1,
+    )
+  );
+}

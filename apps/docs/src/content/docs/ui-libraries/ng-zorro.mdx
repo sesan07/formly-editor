@@ -1,0 +1,64 @@
+---
+title: Ng Zorro UI library
+description: Ng Zorro field types and properties configured in the Studio demo.
+---
+
+The Ng Zorro configuration uses [`@ngx-formly/ng-zorro-antd`](https://formly.dev/docs/ui/zorro). This page documents the field types and properties configured in the Formly Studio demo for Ng Zorro forms.
+
+## Form controls
+
+### Input
+
+- Formly `type`: `input`
+- Use it for: Single-line text, email, password, or telephone input.
+- Properties: `Key`, `Label`, `Placeholder`, `Description`, `Type`, `Hide`, `Expressions`.
+- Validation: `Required` and `Show Validation`.
+- Wrapper properties: `Hide Label` and `Hide Required Marker`.
+
+### Number
+
+- Formly `type`: `number`
+- Use it for: A numeric value.
+- Properties: `Key`, `Label`, `Placeholder`, `Description`, `Hide`, `Expressions`.
+- Validation: `Required`, `Show Validation`, `Min`, and `Max`.
+
+### Textarea
+
+- Formly `type`: `textarea`
+- Use it for: Longer text such as messages or notes.
+- Properties: `Key`, `Label`, `Placeholder`, `Description`, `Rows`, `Hide`, `Expressions`.
+- Validation: `Required` and `Show Validation`.
+
+### Select
+
+- Formly `type`: `select`
+- Use it for: One or more choices from a dropdown list.
+- Properties: `Key`, `Label`, `Placeholder`, `Description`, `Multiple Selections`, `Options`, `Hide`, `Expressions`.
+- Each option has a `Label`, `Value`, and `Disabled` setting.
+- Validation: `Required` and `Show Validation`.
+
+### Radio
+
+- Formly `type`: `radio`
+- Use it for: One choice from a visible set of options.
+- Properties: `Key`, `Label`, `Description`, `Options`, `Hide`, `Expressions`.
+- Each option has a `Label`, `Value`, and `Disabled` setting.
+- Validation: `Required` and `Show Validation`.
+
+### Checkbox
+
+- Formly `type`: `checkbox`
+- Use it for: A boolean value or required acknowledgement.
+- Properties: `Key`, `Label`, `Description`, `Hide`, `Expressions`.
+- Validation: `Required` and `Show Validation`.
+
+## Containers
+
+### Group
+
+- Formly `type`: `formly-group`
+- Use it for: A section that contains related fields.
+- Properties: `Key`, `Hide`, and `Expressions`.
+
+See [Add and configure fields](/guides/add-and-configure-fields/) for the Field Edit workflow and
+[Structure fields](/guides/organizing-fields/) for containers.

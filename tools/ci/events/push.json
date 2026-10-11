@@ -1,0 +1,10 @@
+{
+  "act": true,
+  "ref": "refs/heads/main",
+  "repository": {
+    "default_branch": "main",
+    "owner": { "login": "local-fixture" },
+    "name": "formly-editor",
+    "full_name": "local-fixture/formly-editor"
+  }
+}

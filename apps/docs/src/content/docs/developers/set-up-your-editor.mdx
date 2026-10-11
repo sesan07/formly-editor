@@ -1,0 +1,61 @@
+---
+title: Set up your editor
+description: Run a local checkout of Studio as an editor for your application's ngx-formly components.
+---
+
+Use a local checkout of Formly Editor to build an authoring environment for your application's
+Formly setup. Studio is the reference implementation: you will add a UI profile to its existing
+editor, not create a new Angular application.
+
+## Run Studio locally
+
+Use Node.js 24 and npm. From a terminal:
+
+```bash
+git clone https://github.com/sesan07/formly-editor.git
+cd formly-editor
+npm ci
+npm start
+```
+
+Open `http://localhost:4200`, enter the Form Editor, and create a form using Material. Add a field
+and check Preview before making changes. This gives you a working baseline for your setup.
+
+Forms are stored in the browser's local storage.
+Export work you want to keep before clearing browser data or changing the local origin.
+
+## Find the integration points
+
+Profiles live under `apps/studio/src/app/form-editor/`. A profile connects the Formly runtime to
+the editor's authoring controls:
+
+| File                      | Responsibility                                                      |
+| ------------------------- | ------------------------------------------------------------------- |
+| `<profile>.config.ts`     | Register Formly types, wrappers, validators, and messages.          |
+| `<profile>.options.ts`    | Define palette categories, field defaults, and editable properties. |
+| `<profile>.forms.ts`      | Supply representative starter forms.                                |
+| `<profile>.library.ts`    | Compose the profile with `createLibrary()`.                         |
+| `form-editor.provider.ts` | Register the profile with Studio.                                   |
+
+Start with the
+[Material profile](https://github.com/sesan07/formly-editor/tree/main/apps/studio/src/app/form-editor/material)
+for standard controls. The
+[Studio Material profile](https://github.com/sesan07/formly-editor/tree/main/apps/studio/src/app/form-editor/studio-material)
+shows custom components and builder-only adaptations. Runtime implementations live in
+`libs/ui/material`; the shared editor lives in `libs/core`.
+
+Within this checkout, use the existing `@formly-editor/core`, `@formly-editor/material`, and
+`@formly-editor/builder-material` imports. They resolve to repository source; there is no editor
+package to install from npm.
+
+## Bring your application's components
+
+Your components and their dependencies must be available to Studio at build time. Reuse your
+application's Formly registrations where possible, and provide any services, styles, or UI-library
+setup they require. A JSON field configuration cannot load an Angular component that was not
+included in the application.
+
+Keep application-specific configuration in your profile directory. Reusable types can follow the
+existing UI-library structure, but should not depend on Studio's shell or modify shared editor state.
+
+Next, [configure a UI profile](/developers/configure-a-ui-profile/) for the fields you want to author.

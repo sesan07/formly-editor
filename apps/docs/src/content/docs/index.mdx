@@ -1,0 +1,51 @@
+---
+title: Formly Editor
+description: Documentation for Formly Editor, an open-source ngx-formly editor framework, and its Studio demo application.
+template: splash
+hero:
+  tagline: An open-source editor framework for ngx-formly. Explore it through the Studio demo.
+  actions:
+    - text: Studio demo quickstart
+      link: /guides/form-editor-quickstart/
+      icon: right-arrow
+    - text: Developer guides
+      link: /developers/
+      icon: right-arrow
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+Formly Editor is an MIT-licensed project providing an editor framework for ngx-formly in Angular.
+Its editor libraries are internal source modules, not published npm packages.
+
+Formly Studio is the project's demo application. Use this browser-local demo to build and preview
+forms, then export their `FormlyFieldConfig[]` for an Angular application. These guides cover the
+demo, configuring a local checkout for your own components, and consuming exported forms.
+
+[Open Studio demo](https://formlystudio.com/) or visit the
+[source repository](https://github.com/sesan07/formly-editor).
+
+## What’s here
+
+<CardGrid stagger>
+  <Card
+    title="Studio Demo"
+    icon="open-book"
+  >
+    Create, configure, preview, organize, and export forms in the demo. [Open the guides](/guides/).
+  </Card>
+  <Card
+    title="Demo UI Profiles"
+    icon="document"
+  >
+    Review the UI-library configurations included in Studio and their supported fields and
+    properties. [Compare demo profiles](/ui-libraries/).
+  </Card>
+  <Card
+    title="Developers"
+    icon="code"
+  >
+    Configure Studio for your application's Formly components and render the generated forms. [Open
+    developer guides](/developers/).
+  </Card>
+</CardGrid>

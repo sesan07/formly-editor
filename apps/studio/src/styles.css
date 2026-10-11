@@ -1,0 +1,46 @@
+@layer theme, base, zorro-base, bootstrap, zorro-components, primeng;
+
+@import 'tailwindcss';
+@import 'tailwindcss-primeui';
+
+/* Editor styles */
+@import '../../../libs/core/src/assets/styles';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --app-header-height: 51px;
+  color-scheme: light;
+}
+
+:root.dark {
+  color-scheme: dark;
+}
+
+html {
+  font-size: 14px;
+  scrollbar-color: var(--p-surface-300) var(--p-content-background);
+}
+
+body {
+  font-family: Ubuntu, sans-serif;
+  font-size: 1rem;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+.material-symbols-outlined {
+  font-size: 1.5rem;
+}

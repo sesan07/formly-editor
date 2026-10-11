@@ -1,3 +1,9 @@
-/.angular/cache
-/node_modules
-/projects/ngx-formly
+# Add files here to ignore them from prettier formatting
+/dist
+/tmp
+/coverage
+.angular
+/tmp/local-registry
+/libs/core/src/tailwind-input.css
+
+.nx/self-healing

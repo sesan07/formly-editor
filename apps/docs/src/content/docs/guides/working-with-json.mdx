@@ -1,0 +1,39 @@
+---
+title: Inspect form JSON
+description: View the field configuration behind a form without editing it directly.
+---
+
+The **JSON** view lets you inspect the field configuration for the active form. It is an optional way to understand what the Form Editor has generated; use **Builder** when you need to make changes.
+
+## Open the JSON view
+
+1. Open a form in **Workspace**.
+2. Select **JSON** in the display-mode control above the canvas.
+3. Review the field configuration shown for the active form.
+
+Select **Builder** to return to the visual form editor. Your ordinary field changes should be made there through the canvas, **Fields**, and **Field Edit** panels.
+
+## What the JSON view represents
+
+The JSON view describes the form’s fields, their structure, and their configured properties. It is separate from the test values shown in **Model**.
+
+- Use **JSON** to inspect field configuration.
+- Use **Builder** to edit the form structure and field settings.
+- Use **Model** to edit test values.
+
+## Editing JSON
+
+The form JSON view is read-only. Changes made in the JSON view cannot be applied back to the form. Make changes in **Builder**, then return to **JSON** if you want to inspect the updated configuration.
+
+## Understand validation feedback
+
+The JSON panel may show validation feedback while it displays the configuration:
+
+- **JSON is valid** means the displayed content can be read as valid JSON.
+- A format error means the content is not valid JSON syntax.
+- A schema error means the content does not match the field structure expected by the editor.
+
+Because the JSON view is not an editing workflow, use **Builder** to correct the form rather than trying to repair the JSON in place.
+
+Return to [Add and configure fields](/guides/add-and-configure-fields/) to make changes, or use
+[Save, import, and export](/guides/save-import-and-export/) to move the configuration.
